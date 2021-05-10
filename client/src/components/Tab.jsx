@@ -6,11 +6,13 @@ const Container = styled.div`
     height: ${props => props.fullHeight ? "100%" : props.height ? props.height : "auto"};
     display: flex;
     flex-direction: column;
+    
 `;
 const DivTab = styled.div`
     display:flex;
     align-items:center;
     justify-content:center;
+    padding: 1rem;
 `;
 const ButtonTab=styled.button`
     display:block;
@@ -23,6 +25,8 @@ const ButtonTab=styled.button`
     padding: 1rem;
     font-size:1rem;
     text-transform: uppercase;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+    font-weight: bold;
     color:${props => props.theme.color.text.primary};
     background: transparent;
     transition: .4s all;
