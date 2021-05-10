@@ -8,6 +8,10 @@ const TableComponent = styled.table`
     box-shadow: none;
     border-collapse: collapse; 
     position: relative;
+
+    & tr:last-child{
+        border-bottom: none;
+    }
 `;
 
 const Header = styled.thead`
@@ -17,18 +21,19 @@ const Row = styled.tr`
     background: transparent;
     transition: all 150ms ease-in;
     padding: ${props => props.footer ? "0.5rem" : "0"};
-    font-size:0.9rem;
+    font-size: 1rem;
+    border-bottom: 1px solid ${props => props.theme.color.border.primary};
 `;
 
 const HeaderCell = styled.th`
     cursor: pointer;
-    color: ${props => props.theme.color.text.primary};
+    color: ${props => props.theme.color.text.secondary};
     padding: 0.3rem 0rem;
-    font-weight: ${props => props.theme.weight.bold};
+    font-weight: bold;
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
     width: ${props => props.width || "auto"};
     text-align: ${props => props.textAlign || "center"};
-    font-size: 0.8rem;
+    font-size: 1rem;
 `;
 HeaderCell.propTypes = {
     width: PropTypes.string,
@@ -39,6 +44,7 @@ const Cell = styled.td`
     padding: 0.4rem 0;
     text-overflow: ellipsis;
     text-align: ${props => props.textAlign || "left"};
+    vertical-align: top;
 `;
 
 Cell.propTypes = {

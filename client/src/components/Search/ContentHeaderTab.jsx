@@ -4,6 +4,7 @@ import styled from "styled-components";
 const ContentInfo = styled.div`
   display: flex;
   flex: 1;
+  height: auto;
 
   padding-bottom: 0.5rem;
   border-bottom: 3px solid ${(props) => props.theme.color.text.secondary};

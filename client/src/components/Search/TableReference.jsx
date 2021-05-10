@@ -22,14 +22,6 @@ const TableTitle = styled.h4`
     color: ${props => props.theme.color.text.secondary};
     padding: 0.3rem 0;
 `
-const TableField = styled.table`
-    & th{
-        vertical-align: top;
-    }    
-    & .field-value{
-        font-weight: normal;
-    }
-`
 const StyleButton = styled.button`
     background : transparent;
     color: ${props => props.theme.color.text.secondary};
@@ -40,21 +32,17 @@ const StyleButton = styled.button`
 
     cursor: pointer;
 `
-function TableApproval({dataList}) {
+function TableReference({dataList}) {
     return (
         <TableWrapper className='table-list-1'>
             <TableInfo>
-                <TableTitle>APPROVAL DOCUMENT ({dataList.length})</TableTitle>
-                <p>The flexible approval may not follow the operational procedures, approval participants are responsible for the completeness of attached documents.</p>
+                <TableTitle>REFERENCE DOCUMENT ({dataList.length})</TableTitle>
             </TableInfo>
             <Table>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell textAlign="left" width="30%">
+                        <Table.HeaderCell textAlign="left" width="90%">
                             Name
-                        </Table.HeaderCell>
-                        <Table.HeaderCell textAlign="left" width="60%">
-                            Data Field
                         </Table.HeaderCell>
                         <Table.HeaderCell textAlign="left" width="10%">
                             Action
@@ -71,24 +59,6 @@ function TableApproval({dataList}) {
                             <p>{val.name}</p>
                             </Table.Cell>
                             <Table.Cell textAlign="left">
-                            {
-                                (val.data_field && val.data_field.length > 0)
-                                ?
-                                    val.data_field.map((val) => {
-                                        return(
-                                            <TableField className="table-data-field" key={val.id} style={{width: '100%'}}>
-                                                <tr>
-                                                    <th style={{width: '35%',textAlign: 'left'}}><p>{val.name + ":"}</p></th>
-                                                    <th><p className="field-value">{val.value}</p></th>
-                                                </tr>
-                                            </TableField>
-                                        )
-                                    }) 
-                                    :
-                               <p className="field-value">N/A</p>
-                            }
-                            </Table.Cell>
-                            <Table.Cell textAlign="left">
                                 <StyleButton>Detail</StyleButton>
                             </Table.Cell>
                         </Table.Row>
@@ -100,4 +70,4 @@ function TableApproval({dataList}) {
     );
 }
 
-export default TableApproval;
+export default TableReference;

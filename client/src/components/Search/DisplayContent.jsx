@@ -7,6 +7,8 @@ import ContentHeaderTab from "./ContentHeaderTab";
 
 const StyleContentWrapper = styled.div`
   flex: 10;
+  height: 100%;
+  padding: 1rem 0;
   background-color: ${(props) => props.theme.color.background.secondary};
   color: ${(props) => props.theme.color.text.primary};
   border-left: 1px solid ${(props) => props.theme.color.border.primary};
@@ -14,7 +16,7 @@ const StyleContentWrapper = styled.div`
 function DisplayContent() {
   return (
     <StyleContentWrapper>
-      <Tab>
+      <Tab fullHeight>
         <TabPane name="Content" key={1} value="1">
             <ContentHeaderTab/>
           <Content />

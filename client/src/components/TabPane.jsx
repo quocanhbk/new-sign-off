@@ -4,8 +4,9 @@ import PropTypes from "prop-types";
 
 const DivTab = styled.div`
   display: block;
-  flex: 1;
   background: transparent;
+  height: 100%;
+  flex : 1;
 `;
 const TabPane = (props) => {
   return <DivTab {...props} />;
