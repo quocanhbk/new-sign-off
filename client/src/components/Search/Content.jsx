@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import {getFader} from '../../utils/color'
+import TableApproval from './TableApproval';
 
 const ContentWrapper = styled.div`
     display:flex;
@@ -85,6 +86,35 @@ const TextFill  = styled.p`
 
     color: ${props => props.theme.color.text.secondary};
 `
+
+const dataList=[
+    {
+        id : 1,
+        name: 'Name of doucument in wrap text',
+        data_field: [
+            {
+                id: 1,
+                name: 'Date of Request',
+                value: '20/04/2021'
+            },
+            {
+                id: 2,
+                name: 'Description',
+                value: 'TT tiền thanh toán chi phí tiếp khách ABC tại sự kiện DEF ngày 20/04/2021'
+            },
+            {
+                id: 3,
+                name: 'Value Excl.VAT',
+                value: '17,000,000 vnđ'
+            }
+        ]
+    },
+    {
+        id : 2,
+        name: 'Internal payment request form - Đề nghị thanh toán nội bộ.',
+        data_field: []
+    },
+]
 function Content() {
     return (
         <ContentWrapper>
@@ -113,6 +143,9 @@ function Content() {
                             consectetur adipisicing elit. Aliquid iure labore officia. Expedita suscipit odit non eligendi laudantium deserunt perspiciatis. 
                             Alias possimus quas, accusantium neque minus asperiores natus error magnam!
                     </TextFill>
+                </DivContent>
+                <DivContent>
+                    <TableApproval dataList={dataList}/>
                 </DivContent>
             </ContentContainer>
         </ContentWrapper>

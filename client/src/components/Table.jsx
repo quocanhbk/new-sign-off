@@ -17,10 +17,7 @@ const Row = styled.tr`
     background: transparent;
     transition: all 150ms ease-in;
     padding: ${props => props.footer ? "0.5rem" : "0"};
-<<<<<<< HEAD
-=======
     font-size:0.9rem;
->>>>>>> 180c030d32581ba52bf283d6f24a61a08a7626d8
 `;
 
 const HeaderCell = styled.th`
@@ -31,10 +28,7 @@ const HeaderCell = styled.th`
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
     width: ${props => props.width || "auto"};
     text-align: ${props => props.textAlign || "center"};
-<<<<<<< HEAD
-=======
     font-size: 0.8rem;
->>>>>>> 180c030d32581ba52bf283d6f24a61a08a7626d8
 `;
 HeaderCell.propTypes = {
     width: PropTypes.string,
