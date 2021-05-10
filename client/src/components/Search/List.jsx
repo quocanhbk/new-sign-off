@@ -82,9 +82,9 @@ function List() {
                 </TagContainer>
             </TagBar>
             <CardList>
-                {data.map((task) => (
+                {data.map((task, index) => (
                     <Card
-                    key={task.Id}
+                    key={index}
                     title={task.title}
                     deadline={task.deadline}
                     status={task.status}
