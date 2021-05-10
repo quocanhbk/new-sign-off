@@ -64,6 +64,7 @@ const NavItem = styled.div`
   ${props => props.active && css`
     background: ${props => getFader(props.theme.color.border.primary, 0.5)};
     color: ${props => props.theme.color.fill.primary};
+    font-weight: 600;
     &:hover {
       background: ${props => props.theme.color.border.primary};
 
@@ -81,7 +82,6 @@ const NavList = styled.div`
 const Header = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
   padding: 0 0.5rem;
   & h1 {
     font-size: calc(1.0rem + .4vw);
@@ -117,13 +117,13 @@ const SideBar = () => {
     <SidebarContainer>
       <Header>
         <Logo src={themeContext.isDark ? '/iconNoTextDark.svg' : '/iconNoTextLight.svg'} />
-        <h1>Project Management Dashboard</h1>
+        <h1>TTG Approval Online</h1>
       </Header>
       <UserDisplayCard>
-        <Avatar src={`http://172.30.1.213:3600/api/v1/avatar/son.nk@ttgvn.com`} />
+        <Avatar src={`/avatar.png`} />
         <UserDisplayCardInfo>
-          <h3>La Quốc Anh</h3>
-          <p>anh.lq@ttgvn.com</p>
+          <h3>John Doe</h3>
+          <p>johndoe@email.com</p>
         </UserDisplayCardInfo>
         <BsThreeDotsVertical size="20px"/>
       </UserDisplayCard>
