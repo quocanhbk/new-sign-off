@@ -30,11 +30,11 @@ function DisplayContent({selectData,open}) {
               <Content />
             </TabPane>
             <TabPane name="Approval Flow" key={2} value="2">
-              <ContentHeaderTab />
+            <ContentHeaderTab selectData={selectData}/>
               <ApprovalFlow />
             </TabPane>
             <TabPane name="Info" key={3} value="3">
-              <ContentHeaderTab />
+            <ContentHeaderTab selectData={selectData}/>
               <ApprovalInfo />
             </TabPane>
           </Tab>
