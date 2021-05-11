@@ -12,7 +12,7 @@ const TableForm = styled.div`
 
 `
 const TableTitle = styled.h4`
-
+    color: ${props => props.theme.color.text.secondary};
 `
 const Input = styled.textarea`
     flex: 10;
@@ -73,7 +73,7 @@ function EventComents({dataList,setComment}) {
     return (
         <StyleWrapper>
             <TableForm>
-                <TableTitle>Event & Comments</TableTitle>
+                <TableTitle>Event & Comments ({dataList.length})</TableTitle>
                 <Form>
                     <Avatar width="2.5rem" height="2.5rem" src={`/avatar.png`} />
                     <Input placeholder="Write comment here ..." value={value} onChange={(e) => setValue(e.target.value)}/>
