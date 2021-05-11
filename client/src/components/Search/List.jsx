@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components'
 import Card from './Card';
@@ -33,45 +34,8 @@ const CardList = styled.div`
     
     gap: 0.5rem;
 `
-const data = [
-    {
-        id: 1,
-        title: 'Đề nghị thanh toán chi phí tiếp khách hàng abc def transform',
-        deadline: '04/05/2021',
-        status: 'Approved',
-        approved: 'Flexible',
-        create_by: 'Nguyễn Văn Chuối',
-        create_date: '01/05/2021'
-    },
-    {
-        id: 2,
-        title: 'Đề nghị thanh toán chi phí tiếp khách hàng abc def transform',
-        deadline: '04/05/2021',
-        status: 'Stoped',
-        approved: 'Flexible',
-        create_by: 'Nguyễn Văn Chuối',
-        create_date: '01/05/2021'
-    },
-    {
-        id: 3,
-        title: 'Đề nghị thanh toán chi phí tiếp khách hàng abc def transform',
-        deadline: '04/05/2021',
-        status: 'Pending',
-        approved: 'Process',
-        create_by: 'Nguyễn Văn Chuối',
-        create_date: '01/05/2021'
-    },
-    {
-        id: 4,
-        title: 'Đề nghị thanh toán chi phí tiếp khách hàng abc def transform',
-        deadline: '04/05/2021',
-        status: 'Rejected',
-        approved: 'Flexible',
-        create_by: 'Nguyễn Văn Chuối',
-        create_date: '01/05/2021'
-    },
-]
-function List() {
+
+function List({data,setSelectData,setOpen}) {
     return (
         <StyleListWrapper>
             <ListToolbar/>
@@ -85,11 +49,9 @@ function List() {
                 {data.map((task, index) => (
                     <Card
                     key={index}
-                    title={task.title}
-                    deadline={task.deadline}
-                    status={task.status}
-                    approved={task.approved}
-                    create_by={task.create_by}
+                    task={task}
+                    setSelectData={setSelectData}
+                    setOpen={setOpen}
                     />
                 ))}
             </CardList>

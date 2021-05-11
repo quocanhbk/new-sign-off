@@ -2,6 +2,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import IconStatus from './IconStatus';
+import {IoChevronForwardCircle} from 'react-icons/all'
 
 const CardWrapper = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
@@ -16,7 +17,6 @@ const CardWrapper = styled.div`
     flex-direction: column;
 
     padding: 1rem;
-    cursor: pointer;
 
     &:hover {
         background: ${props => props.theme.color.background.secondary};
@@ -58,7 +58,7 @@ const DivIcon = styled.div`
     width: 20%;
 
     background: ${props => props.status==="Approved" ? props.theme.color.fill.success
-                : props.status==="Stoped" ? props.theme.color.fill.info
+                : props.status==="Stopped" ? props.theme.color.fill.info
                 : props.status==="Pending" ? props.theme.color.fill.warning
                 : props.status==="Rejected" ? props.theme.color.fill.danger
                 : ''};
@@ -94,22 +94,42 @@ const DivInfo = styled.div`
         font-size: 0.85rem;
     }
 `
-function Card({approved,status,deadline,title,create_by}) {
+const StyleButton = styled.button`
+    cursor: pointer;
+
+    background: transparent;
+    border: none;
+
+    position: absolute;
+    bottom: 0;
+    right: 5%;
+
+    & svg{
+        color: ${props => props.theme.color.text.secondary};
+    }
+`
+function Card({task,setSelectData,setOpen}) {
+
+    const handleSelect = (task) =>{
+        setSelectData(task)
+        setOpen(true)
+    }
 
     return (
         <CardWrapper>
-            <StyleTypes className={`card-approved ${approved==='Flexible' ? 'flexible' : 'process'}`}>{approved}</StyleTypes>
+            <StyleTypes className={`card-approved ${task.approved==='Flexible' ? 'flexible' : 'process'}`}>{task.approved}</StyleTypes>
             <DivMain>
-                <DivIcon status={status}>
-                    <IconStatus icon={status} size='1.5rem'/>
-                    <p>{status}</p>
+                <DivIcon status={task.status}>
+                    <IconStatus icon={task.status} size='1.5rem'/>
+                    <p>{task.status}</p>
                 </DivIcon>
                 <DivInfo>
-                    <p className="card-deadline">Deadline: {deadline}</p>
-                    <p className="card-title">{title}</p>
-                    <p className="card-create_by">{create_by}</p>
+                    <p className="card-deadline">Deadline: {task.deadline}</p>
+                    <p className="card-title">{task.title}</p>
+                    <p className="card-create_by">{task.create_by}</p>
                 </DivInfo>
             </DivMain>
+            <StyleButton onClick={() => handleSelect(task)}><IoChevronForwardCircle size="1.5rem"/></StyleButton>
         </CardWrapper>
     );
 }

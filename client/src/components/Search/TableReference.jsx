@@ -4,14 +4,10 @@ import styled from 'styled-components'
 import Table from '../Table'
 
 const TableWrapper = styled.div`
-    border: 2px solid ${(props) => props.theme.color.border.primary};
+    border: 1px solid ${(props) => props.theme.color.border.primary};
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
     
     padding: 0.5rem;
-    & .data-field{
-        display:flex;
-
-    }
 
     & p{
         color: ${props => props.theme.color.text.secondary};

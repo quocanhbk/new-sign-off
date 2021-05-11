@@ -4,24 +4,14 @@ import styled from "styled-components";
 import Table from "../Table";
 
 const TableWrapper = styled.div`
-<<<<<<< HEAD
-  border: 2px solid ${(props) => props.theme.color.border.primary};
-  padding: 0.5rem;
-  & .data-field {
-    display: flex;
-  }
-=======
-    border: 2px solid ${(props) => props.theme.color.border.primary};
+    border: 1px solid ${(props) => props.theme.color.border.primary};
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
 
     padding: 0.5rem;
-    & .data-field{
-        display:flex;
->>>>>>> b46607b8ed3e79f51e5d0bfae8d3d6a45484ea7e
 
-  & p {
-    color: ${(props) => props.theme.color.text.secondary};
-  }
+    & p {
+      color: ${(props) => props.theme.color.text.secondary};
+    }
 `;
 const TableInfo = styled.div`
   padding: 0.5rem 0;
@@ -90,7 +80,7 @@ function TableApproval({ dataList }) {
                         >
                           <tbody>
                             <tr>
-                              <th style={{ width: "35%", textAlign: "left" }}>
+                              <th style={{ width: "35%",textAlign: "left" }}>
                                 <p>{val.name + ":"}</p>
                               </th>
                               <th>
