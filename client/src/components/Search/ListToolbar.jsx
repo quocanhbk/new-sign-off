@@ -43,7 +43,6 @@ function ListToolbar() {
   const [filterPopup, setFilterPopup] = useState(false);
   const ref1 = useClickOutside(() => {
     setFilterPopup(false);
-    console.log("1");
   });
 
   const handlePopup = (e, type) => {
