@@ -5,13 +5,13 @@ import Avatar from "./Avatar";
 import { IoCloseCircleSharp, FaCheckCircle } from "react-icons/all";
 
 const Span = styled.span`
-  width: 10%;
+  width: auto;
   position: relative;
 `;
 const Icon = styled.span`
   position: absolute;
-  top: 50%;
-  right: 18%;
+  top: 68%;
+  right: 0;
 `;
 Icon.defaultProps = {
   status: true,
