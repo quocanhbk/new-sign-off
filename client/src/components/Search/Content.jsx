@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components'
 import {getFader} from '../../utils/color'
+import EventComents from './EventComents';
 import TableApproval from './TableApproval';
 import TableReference from './TableReference';
 
@@ -71,7 +72,34 @@ const dataList=[
         data_field: []
     },
 ]
+const events = [
+    {
+        id: 1,
+        title: 'Lorem ipsum dolo sit amet',
+        create_by: 'Nguyễn Văn Gấu',
+        create_date: '16:20 20/04/2021',
+    },
+    {
+        id: 2,
+        title: 'Lorem ipsum dolo sit amet',
+        create_by: 'Nguyễn Văn Gấu',
+        create_date: '16:20 20/04/2021',
+    },
+    {
+        id: 3,
+        title: 'Lorem ipsum dolo sit amet',
+        create_by: 'Nguyễn Văn Gấu',
+        create_date: '16:20 20/04/2021',
+    },
+    {
+        id: 4,
+        title: 'Lorem ipsum dolo sit amet consectetur adipisicing elit. Aliquid iure labore officia. Expedita suscipit odit non  Expedita suscipit odit non  Expedita suscipit odit non     eligendi laudantium deserunt perspiciatis. ',        
+        create_by: 'Nguyễn Văn Gấu',
+        create_date: '16:20 20/04/2021',
+    }
+]
 function Content() {
+    const [comment,setComment] = useState(events)
     return (
         <ContentWrapper>
             <ContentContainer>
@@ -116,6 +144,9 @@ function Content() {
                 </DivContent>
                 <DivContent>
                     <TableReference dataList={dataList}/>
+                </DivContent>
+                <DivContent>
+                    <EventComents dataList={comment} setComment={setComment} />
                 </DivContent>
             </ContentContainer>
         </ContentWrapper>
