@@ -1,0 +1,28 @@
+{
+  "name": "signoff",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quocanhbk/new-sign-off.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/quocanhbk/new-sign-off/issues"
+  },
+  "homepage": "https://github.com/quocanhbk/new-sign-off#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "multer": "^1.4.2",
+    "pdf-poppler": "^0.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
