@@ -28,6 +28,7 @@ background: ${(props) => props.theme.color.fill.secondary};
 const ApprovalContent = styled.div`
   border-bottom: 2px solid #807660;
   margin-top: 1rem;
+  margin-left: 5%;
 `;
 const JoinGroup = styled.div`
   margin: 1rem;
