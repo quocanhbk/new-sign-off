@@ -1,17 +1,16 @@
 import React from 'react';
 import styled from 'styled-components'
 import {getFader} from '../../utils/color'
+import TableApproval from './TableApproval';
+import TableReference from './TableReference';
 
 const ContentWrapper = styled.div`
     display:flex;
     flex-direction: column;
-`
-const ContentContainer = styled.div`
     flex: 10;
-
-    padding: 0.5rem 1rem;
-
-    overflow: overlay;
+    padding: 1rem;
+    height: 80%;
+    overflow: auto;
     position: relative;
     
     ::-webkit-scrollbar {
@@ -28,6 +27,9 @@ const ContentContainer = styled.div`
     background: ${props => props.theme.color.fill.secondary};
     }
 `
+const ContentContainer = styled.div`
+    flex: 10;
+`
 const DivContent = styled.div`
     padding: 0.5rem 0;
 `
@@ -40,10 +42,38 @@ const TextFill  = styled.p`
 
     color: ${props => props.theme.color.text.secondary};
 `
+
+const dataList=[
+    {
+        id : 1,
+        name: 'Name of doucument in wrap text',
+        data_field: [
+            {
+                id: 1,
+                name: 'Date of Request',
+                value: '20/04/2021'
+            },
+            {
+                id: 2,
+                name: 'Description',
+                value: 'TT tiền thanh toán chi phí tiếp khách ABC tại sự kiện DEF ngày 20/04/2021'
+            },
+            {
+                id: 3,
+                name: 'Value Excl.VAT',
+                value: '17,000,000 vnđ'
+            }
+        ]
+    },
+    {
+        id : 2,
+        name: 'Internal payment request form - Đề nghị thanh toán nội bộ.',
+        data_field: []
+    },
+]
 function Content() {
     return (
         <ContentWrapper>
-            
             <ContentContainer>
                 <DivContent>
                     <Label>RELATED PROJECT</Label>
@@ -58,7 +88,34 @@ function Content() {
                             nt qui modi dolore similique? Molestias odit explicabo consequatur molestiae in ducimus modi. Lorem ipsum dolor sit amet 
                             consectetur adipisicing elit. Aliquid iure labore officia. Expedita suscipit odit non eligendi laudantium deserunt perspiciatis. 
                             Alias possimus quas, accusantium neque minus asperiores natus error magnam!
+                            rem, ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit cum dolor dolorem soluta illum recusandae expedita consectetur? Nesciu
+                            nt qui modi dolore similique? Molestias odit explicabo consequatur molestiae in ducimus modi. Lorem ipsum dolor sit amet 
+                            consectetur adipisicing elit. Aliquid iure labore officia. Expedita suscipit odit non eligendi laudantium deserunt perspiciatis. 
+                            Alias possimus quas, accusantium neque minus asperiores natus error magnam!, ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit cum dolor dolorem soluta illum recusandae expedita consectetur? Nesciu
+                            nt qui modi dolore similique? Molestias odit explicabo consequatur molestiae in ducimus modi. Lorem ipsum dolor sit amet 
+                            consectetur adipisicing elit. Aliquid iure labore officia. Expedita suscipit odit non eligendi laudantium deserunt perspiciatis. 
+                            Alias possimus quas, accusantium neque minus asperiores natus error magnam!
+                            rem, ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit cum dolor dolorem soluta illum recusandae expedita consectetur? Nesciu
+                            nt qui modi dolore similique? Molestias odit explicabo consequatur molestiae in ducimus modi. Lorem ipsum dolor sit amet 
+                            consectetur adipisicing elit. Aliquid iure labore officia. Expedita suscipit odit non eligendi laudantium deserunt perspiciatis. 
+                            Alias possimus quas, accusantium neque minus asperiores natus error magnam!, ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit cum dolor dolorem soluta illum recusandae expedita consectetur? Nesciu
+                            nt qui modi dolore similique? Molestias odit explicabo consequatur molestiae in ducimus modi. Lorem ipsum dolor sit amet 
+                            consectetur adipisicing elit. Aliquid iure labore officia. Expedita suscipit odit non eligendi laudantium deserunt perspiciatis. 
+                            Alias possimus quas, accusantium neque minus asperiores natus error magnam!
+                            rem, ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit cum dolor dolorem soluta illum recusandae expedita consectetur? Nesciu
+                            nt qui modi dolore similique? Molestias odit explicabo consequatur molestiae in ducimus modi. Lorem ipsum dolor sit amet 
+                            consectetur adipisicing elit. Aliquid iure labore officia. Expedita suscipit odit non eligendi laudantium deserunt perspiciatis. 
+                            Alias possimus quas, accusantium neque minus asperiores natus error magnam!, ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit cum dolor dolorem soluta illum recusandae expedita consectetur? Nesciu
+                            nt qui modi dolore similique? Molestias odit explicabo consequatur molestiae in ducimus modi. Lorem ipsum dolor sit amet 
+                            consectetur adipisicing elit. Aliquid iure labore officia. Expedita suscipit odit non eligendi laudantium deserunt perspiciatis. 
+                            Alias possimus quas, accusantium neque minus asperiores natus error magnam!
                     </TextFill>
+                </DivContent>
+                <DivContent>
+                    <TableApproval dataList={dataList}/>
+                </DivContent>
+                <DivContent>
+                    <TableReference dataList={dataList}/>
                 </DivContent>
             </ContentContainer>
         </ContentWrapper>
