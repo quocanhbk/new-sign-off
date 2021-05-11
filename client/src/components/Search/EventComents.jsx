@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components'
 import {IoMdSend} from 'react-icons/all'
 import Avatar from '../Avatar'
@@ -23,7 +23,7 @@ const Input = styled.textarea`
     padding: 0.5rem 0.5rem 0.5rem 1rem;
 
     background: transparent;
-    color: #fff;
+    color: ${props => props.theme.color.text.secondary};
 
     &:focus{
         outline: none;
@@ -33,7 +33,9 @@ const Form = styled.div`
     display:flex;
     align-items: center;
 
-    background: #000;
+    background: ${props => props.theme.color.background.primary};
+    border: 1px solid ${props => props.theme.color.border.primary};
+
     width: 100%;
     padding: 0 0.3rem;
     
@@ -54,15 +56,28 @@ const TableEvents = styled.div`
 
 `
 
-function EventComents({dataList}) {
+function EventComents({dataList,setComment}) {
+    const [value,setValue] = useState()
+
+    const handleSubmit = (e) =>{
+        e.preventDefault()
+        setComment([{
+            id: Math.random(),
+            title: value,
+            create_by: 'Gấu',
+            create_date: '10:08 11/05/2021'
+        },...dataList])
+        setValue('')
+    }
+
     return (
         <StyleWrapper>
             <TableForm>
                 <TableTitle>Event & Comments</TableTitle>
                 <Form>
                     <Avatar width="2.5rem" height="2.5rem" src={`/avatar.png`} />
-                    <Input placeholder="Write comment here ..."/>
-                    <button><IoMdSend size="1.5rem"/></button>
+                    <Input placeholder="Write comment here ..." value={value} onChange={(e) => setValue(e.target.value)}/>
+                    <button onClick={handleSubmit}><IoMdSend size="1.5rem"/></button>
                 </Form>
             </TableForm>
             <TableEvents>
