@@ -4,26 +4,27 @@ import { getFader } from "../../utils/color";
 import AvatarStatus from "../AvatarStatus";
 
 const Approval = styled.div`
-display:flex;
-flex-direction: column;
-flex: 10;
-padding: 0 1rem;
-height: 80%;
-overflow: auto;
-position: relative;
+  display:flex;
+  flex-direction: column;
+  flex: 10;
+  padding: 0 1rem;
+  height: 80%;
+  overflow: auto;
+  position: relative;
 
-::-webkit-scrollbar {
-width: 0.5rem;
-}
-::-webkit-scrollbar-track {
-background: transparent;
-}
-::-webkit-scrollbar-thumb {
-background: ${(props) => getFader(props.theme.color.fill.secondary, 0.5)};
-border-radius: 99px;
-}
-::-webkit-scrollbar-thumb:hover {
-background: ${(props) => props.theme.color.fill.secondary};
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: ${(props) => getFader(props.theme.color.fill.secondary, 0.5)};
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${(props) => props.theme.color.fill.secondary};
+  }
 `;
 const ApprovalContent = styled.div`
   border-bottom: 2px solid #807660;
