@@ -1,0 +1,48 @@
+getUTCMilliseconds()
+https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html
+	
+https://dev.to/tumee/react-mentions-how-to-add-mentions-to-react-component-46mp
+
+circle: https://stackoverflow.com/questions/6936972/draw-circle-using-css-alone
+
+animation: https://stackoverflow.com/questions/34773266/how-to-write-css-keyframes-to-indeterminate-material-design-progress-bar
+https://www.useragentman.com/blog/2013/03/03/animating-circular-paths-using-css3-transitions/
+https://medium.com/weekly-webtips/angular-clean-arquitecture-d40e9c50f51
+https://ihatetomatoes.net/create-custom-preloading-screen/
+https://freefrontend.com/css-loaders/
+loading animation: https://loading.io/css/
+
+strong mentions: https://css-tricks.com/almanac/properties/d/display/
+
+jquery:
+https://www.w3schools.com/jquery/jquery_fade.asp
+
+thư viện: canva.com
+
+https://viblo.asia/p/reactjs-keo-tha-sap-xep-cac-phan-tu-trong-danh-sach-OeVKBgPYZkW
+tính năng mới của react:
+https://viblo.asia/p/tim-hieu-react-context-trong-reactjs-maGK7AkMlj2
+
+thư viện react:
+-react chart
+-react-flow
+-react-spring: làm hiệu ứng
+-react
+
+
+speak to text:
+https://stackoverflow.com/questions/51543143/react-js-react-voice-to-text-recognition
+
+thư viện js:
+https://hocjavascript.net/tong-quan/4-front-end-blog-nen-theo-doi/?fbclid=IwAR2aAsWfD0HAZ20FdVzcsSxyAevA8kRnH3upd1aalPDQwkgbp80CK7L6-IQ
+
+sequelize:
+https://ichi.pro/vi/ket-noi-db-quan-he-va-phan-phu-tro-voi-node-js-sequelize-postgresql-272488904294096
+
+https://developer.mozilla.org/vi/docs/Learn/JavaScript
+
+su kien trong javascript
+-https://webvn.com/su-kien-onselect/
+
+tool:
+-https://keywordtool.io/
