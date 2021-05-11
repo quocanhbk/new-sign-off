@@ -1,16 +1,33 @@
 import React from "react";
 import styled from "styled-components";
+import { getFader } from "../../utils/color";
 import AvatarStatus from "../AvatarStatus";
 
 const Approval = styled.div`
-  height: 100vh;
-  padding: 1.5rem;
-  overflow: scroll;
+display:flex;
+flex-direction: column;
+flex: 10;
+padding: 0 1rem;
+height: 80%;
+overflow: auto;
+position: relative;
+
+::-webkit-scrollbar {
+width: 0.5rem;
+}
+::-webkit-scrollbar-track {
+background: transparent;
+}
+::-webkit-scrollbar-thumb {
+background: ${(props) => getFader(props.theme.color.fill.secondary, 0.5)};
+border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: ${(props) => props.theme.color.fill.secondary};
 `;
 const ApprovalContent = styled.div`
-  padding-bottom: 2rem;
-  margin-bottom: 4rem;
-  border-bottom: 5px solid #807660;
+  border-bottom: 2px solid #807660;
+  margin-top: 1rem;
 `;
 const JoinGroup = styled.div`
   margin: 1rem;

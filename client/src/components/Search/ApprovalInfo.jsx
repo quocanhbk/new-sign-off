@@ -1,15 +1,32 @@
 import React from "react";
+import { getFader } from "../../utils/color";
 import styled from "styled-components";
 
 const SearchInfo = styled.div`
-  height: 100vh;
-  padding: 1.5rem;
-  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  flex: 10;
+  padding: 1rem;
+  height: 80%;
+  overflow: auto;
+  position: relative;
+
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: ${(props) => getFader(props.theme.color.fill.secondary, 0.5)};
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${(props) => props.theme.color.fill.secondary};
+  }
 `;
 const SearchInfoContent = styled.div`
-  padding-bottom: 1rem;
-  margin-bottom: 2rem;
-  border-bottom: 5px solid #807660;
+  border-bottom: 2px solid #807660;
 `;
 const Elements = styled.ul`
   margin: 1rem;
@@ -22,7 +39,7 @@ const CardChild = styled.ul`
   align-items: center;
   margin: 1rem 1rem 1rem 3rem;
   li {
-    width: 90%;
+    width: 85%;
     .info {
       margin-left: 2rem;
       div {
@@ -108,6 +125,19 @@ const ApprovalInfo = () => {
             <ContentStatus>ahihi</ContentStatus>
           </CardChild>
         </Elements>
+        {/* <Elements>
+          <TitleInfo>Log</TitleInfo>
+          {title.map((value) => {
+            return (
+              <CardChild key={value}>
+                <li>
+                  <TitleContent>{value}</TitleContent>
+                </li>
+                <ContentStatus>ahihi</ContentStatus>
+              </CardChild>
+            );
+          })}
+        </Elements> */}
       </SearchInfoContent>
     </SearchInfo>
   );
