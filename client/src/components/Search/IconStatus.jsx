@@ -16,7 +16,7 @@ function IconStatus({icon,className,size}) {
         icon === "Approved" ?
         <AiTwotoneLike size={size}/>
         :
-        icon === "Stoped" ?
+        icon === "Stopped" ?
         <GiPauseButton size={size}/>
         :    
         icon === "Pending" ?

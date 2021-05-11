@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import styled from "styled-components";
 
@@ -36,30 +37,34 @@ const ContentProperties = styled.div`
     font-weight: bold;
     padding: 0.3rem 0.5rem;
   }
-  & .content-status {
-    background: ${(props) => props.theme.color.fill.success};
-    color: ${(props) => props.theme.color.background.primary};
-  }
-  & .content-approved {
-    background: ${(props) => props.theme.color.border.primary};
-    color: ${(props) => props.theme.color.text.primary};
 
-    margin-top: 0.5rem;
-  }
 `;
+const Approved = styled.span`
+  background: ${(props) => props.theme.color.border.primary};
+  color: ${(props) => props.theme.color.text.primary};
 
-const ContentHeaderTab = () => {
+  margin-top: 0.5rem;
+`
+const Status = styled.span`
+  background: ${(props) => props.status === "Approved" ? props.theme.color.fill.success 
+              : props.status === "Stopped" ? props.theme.color.fill.info 
+              : props.status === "Pending" ? props.theme.color.fill.warning 
+              : props.theme.color.fill.danger};
+  color: ${(props) => props.theme.color.background.primary};
+`
+const ContentHeaderTab = ({selectData}) => {
+  console.log(selectData)
   return (
     <ContentInfo>
       <ContentTitle>
         <p className="content-modified">Last modified at 05:35 pm 04/05/2021</p>
         <p className="content-title">
-          Đề nghị thanh toán chi phí tiếp khách ABC 20/04/2021
+         {selectData && selectData.title}
         </p>
       </ContentTitle>
       <ContentProperties>
-        <span className="content-status">Approved</span>
-        <span className="content-approved">Flexible</span>
+        <Status className="content-status" status={selectData.status}>{selectData && selectData.status}</Status>
+        <Approved className="content-approved">{selectData && selectData.approved}</Approved>
       </ContentProperties>
     </ContentInfo>
   );
