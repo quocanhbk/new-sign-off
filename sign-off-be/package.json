@@ -22,8 +22,11 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "fs-extra": "^10.0.0",
     "multer": "^1.4.2",
-    "pdf-poppler": "^0.2.1"
+    "pdf-poppler": "^0.2.1",
+    "pdf2pic": "^2.1.4",
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "concurrently": "^6.1.0",

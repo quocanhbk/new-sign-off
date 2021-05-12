@@ -20,9 +20,10 @@ const upload = multer({
 }).single("myImage");
 
 router.post("/", upload, async (req, res) => {
+    console.log(req.file)
   let dirPath = await path.join(
     __dirname,
-    "public",
+    "../../public",
     "image",
     path.basename(req.file.filename, path.extname(req.file.filename))
   );
@@ -34,7 +35,10 @@ router.post("/", upload, async (req, res) => {
   };
 
   pdf
-    .convert("../../public/uploads/" + path.basename(req.file.originalname), opts)
+    .convert(
+      "../../public/uploads/" + path.basename(req.file.originalname),
+      opts
+    )
     .then(() => {
       console.log("Convert successfully");
       let pathArray = fs
@@ -48,10 +52,14 @@ router.post("/", upload, async (req, res) => {
         );
       res.json({ path: pathArray });
     })
-    .catch((er) => res.send({ "Error: ": er }));
+    .catch((er) => {
+        console.error(er)
+        res.send({ "Error: ": er })
+    });
 });
 
-router.get('/', (req, res) => {
-    res.send("hihi")
-})
+// test connect
+router.get("/", (req, res) => {
+  res.send("hihi");
+});
 module.exports = router;

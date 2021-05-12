@@ -28,7 +28,7 @@ const Playground = () => {
                 'content-type': 'multipart/form-data'
             }
         }
-        axios.post(process.env.PORT || 'http://localhost:5000/upload', formData, config).then((res) => setImgArray(res.data.path))
+        axios.post(process.env.PORT || 'http://localhost:5000/test', formData, config).then((res) => console.log(res))//setImgArray(res.data.path))
     }
 
     const handleChange = (e) => {
