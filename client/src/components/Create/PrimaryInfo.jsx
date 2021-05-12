@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {  useState } from 'react';
 import styled from 'styled-components'
 import Combox from '../Combox'
 import Calendar from '../Calendar'
 
 const StyleWrapper = styled.div`
-    padding: 1rem;
+    padding: 0.5rem 0;
 `
 
 const StyleItemsColumn = styled.div`
@@ -27,9 +27,17 @@ const Text = styled.label`
     display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;flex-wrap: wrap;-webkit-flex-wrap: wrap; 
 
     font-size: 0.9rem;
+    color : ${props => props.theme.color.text.primary};
+
+    padding: 0.5rem 0;
+`
+const Text1 = styled.label`
+    display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;flex-wrap: wrap;-webkit-flex-wrap: wrap; 
+
+    font-size: 0.9rem;
     color : ${props => props.theme.color.text.secondary};
 
-    padding: 0.5rem;
+    padding: 0.5rem 0;
 `
 const Input = styled.input`
     background-color: ${props=> props.theme.color.background.secondary};
@@ -83,21 +91,37 @@ const project = [
         name: 'Lancaster'
     }
 ]
+const form = [
+    {
+        id: 1,
+        name: 'Đề nghị thanh toán nội bộ'
+    },
+    {
+        id: 2,
+        name: 'Payment request form - Đề nghị thanh toán'
+    }
+]
 function PrimaryInfo() {
+    const [typeValue,setTypeValue] = useState(types[0].name)
+
+    const PopupProcess = (value) =>{
+        setTypeValue(value[0])
+    }
     return (
         <StyleWrapper>
             <StyleItemsColumn>
                 <StyleItems>
                     <Text>Approval Title <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
                     <Input placeholder="Input document title..."/>
-                    <Text>Little caption goes here</Text>
+                    <Text1>Little caption goes here</Text1>
                 </StyleItems>
+            </StyleItemsColumn>
+            <StyleItemRow>
                 <StyleItems>
                     <Text>Approval Type <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
                     <Combox
                         className="combox-type"
-                        onSelect={v => console.log(v)}
-                        // selectTodo={emailCalendar}
+                        onSelect={v => PopupProcess(v)}
                     >
                         {types.map((data, index) => {
                             return(
@@ -115,16 +139,43 @@ function PrimaryInfo() {
                             )
                         })}
                     </Combox>
-                    <Text>Little caption goes here</Text>
+                    <Text1>Little caption goes here</Text1>
                 </StyleItems>
-            </StyleItemsColumn>
+                {
+                    typeValue === "Process" ?
+                    <StyleItems>
+                        <Text>Process Name <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
+                        <Combox
+                            className="combox-type"
+                            // onSelect={v => console.log(v)}
+                        >
+                            {form.map((data, index) => {
+                                return(
+                                <Combox.Option
+                                default={data.id === 1}
+                                id={data.id}
+                                searchText={[data.name]}
+                                value={data.name}    
+                                key={index}
+                                >
+                                {
+                                    data.name
+                                }
+                                </Combox.Option>
+                                )
+                            })}
+                        </Combox>
+                        <Text1>Little caption goes here</Text1>
+                    </StyleItems>
+                : ""
+                }
+                </StyleItemRow>
             <StyleItemRow>
                 <StyleItems>
                     <Text>Priority <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
                     <Combox
                         className="combox-priority"
-                        onSelect={v => console.log(v)}
-                        // selectTodo={emailCalendar}
+                        // onSelect={v => console.log(v)}
                     >
                         {priority.map((data, index) => {
                             return(
@@ -142,19 +193,18 @@ function PrimaryInfo() {
                             )
                         })}
                     </Combox>
-                    <Text>Little caption goes here</Text>
+                    <Text1>Little caption goes here</Text1>
                 </StyleItems>
                 <StyleItems>
                     <Text>Deadline <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
                     <Calendar fullWidth/>
-                    <Text>Expected date to receive final approval</Text>
+                    <Text1>Expected date to receive final approval</Text1>
                 </StyleItems>
                 <StyleItems>
                     <Text>Related Project <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
                     <Combox
                         className="combox-project"
-                        onSelect={v => console.log(v)}
-                        // selectTodo={emailCalendar}
+                        // onSelect={v => console.log(v)}
                     >
                         {project.map((data, index) => {
                             return(
@@ -172,7 +222,7 @@ function PrimaryInfo() {
                             )
                         })}
                     </Combox>
-                    <Text>Little caption goes here</Text>
+                    <Text1>Little caption goes here</Text1>
                 </StyleItems>
             </StyleItemRow>
         </StyleWrapper>

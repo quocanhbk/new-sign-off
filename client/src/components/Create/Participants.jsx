@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Combox from '../Combox';
 
 const StyleWrapper = styled.div`
-    padding: 1rem;
+    padding: 0.5rem 0;
 `
 
 const StyleItems = styled.div`
@@ -15,11 +15,18 @@ const Text = styled.label`
     display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;flex-wrap: wrap;-webkit-flex-wrap: wrap; 
 
     font-size: 0.9rem;
+    color : ${props => props.theme.color.text.primary};
+
+    padding: 0.5rem 0;
+`
+const Text1 = styled.label`
+    display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;flex-wrap: wrap;-webkit-flex-wrap: wrap; 
+
+    font-size: 0.9rem;
     color : ${props => props.theme.color.text.secondary};
 
-    padding: 0.5rem;
+    padding: 0.5rem 0;
 `
-
 const user = [
     {
         id: 1,
@@ -47,8 +54,7 @@ function Participants() {
                     multiple
                     searchable
                     className="combox-advisor-list"
-                    onSelect={v => console.log(v)}
-                    // selectTodo={emailCalendar}
+                    // onSelect={v => console.log(v)}
                 >
                     {user.map((data, index) => {
                         return(
@@ -66,7 +72,7 @@ function Participants() {
                         )
                     })}
                 </Combox>
-                <Text>List of individuals to contribute opinion for approver(s). Advisor could approve unorder but all advisor must approved before the document could be sent to the first person in Approver List.</Text>
+                <Text1>List of individuals to contribute opinion for approver(s). Advisor could approve unorder but all advisor must approved before the document could be sent to the first person in Approver List.</Text1>
             </StyleItems>
             <StyleItems>
                 <Text>Approver List <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
@@ -74,8 +80,7 @@ function Participants() {
                     multiple
                     searchable
                     className="combox-advisor-list"
-                    onSelect={v => console.log(v)}
-                    // selectTodo={emailCalendar}
+                    // onSelect={v => console.log(v)}
                 >
                     {user.map((data, index) => {
                         return(
@@ -93,7 +98,7 @@ function Participants() {
                         )
                     })}
                 </Combox>
-                <Text>List of individuals has authority to approve the document. In order to complete approval process, all person in this list must approved the document.</Text>
+                <Text1>List of individuals has authority to approve the document. In order to complete approval process, all person in this list must approved the document.</Text1>
             </StyleItems>
             <StyleItems>
                 <Text>Observator List</Text>
@@ -101,8 +106,7 @@ function Participants() {
                     multiple
                     searchable
                     className="combox-advisor-list"
-                    onSelect={v => console.log(v)}
-                    // selectTodo={emailCalendar}
+                    // onSelect={v => console.log(v)}
                 >
                     {user.map((data, index) => {
                         return(
@@ -120,7 +124,7 @@ function Participants() {
                         )
                     })}
                 </Combox>
-                <Text>List of individuals should be noted about this document but are not need to participate in approval process.</Text>
+                <Text1>List of individuals should be noted about this document but are not need to participate in approval process.</Text1>
             </StyleItems>
         </StyleWrapper>
     );

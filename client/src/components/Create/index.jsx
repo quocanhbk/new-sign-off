@@ -23,7 +23,7 @@ const StyleTitle = styled.div`
 
     & h4{
         text-transform: uppercase;
-        color: ${props => props.theme.color.text.secondary};
+        color: ${props => props.theme.color.text.primary};
     }
     & span{
         padding: 0.3rem 1rem;
@@ -62,7 +62,7 @@ const DivContent = styled.div`
     & h4{
         text-transform: uppercase;
 
-        color: ${props => props.theme.color.text.secondary};
+        color: ${props => props.theme.color.text.primary};
         border-bottom: 2px solid ${props=> props.theme.color.border.primary};
 
         padding-bottom: 0.5rem;
@@ -83,7 +83,7 @@ const Create = () => {
                     <PrimaryInfo/>
                 </DivContent>
                 <DivContent>
-                    <h4>PATICIPANTS</h4>
+                    <h4>PARTICIPANTS</h4>
                     <Participants/>
                 </DivContent>
                 <DivContent>

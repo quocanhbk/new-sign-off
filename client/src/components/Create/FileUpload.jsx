@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components'
 import {IoMdAddCircleOutline} from 'react-icons/all'
@@ -29,15 +30,20 @@ const LabelFile = styled.label`
     }
 `
 
-function FileUpload() {
+function FileUpload({data,setData}) {
 
 
-    const changeHandler = () =>{
+    const changeHandler = (e) =>{
 
+        setData([...data,{
+            id: Math.random(),
+            name: e.target.files[0].name,
+            data_field: [],
+        }])
     }
     return (
         <StyleWrapper>
-			<InputFile type="file" id="choose-file" onChange={changeHandler}/>
+			<InputFile type="file" id="choose-file"  accept = "application/pdf" onChange={changeHandler}/>
             <LabelFile htmlFor="choose-file" className="custom-file-upload" id="choose-file">
                 <IoMdAddCircleOutline size="3rem"/>
             </LabelFile>			
