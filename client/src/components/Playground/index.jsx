@@ -19,7 +19,7 @@ const ImgContainer = styled.div`
 const Playground = () => {
     const [imgArray, setImgArray] = useState([])
     const [isAdd, setIsAdd] = useState(false)
-    const [tagTitle, setTagTitle] = useState("")
+    const [tagName, setTagName] = useState("")
     const [selectedTag, setSelectedTag] = useState()
 
     const handleChange = (e) => {
@@ -37,13 +37,27 @@ const Playground = () => {
             setImgArray(res.data.path.map(p => ({id: count++, path: p, tagList: []})))
         })
     }
+    const checkTagExisted = (name) => {
+        let tagList = imgArray.map(item => item.tagList)
+        let mergedTagList = [].concat.apply([], tagList)
+
+        return mergedTagList.map(tag => tag.name).includes(name)
+    }
+    const startAddTag = (e) => {
+        e.preventDefault();
+        if (checkTagExisted(tagName)) {
+            alert("Tag name existed")
+            return
+        }
+        setIsAdd(true)
+    }
     const addTextTag = (path, pos) => {
         if (isAdd) {
             let item = imgArray.find(item => item.path === path)
-            item.tagList.push({name: tagTitle, position: pos, content: ""})
+            item.tagList.push({name: tagName, position: pos, content: ""})
             setImgArray([...imgArray.filter(item => item.path !== path), item].sort((a, b) => a.id - b.id))
             setIsAdd(false)
-            setTagTitle("")
+            setTagName("")
         }
     }
     const selectTag = (path, name) => {
@@ -71,10 +85,11 @@ const Playground = () => {
                 <form>
                     <label>Click Add Text Tag then hover the document</label>
                     <br/>
-                    <input type="text" value={tagTitle} onChange={(e) => setTagTitle(e.target.value)}/>
-                    <button onClick={(e) => {e.preventDefault();setIsAdd(true)}}>Add Text Tag</button>
+                    <input type="text" value={tagName} onChange={(e) => setTagName(e.target.value)}/>
+                    <button onClick={startAddTag}>Add Text Tag</button>
                 </form>
                 {selectedTag && <input type="text" value={getContent()} onChange={changeTagContent}/>}
+                
             </div>
             
             <ImgContainer>
