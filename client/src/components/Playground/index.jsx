@@ -89,7 +89,7 @@ const Playground = () => {
                     <button onClick={startAddTag}>Add Text Tag</button>
                 </form>
                 {selectedTag && <input type="text" value={getContent()} onChange={changeTagContent}/>}
-                
+
             </div>
             
             <ImgContainer>
