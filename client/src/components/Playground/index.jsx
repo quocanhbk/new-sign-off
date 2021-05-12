@@ -33,6 +33,7 @@ const Playground = () => {
             }
         }
         axios.post('/upload', formData, config).then((res) => {
+            console.log(res.data)
             let count = 1
             setImgArray(res.data.path.map(p => ({id: count++, path: p, tagList: []})))
         })
@@ -74,7 +75,7 @@ const Playground = () => {
         if (!selectedTag)
             return ""
         return imgArray.find(item => item.path === selectedTag.path).tagList.find(tag => tag.name === selectedTag.name).content
-    }
+    }   
     return (
         <Container>
             <div>

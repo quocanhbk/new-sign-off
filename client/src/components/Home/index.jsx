@@ -89,26 +89,26 @@ const Home = () => {
            <ContainerItems>
                 <DivItem>
                         <IconContainer>
-                            <img src="favicon.ico"/>
+                            <img src="iconHomeFile.svg"/>
                         </IconContainer>
                         
                         <Info>
                             <h4>Search For Document</h4>
-                            <p>Look for document with search engine & filter tools.</p>
+                            <p>Search for documents with search & filter tools.</p>
                         </Info>
                 </DivItem>
                 <DivItem>
                         <IconContainer>
-                            <img src="favicon.ico"/>
+                            <img src="iconHomeFile.svg"/>
                         </IconContainer>
                         <Info>
                             <h4>SIGN DOCUMENT</h4>
-                            <p>Sign files & documents that waiting for my approval</p>
+                            <p>Sign files & documents waiting for my approval</p>
                         </Info>
                 </DivItem>
                 <DivItem>
                         <IconContainer>
-                            <img src="favicon.ico"/>
+                            <img src="iconHomeFile.svg"/>
                         </IconContainer>
                         <Info>
                             <h4>VERIFY DOCUMENT</h4>
@@ -121,11 +121,11 @@ const Home = () => {
                 </DivItem>
                 <DivItem>
                         <IconContainer>
-                            <img src="favicon.ico"/>
+                            <img src="iconHomeFile.svg"/>
                         </IconContainer>
                         <Info>
-                            <h4>CREATE FILE</h4>
-                            <p>Create & submit file for approval</p>
+                            <h4>CREATE DOCUMENT</h4>
+                            <p>Create & submit document for approval</p>
                             <div>
                                 <p>Flexible approval flow</p>
                                 <p>Process approval flow</p>
