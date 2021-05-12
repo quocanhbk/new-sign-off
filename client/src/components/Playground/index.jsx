@@ -33,6 +33,7 @@ const Playground = () => {
             }
         }
         axios.post('/upload', formData, config).then((res) => {
+            console.log(res.data)
             let count = 1
             setImgArray(res.data.path.map(p => ({id: count++, path: p, tagList: []})))
         })
@@ -74,17 +75,7 @@ const Playground = () => {
         if (!selectedTag)
             return ""
         return imgArray.find(item => item.path === selectedTag.path).tagList.find(tag => tag.name === selectedTag.name).content
-    }
-
-    const addTextTag = (path, pos) => {
-        if (isAdd) {
-            let item = imgArray.find(item => item.path === path)
-            item.tagList.push({name: tagTitle, position: pos, content: ""})
-            setImgArray([...imgArray.filter(item => item.path !== path), item].sort((a, b) => a.id - b.id))
-            setIsAdd(false)
-            setTagTitle("")
-        }
-    }
+    }   
     return (
         <Container>
             <div>
