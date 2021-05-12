@@ -7,7 +7,6 @@ const StyleContainer = styled.div`
     flex-direction: column;
     width: 100%;
     height: 100%;
-    padding: 1rem 0;
 `
 const StyleTitle = styled.h4`
     text-transform: uppercase;
@@ -16,8 +15,9 @@ const StyleTitle = styled.h4`
     padding: 1rem;
     flex: 1;
 
-    box-shadow: 5px 4px 8px rgba(0, 0, 0, 0.25);
-
+    box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.25);
+    color : ${props => props.theme.color.text.secondary};
+    background: ${props => props.theme.color.background.secondary};
 `
 const ContainerItems = styled.div`
     flex: 99;
@@ -40,8 +40,8 @@ const DivItem = styled.div`
         flex-direction: row;
         align-items: center;
 
-        background: ${props => props.theme.color.background.primary};
-        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.25);
+        background: ${props => props.theme.color.background.secondary};
+        box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.25);
         border: none;
 
         &:hover{
@@ -85,14 +85,13 @@ const Info = styled.div`
     }
 `
 const Home = () => {
-
-
+   
     return (
         <StyleContainer>
            <StyleTitle>Please select service</StyleTitle>
            <ContainerItems>
                 <DivItem>
-                    <button>
+                    <button  onClick={()=> window.location.href='/search'}>
                         <img src="IconHomeFile.svg"/>
                         <Info>
                             <h4>Search For Document</h4>
@@ -101,7 +100,7 @@ const Home = () => {
                     </button>
                 </DivItem>
                 <DivItem>
-                    <button>
+                    <button  onClick={()=> window.location.href='/sign'}>
                         <img src="IconHomeFile.svg"/>
                         <Info>
                             <h4>SIGN DOCUMENT</h4>

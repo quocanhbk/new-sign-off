@@ -12,18 +12,17 @@ const TableForm = styled.div`
 
 `
 const TableTitle = styled.h4`
-    color: ${props => props.theme.color.text.secondary};
+
 `
-const Input = styled.textarea`
+const Input = styled.input`
     flex: 10;
     height: auto;
-    resize:initial;
     border:none;
 
-    padding: 0.5rem 0.5rem 0.5rem 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 
     background: transparent;
-    color: ${props => props.theme.color.text.secondary};
+    color: ${props => props.theme.color.text.primary};
 
     &:focus{
         outline: none;
@@ -37,7 +36,7 @@ const Form = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
 
     width: 100%;
-    padding: 0 0.3rem;
+    padding: 0.3rem;
     
     & button{
         flex: 1;
@@ -49,7 +48,7 @@ const Form = styled.div`
         background: transparent;
         border : none;
         
-        color: ${props => props.theme.color.text.secondary};
+        color: ${props => props.theme.color.text.primary};
     }
 `
 const TableEvents = styled.div`

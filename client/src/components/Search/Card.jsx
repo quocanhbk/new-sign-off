@@ -13,10 +13,10 @@ const CardWrapper = styled.div`
     
     display: flex;
     position: relative;
-    min-height: 7rem;
     flex-direction: column;
 
-    padding: 1rem;
+    padding: 1rem 0.5rem;
+    padding-bottom: 0.5rem;
 
     &:hover {
         background: ${props => props.theme.color.background.secondary};
@@ -40,8 +40,8 @@ const StyleTypes = styled.span`
     border-bottom-right-radius: 0.5rem;
 
     &.process{
-        background: ${props => props.theme.color.text.secondary};
-        color: ${props => props.theme.color.border.primary};
+        background-color: ${props => props.theme.color.fill.primary};
+        color: ${props => props.theme.color.background.primary};
     }
 `
 const DivMain = styled.div`
@@ -54,8 +54,9 @@ const DivIcon = styled.div`
     display:flex;
     flex-direction: column;
     align-items: center;
-    flex: 1;
-    width: 20%;
+    flex: 2;
+
+    border-radius: 0.5rem;
 
     background: ${props => props.status==="Approved" ? props.theme.color.fill.success
                 : props.status==="Stopped" ? props.theme.color.fill.info
@@ -74,13 +75,12 @@ const DivIcon = styled.div`
 `
 const DivInfo = styled.div`
     padding: 0.5rem;
-    width: 80%;
-    flex: 5;
+    flex: 9;
     & p {
         color: ${props => props.theme.color.text.secondary};
     }
     & .card-deadline{
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
     & .card-title{
         -webkit-line-clamp: 1;
@@ -89,9 +89,11 @@ const DivInfo = styled.div`
         text-overflow: ellipsis;
         display: -webkit-box;
         font-weight: bold;
+        color: ${props => props.theme.color.fill.primary};
+
     }
     & .card-create_by{
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
 `
 const StyleButton = styled.button`
@@ -99,10 +101,7 @@ const StyleButton = styled.button`
 
     background: transparent;
     border: none;
-
-    position: absolute;
-    bottom: 0;
-    right: 5%;
+    flex: 1;
 
     & svg{
         color: ${props => props.theme.color.text.secondary};
@@ -124,12 +123,12 @@ function Card({task,setSelectData,setOpen}) {
                     <p>{task.status}</p>
                 </DivIcon>
                 <DivInfo>
-                    <p className="card-deadline">Deadline: {task.deadline}</p>
                     <p className="card-title">{task.title}</p>
+                    <p className="card-deadline">Deadline: {task.deadline}</p>
                     <p className="card-create_by">{task.create_by}</p>
                 </DivInfo>
+                <StyleButton onClick={() => handleSelect(task)}><IoChevronForwardCircle size="2rem"/></StyleButton>
             </DivMain>
-            <StyleButton onClick={() => handleSelect(task)}><IoChevronForwardCircle size="1.5rem"/></StyleButton>
         </CardWrapper>
     );
 }

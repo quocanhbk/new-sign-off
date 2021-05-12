@@ -27,7 +27,6 @@ const Row = styled.tr`
 
 const HeaderCell = styled.th`
     cursor: pointer;
-    color: ${props => props.theme.color.text.secondary};
     padding: 0.3rem 0rem;
     font-weight: bold;
     border-bottom: 1px solid ${props => props.theme.color.border.primary};

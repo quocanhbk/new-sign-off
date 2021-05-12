@@ -16,7 +16,7 @@ const StyleNodata = styled.div`
 `
 const Title  = styled.p`
     text-align:center;
-    color: #666;
+    color: ${(props) => props.theme.color.text.secondary};
     font-size : 1.2rem;
 `
 
