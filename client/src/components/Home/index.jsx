@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import {getFader} from '../../utils/color'
+import Context from '../../Context'
 
 const StyleContainer = styled.div`
     display:flex;
@@ -13,15 +14,15 @@ const StyleTitle = styled.h3`
     width: 100%;
     padding: 1rem;
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
-
+    overflow: auto;
 `
 const ContainerItems = styled.div`
     flex: 1;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between; 
+    flex-direction: column;
     padding: 1rem;
     gap: 1rem;
+    overflow: auto;
 `
 const DivItem = styled.div`
     flex: 1 0 40%;
@@ -31,26 +32,34 @@ const DivItem = styled.div`
     box-shadow: ${props => props.theme.shadow};
     border: 1px solid ${props => props.theme.color.border.primary};
     border-radius: 1rem;
-    padding: 1rem;
-    transition: transform 0.15s ease-in-out;
+    padding: 1rem 1rem 1rem 0;
+    transition: background 0.15s ease-in-out;
     cursor: pointer;
     &:hover {
-        transform: scale(1.02);
+        background-color: ${props => getFader(props.theme.color.border.primary, 0.5)};
     }
 
+`
+const Row = styled.div`
+    display: flex;
+    flex: 1;
+    gap: 1rem;
 `
 const IconContainer = styled.div`
     display: flex;
     align-items: center;
     flex: 1;
     justify-content: center;
+    & img {
+        width: 100%;
+    }
 `
 const Info = styled.div`
     display:flex;
     flex-direction: column;
     width: 100%;
     padding: 1rem;
-    flex: 3;
+    flex: 3 ;
     & h4{
         font-weight: 700;
         text-transform: uppercase;
@@ -82,56 +91,62 @@ const Info = styled.div`
     }
 `
 const Home = () => {
-
+    const {navigateContext} = Context.useContainer()
+  const {navigatePath} = navigateContext
     return (
         <StyleContainer>
            <StyleTitle>Please select service</StyleTitle>
-           <ContainerItems>
-                <DivItem>
-                        <IconContainer>
-                            <img src="iconHomeFile.svg"/>
-                        </IconContainer>
-                        
-                        <Info>
-                            <h4>Search For Document</h4>
-                            <p>Search for documents with search & filter tools.</p>
-                        </Info>
-                </DivItem>
-                <DivItem>
-                        <IconContainer>
-                            <img src="iconHomeFile.svg"/>
-                        </IconContainer>
-                        <Info>
-                            <h4>SIGN DOCUMENT</h4>
-                            <p>Sign files & documents waiting for my approval</p>
-                        </Info>
-                </DivItem>
-                <DivItem>
-                        <IconContainer>
-                            <img src="iconHomeFile.svg"/>
-                        </IconContainer>
-                        <Info>
-                            <h4>VERIFY DOCUMENT</h4>
-                            <p>Verify document content by upload file or via QR code scan.</p>
-                            <div>
-                                <p>Fast check approval info via QR scan</p>
-                                <p>Upload file to verify content</p>
-                            </div>
-                        </Info>              
-                </DivItem>
-                <DivItem>
-                        <IconContainer>
-                            <img src="iconHomeFile.svg"/>
-                        </IconContainer>
-                        <Info>
-                            <h4>CREATE DOCUMENT</h4>
-                            <p>Create & submit document for approval</p>
-                            <div>
-                                <p>Flexible approval flow</p>
-                                <p>Process approval flow</p>
-                            </div>
-                        </Info>
-                </DivItem>
+           <ContainerItems >
+               <Row>
+                    <DivItem onClick={() => navigatePath('/search')}>
+                            <IconContainer>
+                                <img src="iconHomeFile.svg"/>
+                            </IconContainer>
+                            
+                            <Info>
+                                <h4>Search For Document</h4>
+                                <p>Search for documents with search & filter tools.</p>
+                            </Info>
+                    </DivItem>
+                    <DivItem>
+                            <IconContainer>
+                                <img src="iconHomeFile.svg"/>
+                            </IconContainer>
+                            <Info>
+                                <h4>SIGN DOCUMENT</h4>
+                                <p>Sign files & documents waiting for my approval</p>
+                            </Info>
+                    </DivItem>
+               </Row>
+                <Row>
+                    <DivItem>
+                            <IconContainer>
+                                <img src="iconHomeFile.svg"/>
+                            </IconContainer>
+                            <Info>
+                                <h4>VERIFY DOCUMENT</h4>
+                                <p>Verify document content by upload file or via QR code scan.</p>
+                                <div>
+                                    <p>Fast check approval info via QR scan</p>
+                                    <p>Upload file to verify content</p>
+                                </div>
+                            </Info>              
+                    </DivItem>
+                    <DivItem>
+                            <IconContainer>
+                                <img src="iconHomeFile.svg"/>
+                            </IconContainer>
+                            <Info>
+                                <h4>CREATE DOCUMENT</h4>
+                                <p>Create & submit document for approval</p>
+                                <div>
+                                    <p>Flexible approval flow</p>
+                                    <p>Process approval flow</p>
+                                </div>
+                            </Info>
+                    </DivItem>
+                </Row>
+                
            </ContainerItems>
         </StyleContainer>
     )

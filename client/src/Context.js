@@ -1,6 +1,7 @@
 import { useState } from "react"
 // https://github.com/jamiebuilds/unstated-next
 import { createContainer } from "unstated-next"
+import {navigate} from '@reach/router'
 
 const useTheme = () => {
     const [isDark, setIsDark] = useState(localStorage.getItem('ttgTheme') === "true")
@@ -43,11 +44,23 @@ const useFilter = () => {
 
     return {filter, addFilter, removeFilter}
 }
+const useNavigate = (initPath) => {
+    const [path, setPath] = useState(initPath)
+
+    const navigatePath = (path) => {
+        setPath(path)
+        navigate(path)
+    }
+
+    return {path, navigatePath}
+}
+
 const useContext = () => {
     let themeContext = useTheme()
     let searchContext = useSearch()
     let filterContext = useFilter()
-    return {themeContext, searchContext, filterContext}
+    let navigateContext = useNavigate(location.pathname)
+    return {themeContext, searchContext, filterContext, navigateContext}
 }
 
 const Context = createContainer(useContext)

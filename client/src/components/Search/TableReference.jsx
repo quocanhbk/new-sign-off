@@ -5,24 +5,20 @@ import Table from '../Table'
 
 const TableWrapper = styled.div`
     border: 1px solid ${(props) => props.theme.color.border.primary};
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.25);
     
     padding: 0.5rem;
 
-    & p{
-        color: ${props => props.theme.color.text.secondary};
-    }
 `
 const TableInfo = styled.div`
     padding: 0.5rem 0;
 `
 const TableTitle = styled.h4`
-    color: ${props => props.theme.color.text.secondary};
     padding: 0.3rem 0;
 `
 const StyleButton = styled.button`
     background : transparent;
-    color: ${props => props.theme.color.text.secondary};
+    color: ${props => props.theme.color.text.primary};
 
 
     border: 1px solid ${(props) => props.theme.color.border.primary};
