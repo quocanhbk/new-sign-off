@@ -32,7 +32,7 @@ const ImageItem = ({src, isAdd, addTextTag, tagList, selectTag}) => {
         <Container ref={ref} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onMouseMove={handleMouseMove} onMouseDown={handleClick} >
             {tagList.map(tag => <TextTag position={tag.position} key={tag.name} name={tag.name} content={tag.content} selectTag={selectTag}/>)}
             {isAdd && mouseIn && <TextTag position={curPos}/>}
-            <img src={src} alt=""/>f
+            <img src={src} alt=""/>
         </Container>
     )
 }
