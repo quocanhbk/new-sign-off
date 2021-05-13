@@ -1,4 +1,4 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes, INET, INTEGER } = require("sequelize");
 const init = require("../connectionDB/connectionDB");
 
 // approval models
@@ -7,6 +7,14 @@ const Approval = init.define("approvalInfo", {
   approvalID: {
     type: DataTypes.UUID,
     allowNull: false,
+  },
+  createByName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  createByEmail: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
   approval_title: {
     type: DataTypes.STRING,
@@ -23,13 +31,13 @@ const Approval = init.define("approvalInfo", {
   approval_deadline: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: new Date(),
+    defaultValue: init.NOW,
   },
   approval_related: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  approval_name: {
+  processName: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -37,20 +45,12 @@ const Approval = init.define("approvalInfo", {
     type: DataTypes.DATE,
     defaultValue: init.NOW,
   },
+  approvalStatus: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    allowNull: false
+  }
 });
-
-// models attachment
-// const Attachment = init.define("attachment", {
-//   // foreign key
-//   approvalID: {
-//     type: DataTypes.UUID,
-//     allowNull: false,
-//   },
-//   path: {
-//     type: DataTypes.STRING,
-//     allowNull: false,
-//   },
-// });
 
 const Advisor = init.define("advisor", {
   approvalID: {
@@ -65,6 +65,10 @@ const Advisor = init.define("advisor", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  // position: {
+  //   type: INTEGER,
+  //   allowNull: true,
+  // }
 });
 
 const Approver = init.define("approver", {
@@ -152,11 +156,11 @@ const ReferenceDoc = init.define("refernceDoc", {
 });
 
 // create table
-Approval.sync();
-Advisor.sync();
-Approver.sync();
-Observator.sync();
-ApprovalDocument.sync();
-ReferenceDoc.sync();
+// Approval.sync();
+// Advisor.sync();
+// Approver.sync();
+// Observator.sync();
+// ApprovalDocument.sync();
+// ReferenceDoc.sync();
 
-// module.exports = { Approval };
+module.exports = { Approval, Advisor, Approver, Observator, ApprovalDocument, ReferenceDoc };

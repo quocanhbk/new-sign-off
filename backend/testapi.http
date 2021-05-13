@@ -1,0 +1,18 @@
+
+
+POST http://localhost:5000/primary-info
+Content-Type: application/json
+
+{
+    "approvalID": "a0e8f8f0-f5a6-4d94-8a2a-fcb1bde27300",
+    "createByName": "Nguyen Quoc Dat",
+    "createByEmail": "quocdatsc1205@gmail.com",
+    "approval_title": "test post primary info",
+    "approval_type": "flexible",
+    "approval_priority": "normal",
+    "approval_deadline": "2020/12/05",
+    "approval_related": "Trung thuy",
+    "processName": "Quy tirnh than toan",
+    "createAt": "2020/12/05 16:33",
+    "approvalStatus": 0
+}
