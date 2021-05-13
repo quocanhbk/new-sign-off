@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import {getFader} from '../../utils/color'
 import ApprovalDocument from './ApprovalDocument'
 import Participants from './Participants'
 import PrimaryInfo from './PrimaryInfo'
+import ReferenceDocument from './ReferenceDocument'
 
 const StyleContainer = styled.div`
     display:flex;
@@ -69,8 +70,56 @@ const DivContent = styled.div`
         margin-bottom : 0.5rem;
     }
 `
+const data = [
+    {
+        id: 1,
+        name: 'Name File have field',
+    },
+    {
+        id: 2,
+        name: 'Name File no field',
+    }
+]
 
+const data2 = [
+    {
+        id: 1,
+        name: 'Name File have fieldName File have fieldName File have fieldName File have fieldName File have fieldName File have field',
+        data_field: [
+            {
+                id: 1,
+                name: 'Date of Request',
+                value: ''
+            },
+            {
+                id: 2,
+                name: 'Description',
+                value: ''
+            },
+
+            {
+                id: 3,
+                name: 'Vat',
+                value: ''
+            },
+            {
+                id: 4,
+                name: 'Value',
+                value: ''
+            },
+        ]
+    },
+    {
+        id: 2,
+        name: 'Name File no field',
+        data_field: []
+    }
+]
 const Create = () => {
+
+    const [approvalData,setApprovalData] = useState(data2)
+    const [dataReference, setDataReference] = useState(data)
+
     return (
         <StyleContainer>
             <StyleTitle>
@@ -87,11 +136,12 @@ const Create = () => {
                     <Participants/>
                 </DivContent>
                 <DivContent>
-                    <h4>APPROVAL DOCUMENT (3)</h4>
-                    <ApprovalDocument/>
+                    <h4>APPROVAL DOCUMENT ({approvalData.length})</h4>
+                    <ApprovalDocument approvalData={approvalData} setApprovalData={setApprovalData}/>
                 </DivContent>
                 <DivContent>
-                    <h4>REFERENCE DOCUMENT (2)</h4>
+                    <h4>REFERENCE DOCUMENT ({dataReference.length})</h4>
+                    <ReferenceDocument dataReference={dataReference} setDataReference={setDataReference}/>
                 </DivContent>
             </ContainerItems>
         </StyleContainer>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import styled from "styled-components";
 import propTypes from "prop-types";
@@ -18,15 +19,16 @@ Icon.defaultProps = {
 };
 
 function AvatarStatus(props) {
+  const {src}= props
   const status = true;
   return (
     <Span {...props}>
-      <Avatar src="/avatar.png" width="3.5rem" height="3.5rem" />
+      <Avatar src={src} width="3rem" height="3rem" />
       <Icon>
         {status === true ? (
-          <FaCheckCircle color="#00875A" size="1.5rem" />
+          <FaCheckCircle color="#00875A" size="1rem" />
         ) : (
-          <IoCloseCircleSharp color="red" size="1.5rem" />
+          <IoCloseCircleSharp color="red" size="1rem" />
         )}
       </Icon>
     </Span>

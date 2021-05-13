@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { getFader } from "../../utils/color";
 import AvatarStatus from "../AvatarStatus";
+import {GoPrimitiveDot} from 'react-icons/all'
 
 const Approval = styled.div`
   display:flex;
@@ -27,16 +28,15 @@ const Approval = styled.div`
   }
 `;
 const ApprovalContent = styled.div`
-  border-bottom: 2px solid #807660;
+  border-bottom: 3px solid ${props => props.theme.color.border.primary};
   margin-top: 1rem;
-  margin-left: 5%;
 `;
 const JoinGroup = styled.div`
   margin: 1rem;
 `;
 const TitleApproval = styled.h4`
   text-transform: uppercase;
-  margin: 1rem 0;
+  padding-left: 2rem;
 `;
 const CardChild = styled.div`
   display: flex;
@@ -45,23 +45,77 @@ const CardChild = styled.div`
 const InfoApproval = styled.div`
   display: flex;
   align-items: center;
-  width: 90%;
+  width: 100%;
   margin: 0.5rem 0;
+  padding-left: 1rem;
   .info {
-    div {
-      margin: 0.5rem;
+    p {
+      padding-left: 1rem;
+    }
+    & .position{
+      font-size: 0.9rem;
+      color : ${props => props.theme.color.text.secondary}
     }
   }
 `;
-const ContentStatus = styled.div`
-  border: 1px solid #4c4c4c;
-  box-sizing: border-box;
-  border-radius: 2px;
+const ButtonRemind = styled.button`
+  background-color: transparent;
+  border: 1px solid ${props => props.theme.color.border.primary};
+  border-radius: 4px;
   text-transform: capitalize;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
+  color: ${props => props.theme.color.text.secondary};
+  cursor: pointer;
 `;
+const data = [
+  {
+    id: 1,
+    submitter: [
+      {
+        id: 1,
+        name: 'Nguyen Van Bao',
+        job: 'Chuyen vien Phat trien Ung dung'
+      },
+    ],
+    advisor : [
+      {
+        id: 1,
+        name: 'Nguyen Van Cao',
+        job: 'Truong nhom Phat trien Ung dung',
+      },
+      {
+        id: 2,
+        name: 'Le Thi Bo Cau',
+        job: 'Chuyen vien HCQT'
+      }
+    ],
+    approver: [
+      {
+        id: 1,
+        name: 'Nguyen Van Gau',
+        job: 'Giam doc CNTT'
+      }
+    ],
+    observator: [
+      {
+        id: 1,
+        name: 'Nguyen Ca Chep',
+        job: 'Chuyen vien Lap Quy'
+      },
+      {
+        id: 2,
+        name: 'Nguyen Ca Ro',
+        job: 'Chuyen vien Lap Quy'
+      },
+      {
+        id: 3,
+        name: 'Nguyen Ca Hoi',
+        job: 'Chuyen vien Lap Quy'
+      }
+    ]
+  }
+]
 function ApprovalFlow() {
-  const data = [1, 2, 3];
   return (
     <Approval>
       <ApprovalContent>
@@ -70,18 +124,20 @@ function ApprovalFlow() {
           {data.map((value, index) => {
             return (
               <CardChild key={index}>
+                <GoPrimitiveDot size="1.5rem"/>
                 <InfoApproval className="info_approval">
                   <AvatarStatus
-                    astatus={value}
+                    src="/avatar.png"
+                    status={value}
                   />
                   <div className="info">
-                    <div className="name">Nguyen van A {value}</div>
-                    <div className="position">
-                      Chuyên viên Phát triển Ứng dụng
-                    </div>
+                    <p className="name">{value.submitter[0].name}</p>
+                    <p className="position">
+                      {value.submitter[0].job}
+                    </p>
                   </div>
                 </InfoApproval>
-                <ContentStatus>remind</ContentStatus>
+                <ButtonRemind>remind</ButtonRemind>
               </CardChild>
             );
           })}
@@ -90,20 +146,30 @@ function ApprovalFlow() {
           <TitleApproval>ADVISOR (2)</TitleApproval>
           {data.map((value, index) => {
             return (
-              <CardChild key={index}>
-                <InfoApproval className="info_approval">
-                  <AvatarStatus
-                    astatus={value}
-                  />
-                  <div className="info">
-                    <div className="name">Nguyen van A {value}</div>
-                    <div className="position">
-                      Chuyên viên Phát triển Ứng dụng
-                    </div>
-                  </div>
-                </InfoApproval>
-                <ContentStatus>remind</ContentStatus>
-              </CardChild>
+              <div key={index}>
+                 {
+                   value.advisor.map((val) =>{
+                     return (
+                      <CardChild key={val.id}>
+                        <GoPrimitiveDot size="1.5rem"/>
+                        <InfoApproval className="info_approval">
+                          <AvatarStatus
+                            src="/avatar.png"
+                            status={val}
+                          />
+                          <div className="info">
+                            <p className="name">{val.name}</p>
+                            <p className="position">
+                              {val.job}
+                            </p>
+                          </div>
+                        </InfoApproval>
+                        <ButtonRemind>remind</ButtonRemind>
+                    </CardChild>
+                     )
+                   })
+                 }
+              </div>
             );
           })}
         </JoinGroup>
@@ -111,70 +177,64 @@ function ApprovalFlow() {
           <TitleApproval>APPROVER (1)</TitleApproval>
           {data.map((value, index) => {
             return (
-              <CardChild key={index}>
-                <InfoApproval className="info_approval">
-                  <AvatarStatus
-                    astatus={value}
-                  />
-                  <div className="info">
-                    <div className="name">Nguyen van A {value}</div>
-                    <div className="position">
-                      Chuyên viên Phát triển Ứng dụng
-                    </div>
-                  </div>
-                </InfoApproval>
-                <ContentStatus>remind</ContentStatus>
-              </CardChild>
+              <div key={index}>
+                 {
+                   value.approver.map((val) =>{
+                     return (
+                      <CardChild key={val.id}>
+                        <GoPrimitiveDot size="1.5rem"/>
+                        <InfoApproval className="info_approval">
+                          <AvatarStatus
+                            src="/avatar.png"
+                            status={val}
+                          />
+                          <div className="info">
+                            <p className="name">{val.name}</p>
+                            <p className="position">
+                              {val.job}
+                            </p>
+                          </div>
+                        </InfoApproval>
+                        <ButtonRemind>remind</ButtonRemind>
+                    </CardChild>
+                     )
+                   })
+                 }
+              </div>
             );
           })}
         </JoinGroup>
       </ApprovalContent>
-      <ApprovalContent>
-        <TitleApproval>OBSERVATOR (3)</TitleApproval>
-        {data.map((value, index) => {
-          return (
-            <JoinGroup key={index}>
-              <CardChild>
-                <InfoApproval className="info_approval">
-                  <AvatarStatus
-                    astatus={value}
-                  />
-                  <div className="info">
-                    <div className="name">Nguyen van A {value}</div>
-                    <div className="position">
-                      Chuyên viên Phát triển Ứng dụng
-                    </div>
-                  </div>
-                </InfoApproval>
-                <ContentStatus>remind</ContentStatus>
-              </CardChild>
-            </JoinGroup>
-          );
-        })}
-      </ApprovalContent>
-      <ApprovalContent>
-        <TitleApproval>OBSERVATOR (3)</TitleApproval>
-        {data.map((value, index) => {
-          return (
-            <JoinGroup key={index}>
-              <CardChild>
-                <InfoApproval className="info_approval">
-                  <AvatarStatus
-                    astatus={value}
-                  />
-                  <div className="info">
-                    <div className="name">Nguyen van A {value}</div>
-                    <div className="position">
-                      Chuyên viên Phát triển Ứng dụng
-                    </div>
-                  </div>
-                </InfoApproval>
-                <ContentStatus>remind</ContentStatus>
-              </CardChild>
-            </JoinGroup>
-          );
-        })}
-      </ApprovalContent>
+      <JoinGroup>
+          <TitleApproval>OBSERVATOR (1)</TitleApproval>
+          {data.map((value, index) => {
+            return (
+              <div key={index}>
+                 {
+                   value.observator.map((val) =>{
+                     return (
+                      <CardChild key={val.id}>
+                      <GoPrimitiveDot size="1.5rem"/>
+                      <InfoApproval className="info_approval">
+                        <AvatarStatus
+                          src="/avatar.png"
+                          astatus={val}
+                        />
+                        <div className="info">
+                          <p className="name">{val.name}</p>
+                          <p className="position">
+                            {val.job}
+                          </p>
+                        </div>
+                      </InfoApproval>
+                    </CardChild>
+                     )
+                   })
+                 }
+              </div>
+            );
+          })}
+        </JoinGroup>
     </Approval>
   );
 }

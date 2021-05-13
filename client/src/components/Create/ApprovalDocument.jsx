@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import styled from 'styled-components'
 import Combox from '../Combox';
@@ -58,42 +59,8 @@ const form = [
         name: 'Payment request form - Đề nghị thanh toán'
     }
 ]
-const data = [
-    {
-        id: 1,
-        name: 'Name File have field',
-        data_field: [
-            {
-                id: 1,
-                name: 'Date of Request',
-                value: ''
-            },
-            {
-                id: 2,
-                name: 'Description',
-                value: ''
-            },
 
-            {
-                id: 3,
-                name: 'Vat',
-                value: ''
-            },
-            {
-                id: 4,
-                name: 'Value',
-                value: ''
-            },
-        ]
-    },
-    {
-        id: 2,
-        name: 'Name File no field',
-        data_field: []
-    }
-]
-function ApprovalDocument() {
-    const [approvalData,setApprovalData] = useState(data)
+function ApprovalDocument({approvalData,setApprovalData}) {
     const [formData,setFormData] = useState(form)
 
     const handleFormValue = () =>{
@@ -103,11 +70,20 @@ function ApprovalDocument() {
             data_field: [],
         }])
     }
+
+    const handleFile = (e) =>{
+        setApprovalData([...approvalData,{
+            id: Math.random(),
+            name: e.target.files[0].name,
+            data_field: [],
+        }])
+    }
+
     return (
         <StyleWrapper>
             <Text>The flexible approval may not follow the operational procedures, approval participants are responsible for the completeness of attached documents.</Text>
             <StyleItems>
-                <FileUpload data={approvalData} setData={setApprovalData}/>
+                <FileUpload handleFile={handleFile}/>
                 <FormSelect>
                     <Text>Select form from database</Text>
                     <Combox

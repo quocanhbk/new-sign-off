@@ -127,7 +127,7 @@ function Card({task,setSelectData,setOpen}) {
                     <p className="card-deadline">Deadline: {task.deadline}</p>
                     <p className="card-create_by">{task.create_by}</p>
                 </DivInfo>
-                <StyleButton onClick={() => handleSelect(task)}><IoChevronForwardCircle size="2rem"/></StyleButton>
+                <StyleButton onClick={() => handleSelect(task)}><IoChevronForwardCircle size="2.5rem"/></StyleButton>
             </DivMain>
         </CardWrapper>
     );

@@ -30,20 +30,11 @@ const LabelFile = styled.label`
     }
 `
 
-function FileUpload({data,setData}) {
+function FileUpload({handleFile}) {
 
-
-    const changeHandler = (e) =>{
-
-        setData([...data,{
-            id: Math.random(),
-            name: e.target.files[0].name,
-            data_field: [],
-        }])
-    }
     return (
         <StyleWrapper>
-			<InputFile type="file" id="choose-file"  accept = "application/pdf" onChange={changeHandler}/>
+			<InputFile type="file" id="choose-file"  accept = "application/pdf" onChange={handleFile}/>
             <LabelFile htmlFor="choose-file" className="custom-file-upload" id="choose-file">
                 <IoMdAddCircleOutline size="3rem"/>
             </LabelFile>			

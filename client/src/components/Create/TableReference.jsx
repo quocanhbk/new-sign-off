@@ -8,17 +8,10 @@ const TableWrapper = styled.div`
     border: 1px solid ${(props) => props.theme.color.border.primary};
     box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.25);
 
+    margin-top: 1rem;
     padding: 0.5rem;
 `;
 
-const TableField = styled.table`
-  & th {
-    vertical-align: top;
-  }
-  & .field-value {
-    font-weight: normal;
-  }
-`;
 const DivButton = styled.div`
     display:flex;
     justify-content: space-around;
@@ -37,7 +30,7 @@ const ButtonDetail = styled.button`
     border: none;
     cursor: pointer;
 `
-function TableApproval({data,setData}) {
+function TableReference({data,setData}) {
 
     const removeItem = (value) =>{
        console.log(value)
@@ -48,11 +41,8 @@ function TableApproval({data,setData}) {
             <Table>
                 <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell textAlign="left" width="30%">
+                    <Table.HeaderCell textAlign="left" width="90%">
                     Name
-                    </Table.HeaderCell>
-                    <Table.HeaderCell textAlign="left" width="60%">
-                    Data Field
                     </Table.HeaderCell>
                     <Table.HeaderCell textAlign="center" width="10%">
                     Action
@@ -65,32 +55,6 @@ function TableApproval({data,setData}) {
                     <Table.Row key={keys}>
                         <Table.Cell textAlign="left">
                             <p><VscFilePdf size="18px" style={{marginRight: '0.2rem'}}/>{val.name}</p>
-                        </Table.Cell>
-                        <Table.Cell textAlign="left">
-                        {val.data_field && val.data_field.length > 0 ? (
-                            val.data_field.map((val) => {
-                            return (
-                                <TableField
-                                className="table-data-field"
-                                key={val.id}
-                                style={{ width: "100%" }}
-                                >
-                                <tbody>
-                                    <tr>
-                                    <th style={{ width: "35%",textAlign: "left" }}>
-                                        <p>{val.name + ":"}</p>
-                                    </th>
-                                    <th>
-                                        <p className="field-value">{(val.value !== '') ? val.value : 'N/A'}</p>
-                                    </th>
-                                    </tr>
-                                </tbody>
-                                </TableField>
-                            );
-                            })
-                        ) : (
-                            <p className="field-value">N/A</p>
-                        )}
                         </Table.Cell>
                         <Table.Cell textAlign="left">
                             <DivButton>
@@ -107,4 +71,4 @@ function TableApproval({data,setData}) {
     );
 }
 
-export default TableApproval;
+export default TableReference;
