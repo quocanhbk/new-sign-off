@@ -7,10 +7,9 @@ const CardWrapper = styled.div`
     display:flex;
     align-items: center;
     
-    padding: 0.5rem 0.3rem;
+    padding: 0.3rem;
     gap: 0.5rem;
     margin: 0.5rem 0;
-
 `
 const DivAvatar = styled.div`
     padding: 0;
@@ -19,10 +18,6 @@ const DivInfo = styled.div`
     display:flex;
     flex-direction: column;
     
-    & p{
-        color: ${props => props.theme.color.text.secondary};
-    }
-
     & .create-event{
         display:flex;
         align-items: flex-end;

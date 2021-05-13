@@ -5,14 +5,14 @@ import React, { useState, useEffect } from 'react';
 const Container = styled.div`
     height: ${props => props.fullHeight ? "100%" : props.height ? props.height : "auto"};
     display: flex;
-    flex-direction: column;
-    
+    flex-direction: column;    
 `;
 const DivTab = styled.div`
     display:flex;
     align-items:center;
     justify-content:center;
     padding: 1rem;
+    
 `;
 const ButtonTab=styled.button`
     display:block;
@@ -30,16 +30,14 @@ const ButtonTab=styled.button`
     color:${props => props.theme.color.text.primary};
     background: transparent;
     transition: .4s all;
-
+    background-color: ${props => props.theme.color.border.primary};
+    border-radius: 1rem 1rem 0 0;
     &:disabled {
         color: ${props => props.theme.color.text.disabled};
     }
     &.active{
         background: ${props => props.theme.color.text.secondary};
         color: ${props => props.theme.color.border.primary};
-
-        border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem;
 
         transition: .4s all;
     }

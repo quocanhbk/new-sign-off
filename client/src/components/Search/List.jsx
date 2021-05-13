@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components'
 import Card from './Card';
 import ListToolbar from './ListToolbar';
+import {getFader} from '../../utils/color'
 
 const StyleListWrapper =styled.div`
     flex: 5;
@@ -29,6 +30,23 @@ const CardList = styled.div`
     width: 100%;
     flex: 1;
     
+    overflow: auto;
+    position: relative;
+    
+    ::-webkit-scrollbar {
+    width: 0.5rem;
+    }
+    ::-webkit-scrollbar-track {
+    background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+    background: ${props => getFader(props.theme.color.fill.secondary, 0.5)};
+    border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+    background: ${props => props.theme.color.fill.secondary};
+    }
+
     display:flex;
     flex-direction: column;
     

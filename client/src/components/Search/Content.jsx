@@ -36,12 +36,12 @@ const DivContent = styled.div`
 `
 const Label = styled.p`
     font-weight: bold;
-    color: ${props => props.theme.color.text.secondary};
+    color: ${props => props.theme.color.text.primary};
 `
 const TextFill  = styled.p`
     padding: 0.3rem 0;
 
-    color: ${props => props.theme.color.text.secondary};
+    color: ${props => props.theme.color.text.primary};
 `
 
 const dataList=[

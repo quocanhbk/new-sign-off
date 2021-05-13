@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled, {css} from 'styled-components';
 import { BsThreeDotsVertical} from 'react-icons/bs';
 import Avatar from './Avatar';
 import Context from '../Context'
 import ThemeToggle from './ThemeToggle'
 import pageList from '../pageList'
-import { navigate } from '@reach/router';
 import { getFader } from '../utils/color';
 
 // Hard Coded the background-color, not gonna bother with this thing
@@ -111,8 +110,8 @@ const Footer = styled.div`
   }
 `
 const SideBar = () => {
-  const {themeContext} = Context.useContainer()
-  const [pathname, setPathname] = useState(location.pathname)
+  const {themeContext, navigateContext} = Context.useContainer()
+  const {path, navigatePath} = navigateContext
   return (
     <SidebarContainer>
       <Header>
@@ -129,7 +128,7 @@ const SideBar = () => {
       </UserDisplayCard>
       <NavList>
         {pageList.map(item => 
-          <NavItem key={item.text} onClick={() =>{navigate(item.path);setPathname(item.path)}} active={item.path === pathname}>
+          <NavItem key={item.text} onClick={() =>{navigatePath(item.path)}} active={item.path === path}>
             {item.icon}
             <p>{item.text}</p>
           </NavItem>  

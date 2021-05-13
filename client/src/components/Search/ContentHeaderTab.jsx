@@ -16,11 +16,12 @@ const ContentTitle = styled.div`
   flex: 10;
   padding: 0 1rem;
   & p {
-    color: ${(props) => props.theme.color.text.secondary};
+    color: ${props => props.theme.color.text.primary};
     flex: 1;
   }
   & .content-modified {
     font-size: 0.8rem;
+    color: ${props => props.theme.color.text.secondary};
   }
   & .content-title {
     font-weight: bold;
@@ -41,7 +42,7 @@ const ContentProperties = styled.div`
 `;
 const Approved = styled.span`
   background: ${(props) => props.theme.color.border.primary};
-  color: ${(props) => props.theme.color.text.primary};
+  color: ${props => props.theme.color.text.primary};
 
   margin-top: 0.5rem;
 `

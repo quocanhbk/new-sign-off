@@ -89,8 +89,9 @@ const Playground = () => {
                     <input type="text" value={tagName} onChange={(e) => setTagName(e.target.value)}/>
                     <button onClick={startAddTag}>Add Text Tag</button>
                 </form>
+                <hr/>
+                <div>Change tag content</div>
                 {selectedTag && <input type="text" value={getContent()} onChange={changeTagContent}/>}
-
             </div>
             
             <ImgContainer>
