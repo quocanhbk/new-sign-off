@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from '../Table';
 import styled from 'styled-components'
 import {AiOutlineDelete,VscFilePdf,BiDotsVerticalRounded} from 'react-icons/all'
@@ -37,11 +38,35 @@ const ButtonDetail = styled.button`
     border: none;
     cursor: pointer;
 `
-function TableApproval({data,setData}) {
-
+const LabelFile = styled.label`
+    cursor: pointer;
+    background-color: ${props => props.theme.color.fill.success};
+    color: ${props => props.theme.color.background.primary};
+    padding: 0.2rem 0.3rem;
+    border-radius: 4px;
+`
+function TableApprovalProcess({data,setData}) {
     const removeItem = (value) =>{
        setData(data.filter(item => item.id !== value.id))
     }
+    const handleFile = (e,val) =>{
+        
+        if(e.target.files[0].name !== "")
+        {
+            setData(
+                data.approvalDocument.map((item) => {
+                  if (item.id === val.id) {
+                    return {
+                      ...item,
+                      is_File: true,
+                    };
+                  }
+                  return item;
+                })
+              );
+        }
+    }
+
     return (
         <TableWrapper className="table-list-1">
             <Table>
@@ -50,7 +75,10 @@ function TableApproval({data,setData}) {
                     <Table.HeaderCell textAlign="left" width="30%">
                     Name
                     </Table.HeaderCell>
-                    <Table.HeaderCell textAlign="left" width="60%">
+                    <Table.HeaderCell textAlign="left" width="30%">
+                    File Name
+                    </Table.HeaderCell>
+                    <Table.HeaderCell textAlign="left" width="30%">
                     Data Field
                     </Table.HeaderCell>
                     <Table.HeaderCell textAlign="center" width="10%">
@@ -59,14 +87,21 @@ function TableApproval({data,setData}) {
                 </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                {data.map((val, keys) => {
+                {data && data.approvalDocument.map((val, keys) => {
                     return (
                     <Table.Row key={keys}>
                         <Table.Cell textAlign="left">
                             <p><VscFilePdf size="18px" style={{marginRight: '0.2rem'}}/>{val.name}</p>
                         </Table.Cell>
                         <Table.Cell textAlign="left">
-                        {val.data_field && val.data_field.length > 0 ? (
+                            {val.file_name !== "" ? (
+                                <p>{val.file_name}</p>
+                            ) : (
+                                <p className="field-value">N/A</p>
+                            )}
+                        </Table.Cell>
+                        <Table.Cell textAlign="left">
+                        { val.data_field.length > 0 ? (
                             val.data_field.map((val) => {
                             return (
                                 <TableField
@@ -93,8 +128,20 @@ function TableApproval({data,setData}) {
                         </Table.Cell>
                         <Table.Cell textAlign="left">
                             <DivButton>
-                                <ButtonRemove onClick={() => removeItem(val)}><AiOutlineDelete size="1.5rem"/></ButtonRemove>
-                                <ButtonDetail><BiDotsVerticalRounded size="1.5rem"/></ButtonDetail>
+                                {
+                                    !val.is_File ?
+                                        <>
+                                            <input style={{display: 'none'}} type="file" id={val.name} accept = "application/pdf" onChange={(e) => handleFile(e,val)}/>
+                                            <LabelFile htmlFor={val.name} className="custom-file-upload" id={val.name}>
+                                                Attach File
+                                            </LabelFile>
+                                        </>
+                                    :
+                                    <>
+                                        <ButtonRemove onClick={() => removeItem(val)}><AiOutlineDelete size="1.5rem"/></ButtonRemove>
+                                        <ButtonDetail><BiDotsVerticalRounded size="1.5rem"/></ButtonDetail>
+                                    </>
+                                }
                             </DivButton>
                         </Table.Cell>
                     </Table.Row>
@@ -106,4 +153,4 @@ function TableApproval({data,setData}) {
     );
 }
 
-export default TableApproval;
+export default TableApprovalProcess;

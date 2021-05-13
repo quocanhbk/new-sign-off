@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import IconStatus from './IconStatus';
-import {MdMoreVert} from 'react-icons/all'
+import {TiEyeOutline} from 'react-icons/all'
 
 const CardWrapper = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
@@ -127,7 +127,7 @@ function Card({task,setSelectData,setOpen}) {
                     <p className="card-deadline">Deadline: {task.deadline}</p>
                     <p className="card-create_by">{task.create_by}</p>
                 </DivInfo>
-                <StyleButton onClick={() => handleSelect(task)}><MdMoreVert size="2.5rem"/></StyleButton>
+                <StyleButton onClick={() => handleSelect(task)}><TiEyeOutline size="2.5rem"/></StyleButton>
             </DivMain>
         </CardWrapper>
     );

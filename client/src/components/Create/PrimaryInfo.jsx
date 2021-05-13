@@ -92,23 +92,13 @@ const project = [
         name: 'Lancaster'
     }
 ]
-const form = [
-    {
-        id: 1,
-        name: 'Đề nghị thanh toán nội bộ'
-    },
-    {
-        id: 2,
-        name: 'Payment request form - Đề nghị thanh toán'
-    }
-]
-function PrimaryInfo({approvalNavigate}) {
+
+function PrimaryInfo({approvalNavigate,dataForm,setGetDataForm}) {
     const [typeValue,setTypeValue] = useState(types[0].name)
 
     const PopupProcess = (value) =>{
         setTypeValue(value[0])
     }
-    console.log(approvalNavigate)
 
     return (
         <StyleWrapper>
@@ -152,15 +142,15 @@ function PrimaryInfo({approvalNavigate}) {
                         <Text>Process Name <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
                         <Combox
                             className="combox-type"
-                            // onSelect={v => console.log(v)}
+                            onSelect={v => setGetDataForm(v[0])}
                         >
-                            {form.map((data, index) => {
+                            {dataForm.map((data, index) => {
                                 return(
                                 <Combox.Option
                                 default={data.id === 1}
                                 id={data.id}
                                 searchText={[data.name]}
-                                value={data.name}    
+                                value={data}    
                                 key={index}
                                 >
                                 {

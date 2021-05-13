@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import {getFader} from '../../utils/color'
-import ApprovalDocument from './ApprovalDocument'
+// import ApprovalDocument from './ApprovalDocument'
+import ApprovalDocumentProcess from './ApprovalDocumentProcess'
 import DescriptionEditor from './DescriptionEditor'
 import Participants from './Participants'
 import PrimaryInfo from './PrimaryInfo'
@@ -137,13 +139,59 @@ const data2 = [
         data_field: []
     }
 ]
+const form = [
+    {
+        id: 1,
+        name: 'Đề nghị thanh toán nội bộ',
+        approvalDocument: [
+            {
+                id : 1,
+                name: 'Name File 1',
+                file_name: 'ahihi.pdf',
+                data_field: [],
+                is_File: true,
+            },
+            {
+                id : 2,
+                name: 'Name File 2',
+                file_name: '',
+                data_field: [],
+                is_File: false,
+            }
+        ]
+    },
+    {
+        id: 2,
+        name: 'Payment request form - Đề nghị thanh toán',
+        approvalDocument: [
+            {
+                id : 1,
+                name: 'Payment File 1',
+                file_name: 'ahihi.pdf',
+                data_field: [],
+                is_File: true,
+            },
+            {
+                id : 2,
+                name: 'Payment File 2',
+                file_name: '',
+                data_field: [],
+                is_File: false,
+            }
+        ]
+    }
+]
 const Create = () => {
 
     const [approvalData,setApprovalData] = useState(data2)
     const [dataReference, setDataReference] = useState(data)
 
-    const [approvalNavigate, setApprovalNavigate] = useState()
+    const [dataForm ,setDataForm ] = useState(form)
+    const [getDataForm, setGetDataForm] = useState()
+    const [dataFormValue , setDataFormValue] = useState()
 
+    const [approvalNavigate, setApprovalNavigate] = useState()
+    
     useEffect(()=>{
       if(localStorage.getItem('approval')){
         setApprovalNavigate(JSON.parse(localStorage.getItem('approval')))
@@ -152,7 +200,10 @@ const Create = () => {
         },[1000])
       }
     },[])
-
+    useEffect(() =>{
+        setDataFormValue(getDataForm)
+    },[getDataForm])
+    
     return (
         <StyleContainer>
             <StyleTitle>
@@ -166,7 +217,7 @@ const Create = () => {
             <ContainerItems>
                 <DivContent>
                     <h4>Primary Info</h4>
-                    <PrimaryInfo approvalNavigate={approvalNavigate}/>
+                    <PrimaryInfo approvalNavigate={approvalNavigate} dataForm={dataForm} setGetDataForm={setGetDataForm}/>
                 </DivContent>
                 <DivContent>
                     <h4>PARTICIPANTS</h4>
@@ -174,7 +225,7 @@ const Create = () => {
                 </DivContent>
                 <DivContent>
                     <h4>APPROVAL DOCUMENT ({approvalData.length})</h4>
-                    <ApprovalDocument approvalData={approvalData} setApprovalData={setApprovalData}/>
+                    <ApprovalDocumentProcess dataForm={dataFormValue} setDataForm={setDataFormValue}/>
                 </DivContent>
                 <DivContent>
                     <h4>REFERENCE DOCUMENT ({dataReference.length})</h4>
