@@ -32,7 +32,7 @@ const ButtonRemove = styled.button`
 `
 const ButtonDetail = styled.button`
     background-color: transparent;
-    color: ${props => props.theme.color.fill.primary};
+    color: ${props => props.theme.color.text.primary};
 
     border: none;
     cursor: pointer;

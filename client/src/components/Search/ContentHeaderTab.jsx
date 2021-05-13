@@ -54,7 +54,6 @@ const Status = styled.span`
   color: ${(props) => props.theme.color.background.primary};
 `
 const ContentHeaderTab = ({selectData}) => {
-  console.log(selectData)
   return (
     <ContentInfo>
       <ContentTitle>

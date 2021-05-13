@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, {  useState } from 'react';
 import styled from 'styled-components'
 import Combox from '../Combox'
@@ -101,12 +102,14 @@ const form = [
         name: 'Payment request form - Đề nghị thanh toán'
     }
 ]
-function PrimaryInfo() {
+function PrimaryInfo({approvalNavigate}) {
     const [typeValue,setTypeValue] = useState(types[0].name)
 
     const PopupProcess = (value) =>{
         setTypeValue(value[0])
     }
+    console.log(approvalNavigate)
+
     return (
         <StyleWrapper>
             <StyleItemsColumn>
@@ -122,15 +125,17 @@ function PrimaryInfo() {
                     <Combox
                         className="combox-type"
                         onSelect={v => PopupProcess(v)}
+                        selectTodo={approvalNavigate}
                     >
                         {types.map((data, index) => {
                             return(
                             <Combox.Option
-                            default={data.id === 1}
+                            default={(approvalNavigate !== undefined ? data.id === 2 : data.id === 1)}
                             id={data.id}
                             searchText={[data.name]}
                             value={data.name}    
                             key={index}
+                            approval={true}
                             >
                             {
                                 data.name

@@ -11,7 +11,7 @@ const Text = styled.label`
     display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;flex-wrap: wrap;-webkit-flex-wrap: wrap; 
 
     font-size: 0.9rem;
-    color : ${props => props.theme.color.text.primary};
+    color : ${props => props.theme.color.text.secondary};
 
     padding: 0.5rem 0;
 `
@@ -28,7 +28,7 @@ function ReferenceDocument({dataReference,setDataReference}) {
     return (
         <StyleWrapper>
             <Text>The flexible approval may not follow the operational procedures, approval participants are responsible for the completeness of attached documents</Text>
-            <FileUpload handleFile={handleFile}/>
+            <FileUpload handleFile={handleFile} name="choose-file2"/>
             <TableReference data={dataReference} setData={setDataReference}/>
         </StyleWrapper>
     );

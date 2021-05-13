@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import {getFader} from '../../utils/color'
 import ApprovalDocument from './ApprovalDocument'
+import DescriptionEditor from './DescriptionEditor'
 import Participants from './Participants'
 import PrimaryInfo from './PrimaryInfo'
 import ReferenceDocument from './ReferenceDocument'
@@ -26,12 +27,33 @@ const StyleTitle = styled.div`
         text-transform: uppercase;
         color: ${props => props.theme.color.text.primary};
     }
-    & span{
+
+`
+const StyleButton = styled.div`
+    display:flex;
+
+    gap: 1rem;
+    & button{
         padding: 0.3rem 1rem;
 
         font-weight: bold;
-        background: ${props => props.theme.color.text.secondary};
-        color: ${props => props.theme.color.background.primary};
+        text-transform: uppercase;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        
+        &.btn-stored{
+            background: ${props => props.theme.color.fill.info};
+            color: ${props => props.theme.color.background.primary};
+        }
+        &.btn-draft{
+            background: ${props => getFader(props.theme.color.text.primary, 0.3)};
+            color: ${props => props.theme.color.text.primary};
+        }
+        &.btn-preview{
+            background: ${props => props.theme.color.text.primary};
+            color: ${props => props.theme.color.background.primary};
+        }
     }
 `
 const ContainerItems = styled.div`
@@ -120,16 +142,31 @@ const Create = () => {
     const [approvalData,setApprovalData] = useState(data2)
     const [dataReference, setDataReference] = useState(data)
 
+    const [approvalNavigate, setApprovalNavigate] = useState()
+
+    useEffect(()=>{
+      if(localStorage.getItem('approval')){
+        setApprovalNavigate(JSON.parse(localStorage.getItem('approval')))
+        setTimeout(()=>{
+          localStorage.removeItem('approval')
+        },[1000])
+      }
+    },[])
+
     return (
         <StyleContainer>
             <StyleTitle>
                 <h4>CREATE A NEW APPROVAL DOCUMENT</h4>
-                <span>PREVIEW</span>
+                <StyleButton>
+                    <button className="btn-stored">Load from stored</button>
+                    <button className="btn-draft">Save Draft</button>
+                    <button className="btn-preview">PREVIEW</button>
+                </StyleButton>
             </StyleTitle>
             <ContainerItems>
                 <DivContent>
                     <h4>Primary Info</h4>
-                    <PrimaryInfo/>
+                    <PrimaryInfo approvalNavigate={approvalNavigate}/>
                 </DivContent>
                 <DivContent>
                     <h4>PARTICIPANTS</h4>
@@ -142,6 +179,10 @@ const Create = () => {
                 <DivContent>
                     <h4>REFERENCE DOCUMENT ({dataReference.length})</h4>
                     <ReferenceDocument dataReference={dataReference} setDataReference={setDataReference}/>
+                </DivContent>
+                <DivContent>
+                    <h4>DESCRIPTION</h4>
+                    <DescriptionEditor/>
                 </DivContent>
             </ContainerItems>
         </StyleContainer>

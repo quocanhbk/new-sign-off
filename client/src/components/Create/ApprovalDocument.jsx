@@ -6,17 +6,9 @@ import FileUpload from './FileUpload';
 import TableApproval from './TableApproval';
 
 const StyleWrapper = styled.div`
-    padding: 0.5rem 0;
+    padding: 0.5rem 0 1rem 0;
 `
 const Text = styled.label`
-    display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;flex-wrap: wrap;-webkit-flex-wrap: wrap; 
-
-    font-size: 0.9rem;
-    color : ${props => props.theme.color.text.primary};
-
-    padding: 0.5rem 0;
-`
-const Text1 = styled.label`
     display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;flex-wrap: wrap;-webkit-flex-wrap: wrap; 
 
     font-size: 0.9rem;
@@ -43,7 +35,7 @@ const Div = styled.div`
 
     & button{
         background: ${props => props.theme.color.fill.success};
-        color: ${props => props.theme.color.text.primary};
+        color: ${props => props.theme.color.background.primary};
         cursor: pointer;
         padding: 0.5rem 1rem;
         border: none;
@@ -83,7 +75,7 @@ function ApprovalDocument({approvalData,setApprovalData}) {
         <StyleWrapper>
             <Text>The flexible approval may not follow the operational procedures, approval participants are responsible for the completeness of attached documents.</Text>
             <StyleItems>
-                <FileUpload handleFile={handleFile}/>
+                <FileUpload handleFile={handleFile} name="choose-file"/>
                 <FormSelect>
                     <Text>Select form from database</Text>
                     <Combox
@@ -106,7 +98,7 @@ function ApprovalDocument({approvalData,setApprovalData}) {
                             )
                         })}
                     </Combox>
-                    <Text1>Little caption goes here</Text1>
+                    <Text>Little caption goes here</Text>
                     <Div>
                         <button onClick={() => handleFormValue()}>Use form</button>
                     </Div>

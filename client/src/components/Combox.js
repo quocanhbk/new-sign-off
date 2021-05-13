@@ -122,7 +122,7 @@ const StyledItem = styled.div`
     display: flex;
     align-items: center;
     pointer-events: ${props => props.multiple ? 'unset' : 'none'};
-    background: ${props => props.theme.color.background.secondary};
+    background: ${props => props.multiple ? props.theme.color.border.primary : 'transparent'};
     color: ${props => props.theme.color.text.primary};
     animation: ${opa} 0.15s linear 0s 1 normal forwards;
     border-radius: 2px;

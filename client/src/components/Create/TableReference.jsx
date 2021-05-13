@@ -8,7 +8,7 @@ const TableWrapper = styled.div`
     border: 1px solid ${(props) => props.theme.color.border.primary};
     box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.25);
 
-    margin-top: 1rem;
+    margin: 1rem 0;
     padding: 0.5rem;
 `;
 
@@ -25,7 +25,7 @@ const ButtonRemove = styled.button`
 `
 const ButtonDetail = styled.button`
     background-color: transparent;
-    color: ${props => props.theme.color.fill.primary};
+    color: ${props => props.theme.color.text.primary};
 
     border: none;
     cursor: pointer;

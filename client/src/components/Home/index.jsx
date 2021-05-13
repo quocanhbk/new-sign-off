@@ -83,6 +83,7 @@ const Info = styled.div`
             padding: 0.5rem 1rem;
             margin: 0.5rem 0;
             border-radius: 0.5rem;
+            display:block;
             font-size: 0.9rem;
             &:hover {
                 background: ${props => getFader(props.theme.color.fill.secondary, 0.9)};
@@ -92,7 +93,12 @@ const Info = styled.div`
 `
 const Home = () => {
     const {navigateContext} = Context.useContainer()
-  const {navigatePath} = navigateContext
+    const {navigatePath} = navigateContext
+
+    const navigateProcess = () =>{
+        localStorage.setItem('approval' , JSON.stringify('Process'))
+        navigatePath('/create')
+    }
     return (
         <StyleContainer>
            <StyleTitle>Please select service</StyleTitle>
@@ -140,8 +146,8 @@ const Home = () => {
                                 <h4>CREATE DOCUMENT</h4>
                                 <p>Create & submit document for approval</p>
                                 <div>
-                                    <p>Flexible approval flow</p>
-                                    <p>Process approval flow</p>
+                                    <p onClick={() => navigatePath('/create')}>Flexible approval flow</p>
+                                    <p onClick={() => navigateProcess()}>Process approval flow</p>
                                 </div>
                             </Info>
                     </DivItem>
