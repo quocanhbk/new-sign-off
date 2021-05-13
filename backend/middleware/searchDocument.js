@@ -1,45 +1,32 @@
 const express = require("express");
 const router = express.Router();
-const { InsertApproval } = require("../controller/insertController");
+const { SelectListApproval } = require("../controller/searchController");
 
-router.post("/", (req, res) => {
-  const {
-    approvalID,
-    createByName,
-    createByEmail,
-    approval_title,
-    approval_type,
-    approval_priority,
-    approval_deadline,
-    approval_related,
-    processName,
-    createAt,
-    approvalStatus,
-  } = req.body;
-
-  InsertApproval(
-    approvalID,
-    createByName,
-    createByEmail,
-    approval_title,
-    approval_type,
-    approval_priority,
-    approval_deadline,
-    approval_related,
-    processName,
-    createAt,
-    approvalStatus
-  ).then(() => {
-      res.json({
-          _isInsert: true
-      });
-  })
-  .catch(err => {
+// select list search
+router.get("/:email", async (req, res) => {
+  const email = await req.params.email
+  SelectListApproval(email)
+    .then((results) => {
+      res.json(results)
+    })
+    .catch(err => {
       console.error(err)
-      res.json({
-          _isInsert: false
-      })
-  })
+      res.json({_isGet: false})
+    })
 });
+
+// get details content approlval flow
+// router.get('/details/:approvalID', (req, res) => {
+//   const { approvalID } = req.params.approvalID
+//   GetDetailsApproval(approvalID)
+//     .then((results) => {
+//       res.json(results)
+//     })
+//     .catch(err => {
+//       console.error(err)
+//       res.json({_isGet: false})
+//     })
+// })
+
 
 module.exports = router;

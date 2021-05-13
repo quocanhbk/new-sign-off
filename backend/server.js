@@ -4,7 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const cors = require("cors");
 const morgan = require("morgan");
-const http = require('http')
+const http = require("http");
 
 // init database
 // const select = require("./controller/selectController");
@@ -18,12 +18,14 @@ app.use(cors());
 
 // call middleware
 const UploadController = require("./controller/uploadFile");
-const insert = require("./middleware/searchDocument");
+const searchDocument = require("./middleware/searchDocument");
+const create = require("./middleware/createDocument");
 
 // use middleware
 // if it handles the route, we call it controller, middleware is the sub-controller before the controller
 app.use("/upload", UploadController);
-app.use("/primary-info", insert);
+app.use("/primary-info", searchDocument);
+app.use("/create-document", create);
 
-const server = http.createServer(app)
+const server = http.createServer(app);
 server.listen(PORT, () => console.log("Server is running on port " + PORT));

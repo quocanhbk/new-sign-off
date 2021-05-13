@@ -1,18 +1,20 @@
 const {
   Approval,
-  Advisor,
-  Approver,
-  Observator,
+  Participants,
   ApprovalDocument,
   ReferenceDoc,
+  Comment,
+  History,
 } = require("../models/allModels");
 
-// insert primary info
+// insert primary infoapprovalID: {
 const InsertApproval = async (
   approvalID,
   createByName,
   createByEmail,
+  createPosition,
   approval_title,
+  approval_description,
   approval_type,
   approval_priority,
   approval_deadline,
@@ -25,7 +27,9 @@ const InsertApproval = async (
     approvalID: approvalID,
     createByName: createByName,
     createByEmail: createByEmail,
+    createPosition: createPosition,
     approval_title: approval_title,
+    approval_description: approval_description,
     approval_type: approval_type,
     approval_priority: approval_priority,
     approval_deadline: approval_deadline,
@@ -36,70 +40,26 @@ const InsertApproval = async (
   });
 };
 
-// insert advisor
-const InsertAdvisor = async (approvalID, advisorEmail, advisorName) => {
-  await Advisor.create({
-    approvalID: approvalID,
-    advisorEmail: advisorEmail,
-    advisorName: advisorName,
-  });
-};
-
-// insert approver
-const InsertApprover = async (approvalID, advisorEmail, advisorName) => {
-  await Approver.create({
-    approvalID: approvalID,
-    advisorEmail: advisorEmail,
-    advisorName: advisorName,
-  });
-};
-
-// insert Observator
-const InsertObservator = async (approvalID, advisorEmail, advisorName) => {
-  await Observator.create({
-    approvalID: approvalID,
-    advisorEmail: advisorEmail,
-    advisorName: advisorName,
-  });
-};
-
-// insert ApprovalDocument
-const InsertApprovalDocument = async (
+const InsertParticipant = async (
   approvalID,
-  attachment,
-  nameDocument,
-  requestAt,
-  description,
-  valueVAT,
-  VAT,
-  totalPay
+  paticipantName,
+  paticipantEmail,
+  paticipantPosition,
+  paticipantType,
+  _isApproval,
+  paticipantStatus
 ) => {
-  await ApprovalDocument.create({
+  await Participants.create({
     approvalID: approvalID,
-    attachment: attachment,
-    nameDocument: nameDocument,
-    requestAt: requestAt,
-    description: description,
-    valueVAT: valueVAT,
-    VAT: VAT,
-    totalPay: totalPay,
+    paticipantName: paticipantName,
+    paticipantEmail: paticipantEmail,
+    paticipantPosition: paticipantPosition,
+    paticipantType: paticipantType,
+    _isApproval: _isApproval,
+    paticipantStatus: paticipantStatus,
   });
 };
-
-// insert ReferenceDoc
-const InsertReferenceDoc = async (approvalID, attachment, nameDocument) => {
-  await ReferenceDoc.create({
-    approvalID: approvalID,
-    attachment: attachment,
-    nameDocument: nameDocument,
-  });
-};
-
 module.exports = {
   InsertApproval,
-  InsertAdvisor,
-  InsertApprover,
-  InsertObservator,
-  InsertApprovalDocument,
-  InsertReferenceDoc,
+  InsertParticipant
 };

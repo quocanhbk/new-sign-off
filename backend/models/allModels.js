@@ -1,9 +1,8 @@
-const { DataTypes, INET, INTEGER } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const init = require("../connectionDB/connectionDB");
 
 // approval models
 const Approval = init.define("approvalInfo", {
-  // foreign key: approvalID
   approvalID: {
     type: DataTypes.UUID,
     allowNull: false,
@@ -16,9 +15,17 @@ const Approval = init.define("approvalInfo", {
     type: DataTypes.STRING,
     allowNull: false
   },
+  createPosition: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   approval_title: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  approval_description: {
+    type: DataTypes.TEXT,
+    allowNull: true
   },
   approval_type: {
     type: DataTypes.STRING,
@@ -52,54 +59,38 @@ const Approval = init.define("approvalInfo", {
   }
 });
 
-const Advisor = init.define("advisor", {
+// models paticipants
+const Participants = init.define("participants",{
   approvalID: {
     type: DataTypes.UUID,
     allowNull: false,
   },
-  advisorEmail: {
+  paticipantName: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
-  advisorName: {
+  paticipantEmail: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
-  // position: {
-  //   type: INTEGER,
-  //   allowNull: true,
-  // }
-});
-
-const Approver = init.define("approver", {
-  approvalID: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
-  advisorEmail: {
+  paticipantPosition: {
     type: DataTypes.STRING,
-    allowNull: false,
-  },
-  advisorName: {
+    allowNull: true,
+    defaultValue: "Staff"
+  }, 
+  paticipantType: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
-});
-
-const Observator = init.define("observator", {
-  approvalID: {
-    type: DataTypes.UUID,
-    allowNull: false,
+  _isApproval: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
-  advisorEmail: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  advisorName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-});
+  paticipantStatus: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
+})
 
 const ApprovalDocument = init.define("approval_document", {
   approvalID: {
@@ -124,7 +115,7 @@ const ApprovalDocument = init.define("approval_document", {
     defaultValue: "",
     allowNull: true,
   },
-  valueVAT: {
+  valueExclVAT: {
     type: DataTypes.FLOAT,
     defaultValue: 0,
     allowNull: true,
@@ -140,7 +131,7 @@ const ApprovalDocument = init.define("approval_document", {
   },
 });
 
-const ReferenceDoc = init.define("refernceDoc", {
+const ReferenceDoc = init.define("refernce_doc", {
   approvalID: {
     type: DataTypes.UUID,
     allowNull: false,
@@ -153,14 +144,67 @@ const ReferenceDoc = init.define("refernceDoc", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  createAt: {
+    type: DataTypes.STRING,
+    defaultValue: init.NOW
+  }
 });
 
-// create table
+const Comment = init.define("comments",{
+  approvalID: {
+    type: DataTypes.UUID,
+    allowNull: false
+  },
+  commentBy: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  commentByEmail: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  commentAt: {
+    type: DataTypes.DATE,
+    defaultValue: init.NOW
+  },
+  commentContent: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+})
+
+const History = init.define("history",{
+  approvalID: {
+    type: DataTypes.UUID,
+    allowNull: false
+  },
+  historyBy: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  historyByEmail: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  historyAction: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  historyContent: {
+    type: DataTypes.STRING,
+  },
+  historyAt: {
+    type: DataTypes.DATE,
+    defaultValue: init.NOW
+  }
+})
+
+// ------------------------create table--------------------------
 // Approval.sync();
-// Advisor.sync();
-// Approver.sync();
-// Observator.sync();
+// Participants.sync();
 // ApprovalDocument.sync();
 // ReferenceDoc.sync();
+// Comment.sync();
+// History.sync()
 
-module.exports = { Approval, Advisor, Approver, Observator, ApprovalDocument, ReferenceDoc };
+module.exports = { Approval, Participants, ApprovalDocument, ReferenceDoc, Comment, History };
