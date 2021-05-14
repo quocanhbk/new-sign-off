@@ -17,7 +17,7 @@ Content-Type: application/json
         "createAt": "2020/12/05 16:33",
         "approvalStatus": 0
     },
-    "participan": {
+    "participant": {
         "advisor": [
             {
                 "paticipantName": "Van Thuan ' !Quan",
@@ -46,6 +46,32 @@ Content-Type: application/json
         ]
     }
 }
+
+###
+POST  http://localhost:5000/create-document/document
+Content-Type: application/json
+
+{
+    "approvalID": "a0e8f8f0-f5a6-4d94-8a2a-fcb1bde27300",
+    "attachment": "python co ban.pdf",
+    "nameDocument": "De nghi thanh toan noi bo",
+    "requestAt": "2020/12/05 16:33",
+    "description": "test document lan 1",
+    "valueExclVAT": "100000",
+    "VAT": "100",
+    "totalPay": "999900"
+}
+
+###
+POST http://localhost:5000/create-document/reference
+Content-Type: application/json
+
+{
+    "approvalID": "a0e8f8f0-f5a6-4d94-8a2a-fcb1bde27300",
+    "attachment": "C;//images/python co ban.pdf", 
+    "nameDocument": "De nghi thanh toan noi bo"
+}
+
 
 ###
 GET http://localhost:5000/primary-info/a0e8f8f0-f5a6-4d94-8a2a-fcb1bde27300

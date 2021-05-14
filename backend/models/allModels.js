@@ -108,7 +108,7 @@ const ApprovalDocument = init.define("approval_document", {
   requestAt: {
     type: DataTypes.DATE,
     defaultValue: init.NOW,
-    allowNull: false,
+    allowNull: true,
   },
   description: {
     type: DataTypes.STRING,
@@ -145,8 +145,8 @@ const ReferenceDoc = init.define("refernce_doc", {
     allowNull: false,
   },
   createAt: {
-    type: DataTypes.STRING,
-    defaultValue: init.NOW
+    type: DataTypes.DATE,
+    defaultValue: init.DATE
   }
 });
 

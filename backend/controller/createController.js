@@ -40,6 +40,7 @@ const InsertApproval = async (
   });
 };
 
+// insert participants
 const InsertParticipant = async (
   approvalID,
   paticipantName,
@@ -59,7 +60,43 @@ const InsertParticipant = async (
     paticipantStatus: paticipantStatus,
   });
 };
+
+const InsertApprovalDocument = async (
+  approvalID,
+  attachment,
+  nameDocument,
+  requestAt,
+  description,
+  valueExclVAT,
+  VAT,
+  totalPay
+) => {
+  await ApprovalDocument.create({
+    approvalID,
+    attachment,
+    nameDocument,
+    requestAt,
+    description,
+    valueExclVAT,
+    VAT,
+    totalPay,
+  });
+};
+
+const InsertReferenceDoc = async (
+  approvalID,
+  attachment,
+  nameDocument
+) => {
+  await ReferenceDoc.create({
+    approvalID,
+    attachment,
+    nameDocument
+  });
+};
 module.exports = {
   InsertApproval,
-  InsertParticipant
+  InsertParticipant,
+  InsertApprovalDocument,
+  InsertReferenceDoc,
 };

@@ -14,13 +14,13 @@ const Text = styled.label`
 
     padding: 0.5rem 0;
 `
-function ApprovalDocumentProcess({dataForm,setDataForm}) {
+function ApprovalDocumentProcess({getDataForm,setGetDataForm,handleGetFiles}) {
 
 
     return (
         <StyleWrapper>
             <Text>Process: Qui trình thanh toán bão lãnh</Text>
-            <TableApprovalProcess data={dataForm} setData={setDataForm}/>
+            <TableApprovalProcess data={getDataForm} setData={setGetDataForm} handleGetFiles={handleGetFiles}/>
         </StyleWrapper>
     );
 }
