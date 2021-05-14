@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getFader } from "../../utils/color";
-// import ApprovalDocument from './ApprovalDocument'
+import ApprovalDocument from "./ApprovalDocument";
 import ApprovalDocumentProcess from "./ApprovalDocumentProcess";
 import DescriptionEditor from "./DescriptionEditor";
 import Participants from "./Participants";
@@ -193,15 +193,30 @@ const form = [
     ],
   },
 ];
+const types = [
+  {
+    id: 1,
+    name: "Flexible",
+  },
+  {
+    id: 2,
+    name: "Process",
+  },
+];
+
 const Create = () => {
   const [approvalData, setApprovalData] = useState(data2);
   const [dataReference, setDataReference] = useState(data);
 
   const [dataForm, setDataForm] = useState(form);
-  const [getDataForm, setGetDataForm] = useState();
-  // const [dataFormValue , setDataFormValue] = useState()
+  const [getDataForm, setGetDataForm] = useState({
+    id: null,
+    name: "",
+    approvalDocument: [],
+  });
 
   const [approvalNavigate, setApprovalNavigate] = useState();
+
   useEffect(() => {
     if (localStorage.getItem("approval")) {
       setApprovalNavigate(JSON.parse(localStorage.getItem("approval")));
@@ -210,25 +225,11 @@ const Create = () => {
       }, [1000]);
     }
   }, []);
-  // useEffect(() =>{
-  //     setDataFormValue(getDataForm)
-  // },[getDataForm])
 
-  const handleGetFiles = (e, val) => {
-    // console.log(e.target.files, val)
-    if (e.target.files[0].name !== "") {
-      console.log(getDataForm);
-      setGetDataForm(
-        getDataForm.map((item) => {
-          if (item.id === val.id) {
-            return { ...item, is_File: true };
-          } else {
-            return item;
-          }
-        })
-      );
-    }
-  };
+  const [typeValue, setTypeValue] = useState(types[0].name);
+
+  console.log(typeValue);
+
   return (
     <StyleContainer>
       <StyleTitle>
@@ -243,6 +244,9 @@ const Create = () => {
         <DivContent>
           <h4>Primary Info</h4>
           <PrimaryInfo
+            types={types}
+            typeValue={typeValue}
+            setTypeValue={setTypeValue}
             approvalNavigate={approvalNavigate}
             dataForm={dataForm}
             setGetDataForm={setGetDataForm}
@@ -254,11 +258,17 @@ const Create = () => {
         </DivContent>
         <DivContent>
           <h4>APPROVAL DOCUMENT ({approvalData.length})</h4>
-          <ApprovalDocumentProcess
-            getDataForm={getDataForm}
-            setGetDataForm={setGetDataForm}
-            handleGetFiles={handleGetFiles}
-          />
+          {approvalNavigate !== undefined || typeValue === "Process" ? (
+            <ApprovalDocumentProcess
+              getDataForm={getDataForm}
+              setGetDataForm={setGetDataForm}
+            />
+          ) : (
+            <ApprovalDocument
+              approvalData={approvalData}
+              setApprovalData={setApprovalData}
+            />
+          )}
         </DivContent>
         <DivContent>
           <h4>REFERENCE DOCUMENT ({dataReference.length})</h4>
