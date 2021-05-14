@@ -13,14 +13,19 @@ const Text = styled.label`
     color : ${props => props.theme.color.text.primary};
 
     padding: 0.5rem 0;
+
+    & p{
+        color : ${props => props.theme.color.fill.warning};
+        padding-left: 0.3rem;
+    }
 `
-function ApprovalDocumentProcess({dataForm,setDataForm}) {
+function ApprovalDocumentProcess({getDataForm,setGetDataForm}) {
 
 
     return (
         <StyleWrapper>
-            <Text>Process: Qui trình thanh toán bão lãnh</Text>
-            <TableApprovalProcess data={dataForm} setData={setDataForm}/>
+            <Text>Process: <p>{getDataForm && getDataForm.name}</p></Text>
+            <TableApprovalProcess data={getDataForm} setData={setGetDataForm}/>
         </StyleWrapper>
     );
 }

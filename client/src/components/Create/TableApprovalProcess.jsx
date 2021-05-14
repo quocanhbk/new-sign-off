@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../Table';
 import styled from 'styled-components'
-import {AiOutlineDelete,VscFilePdf,BiDotsVerticalRounded} from 'react-icons/all'
+import {AiOutlineDelete,VscFilePdf,BiDotsVerticalRounded,BiSquare,BiCheckSquare} from 'react-icons/all'
 
 const TableWrapper = styled.div`
     border: 1px solid ${(props) => props.theme.color.border.primary};
@@ -45,28 +45,53 @@ const LabelFile = styled.label`
     padding: 0.2rem 0.3rem;
     border-radius: 4px;
 `
-function TableApprovalProcess({data,setData}) {
-    const removeItem = (value) =>{
-       setData(data.filter(item => item.id !== value.id))
+const Name = styled.span`
+    display: flex;
+    align-items: center;
+
+
+    & .bi-check-square{
+        color: ${props => props.theme.color.fill.success}
     }
+    & p{
+        padding-left: 0.3rem;
+    }
+`
+function TableApprovalProcess({data}) {
+    const [temp, setTemp] = useState()
+    
+    
+
+    //set data at Temp
+    useEffect(() =>{
+        if(data)
+        {
+            setTemp(data.approvalDocument)
+        }
+    },[data])
+
     const handleFile = (e,val) =>{
         
-        if(e.target.files[0].name !== "")
+        let fileName = e.target.files[0].name
+        if(fileName !== "")
         {
-            setData(
-                data.approvalDocument.map((item) => {
-                  if (item.id === val.id) {
+            setTemp(
+                temp.map((item) => {
+                    if (item.id === val.id) {
                     return {
-                      ...item,
-                      is_File: true,
+                        ...item,
+                        file_name: fileName,
+                        is_File: true,
                     };
-                  }
-                  return item;
+                    }
+                    return item;
                 })
-              );
+            );
         }
     }
-
+    const removeItem = (value) =>{
+        setTemp(temp.filter(item => item.id !== value.id))
+    }
     return (
         <TableWrapper className="table-list-1">
             <Table>
@@ -87,15 +112,20 @@ function TableApprovalProcess({data,setData}) {
                 </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                {data && data.approvalDocument.map((val, keys) => {
+                {temp && temp.map((val, keys) => {
                     return (
                     <Table.Row key={keys}>
                         <Table.Cell textAlign="left">
-                            <p><VscFilePdf size="18px" style={{marginRight: '0.2rem'}}/>{val.name}</p>
+                            <Name>
+                                {
+                                    !val.is_File ? <BiSquare size="1.5rem"/> : <BiCheckSquare className="bi-check-square" size="1.5rem"/>
+                                }
+                                <p>{val.name}</p>
+                            </Name>
                         </Table.Cell>
                         <Table.Cell textAlign="left">
                             {val.file_name !== "" ? (
-                                <p>{val.file_name}</p>
+                                <Name><VscFilePdf size="1.2rem" style={{marginRight: '0.2rem'}}/><p>{val.file_name}</p></Name>
                             ) : (
                                 <p className="field-value">N/A</p>
                             )}

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import {getFader} from '../../utils/color'
-// import ApprovalDocument from './ApprovalDocument'
+import ApprovalDocument from './ApprovalDocument'
 import ApprovalDocumentProcess from './ApprovalDocumentProcess'
 import DescriptionEditor from './DescriptionEditor'
 import Participants from './Participants'
@@ -157,6 +157,13 @@ const form = [
                 file_name: '',
                 data_field: [],
                 is_File: false,
+            },
+            {
+                id : 3,
+                name: 'Name File 3',
+                file_name: '',
+                data_field: [],
+                is_File: false,
             }
         ]
     },
@@ -181,14 +188,30 @@ const form = [
         ]
     }
 ]
+const types = [
+    {
+        id: 1,
+        name: 'Flexible'
+    },
+    {
+        id: 2,
+        name: 'Process'
+    }
+]
+
 const Create = () => {
 
     const [approvalData,setApprovalData] = useState(data2)
     const [dataReference, setDataReference] = useState(data)
 
     const [dataForm ,setDataForm ] = useState(form)
-    const [getDataForm, setGetDataForm] = useState()
-    const [dataFormValue , setDataFormValue] = useState()
+    const [getDataForm, setGetDataForm] = useState(
+        {
+            id: null,
+            name: '',
+            approvalDocument: []
+        }
+    )
 
     const [approvalNavigate, setApprovalNavigate] = useState()
     
@@ -200,10 +223,11 @@ const Create = () => {
         },[1000])
       }
     },[])
-    useEffect(() =>{
-        setDataFormValue(getDataForm)
-    },[getDataForm])
     
+    const [typeValue,setTypeValue] = useState(types[0].name)
+
+    console.log(typeValue)
+
     return (
         <StyleContainer>
             <StyleTitle>
@@ -217,7 +241,7 @@ const Create = () => {
             <ContainerItems>
                 <DivContent>
                     <h4>Primary Info</h4>
-                    <PrimaryInfo approvalNavigate={approvalNavigate} dataForm={dataForm} setGetDataForm={setGetDataForm}/>
+                    <PrimaryInfo types={types} typeValue={typeValue} setTypeValue={setTypeValue} approvalNavigate={approvalNavigate} dataForm={dataForm} setGetDataForm={setGetDataForm}/>
                 </DivContent>
                 <DivContent>
                     <h4>PARTICIPANTS</h4>
@@ -225,7 +249,13 @@ const Create = () => {
                 </DivContent>
                 <DivContent>
                     <h4>APPROVAL DOCUMENT ({approvalData.length})</h4>
-                    <ApprovalDocumentProcess dataForm={dataFormValue} setDataForm={setDataFormValue}/>
+                    {
+                        approvalNavigate !== undefined || typeValue === "Process"
+                        ?
+                        <ApprovalDocumentProcess getDataForm={getDataForm} setGetDataForm={setGetDataForm}/>
+                        :
+                        <ApprovalDocument approvalData={approvalData} setApprovalData={setApprovalData}/>
+                    }
                 </DivContent>
                 <DivContent>
                     <h4>REFERENCE DOCUMENT ({dataReference.length})</h4>

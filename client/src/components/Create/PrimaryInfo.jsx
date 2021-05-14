@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, {  useState } from 'react';
+import React from 'react';
 import styled from 'styled-components'
 import Combox from '../Combox'
 import Calendar from '../Calendar'
@@ -54,16 +54,7 @@ const Input = styled.input`
         outline: none;
     }
 `
-const types = [
-    {
-        id: 1,
-        name: 'Flexible'
-    },
-    {
-        id: 2,
-        name: 'Process'
-    }
-]
+
 const priority = [
     {
         id: 1,
@@ -93,8 +84,7 @@ const project = [
     }
 ]
 
-function PrimaryInfo({approvalNavigate,dataForm,setGetDataForm}) {
-    const [typeValue,setTypeValue] = useState(types[0].name)
+function PrimaryInfo({approvalNavigate,dataForm,setGetDataForm,typeValue,setTypeValue,types}) {
 
     const PopupProcess = (value) =>{
         setTypeValue(value[0])
