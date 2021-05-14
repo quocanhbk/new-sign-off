@@ -83,7 +83,7 @@ const Info = styled.div`
             padding: 0.5rem 1rem;
             margin: 0.5rem 0;
             border-radius: 0.5rem;
-
+            font-size: 0.9rem;
             &:hover {
                 background: ${props => getFader(props.theme.color.fill.secondary, 0.9)};
             }

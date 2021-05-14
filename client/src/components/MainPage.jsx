@@ -3,6 +3,7 @@ import SideBar from './SideBar';
 import styled from 'styled-components';
 import pageList from '../pageList';
 import {Router} from '@reach/router'
+import FileView from './FileView';
 const PageContainer = styled.div`
     display: flex;
     height: 100%;
@@ -28,6 +29,7 @@ const MainPage = () => {
                         return React.cloneElement(page.comp, {key: page.text, path: page.path})
                     })
                 }
+                    <FileView path="/fileview"/>
                 </Router>
             </BodyContainer>
         </PageContainer>

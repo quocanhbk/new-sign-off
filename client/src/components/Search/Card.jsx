@@ -39,7 +39,7 @@ const StyleTypes = styled.span`
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
 
-    &.process{
+    & .process{
         background-color: ${props => props.theme.color.fill.primary};
         color: ${props => props.theme.color.background.primary};
     }
@@ -107,11 +107,10 @@ const StyleButton = styled.button`
         color: ${props => props.theme.color.text.secondary};
     }
 `
-function Card({task,setSelectData,setOpen}) {
+function Card({task,setSelectedId}) {
 
     const handleSelect = (task) =>{
-        setSelectData(task)
-        setOpen(true)
+        setSelectedId(task.id)
     }
 
     return (

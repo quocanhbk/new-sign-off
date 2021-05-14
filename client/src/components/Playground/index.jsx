@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 import ImageItem from './ImageItem'
+import { navigate } from '@reach/router'
 
 const Container = styled.div`
     display: flex;
@@ -76,6 +77,11 @@ const Playground = () => {
             return ""
         return imgArray.find(item => item.path === selectedTag.path).tagList.find(tag => tag.name === selectedTag.name).content
     }   
+    const ref = useRef()
+    const handleClick = () => {
+        let html = ref.current.innerHTML
+        console.log(html);
+    }
     return (
         <Container>
             <div>
@@ -92,9 +98,10 @@ const Playground = () => {
                 <hr/>
                 <div>Change tag content</div>
                 {selectedTag && <input type="text" value={getContent()} onChange={changeTagContent}/>}
+                <button onClick={handleClick}>Button</button>
             </div>
             
-            <ImgContainer>
+            <ImgContainer ref={ref}>
                 {imgArray.map(item => 
                     <ImageItem 
                         key={item.path} 

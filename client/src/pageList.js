@@ -7,7 +7,7 @@ import SearchPage from './components/Search'
 import SignPage from './components/Sign'
 import CompletedPage from './components/Completed'
 import PlaygroundPage from './components/Playground'
-
+import PlaygroundPage2 from './components/Playground2'
 const pageList = [
     {icon: <BsHouse size="24px"/>, text: "Home", path: "/", comp: <HomePage/>},
     {icon: <BsSearch size="24px"/>, text: "Search Document", path: "/search", comp: <SearchPage/>},
@@ -16,6 +16,7 @@ const pageList = [
     {icon: <BsFileEarmarkCheck size="24px"/>, text: "Completed Document", path: "/completed", comp: <CompletedPage/>},
     {icon: <BsFileEarmarkMinus size="24px"/>, text: "Deleted Document", path: "/deleted", comp: <DeletedPage/>},
     {icon: <BsGear size="24px"/>, text: "Playground", path: "/playground", comp: <PlaygroundPage/>},
+    {icon: <BsGear size="24px"/>, text: "Playground2", path: "/playground2", comp: <PlaygroundPage2/>},
 ]
 
 export default pageList

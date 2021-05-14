@@ -7,7 +7,7 @@ import Content from "./Content";
 import ContentHeaderTab from "./ContentHeaderTab";
 import ApprovalFlow from "./ApprovalFlow";
 import ApprovalInfo from "./ApprovalInfo";
-import NoData from "./NoData";
+import NoSelectionIndicator from "./NoSelectionIndicator";
 
 const StyleContentWrapper = styled.div`
   flex: 10;
@@ -17,30 +17,31 @@ const StyleContentWrapper = styled.div`
   color: ${(props) => props.theme.color.text.primary};
   border-left: 1px solid ${(props) => props.theme.color.border.primary};
   height: 100%;
+  position: relative;
 `;
-function DisplayContent({selectData,open}) {
+function DisplayContent({data}) {
   return (
     <StyleContentWrapper>
       {
-        open ?
+        data ?
         <>
           <Tab fullHeight>
             <TabPane name="Content" key={1} value="1">
-              <ContentHeaderTab selectData={selectData}/>
+              <ContentHeaderTab data={data}/>
               <Content />
             </TabPane>
             <TabPane name="Approval Flow" key={2} value="2">
-            <ContentHeaderTab selectData={selectData}/>
+            <ContentHeaderTab data={data}/>
               <ApprovalFlow />
             </TabPane>
             <TabPane name="Info" key={3} value="3">
-            <ContentHeaderTab selectData={selectData}/>
+            <ContentHeaderTab data={data}/>
               <ApprovalInfo />
             </TabPane>
           </Tab>
         </>
         :
-          <NoData/>
+          <NoSelectionIndicator/>
       }
     </StyleContentWrapper>
   );

@@ -53,7 +53,7 @@ const CardList = styled.div`
     gap: 0.5rem;
 `
 
-function List({data,setSelectData,setOpen}) {
+function List({data,setSelectedId}) {
     return (
         <StyleListWrapper>
             <ListToolbar/>
@@ -64,12 +64,11 @@ function List({data,setSelectData,setOpen}) {
                 </TagContainer>
             </TagBar>
             <CardList>
-                {data.map((task, index) => (
+                {data.map((task) => (
                     <Card
-                    key={index}
+                    key={task.id}
                     task={task}
-                    setSelectData={setSelectData}
-                    setOpen={setOpen}
+                    setSelectedId={setSelectedId}
                     />
                 ))}
             </CardList>

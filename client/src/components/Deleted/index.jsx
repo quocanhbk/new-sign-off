@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Deleted = () => {
+const Verify = () => {
     return (
-        <div>Deleted</div>
+        <div>Verify</div>
     )
 }
 
-export default Deleted
+export default Verify

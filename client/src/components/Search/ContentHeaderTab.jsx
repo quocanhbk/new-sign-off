@@ -53,19 +53,18 @@ const Status = styled.span`
               : props.theme.color.fill.danger};
   color: ${(props) => props.theme.color.background.primary};
 `
-const ContentHeaderTab = ({selectData}) => {
-  console.log(selectData)
+const ContentHeaderTab = ({data}) => {
   return (
     <ContentInfo>
       <ContentTitle>
         <p className="content-modified">Last modified at 05:35 pm 04/05/2021</p>
         <p className="content-title">
-         {selectData && selectData.title}
+         {data.title}
         </p>
       </ContentTitle>
       <ContentProperties>
-        <Status className="content-status" status={selectData.status}>{selectData && selectData.status}</Status>
-        <Approved className="content-approved">{selectData && selectData.approved}</Approved>
+        <Status className="content-status" status={data.status}>{data.status}</Status>
+        <Approved className="content-approved">{data.approved}</Approved>
       </ContentProperties>
     </ContentInfo>
   );
