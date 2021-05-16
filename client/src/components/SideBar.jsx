@@ -7,11 +7,10 @@ import ThemeToggle from './ThemeToggle'
 import pageList from '../pageList'
 import { getFader } from '../utils/color';
 
-// Hard Coded the background-color, not gonna bother with this thing
-// C'mon man!
 const SidebarContainer = styled.div`
   background-color: ${props => props.theme.color.background.secondary};
   padding-top: 0.5rem;
+  width: 100%;
   box-shadow: ${props => props.theme.shadow};
   flex: 5;
   display: flex;
@@ -128,7 +127,7 @@ const SideBar = () => {
       </UserDisplayCard>
       <NavList>
         {pageList.map(item => 
-          <NavItem key={item.text} onClick={() =>{navigatePath(item.path)}} active={item.path === path}>
+          <NavItem key={item.text} onClick={() =>{navigatePath(item.link)}} active={item.link === path}>
             {item.icon}
             <p>{item.text}</p>
           </NavItem>  

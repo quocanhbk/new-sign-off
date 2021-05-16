@@ -1,0 +1,78 @@
+POST http://localhost:5000/create-document
+Content-Type: application/json
+
+{
+    "primary_info": {
+        "approvalID": "a0e8f8f0-f5a6-4d94-8a2a-fcb1bde27300",
+        "createByName": "Van Thuan Quan",
+        "createByEmail": "quan.vt@gmail.com",
+        "createPosition": "Developer",
+        "approval_title": "test post primary info",
+        "approval_description": "abcxyz",
+        "approval_type": "process",
+        "approval_priority": "normal",
+        "approval_deadline": "2020/12/05",
+        "approval_related": "Trung thuy",
+        "processName": "Quy tirnh than toan",
+        "createAt": "2020/12/05 16:33",
+        "approvalStatus": 0
+    },
+    "participant": {
+        "advisor": [
+            {
+                "paticipantName": "Van Thuan ' !Quan",
+                "paticipantEmail": "quan.vt@ttgvn.com",
+                "paticipantPosition": "Developer"
+            },
+            {
+                "paticipantName": "Nguyen Quoc dat",
+                "paticipantEmail": "dat.nq@ttgvn.com",
+                "paticipantPosition": "Developer"
+            }
+        ],
+        "approver": [
+            {
+                "paticipantName": "Van Thuan Quan",
+                "paticipantEmail": "quan.vt@ttgvn.com",
+                "paticipantPosition": "Developer"
+            }
+        ],
+        "observator": [
+            {
+                "paticipantName": "Van Thuan Quan",
+                "paticipantEmail": "quan.vt@ttgvn.com",
+                "paticipantPosition": "Developer"
+            }
+        ]
+    }
+}
+
+###
+POST  http://localhost:5000/create-document/document
+Content-Type: application/json
+
+{
+    "approvalID": "a0e8f8f0-f5a6-4d94-8a2a-fcb1bde27300",
+    "attachment": "python co ban.pdf",
+    "nameDocument": "De nghi thanh toan noi bo",
+    "requestAt": "2020/12/05 16:33",
+    "description": "test document lan 1",
+    "valueExclVAT": "100000",
+    "VAT": "100",
+    "totalPay": "999900"
+}
+
+###
+POST http://localhost:5000/create-document/reference
+Content-Type: application/json
+
+{
+    "approvalID": "a0e8f8f0-f5a6-4d94-8a2a-fcb1bde27300",
+    "attachment": "C;//images/python co ban.pdf", 
+    "nameDocument": "De nghi thanh toan noi bo"
+}
+
+
+###
+GET http://localhost:5000/primary-info/a0e8f8f0-f5a6-4d94-8a2a-fcb1bde27300
+Content-Type: application/json

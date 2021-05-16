@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import IconStatus from './IconStatus';
-import {IoChevronForwardCircle} from 'react-icons/all'
+import {BsChevronRight} from 'react-icons/all'
 
 const CardWrapper = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
@@ -126,7 +126,7 @@ function Card({task,setSelectedId}) {
                     <p className="card-deadline">Deadline: {task.deadline}</p>
                     <p className="card-create_by">{task.create_by}</p>
                 </DivInfo>
-                <StyleButton onClick={() => handleSelect(task)}><IoChevronForwardCircle size="2rem"/></StyleButton>
+                <StyleButton onClick={() => handleSelect(task)}><BsChevronRight size="1.2rem"/></StyleButton>
             </DivMain>
         </CardWrapper>
     );
