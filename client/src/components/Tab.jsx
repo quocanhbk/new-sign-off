@@ -12,7 +12,6 @@ const DivTab = styled.div`
     align-items:center;
     justify-content:center;
     padding: 1rem;
-    
 `;
 const ButtonTab=styled.button`
     display:block;

@@ -84,12 +84,14 @@ const project = [
     }
 ]
 
-function PrimaryInfo({approvalNavigate,dataForm,setGetDataForm,typeValue,setTypeValue,types}) {
+function PrimaryInfo({approvalNavigate,form , setGetDataForm,typeValue,setTypeValue,types}) {
 
     const PopupProcess = (value) =>{
         setTypeValue(value[0])
     }
-
+    const handleSelectProcess = (value) =>{
+        setGetDataForm(value[0])
+    }
     return (
         <StyleWrapper>
             <StyleItemsColumn>
@@ -110,7 +112,7 @@ function PrimaryInfo({approvalNavigate,dataForm,setGetDataForm,typeValue,setType
                         {types.map((data, index) => {
                             return(
                             <Combox.Option
-                            default={(approvalNavigate !== undefined ? data.id === 2 : data.id === 1)}
+                            default={(approvalNavigate ? data.id === 2 : data.id === 1)}
                             id={data.id}
                             searchText={[data.name]}
                             value={data.name}    
@@ -132,14 +134,13 @@ function PrimaryInfo({approvalNavigate,dataForm,setGetDataForm,typeValue,setType
                         <Text>Process Name <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
                         <Combox
                             className="combox-type"
-                            onSelect={v => setGetDataForm(v[0])}
+                            onSelect={v => handleSelectProcess(v)}
                         >
-                            {dataForm.map((data, index) => {
+                            {form.map((data,index) => {
                                 return(
                                 <Combox.Option
                                 default={data.id === 1}
                                 id={data.id}
-                                searchText={[data.name]}
                                 value={data}    
                                 key={index}
                                 >
