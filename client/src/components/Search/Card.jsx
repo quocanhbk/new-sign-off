@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import IconStatus from './IconStatus';
-import {TiEyeOutline} from 'react-icons/all'
+import {BsChevronRight} from 'react-icons/all'
 
 const CardWrapper = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
@@ -39,7 +39,7 @@ const StyleTypes = styled.span`
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
 
-    &.process{
+    & .process{
         background-color: ${props => props.theme.color.fill.primary};
         color: ${props => props.theme.color.background.primary};
     }
@@ -107,11 +107,10 @@ const StyleButton = styled.button`
         color: ${props => props.theme.color.text.secondary};
     }
 `
-function Card({task,setSelectData,setOpen}) {
+function Card({task,setSelectedId}) {
 
     const handleSelect = (task) =>{
-        setSelectData(task)
-        setOpen(true)
+        setSelectedId(task.id)
     }
 
     return (
@@ -127,7 +126,7 @@ function Card({task,setSelectData,setOpen}) {
                     <p className="card-deadline">Deadline: {task.deadline}</p>
                     <p className="card-create_by">{task.create_by}</p>
                 </DivInfo>
-                <StyleButton onClick={() => handleSelect(task)}><TiEyeOutline size="2.5rem"/></StyleButton>
+                <StyleButton onClick={() => handleSelect(task)}><BsChevronRight size="1.2rem"/></StyleButton>
             </DivMain>
         </CardWrapper>
     );

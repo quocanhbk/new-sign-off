@@ -96,6 +96,7 @@ const StyledCalendar = styled.div`
 `;
 const Left = styled.div`
     flex: 7;
+    
 `
 const Right = styled.div`
     flex: 6;
@@ -135,24 +136,26 @@ const CalendarContent = styled.ul`
     flex-wrap: wrap;
     gap: 4px;
     padding: 4px;
+    
 `;
 const StyledMonthItem = styled.li`
     width: 44px;
     height: 44px;
-    background: ${props => props.theme.color.background.secondary};
+    background: transparent;
     list-style: none;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0.2rem;
     cursor: pointer;
+    border-radius: 999px;
     &:hover {
-        background: ${props => props.theme.color.border.primary};
+        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
     }
     ${props => props.selected && css`
-        border-radius: 999px;
-        background: ${props => props.theme.color.fill.primary};
-        color: ${props => props.theme.color.background.primary};
+        font-weight: 700;
+        color: ${props => props.theme.color.fill.primary};
+        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
     `}
 `
 
@@ -167,11 +170,12 @@ const StyledLi = styled.li`
     cursor: pointer;
     user-select: none;
     &.date-item {
-        background: ${props => props.selected ? props.theme.color.fill.primary : "transparent"};
-        color: ${props => props.selected ? props.theme.color.background.primary : props => props.current ? props.theme.color.text.primary : getFader(props.theme.color.text.primary, 0.6)};
+        background: ${props => props.selected ? getFader(props.theme.color.border.primary, 0.5) : "transparent"};
+        color: ${props => props.selected ? props.theme.color.fill.primary : props => props.current ? props.theme.color.text.primary : getFader(props.theme.color.text.primary, 0.6)};
+        font-weight: ${props => props.selected ? 700 : 500};
     }
     &.date-item:hover {
-        background: ${props => getFader(props.theme.color.fill.primary, 0.4)};
+        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
     }
     
     &.date-title {
