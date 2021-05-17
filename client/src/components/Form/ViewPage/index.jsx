@@ -1,4 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { useState } from "react";
 import styled from "styled-components";
 import DisplayContent from "./DisplayContent";
 import List from "./List";
@@ -9,10 +10,13 @@ const Container = styled.div`
 `
 
 const ViewPage = () => {
+    
+    const [selectedForm, setSelectedForm] = useState()
+
     return (
         <Container>
-            <List/>
-            <DisplayContent/>
+            <List setSelectedForm={setSelectedForm}/>
+            <DisplayContent form={selectedForm}/>
         </Container>
     )
 }

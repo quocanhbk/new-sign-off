@@ -46,7 +46,7 @@ const Icon = styled.div`
     color: ${props => props.theme.color.text[props.color || "primary"]};
     cursor: pointer;
 `
-const FieldContentInput = ({name, content, onChangeContent, onChangeName, required, onToggleRequire}) => {
+const FieldContentInput = ({name, content, onChangeContent, onChangeName, required, onToggleRequire, onDelete}) => {
 
     return (
         <Container>
@@ -56,15 +56,14 @@ const FieldContentInput = ({name, content, onChangeContent, onChangeName, requir
                     placeholder="Insert field name..."
                     value={name}
                     onChange={onChangeName}
-                    autoComplete={"false"}
+                    spellCheck={"false"}
                 />
                 <Icon color="warning" onClick={onToggleRequire}>
                     {required ? <BsLockFill/> : <BsFillUnlockFill/>}
                 </Icon>
-                <Icon color="danger">
+                <Icon color="danger" onClick={onDelete}>
                     <BsX size="1.2rem"/>
                 </Icon>
-                
             </NameContainer>
             
             <ContentInput 
@@ -72,7 +71,7 @@ const FieldContentInput = ({name, content, onChangeContent, onChangeName, requir
                 placeholder="Insert default content..." 
                 value={content} 
                 onChange={onChangeContent}
-                autoComplete={"false"}
+                spellCheck={"false"}
             />
         </Container>
     )

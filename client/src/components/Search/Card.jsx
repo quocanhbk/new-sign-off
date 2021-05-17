@@ -10,7 +10,7 @@ const CardWrapper = styled.div`
     background-color: ${(props) =>
         props.selected ? props.theme.color.background.secondary : 'transparent'};
     box-shadow: ${props => props.theme.shadow};
-    
+    cursor: pointer;
     display: flex;
     position: relative;
     flex-direction: column;
@@ -55,9 +55,8 @@ const DivIcon = styled.div`
     flex-direction: column;
     align-items: center;
     flex: 2;
-
-    border-radius: 0.5rem;
-
+    border-radius: 0.2rem;
+    color: ${props => props.theme.color.background.primary};
     background: ${props => props.status==="Approved" ? props.theme.color.fill.success
                 : props.status==="Stopped" ? props.theme.color.fill.info
                 : props.status==="Pending" ? props.theme.color.fill.warning
@@ -65,17 +64,15 @@ const DivIcon = styled.div`
                 : ''};
 
     padding: 0.5rem ;
+
     & p{
-        font-size : 0.7rem;
-        color: ${props => props.theme.color.background.primary};
-    }
-    & svg{
-        color: ${props => props.theme.color.background.primary};
+        font-size : 0.8rem;
     }
 `
 const DivInfo = styled.div`
+    flex: 10;
     padding: 0.5rem;
-    flex: 9;
+    flex: 7;
     & p {
         color: ${props => props.theme.color.text.secondary};
     }
@@ -98,21 +95,12 @@ const DivInfo = styled.div`
 `
 const StyleButton = styled.button`
     cursor: pointer;
-
+    color: ${props => props.theme.color.text.secondary};
     background: transparent;
     border: none;
     flex: 1;
-
-    & svg{
-        color: ${props => props.theme.color.text.secondary};
-    }
 `
-function Card({task,setSelectedId}) {
-
-    const handleSelect = (task) =>{
-        setSelectedId(task.id)
-    }
-
+const Card = ({task,setSelectedId}) => {
     return (
         <CardWrapper>
             <StyleTypes className={`card-approved ${task.approved==='Flexible' ? 'flexible' : 'process'}`}>{task.approved}</StyleTypes>
@@ -126,10 +114,10 @@ function Card({task,setSelectedId}) {
                     <p className="card-deadline">Deadline: {task.deadline}</p>
                     <p className="card-create_by">{task.create_by}</p>
                 </DivInfo>
-                <StyleButton onClick={() => handleSelect(task)}><BsChevronRight size="1.2rem"/></StyleButton>
+                <StyleButton onClick={() => setSelectedId(task.id)}><BsChevronRight size="1.2rem"/></StyleButton>
             </DivMain>
         </CardWrapper>
-    );
+    )
 }
 
 export default Card;

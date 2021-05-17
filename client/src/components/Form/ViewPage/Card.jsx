@@ -12,10 +12,11 @@ const CardWrapper = styled.div`
     position: relative;
     gap: 1rem;
     padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: ${props => props.theme.color.fill.primary};
 
     ${props => props.active && css`
         background: ${props => getFader(props.theme.color.border.primary, 0.5)};
-        color: ${props => props.theme.color.fill.primary};
         font-weight: 600;
         &:hover {
             background: ${props => props.theme.color.border.primary};
@@ -44,22 +45,21 @@ let FormName = styled.div`
     display: -webkit-box;
 `
 let SubInfo = styled.div`
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: ${props => props.theme.color.text.secondary};
     font-style: italic;
 `
 
-function Card() {
+function Card({name, fileName, onClick}) {
 
     return (
-        <CardWrapper>
+        <CardWrapper onClick={onClick}>
             <IconWrapper>
                 <BsFileEarmarkText size="1.5rem"/>
             </IconWrapper>
             <InfoWrapper>
-                <FormName>Form Name Is A Very Long Name</FormName>
-                <SubInfo>formname.pdf</SubInfo>
-                <SubInfo>Created by: La Quoc Anh</SubInfo>
+                <FormName>{name}</FormName>
+                <SubInfo>{fileName}</SubInfo>
             </InfoWrapper>
         </CardWrapper>
     );

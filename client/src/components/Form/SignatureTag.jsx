@@ -14,7 +14,7 @@ const Container = styled.div`
     background: #f6f8ff;
     transform: translate(-50%, -50%);
 
-    & span {
+    & .name {
         position: absolute;
         transform: translateY(-110%);
         font-size: 0.8rem;
@@ -22,6 +22,14 @@ const Container = styled.div`
         color: #A3A3A3;
     }
 
+    & .type {
+        position: absolute;
+        bottom: 0;
+        transform: translateY(100%);
+        font-size: 0.8rem;
+        font-style: italic;
+        color: #A3A3A3;
+    }
 `
 const Background = styled.div`
     position: absolute;
@@ -29,7 +37,7 @@ const Background = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    border: 1px solid #02467e;
+    border: 1px solid #f3f717;
     border-radius: 0.2rem;
     z-index: -1;
 `
@@ -41,23 +49,24 @@ let Resizer = styled.div`
     height: 0.4rem;
     width: 0.4rem;
     transform: translate(45%,45%);
-    background: #02467e;
+    background: #f3f717;
     border-radius: 0.2rem;
 `
-const FieldTag = ({data, onMouseDown, onMouseDownResizer}) => {
+const SignatureTag = ({data, onMouseDown, onMouseDownResizer}) => {
     return (
         <Container 
             onMouseDown={onMouseDown}
             style={{left: data.position.X + "%", top: data.position.Y + "%", width: data.size.width + "%", height: data.size.height + "%"}}
         >
             <Resizer onMouseDown={onMouseDownResizer} data-html2canvas-ignore/>
-            <span data-html2canvas-ignore>{data.name}</span>
+            <span className="name" data-html2canvas-ignore>{data.name}</span>
             <p>
                 {data.content}
             </p>
+            <span className="type" data-html2canvas-ignore>Signature</span>
             <Background data-html2canvas-ignore/>
         </Container>
     )
 }
 
-export default FieldTag
+export default SignatureTag

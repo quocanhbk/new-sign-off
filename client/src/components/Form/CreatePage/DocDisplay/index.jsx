@@ -6,13 +6,13 @@ import DocContent from './DocContent'
 import {MainContainer, Bar, DocWrapper} from './StyledComponent'
 import {BsCardText, BsPen, BsFileEarmarkArrowUp, BsTrash} from 'react-icons/bs'
 
-const DocDisplay = ({file, setFile, addingField, setAddingField, fieldData, handleClickDoc, numPage, setNumPage, docRef, pageRef, moveField, resizeField}) => {
+const DocDisplay = ({file, initForm, addingTag, setAddingTag, fieldData, handleClickDoc, numPage, setNumPage, docRef, pageRef, moveField, resizeField}) => {
     return (
         <MainContainer className="maincontainer">
             {file && 
                 <Bar>
                     <div>
-                        <IconWrapper onClick={() => setAddingField(!addingField)}>
+                        <IconWrapper onClick={() => setAddingTag(addingTag === null ? "field" : null)}>
                             <BsCardText/> Add Field
                         </IconWrapper>
                         <IconWrapper>
@@ -32,8 +32,8 @@ const DocDisplay = ({file, setFile, addingField, setAddingField, fieldData, hand
             <DocWrapper>
                 <DocContent
                     file={file}
-                    setFile={setFile}
-                    addingField={addingField}
+                    initForm={initForm}
+                    addingTag={addingTag}
                     fieldData={fieldData}
                     handleClickDoc={handleClickDoc}
                     numPage={numPage}

@@ -5,7 +5,8 @@ import Card from './Card';
 import ListToolbar from './ListToolbar';
 import {getFader} from '../../../utils/color'
 import { navigate } from '@reach/router';
-import {BsPlus} from 'react-icons/bs'
+import {BsFileEarmarkPlus} from 'react-icons/bs'
+import Context from '../../../Context';
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -51,29 +52,34 @@ const AddNewContainer = styled.div`
 const IconContainer = styled.div`
     cursor: pointer;
     display: flex;
-    padding: 0.2rem 0.4rem 0.2rem 0.1rem;
+    padding: 0.2rem 0.4rem;
     background: ${props => props.theme.color.border.primary};
     font-size: 0.9rem;
     align-items: center;
+    gap: 0.4rem;
+    border-radius: 0.5rem;
     &:hover {
         background: ${props => getFader(props.theme.color.border.primary,0.5)};
     }
 `
-function List() {
+function List({setSelectedForm}) {
+    let {formContext} = Context.useContainer()
+    
     return (
         <StyleListWrapper>
             <ListToolbar/>
             <AddNewContainer>
-                <p>7 Results</p>
+                <p>{formContext.forms.length} {formContext.forms.length > 1 ? "results" : "result"}</p>
                 <IconContainer onClick={() => navigate('/form/create')}>
-                    <BsPlus size="1.4rem"/> Add
+                    <BsFileEarmarkPlus size="1.4rem"/> Add
                 </IconContainer>
             </AddNewContainer>
             <CardList>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
+                {
+                    formContext.forms.map(form => 
+                        <Card key={form.name} name={form.name} fileName={form.file.name} onClick={() => setSelectedForm(form)}/>
+                    )
+                }
             </CardList>
         </StyleListWrapper>
     );

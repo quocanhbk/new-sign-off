@@ -3,9 +3,8 @@
 /* eslint-disable react/prop-types */
 import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
-import FieldTag from './FieldTag'
-import NoData from './NoFile';
-import LoadingFile from './LoadingFile';
+import FieldTag from '../../FieldTag'
+import LoadingFile from '../../LoadingFile';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import UploadButton from './UploadButton'
 
@@ -16,24 +15,25 @@ const DocWrapper = styled.div`
     & .abc {
         min-height: 100%;
     }
-
 `
 const UploadContainer = styled.div`
     min-height: 100%;
     display: grid;
     place-items: center;
 `
-const DocContent = ({file, addingField, fieldData, handleClickDoc, numPage, setNumPage, docRef, pageRef, moveField, resizeField, setFile}) => {
+const DocContent = ({file, addingTag, fieldData, handleClickDoc, numPage, setNumPage, docRef, pageRef, moveField, resizeField, initForm}) => {
 
     const [curPos, setCurPos] = useState({X: -100, Y: -100})
 
+    let floatRef = useRef()
     let selectedFieldId = useRef("")
     let selectedResizer = useRef(false)
     let oldPos = useRef({X: -100, Y: -100})
     const handleMouseMoveDoc = (e) => {
-        if (addingField) {
+        if (addingTag === "field") {
             let {x, y, width, height} = docRef.current.getBoundingClientRect()  
-            setCurPos({X: (e.clientX - x)*100 / width, Y: (e.clientY - y)*100 / height})
+            let {width: floatWidth, height: floatHeight} = floatRef.current.getBoundingClientRect()
+            setCurPos({X: (e.clientX - x - floatWidth/2)*100 / width, Y: (e.clientY - y - floatHeight/2)*100 / height})
             return
         }
         if (selectedResizer.current) {
@@ -81,7 +81,7 @@ const DocContent = ({file, addingField, fieldData, handleClickDoc, numPage, setN
             <DocWrapper
                 ref={docRef}
                 onMouseMove={handleMouseMoveDoc}
-                onClick={() => {handleClickDoc(curPos); setCurPos({X: -100, Y: -100})}}
+                onClick={() => {handleClickDoc(curPos); setCurPos({X: -100, Y: -100}); console.log(floatRef.current)}}
                 onMouseUp={handleMouseUp}
                 className="doc-display"
             >
@@ -93,23 +93,23 @@ const DocContent = ({file, addingField, fieldData, handleClickDoc, numPage, setN
                         onMouseDownResizer={handleMouseDownResizer}
                     />
                 )}
-                {addingField && 
+                {addingTag === "field" && 
                     <FieldTag 
                         data= {{position: curPos, content: "", size: {width: 2, height: 0.1}}}
+                        reff={floatRef}
                     /> 
                 }
                 <Document 
                     file={file}
                     className="abc" 
                     onLoadSuccess={(numPage) => setNumPage(numPage._pdfInfo.numPages)}
-                    noData={<NoData/>}
                     loading={<LoadingFile/>}
                 >
                     {renderPage()}
                 </Document>
             </DocWrapper> :
             <UploadContainer>
-                <UploadButton onSubmit={setFile}>
+                <UploadButton onSubmit={initForm}>
                     Upload Document
                 </UploadButton>
             </UploadContainer>
