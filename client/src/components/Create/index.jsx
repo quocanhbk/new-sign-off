@@ -150,49 +150,111 @@ const form = [
     name: "Đề nghị thanh toán nội bộ",
     approvalDocument: [
       {
-        id: 1,
-        name: "Name File 1",
-        file_name: "ahihi.pdf",
-        data_field: [],
-        is_File: true,
+        id: 11,
+        name_required: 'Thư dề nghị thanh toán nhà thầu',
+        data: [
+          {
+            id: 111,
+            name: "Mau 1",
+            file_name: "ahihi.pdf",
+            data_field:[
+              {
+                id: 1,
+                name: "Date of Request",
+                value: "",
+              },
+              {
+                id: 2,
+                name: "Description",
+                value: "",
+              },
+        
+              {
+                id: 3,
+                name: "Vat",
+                value: "",
+              },
+              {
+                id: 4,
+                name: "Value",
+                value: "",
+              },
+            ],
+          },
+          {
+            id: 112,
+            name: "Mau 2",
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+        ]
       },
       {
-        id: 2,
-        name: "Name File 2",
-        file_name: "",
-        data_field: [],
-        is_File: false,
+        id: 12,
+        name_required: 'Thư dề nghị bão lãnh',
+        data: [
+          {
+            id: 113,
+            name: "Mau 1",
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+          {
+            id: 114,
+            name: "Mau 2",
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+          {
+            id: 114,
+            name: "Mau 2",
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+          {
+            id: 114,
+            name: "Mau 2",
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+        ]
       },
-    ],
+    ]
   },
   {
     id: 2,
-    name: "Payment request form - Đề nghị thanh toán",
+    name: "Đề nghị thanh toán ngoại bộ",
     approvalDocument: [
       {
-        id: 1,
-        name: "Payment File 1",
-        file_name: "ahihi.pdf",
-        data_field: [],
-        is_File: true,
+        id: 21,
+        name_required: 'Thu de nghi nha thau',
+        data: [
+          {
+            id: 221,
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+          {
+            id: 222,
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+        ]
       },
       {
-        id: 2,
-        name: "Payment File 2",
-        file_name: "",
-        data_field: [],
-        is_File: false,
+        id: 22,
+        name_required: 'Thu de nghi nha thau 222',
+        data: [
+          {
+            id: 221,
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+        ]
       },
-      {
-        id: 3,
-        name: "Payment File 3",
-        file_name: "",
-        data_field: [],
-        is_File: false,
-      },
-    ],
+    ]
   },
-];
+]
 const types = [
   {
     id: 1,
@@ -207,19 +269,15 @@ const types = [
 const Create = () => {
   const [approvalData, setApprovalData] = useState(data2);
   const [dataReference, setDataReference] = useState(data);
+  
+  const [getDataForm, setGetDataForm] = useState(form[0]);
 
-  const [dataForm, setDataForm] = useState(form);
-  const [getDataForm, setGetDataForm] = useState({
-    id: null,
-    name: "",
-    approvalDocument: [],
-  });
+  const [approvalNavigate, setApprovalNavigate] = useState(false);
 
-  const [approvalNavigate, setApprovalNavigate] = useState();
-
+  
   useEffect(() => {
     if (localStorage.getItem("approval")) {
-      setApprovalNavigate(JSON.parse(localStorage.getItem("approval")));
+      setApprovalNavigate(true);
       setTimeout(() => {
         localStorage.removeItem("approval");
       }, [1000]);
@@ -227,8 +285,14 @@ const Create = () => {
   }, []);
 
   const [typeValue, setTypeValue] = useState(types[0].name);
+  const [tempForm , setTempForm ]= useState()
 
-  console.log(typeValue);
+  useEffect(() =>{
+    if(getDataForm !== undefined)
+    {
+      setTempForm(getDataForm)
+    }
+  },[getDataForm])
 
   return (
     <StyleContainer>
@@ -248,8 +312,9 @@ const Create = () => {
             typeValue={typeValue}
             setTypeValue={setTypeValue}
             approvalNavigate={approvalNavigate}
-            dataForm={dataForm}
+            form= {form}
             setGetDataForm={setGetDataForm}
+            setApprovalNavigate={setApprovalNavigate}
           />
         </DivContent>
         <DivContent>
@@ -258,10 +323,11 @@ const Create = () => {
         </DivContent>
         <DivContent>
           <h4>APPROVAL DOCUMENT ({approvalData.length})</h4>
-          {approvalNavigate !== undefined || typeValue === "Process" ? (
+          {typeValue === "Process" ? (
             <ApprovalDocumentProcess
-              getDataForm={getDataForm}
-              setGetDataForm={setGetDataForm}
+              tempForm={tempForm}
+              setTempForm={setTempForm}
+              form={form}
             />
           ) : (
             <ApprovalDocument

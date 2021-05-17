@@ -34,7 +34,7 @@ const IconChevronDown = () => {
 Option.propTypes = {
     id: PropTypes.number,
     searchText: PropTypes.arrayOf(PropTypes.string),
-    value: PropTypes.string,
+    value: PropTypes.any,
     default: PropTypes.bool,
     selectTodo: PropTypes.bool
 }
