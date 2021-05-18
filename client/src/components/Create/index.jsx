@@ -215,20 +215,20 @@ const Create = () => {
     approvalDocument: [],
   });
 
-  const [approvalNavigate, setApprovalNavigate] = useState();
+  const [approvalNavigate, setApprovalNavigate] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem("approval")) {
-      setApprovalNavigate(JSON.parse(localStorage.getItem("approval")));
+      setApprovalNavigate(true);
       setTimeout(() => {
         localStorage.removeItem("approval");
       }, [1000]);
+    }else{
+      setApprovalNavigate(false)
     }
-  }, []);
+  }, [approvalNavigate]);
 
   const [typeValue, setTypeValue] = useState(types[0].name);
-
-  console.log(typeValue);
 
   return (
     <StyleContainer>
@@ -258,7 +258,7 @@ const Create = () => {
         </DivContent>
         <DivContent>
           <h4>APPROVAL DOCUMENT ({approvalData.length})</h4>
-          {approvalNavigate !== undefined || typeValue === "Process" ? (
+          {approvalNavigate || typeValue === "Process" ? (
             <ApprovalDocumentProcess
               getDataForm={getDataForm}
               setGetDataForm={setGetDataForm}

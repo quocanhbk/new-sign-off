@@ -110,7 +110,7 @@ function PrimaryInfo({approvalNavigate,dataForm,setGetDataForm,typeValue,setType
                         {types.map((data, index) => {
                             return(
                             <Combox.Option
-                            default={(approvalNavigate !== undefined ? data.id === 2 : data.id === 1)}
+                            default={(approvalNavigate ? data.id === 2 : data.id === 1)}
                             id={data.id}
                             searchText={[data.name]}
                             value={data.name}    

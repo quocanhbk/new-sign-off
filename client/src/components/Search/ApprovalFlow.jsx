@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { getFader } from "../../utils/color";
 import AvatarStatus from "../AvatarStatus";
@@ -30,6 +30,7 @@ const Approval = styled.div`
 const ApprovalContent = styled.div`
   border-bottom: 3px solid ${props => props.theme.color.border.primary};
   margin-top: 1rem;
+  position: relative;
 `;
 const JoinGroup = styled.div`
   margin: 1rem;
@@ -66,6 +67,13 @@ const ButtonRemind = styled.button`
   padding: 0.5rem 1rem;
   color: ${props => props.theme.color.text.secondary};
   cursor: pointer;
+`;
+const Flow = styled.div`
+    height: 100%;
+    position: absolute;
+    border: 5px solid red;
+    margin-top: 35px;
+    overflow: hidden;
 `;
 const data = [
   {
@@ -116,14 +124,19 @@ const data = [
   }
 ]
 function ApprovalFlow() {
+  useEffect(() => {
+    let position = document.querySelector(".submiter")
+    console.log(position.offsetTop)
+  })
   return (
     <Approval>
-      <ApprovalContent>
+      <ApprovalContent className="content">
+        <Flow />
         <JoinGroup>
           <TitleApproval>SUBMITER</TitleApproval>
           {data.map((value, index) => {
             return (
-              <CardChild key={index}>
+              <CardChild key={index} className="submiter">
                 <GoPrimitiveDot size="1.5rem"/>
                 <InfoApproval className="info_approval">
                   <AvatarStatus
@@ -150,7 +163,7 @@ function ApprovalFlow() {
                  {
                    value.advisor.map((val) =>{
                      return (
-                      <CardChild key={val.id}>
+                      <CardChild key={val.id} className="advisor">
                         <GoPrimitiveDot size="1.5rem"/>
                         <InfoApproval className="info_approval">
                           <AvatarStatus
@@ -181,7 +194,7 @@ function ApprovalFlow() {
                  {
                    value.approver.map((val) =>{
                      return (
-                      <CardChild key={val.id}>
+                      <CardChild key={val.id} className="approver">
                         <GoPrimitiveDot size="1.5rem"/>
                         <InfoApproval className="info_approval">
                           <AvatarStatus

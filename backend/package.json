@@ -29,7 +29,8 @@
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.3",
     "rimraf": "^3.0.2",
-    "sequelize": "^6.6.2"
+    "sequelize": "^6.6.2",
+    "sequelize-cli": "^6.2.0"
   },
   "devDependencies": {
     "concurrently": "^6.1.0",

@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
-const init = require("../connectionDB/connectionDB");
+const database = require("../connectionDB/connectionDB");
 
 // approval models
-const Approval = init.define("approvalInfo", {
+const Approval = database.define("approvalInfo", {
   approvalID: {
     type: DataTypes.UUID,
     allowNull: false,
@@ -38,7 +38,7 @@ const Approval = init.define("approvalInfo", {
   approval_deadline: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: init.NOW,
+    defaultValue: database.NOW,
   },
   approval_related: {
     type: DataTypes.STRING,
@@ -48,10 +48,6 @@ const Approval = init.define("approvalInfo", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  createAt: {
-    type: DataTypes.DATE,
-    defaultValue: init.NOW,
-  },
   approvalStatus: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
@@ -60,25 +56,25 @@ const Approval = init.define("approvalInfo", {
 });
 
 // models paticipants
-const Participants = init.define("participants",{
+const Participants = database.define("participants",{
   approvalID: {
     type: DataTypes.UUID,
     allowNull: false,
   },
-  paticipantName: {
+  paricipantName: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  paticipantEmail: {
+  participantEmail: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  paticipantPosition: {
+  participantPosition: {
     type: DataTypes.STRING,
     allowNull: true,
     defaultValue: "Staff"
   }, 
-  paticipantType: {
+  participantType: {
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -86,13 +82,13 @@ const Participants = init.define("participants",{
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
-  paticipantStatus: {
+  participantStatus: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   }
 })
 
-const ApprovalDocument = init.define("approval_document", {
+const ApprovalDocument = database.define("approval_document", {
   approvalID: {
     type: DataTypes.UUID,
     allowNull: false,
@@ -107,7 +103,7 @@ const ApprovalDocument = init.define("approval_document", {
   },
   requestAt: {
     type: DataTypes.DATE,
-    defaultValue: init.NOW,
+    defaultValue: database.NOW,
     allowNull: true,
   },
   description: {
@@ -131,7 +127,7 @@ const ApprovalDocument = init.define("approval_document", {
   },
 });
 
-const ReferenceDoc = init.define("refernce_doc", {
+const ReferenceDoc = database.define("refernce_doc", {
   approvalID: {
     type: DataTypes.UUID,
     allowNull: false,
@@ -143,14 +139,10 @@ const ReferenceDoc = init.define("refernce_doc", {
   nameDocument: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  createAt: {
-    type: DataTypes.DATE,
-    defaultValue: init.DATE
   }
 });
 
-const Comment = init.define("comments",{
+const Comment = database.define("comments",{
   approvalID: {
     type: DataTypes.UUID,
     allowNull: false
@@ -165,7 +157,7 @@ const Comment = init.define("comments",{
   },
   commentAt: {
     type: DataTypes.DATE,
-    defaultValue: init.NOW
+    defaultValue: database.NOW
   },
   commentContent: {
     type: DataTypes.TEXT,
@@ -173,7 +165,7 @@ const Comment = init.define("comments",{
   },
 })
 
-const History = init.define("history",{
+const History = database.define("approvalHistory",{
   approvalID: {
     type: DataTypes.UUID,
     allowNull: false
@@ -195,16 +187,16 @@ const History = init.define("history",{
   },
   historyAt: {
     type: DataTypes.DATE,
-    defaultValue: init.NOW
+    defaultValue: database.NOW
   }
 })
 
 // ------------------------create table--------------------------
-// Approval.sync();
-// Participants.sync();
-// ApprovalDocument.sync();
-// ReferenceDoc.sync();
-// Comment.sync();
-// History.sync()
+Approval.sync();
+Participants.sync();
+ApprovalDocument.sync();
+ReferenceDoc.sync();
+Comment.sync();
+History.sync()
 
 module.exports = { Approval, Participants, ApprovalDocument, ReferenceDoc, Comment, History };
