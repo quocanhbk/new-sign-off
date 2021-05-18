@@ -1,8 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import DisplayContent from './DisplayContent'
+import List from './List'
+import sampleData from '../Search/sampleData'
 
+
+const StyleContainer = styled.div`
+    display:flex;
+    width: 100%;
+    height: 100%;
+`
 const Sign = () => {
+    const [selectedId, setSelectedId] = useState()
+
     return (
-        <div>Sign</div>
+        <StyleContainer>
+            <List 
+                data={sampleData} 
+                setSelectedId={setSelectedId}
+            />
+            <DisplayContent data={sampleData.find(item => item.id === selectedId)}/>
+        </StyleContainer>
     )
 }
 
