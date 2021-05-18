@@ -8,6 +8,9 @@ import DescriptionEditor from "./DescriptionEditor";
 import Participants from "./Participants";
 import PrimaryInfo from "./PrimaryInfo";
 import ReferenceDocument from "./ReferenceDocument";
+import Modal from '../Modal'
+import SavingDraftDocument from "./SavingDraftDocument";
+import LoadingDocument from "./LoadingDocument";
 
 const StyleContainer = styled.div`
   display: flex;
@@ -265,16 +268,44 @@ const types = [
     name: "Process",
   },
 ];
-
+const draft = [
+  {
+    id: 1,
+    name: 'Tờ trình 1',
+    created: '15:00 20/04/2021',
+    title: 'TT tiền điện',
+    type: 'Flexible',
+    priority: 'Normal',
+    deadline: '22/04/2021'
+  },
+  {
+    id: 2,
+    name: 'Tờ trình 2',
+    created: '15:00 20/04/2021',
+    title: 'TT tiền điện',
+    type: 'Flexible',
+    priority: 'Normal',
+    deadline: '22/04/2021'
+  },
+  {
+    id: 3,
+    name: 'Tờ trình 3',
+    created: '15:00 20/04/2021',
+    title: 'TT tiền điện',
+    type: 'Flexible',
+    priority: 'Normal',
+    deadline: '22/04/2021'
+  }
+]
 const Create = () => {
   const [approvalData, setApprovalData] = useState(data2);
   const [dataReference, setDataReference] = useState(data);
-  
   const [getDataForm, setGetDataForm] = useState(form[0]);
-
   const [approvalNavigate, setApprovalNavigate] = useState(false);
 
-  
+  const [modalDraft, setModalDraft] = useState(false)
+  const [modalStore, setModalStore] = useState(false)
+
   useEffect(() => {
     if (localStorage.getItem("approval")) {
       setApprovalNavigate(true);
@@ -286,6 +317,8 @@ const Create = () => {
 
   const [typeValue, setTypeValue] = useState(types[0].name);
   const [tempForm , setTempForm ]= useState()
+  const [dataDraft,setdataDraft] = useState(draft)
+  const [dataStore,setDataStore] = useState(draft)
 
   useEffect(() =>{
     if(getDataForm !== undefined)
@@ -299,8 +332,14 @@ const Create = () => {
       <StyleTitle>
         <h4>CREATE A NEW APPROVAL DOCUMENT</h4>
         <StyleButton>
-          <button className="btn-stored">Load from stored</button>
-          <button className="btn-draft">Save Draft</button>
+          <Modal height="80%" width="80%" visible={modalStore} onClickOutside = {() => setModalStore(false)} title="Loading document">
+            <LoadingDocument dataStore={dataStore} setDataStore={setDataStore}/>
+          </Modal>
+          <button onClick={() => setModalStore(true)} className="btn-stored">Load from stored</button>
+          <Modal height="80%" width="80%" visible={modalDraft} onClickOutside = {() => setModalDraft(false)} title="Saving draft document">
+            <SavingDraftDocument dataDraft={dataDraft} setdataDraft={setdataDraft}/>
+          </Modal>
+          <button onClick={() => setModalDraft(true)} className="btn-draft">Save Draft</button>
           <button className="btn-preview">PREVIEW</button>
         </StyleButton>
       </StyleTitle>
