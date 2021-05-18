@@ -3,8 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getFader } from "../../utils/color";
 import AvatarStatus from "../AvatarStatus";
-import { GoPrimitiveDot } from "react-icons/all";
-import { FaBeer } from 'react-icons/all';
+import { BiCheck, GoPrimitiveDot } from "react-icons/all";
 
 const Approval = styled.div`
   display: flex;
@@ -38,19 +37,20 @@ const ApprovalContent = styled.div`
     content: "";
     width: 100%;
     height: 2px;
-    background: #ffc107;
+    background: ${props => props.theme.color.fill.warning};
     position: absolute;
-    left: 140%;
+    left: 150%;
     top: 45%;
   }
   .flow:after {
     content: "";
-    width: 130%;
-    height: 130%;
+    width: 120%;
+    height: 120%;
     position: absolute;
-    border-radius: 50%;
-    border-right: 3px solid #ffc107;
-    top: -15%;
+    left: 20%;
+    border-radius: 100%;
+    border-right: 3px solid ${props => props.theme.color.fill.warning};
+    top: -10%;
   }
 `;
 const JoinGroup = styled.div`
@@ -93,26 +93,27 @@ const ButtonRemind = styled.button`
 const Flow = styled.div`
   height: ${props => props.height}px;
   position: absolute;
-  border-left: 2px solid #ffc107;
+  border-left: 2px solid ${props => props.theme.color.fill.warning};
   top: ${(props) => props.top}px;
   overflow: hidden;
   left: 0.4%;
   width: 1px;
 `;
 const Cicle = styled.div`
-  width: 2rem;
-  height: 2rem;
-  background: black;
+  width: 3%;
+  height: 3%;
+  background: ${props => props.theme.color.background.primary};
   position: absolute;
   top: ${(props) => props.top}px;
   border-radius: 50%;
   left: -1%;
-  border: 2px solid #ffc107;
-  svg{
-    margin-top: 50%;
-    margin-left: 50%;
-    transform: translateX(-50%);
-    transform: translateY(-50%) translateX(-50%);
+  border: 2px solid ${props => props.theme.color.fill.warning};
+
+  display:flex;
+  justify-content: center;
+  align-items : center;
+  & svg{
+    color : ${props => props.theme.color.fill.success};
   }
 `;
 const data = [
@@ -132,42 +133,17 @@ const data = [
         job: "Truong nhom Phat trien Ung dung",
       },
       {
-        id: 2,
+        id: 3,
         name: "Le Thi Bo Cau",
         job: "Chuyen vien HCQT",
       },
       {
-        id: 1,
+        id: 4,
         name: "Nguyen Van Cao",
         job: "Truong nhom Phat trien Ung dung",
       },
       {
-        id: 2,
-        name: "Le Thi Bo Cau",
-        job: "Chuyen vien HCQT",
-      },
-      {
-        id: 2,
-        name: "Le Thi Bo Cau",
-        job: "Chuyen vien HCQT",
-      },
-      {
-        id: 2,
-        name: "Le Thi Bo Cau",
-        job: "Chuyen vien HCQT",
-      },
-      {
-        id: 2,
-        name: "Le Thi Bo Cau",
-        job: "Chuyen vien HCQT",
-      },
-      {
-        id: 2,
-        name: "Le Thi Bo Cau",
-        job: "Chuyen vien HCQT",
-      },
-      {
-        id: 2,
+        id: 5,
         name: "Le Thi Bo Cau",
         job: "Chuyen vien HCQT",
       },
@@ -179,7 +155,7 @@ const data = [
         job: "Giam doc CNTT",
       },
       {
-        id: 1,
+        id: 2,
         name: "Nguyen Van Gau",
         job: "Giam doc CNTT",
       },
@@ -193,16 +169,6 @@ const data = [
       {
         id: 2,
         name: "Nguyen Ca Ro",
-        job: "Chuyen vien Lap Quy",
-      },
-      {
-        id: 3,
-        name: "Nguyen Ca Hoi",
-        job: "Chuyen vien Lap Quy",
-      },
-      {
-        id: 3,
-        name: "Nguyen Ca Hoi",
         job: "Chuyen vien Lap Quy",
       },
       {
@@ -247,9 +213,9 @@ function ApprovalFlow() {
       <ApprovalContent className="content">
         {/* draw flow */}
         <Flow top={position1 + 5} height={positionflow}/>
-        <Cicle top={position1} className="flow"><FaBeer/></Cicle>
-        <Cicle top={position2} className="flow"><FaBeer/></Cicle>
-        <Cicle top={position3} className="flow"><FaBeer/></Cicle>
+        <Cicle top={position1} className="flow"><BiCheck size="1.5rem"/></Cicle>
+        <Cicle top={position2} className="flow"><BiCheck size="1.5rem"/></Cicle>
+        <Cicle top={position3} className="flow"><BiCheck size="1.5rem"/></Cicle>
         {/* end drawa flow */}
         <JoinGroup>
           <TitleApproval>SUBMITER</TitleApproval>
