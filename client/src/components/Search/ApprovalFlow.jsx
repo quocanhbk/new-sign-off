@@ -60,7 +60,7 @@ const JoinGroup = styled.div`
     content: "";
     width: 3px;
     height: 100%;
-    top: 30%;
+    top: 0;
     left: 0;
     background: #fff;
 
@@ -68,7 +68,7 @@ const JoinGroup = styled.div`
       content: "";
       position:absolute;
       left: -5.5px;
-      top: 20%;
+      top: 0%;
       width: 1rem;
       height: 1rem;
       border-radius: 50%;
@@ -151,7 +151,16 @@ const data = [
         name: 'Le Thi Bo Cau',
         job: 'Chuyen vien HCQT'
       },
-      
+      {
+        id: 1,
+        name: 'Nguyen Van Cao',
+        job: 'Truong nhom Phat trien Ung dung',
+      },
+      {
+        id: 2,
+        name: 'Le Thi Bo Cau',
+        job: 'Chuyen vien HCQT'
+      },
     ],
     approver: [
       {
