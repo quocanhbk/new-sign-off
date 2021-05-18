@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { getFader } from "../../utils/color";
 import AvatarStatus from "../AvatarStatus";
 import { GoPrimitiveDot } from "react-icons/all";
+import { FaBeer } from 'react-icons/all';
 
 const Approval = styled.div`
   display: flex;
@@ -32,80 +33,29 @@ const ApprovalContent = styled.div`
   border-bottom: 3px solid ${(props) => props.theme.color.border.primary};
   margin-top: 1rem;
   position: relative;
+  padding-left: 1rem;
   .flow:before {
     content: "";
-    width: 10px;
-    height: 5px;
-    background: blue;
+    width: 100%;
+    height: 2px;
+    background: #ffc107;
     position: absolute;
-    left: 100%;
-    top: 40%;
+    left: 140%;
+    top: 45%;
+  }
+  .flow:after {
+    content: "";
+    width: 130%;
+    height: 130%;
+    position: absolute;
+    border-radius: 50%;
+    border-right: 3px solid #ffc107;
+    top: -15%;
   }
 `;
 const JoinGroup = styled.div`
   margin: 1rem;
   position: relative;
-
-  & .ahihi {
-    position: absolute;
-    content: "";
-    width: 3px;
-    height: 150%;
-    top: 50%;
-    left: 0;
-    background: #fff;
-
-    &::before {
-      content: "";
-      position: absolute;
-      left: -5.5px;
-      top: 0;
-      width: 1rem;
-      height: 1rem;
-      border-radius: 50%;
-      background-color: #fff;
-    }
-  }
-  & .ahihi2 {
-    position: absolute;
-    content: "";
-    width: 3px;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: #fff;
-
-    &::before {
-      content: "";
-      position: absolute;
-      left: -5.5px;
-      top: 0%;
-      width: 1rem;
-      height: 1rem;
-      border-radius: 50%;
-      background-color: #fff;
-    }
-  }
-  & .ahihi3 {
-    position: absolute;
-    content: "";
-    width: 3px;
-    height: 100%;
-    top: -30%;
-    left: 0;
-    background: #fff;
-
-    &::before {
-      content: "";
-      position: absolute;
-      left: -5.5px;
-      bottom: 0;
-      width: 1rem;
-      height: 1rem;
-      border-radius: 50%;
-      background-color: #fff;
-    }
-  }
 `;
 const TitleApproval = styled.h4`
   text-transform: uppercase;
@@ -141,40 +91,29 @@ const ButtonRemind = styled.button`
   cursor: pointer;
 `;
 const Flow = styled.div`
-  height: 77%;
+  height: ${props => props.height}px;
   position: absolute;
-  border: 5px solid red;
+  border-left: 2px solid #ffc107;
   top: ${(props) => props.top}px;
   overflow: hidden;
-  left: 0.8%;
+  left: 0.4%;
+  width: 1px;
 `;
-const Cicle1 = styled.div`
+const Cicle = styled.div`
   width: 2rem;
   height: 2rem;
-  background: blue;
+  background: black;
   position: absolute;
   top: ${(props) => props.top}px;
   border-radius: 50%;
   left: -1%;
-`;
-const Cicle2 = styled.div`
-  width: 2rem;
-  height: 2rem;
-  background: blue;
-  position: absolute;
-  top: ${(props) => props.top}px;
-  border-radius: 50%;
-  left: -1%; 40%;
+  border: 2px solid #ffc107;
+  svg{
+    margin-top: 50%;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    transform: translateY(-50%) translateX(-50%);
   }
-`;
-const Cicle3 = styled.div`
-  width: 2rem;
-  height: 2rem;
-  background: blue;
-  position: absolute;
-  top: ${(props) => props.top}px;
-  border-radius: 50%;
-  left: -1%;
 `;
 const data = [
   {
@@ -201,6 +140,21 @@ const data = [
         id: 1,
         name: "Nguyen Van Cao",
         job: "Truong nhom Phat trien Ung dung",
+      },
+      {
+        id: 2,
+        name: "Le Thi Bo Cau",
+        job: "Chuyen vien HCQT",
+      },
+      {
+        id: 2,
+        name: "Le Thi Bo Cau",
+        job: "Chuyen vien HCQT",
+      },
+      {
+        id: 2,
+        name: "Le Thi Bo Cau",
+        job: "Chuyen vien HCQT",
       },
       {
         id: 2,
@@ -263,6 +217,7 @@ function ApprovalFlow() {
   const [position1, setPosition1] = useState(0);
   const [position2, setPosition2] = useState(0);
   const [position3, setPosition3] = useState(0);
+  const [positionflow, setPositionFlow] = useState(0)
   useEffect(() => {
     let position1 = document.getElementsByClassName("submiter");
     let position2 = document.getElementsByClassName("advisor");
@@ -283,15 +238,18 @@ function ApprovalFlow() {
         content[0].getBoundingClientRect().top +
         17
     );
+
+    let flow = document.getElementsByClassName("flow")
+    setPositionFlow(flow[flow.length - 1].getBoundingClientRect().top - flow[0].getBoundingClientRect().top)
   });
   return (
     <Approval>
       <ApprovalContent className="content">
         {/* draw flow */}
-        <Flow top={position1 + 5} />
-        <Cicle1 top={position1} className="flow" />
-        <Cicle2 top={position2} className="flow" />
-        <Cicle3 top={position3} className="flow" />
+        <Flow top={position1 + 5} height={positionflow}/>
+        <Cicle top={position1} className="flow"><FaBeer/></Cicle>
+        <Cicle top={position2} className="flow"><FaBeer/></Cicle>
+        <Cicle top={position3} className="flow"><FaBeer/></Cicle>
         {/* end drawa flow */}
         <JoinGroup>
           {/* <div className="ahihi">
