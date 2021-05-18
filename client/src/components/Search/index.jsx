@@ -12,7 +12,6 @@ const StyleContainer = styled.div`
 
 const Search = () => {
     const [selectedId, setSelectedId] = useState()
-
     return (
         <StyleContainer>
             <List 

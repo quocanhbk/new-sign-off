@@ -11,6 +11,8 @@ const Container = styled.button`
     cursor: pointer;
     border: none;
     font-size: 1rem;
+    display: block;
+    width: 100%;
 `
 
 const Button = ({onClick, children}) => {

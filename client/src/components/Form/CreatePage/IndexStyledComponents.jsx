@@ -60,20 +60,16 @@ export const ToolbarElement = styled.div`
     flex-direction: column;
     gap: 0.2rem;
 `
-export const AddFieldInput = styled.input`
-    border: 1px solid ${props => props.theme.color.border.primary};
-    background: ${props => props.theme.color.background.secondary};
-    color: ${props => props.theme.color.text.primary};
-    font-size: 1rem;
-    outline: none;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-
-    &:focus {
-        border-color: ${props => props.theme.color.fill.primary};
-    }
-`
 export const NoField = styled.div`
     font-style: italic;
     color: ${props => props.theme.color.text.secondary};
+`
+export const FormNameInput = styled.input`
+    border: 1px solid ${props => props.theme.color.border.primary};
+    background: transparent;
+    padding: 0.5rem;
+    color: ${props => props.theme.color.text.primary};
+    outline: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
 `

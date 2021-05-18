@@ -8,6 +8,9 @@ import DescriptionEditor from "./DescriptionEditor";
 import Participants from "./Participants";
 import PrimaryInfo from "./PrimaryInfo";
 import ReferenceDocument from "./ReferenceDocument";
+import Modal from '../Modal'
+import SavingDraftDocument from "./SavingDraftDocument";
+import LoadingDocument from "./LoadingDocument";
 
 const StyleContainer = styled.div`
   display: flex;
@@ -150,49 +153,111 @@ const form = [
     name: "Đề nghị thanh toán nội bộ",
     approvalDocument: [
       {
-        id: 1,
-        name: "Name File 1",
-        file_name: "ahihi.pdf",
-        data_field: [],
-        is_File: true,
+        id: 11,
+        name_required: 'Thư dề nghị thanh toán nhà thầu',
+        data: [
+          {
+            id: 111,
+            name: "Mau 1",
+            file_name: "ahihi.pdf",
+            data_field:[
+              {
+                id: 1,
+                name: "Date of Request",
+                value: "",
+              },
+              {
+                id: 2,
+                name: "Description",
+                value: "",
+              },
+        
+              {
+                id: 3,
+                name: "Vat",
+                value: "",
+              },
+              {
+                id: 4,
+                name: "Value",
+                value: "",
+              },
+            ],
+          },
+          {
+            id: 112,
+            name: "Mau 2",
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+        ]
       },
       {
-        id: 2,
-        name: "Name File 2",
-        file_name: "",
-        data_field: [],
-        is_File: false,
+        id: 12,
+        name_required: 'Thư dề nghị bão lãnh',
+        data: [
+          {
+            id: 113,
+            name: "Mau 1",
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+          {
+            id: 114,
+            name: "Mau 2",
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+          {
+            id: 114,
+            name: "Mau 2",
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+          {
+            id: 114,
+            name: "Mau 2",
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+        ]
       },
-    ],
+    ]
   },
   {
     id: 2,
-    name: "Payment request form - Đề nghị thanh toán",
+    name: "Đề nghị thanh toán ngoại bộ",
     approvalDocument: [
       {
-        id: 1,
-        name: "Payment File 1",
-        file_name: "ahihi.pdf",
-        data_field: [],
-        is_File: true,
+        id: 21,
+        name_required: 'Thu de nghi nha thau',
+        data: [
+          {
+            id: 221,
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+          {
+            id: 222,
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+        ]
       },
       {
-        id: 2,
-        name: "Payment File 2",
-        file_name: "",
-        data_field: [],
-        is_File: false,
+        id: 22,
+        name_required: 'Thu de nghi nha thau 222',
+        data: [
+          {
+            id: 221,
+            file_name: "ahihi.pdf",
+            data_field: [],
+          },
+        ]
       },
-      {
-        id: 3,
-        name: "Payment File 3",
-        file_name: "",
-        data_field: [],
-        is_File: false,
-      },
-    ],
+    ]
   },
-];
+]
 const types = [
   {
     id: 1,
@@ -203,19 +268,43 @@ const types = [
     name: "Process",
   },
 ];
-
+const draft = [
+  {
+    id: 1,
+    name: 'Tờ trình 1',
+    created: '15:00 20/04/2021',
+    title: 'TT tiền điện',
+    type: 'Flexible',
+    priority: 'Normal',
+    deadline: '22/04/2021'
+  },
+  {
+    id: 2,
+    name: 'Tờ trình 2',
+    created: '15:00 20/04/2021',
+    title: 'TT tiền điện',
+    type: 'Flexible',
+    priority: 'Normal',
+    deadline: '22/04/2021'
+  },
+  {
+    id: 3,
+    name: 'Tờ trình 3',
+    created: '15:00 20/04/2021',
+    title: 'TT tiền điện',
+    type: 'Flexible',
+    priority: 'Normal',
+    deadline: '22/04/2021'
+  }
+]
 const Create = () => {
   const [approvalData, setApprovalData] = useState(data2);
   const [dataReference, setDataReference] = useState(data);
-
-  const [dataForm, setDataForm] = useState(form);
-  const [getDataForm, setGetDataForm] = useState({
-    id: null,
-    name: "",
-    approvalDocument: [],
-  });
-
+  const [getDataForm, setGetDataForm] = useState(form[0]);
   const [approvalNavigate, setApprovalNavigate] = useState(false);
+
+  const [modalDraft, setModalDraft] = useState(false)
+  const [modalStore, setModalStore] = useState(false)
 
   useEffect(() => {
     if (localStorage.getItem("approval")) {
@@ -229,14 +318,30 @@ const Create = () => {
   }, [approvalNavigate]);
 
   const [typeValue, setTypeValue] = useState(types[0].name);
+  const [tempForm , setTempForm ]= useState()
+  const [dataDraft,setdataDraft] = useState(draft)
+  const [dataStore,setDataStore] = useState(draft)
+
+  useEffect(() =>{
+    if(getDataForm !== undefined)
+    {
+      setTempForm(getDataForm)
+    }
+  },[getDataForm])
 
   return (
     <StyleContainer>
       <StyleTitle>
         <h4>CREATE A NEW APPROVAL DOCUMENT</h4>
         <StyleButton>
-          <button className="btn-stored">Load from stored</button>
-          <button className="btn-draft">Save Draft</button>
+          <Modal height="80%" width="80%" visible={modalStore} onClickOutside = {() => setModalStore(false)} title="Loading document">
+            <LoadingDocument dataStore={dataStore} setDataStore={setDataStore}/>
+          </Modal>
+          <button onClick={() => setModalStore(true)} className="btn-stored">Load from stored</button>
+          <Modal height="80%" width="80%" visible={modalDraft} onClickOutside = {() => setModalDraft(false)} title="Saving draft document">
+            <SavingDraftDocument dataDraft={dataDraft} setdataDraft={setdataDraft}/>
+          </Modal>
+          <button onClick={() => setModalDraft(true)} className="btn-draft">Save Draft</button>
           <button className="btn-preview">PREVIEW</button>
         </StyleButton>
       </StyleTitle>
@@ -248,8 +353,9 @@ const Create = () => {
             typeValue={typeValue}
             setTypeValue={setTypeValue}
             approvalNavigate={approvalNavigate}
-            dataForm={dataForm}
+            form= {form}
             setGetDataForm={setGetDataForm}
+            setApprovalNavigate={setApprovalNavigate}
           />
         </DivContent>
         <DivContent>
@@ -258,10 +364,11 @@ const Create = () => {
         </DivContent>
         <DivContent>
           <h4>APPROVAL DOCUMENT ({approvalData.length})</h4>
-          {approvalNavigate || typeValue === "Process" ? (
+          {typeValue === "Process" ? (
             <ApprovalDocumentProcess
-              getDataForm={getDataForm}
-              setGetDataForm={setGetDataForm}
+              tempForm={tempForm}
+              setTempForm={setTempForm}
+              form={form}
             />
           ) : (
             <ApprovalDocument

@@ -34,6 +34,68 @@ const ApprovalContent = styled.div`
 `;
 const JoinGroup = styled.div`
   margin: 1rem;
+  position:relative;
+
+  & .ahihi{
+    position: absolute;
+    content: "";
+    width: 3px;
+    height: 150%;
+    top: 50%;
+    left: 0;
+    background: #fff;
+
+    &::before{
+      content: "";
+      position:absolute;
+      left: -5.5px;
+      top: 0;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      background-color: #fff;
+    }
+  }
+  & .ahihi2{
+    position: absolute;
+    content: "";
+    width: 3px;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: #fff;
+
+    &::before{
+      content: "";
+      position:absolute;
+      left: -5.5px;
+      top: 0%;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      background-color: #fff;
+    }
+  }
+  & .ahihi3{
+    position: absolute;
+    content: "";
+    width: 3px;
+    height: 100%;
+    top: -30%;
+    left: 0;
+    background: #fff;
+
+    &::before{
+      content: "";
+      position:absolute;
+      left: -5.5px;
+      bottom:0;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      background-color: #fff;
+    }
+  }
 `;
 const TitleApproval = styled.h4`
   text-transform: uppercase;
@@ -42,6 +104,7 @@ const TitleApproval = styled.h4`
 const CardChild = styled.div`
   display: flex;
   align-items: center;
+
 `;
 const InfoApproval = styled.div`
   display: flex;
@@ -95,7 +158,17 @@ const data = [
         id: 2,
         name: 'Le Thi Bo Cau',
         job: 'Chuyen vien HCQT'
-      }
+      },
+      {
+        id: 1,
+        name: 'Nguyen Van Cao',
+        job: 'Truong nhom Phat trien Ung dung',
+      },
+      {
+        id: 2,
+        name: 'Le Thi Bo Cau',
+        job: 'Chuyen vien HCQT'
+      },
     ],
     approver: [
       {
@@ -133,11 +206,12 @@ function ApprovalFlow() {
       <ApprovalContent className="content">
         <Flow />
         <JoinGroup>
+          <div className="ahihi">
+          </div>
           <TitleApproval>SUBMITER</TitleApproval>
           {data.map((value, index) => {
             return (
-              <CardChild key={index} className="submiter">
-                <GoPrimitiveDot size="1.5rem"/>
+              <CardChild key={index}>
                 <InfoApproval className="info_approval">
                   <AvatarStatus
                     src="/avatar.png"
@@ -156,6 +230,8 @@ function ApprovalFlow() {
           })}
         </JoinGroup>
         <JoinGroup>
+          <div className="ahihi2">
+          </div>
           <TitleApproval>ADVISOR (2)</TitleApproval>
           {data.map((value, index) => {
             return (
@@ -163,8 +239,7 @@ function ApprovalFlow() {
                  {
                    value.advisor.map((val) =>{
                      return (
-                      <CardChild key={val.id} className="advisor">
-                        <GoPrimitiveDot size="1.5rem"/>
+                      <CardChild key={val.id}>
                         <InfoApproval className="info_approval">
                           <AvatarStatus
                             src="/avatar.png"
@@ -187,6 +262,8 @@ function ApprovalFlow() {
           })}
         </JoinGroup>
         <JoinGroup>
+        <div className="ahihi3">
+          </div>
           <TitleApproval>APPROVER (1)</TitleApproval>
           {data.map((value, index) => {
             return (
@@ -194,8 +271,7 @@ function ApprovalFlow() {
                  {
                    value.approver.map((val) =>{
                      return (
-                      <CardChild key={val.id} className="approver">
-                        <GoPrimitiveDot size="1.5rem"/>
+                      <CardChild key={val.id}>
                         <InfoApproval className="info_approval">
                           <AvatarStatus
                             src="/avatar.png"

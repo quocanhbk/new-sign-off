@@ -1,12 +1,14 @@
-import { useState } from "react"
+/* eslint-disable no-unused-vars */
+import { useEffect, useState } from "react"
 import {v4 as uuid} from 'uuid'
 const useFormData = () => {
+    const [formName, setFormName] = useState("")
     const [file, setFile] = useState()
     const [fieldData, setFieldData] = useState([])
-    const [addingField, setAddingField] = useState(false)
+    const [addingTag, setAddingTag] = useState(null)
 
     const addNewField = (pos) => {
-        if (addingField) {
+        if (addingTag === "field") {
             let newField = {
                 id: uuid().slice(0, 8), 
                 name: "", 
@@ -16,7 +18,7 @@ const useFormData = () => {
                 required: true
             }
             setFieldData([...fieldData, newField])
-            setAddingField(false)
+            setAddingTag(null)
         }
     }
 
@@ -44,13 +46,23 @@ const useFormData = () => {
 
     const toggleRequire = (fieldId) => updateField(fieldId, "required", null)
 
+    const initForm = (file) => {
+        setFile(file)
+        setFormName(file.name.slice(0, file.name.indexOf(".")))
+    }
+    const changeFormName = (e) => {
+        e.preventDefault()
+        setFormName(e.target.value)
+    }
+
     return {
         // Field data
         fieldData, 
         // Some basic state
-        file, setFile, addingField, setAddingField,
+        formName, changeFormName, file, addingTag, setAddingTag,
         //Helper function
-        addNewField, changeContent, moveField, resizeField, changeName, deleteField, toggleRequire
+        addNewField, changeContent, moveField, resizeField, changeName, deleteField, toggleRequire, initForm,
+        //
     }
 }
 
