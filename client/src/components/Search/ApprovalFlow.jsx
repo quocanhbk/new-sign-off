@@ -96,10 +96,9 @@ const Flow = styled.div`
   border-left: 2px solid ${props => props.theme.color.fill.warning};
   top: ${(props) => props.top}px;
   overflow: hidden;
-  left: 0.4%;
-  width: 1px;
+  left: ${props => props.left}px;
 `;
-const Cicle = styled.div`
+const Circle = styled.div`
   width: 2rem;
   height: 2rem;
   background: ${props => props.theme.color.background.primary};
@@ -184,6 +183,7 @@ function ApprovalFlow() {
   const [position2, setPosition2] = useState(0);
   const [position3, setPosition3] = useState(0);
   const [positionflow, setPositionFlow] = useState(0)
+  const [positionFlowLeft, setPositioFlowLeft] = useState(0)
   useEffect(() => {
     let position1 = document.getElementsByClassName("submiter");
     let position2 = document.getElementsByClassName("advisor");
@@ -207,15 +207,17 @@ function ApprovalFlow() {
 
     let flow = document.getElementsByClassName("flow")
     setPositionFlow(flow[flow.length - 1].getBoundingClientRect().top - flow[0].getBoundingClientRect().top)
+
+    setPositioFlowLeft(flow[0].getBoundingClientRect().left - content[0].getBoundingClientRect().left)
   });
   return (
     <Approval>
       <ApprovalContent className="content">
         {/* draw flow */}
-        <Flow top={position1 + 5} height={positionflow}/>
-        <Cicle top={position1} className="flow"><BiCheck size="1.5rem"/></Cicle>
-        <Cicle top={position2} className="flow"><BiCheck size="1.5rem"/></Cicle>
-        <Cicle top={position3} className="flow"><BiCheck size="1.5rem"/></Cicle>
+        <Flow top={position1 + 5} height={positionflow} left={positionFlowLeft + 14}/>
+        <Circle top={position1} className="flow"><BiCheck size="1.5rem"/></Circle>
+        <Circle top={position2} className="flow"><BiCheck size="1.5rem"/></Circle>
+        <Circle top={position3} className="flow"><BiCheck size="1.5rem"/></Circle>
         {/* end drawa flow */}
         <JoinGroup>
           <TitleApproval>SUBMITER</TitleApproval>
