@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components'
 import TabsComponent from './TabsComponent'
 
@@ -10,7 +10,7 @@ const StyleWrapper = styled.div`
 `
 
 function TabApprovalProcess({data, setData, dataForm}) {    
-    
+    const [count, setCount] = useState(0)
     const handleFile = (e,id) =>{
         let newData = data
         let currentApprovalData = newData.approvalDocument.find(doc => doc.id === id)
@@ -22,12 +22,13 @@ function TabApprovalProcess({data, setData, dataForm}) {
             data_field: [],
         }
         ]
+        setCount(count+1)
         setData(newData)
     }
     
     return (
         <StyleWrapper>
-            <TabsComponent tabItems={data.approvalDocument} dataForm={dataForm} handleFile={handleFile}/>     
+            <TabsComponent tabItems={data.approvalDocument} dataForm={dataForm} handleFile={handleFile} count={count}/>     
         </StyleWrapper>
     );
 }

@@ -100,8 +100,8 @@ const Flow = styled.div`
   width: 1px;
 `;
 const Cicle = styled.div`
-  width: 3%;
-  height: 3%;
+  width: 2rem;
+  height: 2rem;
   background: ${props => props.theme.color.background.primary};
   position: absolute;
   top: ${(props) => props.top}px;
