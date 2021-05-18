@@ -85,11 +85,15 @@ const CardList = styled.div`
     background: ${(props) => props.theme.color.fill.secondary};
   }
 `;
-const TabsComponent = ({ tabItems, dataForm, handleFile, count }) => {
+const TabsComponent = ({ tabItems, dataForm, handleFile, handleForm, count,isActive,setIsActive }) => {
   const [active, setActive] = useState(tabItems[0].id);
   useEffect(() => {
     // console.log(count)
   },[count])
+
+  useEffect(() => {
+    setIsActive(false)
+  },[active])
 
   return (
     <StyleWrapper className="wrapper">
@@ -105,10 +109,9 @@ const TabsComponent = ({ tabItems, dataForm, handleFile, count }) => {
       </StyleTabs>
       <Content className="content">
         {tabItems.map((val) => {
-          console.log(val);
           return active === val.id ? (
             <>
-              <DropdownMenu label="Attach File">
+              <DropdownMenu isActive={isActive} setIsActive={setIsActive} label="Attach File">
                 <Text>Select form from my computer</Text>
                 <FileUpload
                   handleFile={(e) => handleFile(e, val.id)}
@@ -118,12 +121,12 @@ const TabsComponent = ({ tabItems, dataForm, handleFile, count }) => {
                   <Text>Select form from database</Text>
                   <Combox
                     className="combox-form"
-                    // onSelect={v => setFormData(v)}
+                    selectTodo={dataForm}
+                    onSelect={v => handleForm(v[0],val.id)}
                   >
                     {dataForm.map((data, index) => {
                       return (
                         <Combox.Option
-                          default={data.id === 1}
                           id={data.id}
                           searchText={[data.name]}
                           value={data.name}

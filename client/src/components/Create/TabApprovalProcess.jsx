@@ -11,6 +11,8 @@ const StyleWrapper = styled.div`
 
 function TabApprovalProcess({data, setData, dataForm}) {    
     const [count, setCount] = useState(0)
+    const [isActive,setIsActive] = useState(false)
+
     const handleFile = (e,id) =>{
         let newData = data
         let currentApprovalData = newData.approvalDocument.find(doc => doc.id === id)
@@ -24,11 +26,22 @@ function TabApprovalProcess({data, setData, dataForm}) {
         ]
         setCount(count+1)
         setData(newData)
+        setIsActive(false)
+    }
+    const handleForm = (val,id) =>{
+        console.log(val,id)
     }
     
     return (
         <StyleWrapper>
-            <TabsComponent tabItems={data.approvalDocument} dataForm={dataForm} handleFile={handleFile} count={count}/>     
+            <TabsComponent 
+            tabItems={data.approvalDocument} 
+            dataForm={dataForm} 
+            handleFile={handleFile}
+            handleForm={handleForm} 
+            count={count}
+            setIsActive={setIsActive}
+            isActive={isActive}/>     
         </StyleWrapper>
     );
 }

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -73,8 +73,8 @@ const NavMenu = styled.nav`
   }
 `;
 const DropdownMenu = (props) => {
+  const {isActive , setIsActive} = props
   const dropdownRef = useRef(null);
-  const [isActive, setIsActive] = useState(false);
   useEffect(() => {
     const pageClickEvent = (e) => {
       if (
