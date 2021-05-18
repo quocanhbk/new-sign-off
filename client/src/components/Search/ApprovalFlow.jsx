@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+/* eslint-disable no-unused-vars */
+import React from "react";
 import styled from "styled-components";
 import { getFader } from "../../utils/color";
 import AvatarStatus from "../AvatarStatus";
@@ -175,7 +176,11 @@ const data = [
         id: 1,
         name: 'Nguyen Van Gau',
         job: 'Giam doc CNTT'
-      }
+      },{
+        id: 1,
+        name: 'Nguyen Van Gau',
+        job: 'Giam doc CNTT'
+      },
     ],
     observator: [
       {
@@ -197,14 +202,14 @@ const data = [
   }
 ]
 function ApprovalFlow() {
-  useEffect(() => {
-    let position = document.querySelector(".submiter")
-    console.log(position.offsetTop)
-  })
+  // useEffect(() => {
+  //   let position = document.querySelector(".submiter")
+  //   console.log(position.offsetTop)
+  // })
   return (
     <Approval>
       <ApprovalContent className="content">
-        <Flow />
+        {/* <Flow /> */}
         <JoinGroup>
           <div className="ahihi">
           </div>
