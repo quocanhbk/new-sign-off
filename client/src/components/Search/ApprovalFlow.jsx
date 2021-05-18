@@ -218,8 +218,6 @@ function ApprovalFlow() {
         <Cicle top={position3} className="flow"><BiCheck size="1.5rem"/></Cicle>
         {/* end drawa flow */}
         <JoinGroup>
-          {/* <div className="ahihi">
-          </div> */}
           <TitleApproval>SUBMITER</TitleApproval>
           {data.map((value, index) => {
             return (
@@ -237,8 +235,6 @@ function ApprovalFlow() {
           })}
         </JoinGroup>
         <JoinGroup>
-          {/* <div className="ahihi2">
-          </div> */}
           <TitleApproval>ADVISOR (2)</TitleApproval>
           {data.map((value, index) => {
             return (
@@ -262,8 +258,6 @@ function ApprovalFlow() {
           })}
         </JoinGroup>
         <JoinGroup>
-          {/* <div className="ahihi3">
-          </div> */}
           <TitleApproval>APPROVER (1)</TitleApproval>
           {data.map((value, index) => {
             return (
