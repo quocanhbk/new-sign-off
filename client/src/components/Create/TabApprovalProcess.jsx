@@ -29,20 +29,33 @@ function TabApprovalProcess({data, setData, dataForm}) {
         setData(newData)
         setIsActive(false)
     }
-    const handleForm = (val,id) =>{
-        setValueDB(val)
+
+    const handleFormValue = (e,id) =>{
+        let newData = data
+        let currentApprovalData = newData.approvalDocument.find(doc => doc.id === id)
+        currentApprovalData.data = [...currentApprovalData.data,{
+            id : Math.random(),
+            name: "",
+            file_name: valueDB,
+            file_data: [],
+            data_field: [],
+        }
+        ]
+        setData(newData)
+        setIsActive(false)
     }
-    
     return (
         <StyleWrapper>
             <TabsComponent 
             tabItems={data.approvalDocument} 
             dataForm={dataForm} 
             handleFile={handleFile}
-            handleForm={handleForm} 
+            setValueDB={setValueDB} 
             count={count}
             setIsActive={setIsActive}
-            isActive={isActive}/>     
+            isActive={isActive}
+            handleFormValue={handleFormValue}
+            />
         </StyleWrapper>
     );
 }

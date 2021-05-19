@@ -154,7 +154,7 @@ const form = [
     approvalDocument: [
       {
         id: 11,
-        name_required: 'Thư dề nghị thanh toán nhà thầu',
+        name_required: 'Thư dề nghị thanh toán nhà thầu Thư dề nghị thanh toán nhà thầu',
         data: [
           {
             id: 111,
@@ -196,30 +196,7 @@ const form = [
         id: 12,
         name_required: 'Thư dề nghị bão lãnh',
         data: [
-          {
-            id: 113,
-            name: "Mau 1",
-            file_name: "ahihi.pdf",
-            data_field: [],
-          },
-          {
-            id: 114,
-            name: "Mau 2",
-            file_name: "ahihi.pdf",
-            data_field: [],
-          },
-          {
-            id: 114,
-            name: "Mau 2",
-            file_name: "ahihi.pdf",
-            data_field: [],
-          },
-          {
-            id: 114,
-            name: "Mau 2",
-            file_name: "ahihi.pdf",
-            data_field: [],
-          },
+
         ]
       },
     ]

@@ -89,8 +89,21 @@ const Text = styled.label`
 
   padding: 0.5rem 0;
 `;
+const Div = styled.div`
+    width: 100%;
+
+    text-align: right;
+    padding-top: 1rem;
+    & button{
+        background: ${props => props.theme.color.fill.success};
+        color: ${props => props.theme.color.background.primary};
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        border: none;
+    }
+`
 const DropdownMenu = (props) => {
-  const {isActive , setIsActive, handleFile, handleForm, dataForm, val } = props
+  const {isActive , setIsActive, handleFile, dataForm, val,handleFormValue, setValueDB } = props
   // const dropdownRef = useRef(null);
   // useEffect(() => {
   //   const pageClickEvent = (e) => {
@@ -127,7 +140,7 @@ const DropdownMenu = (props) => {
             <Combox
               className="combox-form"
               selectTodo={dataForm}
-              onSelect={v => handleForm(v[0],val.id)}
+              onSelect={v => setValueDB(v[0])}
               setIsActive={setIsActive}
             >
               {dataForm.map((data, index) => {
@@ -143,6 +156,9 @@ const DropdownMenu = (props) => {
                 );
               })}
             </Combox>
+            <Div>
+                <button onClick={(e) => handleFormValue(e,val.id)}>Use form</button>
+            </Div>
           </FormSelect>
         </ContainerMenu>
       </NavMenu>

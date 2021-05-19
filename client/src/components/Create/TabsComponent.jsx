@@ -5,22 +5,30 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CardApproval from "./CardApproval";
 import DropdownMenu from "./DropdownMenu";
-import FileUpload from "./FileUpload";
-import Combox from "../Combox";
 import { getFader } from "../../utils/color";
+import { GoTriangleLeft,BiCheckboxChecked,BiCheckbox } from "react-icons/all";
 
 const StyleWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 1rem;
   width: 100%;
   height: 20rem;
 
   & .tabitem--active {
-    background: ${(props) => props.theme.color.text.secondary};
-    color: ${(props) => props.theme.color.border.primary};
+    background: ${props => getFader(props.theme.color.border.primary, 0.5)};
+    color: ${(props) => props.theme.color.text.primary};
 
     transition: 0.4s all;
+
+      & .triangle-active{
+        display:block;
+        color: ${props => props.theme.color.text.secondary};
+        position: absolute;
+        top: 50%; right:-3%;
+        -webkit-transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%);
+      }
   }
 `;
 const StyleTabs = styled.div`
@@ -36,16 +44,39 @@ const StyleTabs = styled.div`
   color: ${(props) => props.theme.color.text.primary};
   background: transparent;
   transition: 0.4s all;
-  background-color: ${(props) => props.theme.color.border.primary};
+  background-color: ${(props) => props.theme.color.background.secondary};
 `;
 const TabItem = styled.div`
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
+
+  position: relative;
+  overflow: hidden;
 `;
+const NamesTab =styled.span`
+  display:flex;
+  align-items: center;
+  & .iconcheck{
+    flex: 1;
+  }
+  & .check-active{
+      color: ${props => props.theme.color.fill.success};
+  }
+  & p{
+    flex: 10;
+    padding-right: 1rem;
+  }
+  & .triangle-active {
+    display: none;
+  }
+`
 const Content = styled.div`
   flex: 2;
   gap: 0.5rem;
   display: flex;
   flex-direction: column;
+  background-color: ${props => props.theme.color.border.primary};
+
+  padding: 0.5rem;
 `;
 
 const CardList = styled.div`
@@ -69,10 +100,8 @@ const CardList = styled.div`
     background: ${(props) => props.theme.color.fill.secondary};
   }
 `;
-const ContentRight = styled.div`
 
-`;
-const TabsComponent = ({ tabItems, dataForm, handleFile, handleForm, count, isActive, setIsActive }) => {
+const TabsComponent = ({ tabItems, dataForm, handleFile, count, isActive, setIsActive ,handleFormValue,setValueDB}) => {
   const [active, setActive] = useState(tabItems[0].id);
   useEffect(() => {
     // console.log(count)
@@ -85,9 +114,10 @@ const TabsComponent = ({ tabItems, dataForm, handleFile, handleForm, count, isAc
   return (
     <StyleWrapper className="wrapper">
       <StyleTabs className="tabs">
-        {tabItems.map(({ id, name_required }) => (
+        {tabItems.map(({ id, name_required,data }) => (
           <TabItemComponent
             key={id}
+            data={data}
             name_required={name_required}
             onItemClicked={() => setActive(id)}
             isActive={active === id}
@@ -97,15 +127,23 @@ const TabsComponent = ({ tabItems, dataForm, handleFile, handleForm, count, isAc
       <Content className="content">
         {tabItems.map((val) => {
           return active === val.id ? (
-            <ContentRight>
-              <DropdownMenu isActive={isActive} setIsActive={setIsActive} val={val} handleFile={handleFile} handleForm={handleForm} dataForm={dataForm} label="Attach File"/>
+            <>
+              <DropdownMenu 
+              isActive={isActive}
+              setIsActive={setIsActive}
+              val={val} 
+              handleFile={handleFile} 
+              handleFormValue={handleFormValue} 
+              dataForm={dataForm} 
+              setValueDB={setValueDB}
+              label="Attach File"/>
               <CardList>
                 {val.data &&
                   val.data.map((val) => {
                     return <CardApproval key={val.id} approvalData={val} />;
                   })}
               </CardList>
-            </ContentRight>
+            </>
           ) : (
             ""
           );
@@ -117,6 +155,7 @@ const TabsComponent = ({ tabItems, dataForm, handleFile, handleForm, count, isAc
 
 const TabItemComponent = ({
   name_required = "",
+  data = [],
   onItemClicked = () => console.error("You passed no action to the component"),
   isActive = false,
 }) => {
@@ -125,7 +164,11 @@ const TabItemComponent = ({
       className={!isActive ? "tabitem" : "tabitem tabitem--active"}
       onClick={onItemClicked}
     >
-      <p className="tabitem__title">{name_required}</p>
+      <NamesTab>
+        {(data.length > 0) ? <BiCheckboxChecked className="iconcheck check-active" size="1.5rem"/> : <BiCheckbox className="iconcheck check-unactive" size="1.5rem"/>}
+        <p className="tabitem__title">{name_required} ({data.length})</p>
+        <GoTriangleLeft className="triangle-active" size="1.5rem"/>
+      </NamesTab>
     </TabItem>
   );
 };

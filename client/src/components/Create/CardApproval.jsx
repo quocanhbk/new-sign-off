@@ -6,8 +6,7 @@ import {AiOutlineDelete,VscFilePdf,BiDotsVerticalRounded} from 'react-icons/all'
 const CardWrapper = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
     border-radius: 0.5rem;
-    background-color: ${(props) =>
-        props.selected ? props.theme.color.background.secondary : 'transparent'};
+    background-color: ${(props) => props.theme.color.background.primary};
     box-shadow: ${props => props.theme.shadow};
     
     display: flex;
