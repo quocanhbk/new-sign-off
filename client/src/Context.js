@@ -67,7 +67,8 @@ const useContext = () => {
     let themeContext = useTheme()
     let searchContext = useSearch()
     let filterContext = useFilter()
-    let navigateContext = useNavigate(location.pathname)
+    console.log(location.pathname)
+    let navigateContext = useNavigate("/" + location.pathname.split("/")[1])
     let formContext = useFormData()
     return {themeContext, searchContext, filterContext, navigateContext, formContext}
 }

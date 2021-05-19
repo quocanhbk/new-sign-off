@@ -17,13 +17,11 @@ app.use(morgan());
 app.use(cors());
 
 // call middleware
-const UploadController = require("./controller/uploadFile");
 const searchDocument = require("./middleware/searchDocument");
 const create = require("./middleware/createDocument");
 
 // use middleware
 // if it handles the route, we call it controller, middleware is the sub-controller before the controller
-app.use("/upload", UploadController);
 app.use("/primary-info", searchDocument);
 app.use("/create-document", create);
 
