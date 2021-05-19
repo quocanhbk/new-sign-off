@@ -38,7 +38,6 @@ const ContainerMenu = styled.div`
   margin: 0;
   display: block;
   padding: 0.5rem;
-  background-color: ${props => props.theme.color.background.primary};
 `;
 const Item = styled.div`
   border-bottom: ${props => props.theme.color.border.primary};
@@ -55,8 +54,8 @@ const LinkItem = styled.a`
 `;
 const NavMenu = styled.nav`
   display: block;
+  border: 2px solid ${props => props.theme.color.border.primary};
   background-color: ${props => props.theme.color.background.primary};
-  border-radius: 4px;
   position: absolute;
   z-index: 1;
   top: 100%;
