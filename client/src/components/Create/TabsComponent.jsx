@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CardApproval from "./CardApproval";
-import DropdownMenu from "../DropdownMenu";
+import DropdownMenu from "./DropdownMenu";
 import FileUpload from "./FileUpload";
 import Combox from "../Combox";
 import { getFader } from "../../utils/color";
@@ -47,23 +47,7 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const FormSelect = styled.div`
-  padding: 0;
-`;
-const Text = styled.label`
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  flex-wrap: wrap;
-  -webkit-flex-wrap: wrap;
 
-  font-size: 0.9rem;
-  color: ${(props) => props.theme.color.text.secondary};
-
-  padding: 0.5rem 0;
-`;
 const CardList = styled.div`
   display: flex;
   flex-direction: column;
@@ -111,34 +95,7 @@ const TabsComponent = ({ tabItems, dataForm, handleFile, handleForm, count,isAct
         {tabItems.map((val) => {
           return active === val.id ? (
             <>
-              <DropdownMenu isActive={isActive} setIsActive={setIsActive} label="Attach File">
-                <Text>Select form from my computer</Text>
-                <FileUpload
-                  handleFile={(e) => handleFile(e, val.id)}
-                  name={val.name_required}
-                />
-                <FormSelect>
-                  <Text>Select form from database</Text>
-                  <Combox
-                    className="combox-form"
-                    selectTodo={dataForm}
-                    onSelect={v => handleForm(v[0],val.id)}
-                  >
-                    {dataForm.map((data, index) => {
-                      return (
-                        <Combox.Option
-                          id={data.id}
-                          searchText={[data.name]}
-                          value={data.name}
-                          key={index}
-                        >
-                          {data.name}
-                        </Combox.Option>
-                      );
-                    })}
-                  </Combox>
-                </FormSelect>
-              </DropdownMenu>
+              <DropdownMenu isActive={isActive} setIsActive={setIsActive} val={val} handleFile={handleFile} handleForm={handleForm} dataForm={dataForm} label="Attach File"/>
               <CardList>
                 {val.data &&
                   val.data.map((val) => {

@@ -2,6 +2,8 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import FileUpload from "./FileUpload";
+import Combox from "../Combox";
 
 const StyleDropDownMenu = styled.div`
   position: relative;
@@ -72,8 +74,25 @@ const NavMenu = styled.nav`
     transform: translateY(0);
   }
 `;
+const FormSelect = styled.div`
+  padding: 0;
+`;
+const Text = styled.label`
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+
+  font-size: 0.9rem;
+  color: ${(props) => props.theme.color.text.secondary};
+
+  padding: 0.5rem 0;
+`;
 const DropdownMenu = (props) => {
-  const {isActive , setIsActive} = props
+  const {isActive , setIsActive, handleFile, handleForm, dataForm, val } = props
   const dropdownRef = useRef(null);
   useEffect(() => {
     const pageClickEvent = (e) => {
@@ -95,16 +114,38 @@ const DropdownMenu = (props) => {
 
   return (
     <StyleDropDownMenu>
-      <StyleButton onClick={() => setIsActive(!isActive)}>
+      <StyleButton onClick={() => setIsActive(true)}>
         <span>{props.label}</span>
       </StyleButton>
       <NavMenu ref={dropdownRef} className={`menu ${isActive ? "active" : ""}`}>
         <ContainerMenu>
-          {React.Children.map(props.children, (child) => {
-            return React.cloneElement(child, {
-              displaymode: props.displayMode,
-            });
-          })}
+        <Text>Select form from my computer</Text>
+          <FileUpload
+            handleFile={(e) => handleFile(e, val.id)}
+            name={val.name_required}
+          />
+          <FormSelect>
+            <Text>Select form from database</Text>
+            <Combox
+              ref={dropdownRef}
+              className="combox-form"
+              selectTodo={dataForm}
+              onSelect={v => handleForm(v[0],val.id)}
+            >
+              {dataForm.map((data, index) => {
+                return (
+                  <Combox.Option
+                    id={data.id}
+                    searchText={[data.name]}
+                    value={data.name}
+                    key={index}
+                  >
+                    {data.name}
+                  </Combox.Option>
+                );
+              })}
+            </Combox>
+          </FormSelect>
         </ContainerMenu>
       </NavMenu>
     </StyleDropDownMenu>

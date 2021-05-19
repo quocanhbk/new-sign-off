@@ -195,6 +195,7 @@ function Combox(props) {
     const [removingItem, setRemovingItem] = useState("")
     const refSearchBar = useRef(null)
 
+    const firstTime = useRef(true)
   
     
     const addItem = (itemProp) => {
@@ -218,7 +219,13 @@ function Combox(props) {
 
 
     useEffect(() => {
-        onSelect(returnItems)
+        if(firstTime.current)
+        {
+            firstTime.current = false
+        }
+        else {
+            onSelect(returnItems)
+        }
     }, [returnItems, onSelect])
 
     useEffect(() => {

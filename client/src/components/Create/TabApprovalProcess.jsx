@@ -12,6 +12,7 @@ const StyleWrapper = styled.div`
 function TabApprovalProcess({data, setData, dataForm}) {    
     const [count, setCount] = useState(0)
     const [isActive,setIsActive] = useState(false)
+    const [valueDB, setValueDB] = useState()
 
     const handleFile = (e,id) =>{
         let newData = data
@@ -29,7 +30,7 @@ function TabApprovalProcess({data, setData, dataForm}) {
         setIsActive(false)
     }
     const handleForm = (val,id) =>{
-        console.log(val,id)
+        setValueDB(val)
     }
     
     return (
