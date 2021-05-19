@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import FileUpload from "./FileUpload";
@@ -8,7 +8,6 @@ import Combox from "../Combox";
 const StyleDropDownMenu = styled.div`
   position: relative;
   z-index: 99;
-
 `;
 const StyleButton = styled.button`
   background: ${props => props.theme.color.fill.success};
@@ -93,31 +92,31 @@ const Text = styled.label`
 `;
 const DropdownMenu = (props) => {
   const {isActive , setIsActive, handleFile, handleForm, dataForm, val } = props
-  const dropdownRef = useRef(null);
-  useEffect(() => {
-    const pageClickEvent = (e) => {
-      if (
-        dropdownRef.current !== null &&
-        !dropdownRef.current.contains(e.target)
-      ) {
-        setIsActive(!isActive);
-      }
-    };
+  // const dropdownRef = useRef(null);
+  // useEffect(() => {
+  //   const pageClickEvent = (e) => {
+  //     if (
+  //       dropdownRef.current !== null &&
+  //       !dropdownRef.current.contains(e.target)
+  //     ) {
+  //       setIsActive(!isActive);
+  //     }
+  //   };
 
-    if (isActive) {
-      window.addEventListener("click", pageClickEvent);
-    }
-    return () => {
-      window.removeEventListener("click", pageClickEvent);
-    };
-  }, [isActive]);
+  //   if (isActive) {
+  //     window.addEventListener("click", pageClickEvent);
+  //   }
+  //   return () => {
+  //     window.removeEventListener("click", pageClickEvent);
+  //   };
+  // }, [isActive]);
 
   return (
     <StyleDropDownMenu>
-      <StyleButton onClick={() => setIsActive(true)}>
+      <StyleButton onClick={() => setIsActive(!isActive)}>
         <span>{props.label}</span>
       </StyleButton>
-      <NavMenu ref={dropdownRef} className={`menu ${isActive ? "active" : ""}`}>
+      <NavMenu className={`menu ${isActive ? "active" : ""}`}>
         <ContainerMenu>
         <Text>Select form from my computer</Text>
           <FileUpload
@@ -127,10 +126,10 @@ const DropdownMenu = (props) => {
           <FormSelect>
             <Text>Select form from database</Text>
             <Combox
-              ref={dropdownRef}
               className="combox-form"
               selectTodo={dataForm}
               onSelect={v => handleForm(v[0],val.id)}
+              setIsActive={setIsActive}
             >
               {dataForm.map((data, index) => {
                 return (

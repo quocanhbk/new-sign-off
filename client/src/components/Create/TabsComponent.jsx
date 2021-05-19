@@ -69,7 +69,10 @@ const CardList = styled.div`
     background: ${(props) => props.theme.color.fill.secondary};
   }
 `;
-const TabsComponent = ({ tabItems, dataForm, handleFile, handleForm, count,isActive,setIsActive }) => {
+const ContentRight = styled.div`
+
+`;
+const TabsComponent = ({ tabItems, dataForm, handleFile, handleForm, count, isActive, setIsActive }) => {
   const [active, setActive] = useState(tabItems[0].id);
   useEffect(() => {
     // console.log(count)
@@ -94,7 +97,7 @@ const TabsComponent = ({ tabItems, dataForm, handleFile, handleForm, count,isAct
       <Content className="content">
         {tabItems.map((val) => {
           return active === val.id ? (
-            <>
+            <ContentRight>
               <DropdownMenu isActive={isActive} setIsActive={setIsActive} val={val} handleFile={handleFile} handleForm={handleForm} dataForm={dataForm} label="Attach File"/>
               <CardList>
                 {val.data &&
@@ -102,7 +105,7 @@ const TabsComponent = ({ tabItems, dataForm, handleFile, handleForm, count,isAct
                     return <CardApproval key={val.id} approvalData={val} />;
                   })}
               </CardList>
-            </>
+            </ContentRight>
           ) : (
             ""
           );
