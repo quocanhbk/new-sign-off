@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components'
 import TabsComponent from './TabsComponent'
 
@@ -10,7 +10,10 @@ const StyleWrapper = styled.div`
 `
 
 function TabApprovalProcess({data, setData, dataForm}) {    
-    
+    const [count, setCount] = useState(0)
+    const [isActive,setIsActive] = useState(false)
+    const [valueDB, setValueDB] = useState()
+
     const handleFile = (e,id) =>{
         let newData = data
         let currentApprovalData = newData.approvalDocument.find(doc => doc.id === id)
@@ -22,12 +25,24 @@ function TabApprovalProcess({data, setData, dataForm}) {
             data_field: [],
         }
         ]
+        setCount(count+1)
         setData(newData)
+        setIsActive(false)
+    }
+    const handleForm = (val,id) =>{
+        setValueDB(val)
     }
     
     return (
         <StyleWrapper>
-            <TabsComponent tabItems={data.approvalDocument} dataForm={dataForm} handleFile={handleFile}/>     
+            <TabsComponent 
+            tabItems={data.approvalDocument} 
+            dataForm={dataForm} 
+            handleFile={handleFile}
+            handleForm={handleForm} 
+            count={count}
+            setIsActive={setIsActive}
+            isActive={isActive}/>     
         </StyleWrapper>
     );
 }

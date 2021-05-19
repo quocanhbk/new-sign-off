@@ -26,7 +26,7 @@ const LabelFile = styled.label`
     cursor: pointer;
 
     & svg{
-        color: ${props => props.theme.color.text.primary}
+        color: ${props => props.theme.color.text.primary};
     }
 `
 

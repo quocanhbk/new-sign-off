@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import FileUpload from "./FileUpload";
+import Combox from "../Combox";
 
 const StyleDropDownMenu = styled.div`
   position: relative;
   z-index: 99;
-
 `;
 const StyleButton = styled.button`
   background: ${props => props.theme.color.fill.success};
@@ -37,7 +38,6 @@ const ContainerMenu = styled.div`
   margin: 0;
   display: block;
   padding: 0.5rem;
-  background-color: ${props => props.theme.color.background.primary};
 `;
 const Item = styled.div`
   border-bottom: ${props => props.theme.color.border.primary};
@@ -54,8 +54,8 @@ const LinkItem = styled.a`
 `;
 const NavMenu = styled.nav`
   display: block;
+  border: 2px solid ${props => props.theme.color.border.primary};
   background-color: ${props => props.theme.color.background.primary};
-  border-radius: 4px;
   position: absolute;
   z-index: 1;
   top: 100%;
@@ -72,39 +72,78 @@ const NavMenu = styled.nav`
     transform: translateY(0);
   }
 `;
-const DropdownMenu = (props) => {
-  const dropdownRef = useRef(null);
-  const [isActive, setIsActive] = useState(false);
-  useEffect(() => {
-    const pageClickEvent = (e) => {
-      if (
-        dropdownRef.current !== null &&
-        !dropdownRef.current.contains(e.target)
-      ) {
-        setIsActive(!isActive);
-      }
-    };
+const FormSelect = styled.div`
+  padding: 0;
+`;
+const Text = styled.label`
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
 
-    if (isActive) {
-      window.addEventListener("click", pageClickEvent);
-    }
-    return () => {
-      window.removeEventListener("click", pageClickEvent);
-    };
-  }, [isActive]);
+  font-size: 0.9rem;
+  color: ${(props) => props.theme.color.text.secondary};
+
+  padding: 0.5rem 0;
+`;
+const DropdownMenu = (props) => {
+  const {isActive , setIsActive, handleFile, handleForm, dataForm, val } = props
+  // const dropdownRef = useRef(null);
+  // useEffect(() => {
+  //   const pageClickEvent = (e) => {
+  //     if (
+  //       dropdownRef.current !== null &&
+  //       !dropdownRef.current.contains(e.target)
+  //     ) {
+  //       setIsActive(!isActive);
+  //     }
+  //   };
+
+  //   if (isActive) {
+  //     window.addEventListener("click", pageClickEvent);
+  //   }
+  //   return () => {
+  //     window.removeEventListener("click", pageClickEvent);
+  //   };
+  // }, [isActive]);
 
   return (
     <StyleDropDownMenu>
       <StyleButton onClick={() => setIsActive(!isActive)}>
         <span>{props.label}</span>
       </StyleButton>
-      <NavMenu ref={dropdownRef} className={`menu ${isActive ? "active" : ""}`}>
+      <NavMenu className={`menu ${isActive ? "active" : ""}`}>
         <ContainerMenu>
-          {React.Children.map(props.children, (child) => {
-            return React.cloneElement(child, {
-              displaymode: props.displayMode,
-            });
-          })}
+        <Text>Select form from my computer</Text>
+          <FileUpload
+            handleFile={(e) => handleFile(e, val.id)}
+            name={val.name_required}
+          />
+          <FormSelect>
+            <Text>Select form from database</Text>
+            <Combox
+              className="combox-form"
+              selectTodo={dataForm}
+              onSelect={v => handleForm(v[0],val.id)}
+              setIsActive={setIsActive}
+            >
+              {dataForm.map((data, index) => {
+                return (
+                  <Combox.Option
+                    id={data.id}
+                    searchText={[data.name]}
+                    value={data.name}
+                    key={index}
+                  >
+                    {data.name}
+                  </Combox.Option>
+                );
+              })}
+            </Combox>
+          </FormSelect>
         </ContainerMenu>
       </NavMenu>
     </StyleDropDownMenu>

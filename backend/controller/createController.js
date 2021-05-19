@@ -83,20 +83,53 @@ const InsertApprovalDocument = async (
   });
 };
 
-const InsertReferenceDoc = async (
-  approvalID,
-  attachment,
-  nameDocument
-) => {
+const InsertReferenceDoc = async (approvalID, attachment, nameDocument) => {
   await ReferenceDoc.create({
     approvalID,
     attachment,
-    nameDocument
+    nameDocument,
   });
 };
+
+const InsertComments = async (
+  approvalID,
+  commentBy,
+  commentByEmail,
+  commentAt,
+  commentContent
+) => {
+  await Comment.create({
+    approvalID,
+    commentBy,
+    commentByEmail,
+    commentAt,
+    commentContent,
+  });
+};
+
+const InsertHistory = async (
+  approvalID,
+  historyBy,
+  historyByEmail,
+  historyAction,
+  historyContent,
+  historyAt
+) => {
+  await History.create({
+    approvalID,
+    historyBy,
+    historyByEmail,
+    historyAction,
+    historyContent,
+    historyAt,
+  });
+};
+
 module.exports = {
   InsertApproval,
   InsertParticipant,
   InsertApprovalDocument,
   InsertReferenceDoc,
+  InsertComments,
+  InsertHistory,
 };

@@ -16,14 +16,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan());
 app.use(cors());
 
+// const db = require('./models/allModels')
+
 // call middleware
-const searchDocument = require("./middleware/searchDocument");
-const create = require("./middleware/createDocument");
+const UploadController = require("./controller/uploadFile");
 
 // use middleware
 // if it handles the route, we call it controller, middleware is the sub-controller before the controller
-app.use("/primary-info", searchDocument);
-app.use("/create-document", create);
+app.use("/upload", UploadController);
 
 const server = http.createServer(app);
 server.listen(PORT, () => console.log("Server is running on port " + PORT));

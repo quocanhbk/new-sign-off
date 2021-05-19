@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import styled from 'styled-components'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -50,15 +51,15 @@ Cell.propTypes = {
     textAlign: PropTypes.string
 }
 
-// const Footer = (props) => {
-//     return (
-//         <tfoot>
-//             <Row footer>
-//                 {React.Children.map(props.children, child => React.cloneElement(child, {footer: true}))}
-//             </Row>
-//         </tfoot>
-//     )
-// }
+const Footer = (props) => {
+    return (
+        <tfoot>
+            <Row footer>
+                {React.Children.map(props.children, child => React.cloneElement(child, {footer: true}))}
+            </Row>
+        </tfoot>
+    )
+}
 
 function Table(props){
     return(
@@ -73,7 +74,7 @@ Table.Header = Header
 Table.HeaderCell = HeaderCell
 Table.Body = Body
 Table.Cell = Cell
-// Table.Footer = Footer
+Table.Footer = Footer
 
 Table.propTypes = {
     cellWidth: PropTypes.string,
