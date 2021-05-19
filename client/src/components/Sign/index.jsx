@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import DisplayContent from './DisplayContent'
 import List from './List'
-import sampleData from '../Search/sampleData'
+import sampleData from './sampleData'
 
 
 const StyleContainer = styled.div`
