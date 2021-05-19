@@ -119,12 +119,11 @@ const CreatePage = () => {
         let pageSize = pageRef.current.getBoundingClientRect()
 
         html2canvas(docRef.current).then(canvas => {
-            let data = canvas.toDataURL('image/jpg')
             const pdf = new jsPDF('p', 'pt', [pageSize.width, pageSize.height])
-            pdf.addImage(data, 'JPEG', 0, 0, docSize.width, docSize.height)
+            pdf.addImage(canvas, 'JPEG', 0, 0, docSize.width, docSize.height)
             for (let i = 1; i < numPage; i++) {
                 pdf.addPage()
-                pdf.addImage(data, 'JPEG', 0, -pageSize.height * i , docSize.width, docSize.height)
+                pdf.addImage(canvas, 'JPEG', 0, -pageSize.height * i , docSize.width, docSize.height)
             }
             pdf.save("download.pdf")
         })
