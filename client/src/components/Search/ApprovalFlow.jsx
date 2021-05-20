@@ -71,6 +71,11 @@ const InfoApproval = styled.div`
   width: 100%;
   margin: 0.5rem 0;
   padding-left: 1rem;
+  .advisor_flow:last-child {
+    &:before{
+      display: none;
+    }
+  }
   .info {
     p {
       padding-left: 1rem;
@@ -241,11 +246,11 @@ function ApprovalFlow() {
           {data.map((value, index) => {
             return (
               <div key={index}>
-                {value.advisor.map((val) => {
+                {value.advisor.map((val,index) => {
                   return (
                     <CardChild key={val.id} className="advisor">
                       <InfoApproval className="info_approval">
-                        <AvatarStatus src="/avatar.png" status={val} />
+                        <AvatarStatus src="/avatar.png" status={val} className={index !== value.advisor.length - 1 ? "advisor_flow" : "empty"} />
                         <div className="info">
                           <p className="name">{val.name}</p>
                           <p className="position">{val.job}</p>
