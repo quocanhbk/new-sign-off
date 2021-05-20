@@ -12,9 +12,9 @@ const Span = styled.span`
     &:before {
       content: "";
       position: absolute;
-      width: 5px;
+      width: 3px;
       height: 50%;
-      background: red;
+      background: ${props => props.theme.color.fill.primary};
       top: 90%;
       margin-left: 50%;
       transform: translateX(-50%);

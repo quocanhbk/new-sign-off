@@ -269,11 +269,11 @@ function ApprovalFlow() {
           {data.map((value, index) => {
             return (
               <div key={index}>
-                {value.approver.map((val) => {
+                {value.approver.map((val,index) => {
                   return (
                     <CardChild key={val.id} className="approver">
                       <InfoApproval className="info_approval">
-                        <AvatarStatus src="/avatar.png" status={val} />
+                      <AvatarStatus src="/avatar.png" status={val} className={index !== value.approver.length - 1 ? "advisor_flow" : "empty"} />
                         <div className="info">
                           <p className="name">{val.name}</p>
                           <p className="position">{val.job}</p>
