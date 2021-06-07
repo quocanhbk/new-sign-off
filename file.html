@@ -1,68 +1,184 @@
-<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>'Hello, world!' example</title>
-</head>
+    <style>
+        html {
+          font-size: 14px;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .title, .headline, .flex-title, .subheadline {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+        .title {
+            font-size: 1.6rem;
+            display: inline-block;
+            margin-top: auto 0 auto 0;
+            margin: 0;
+            padding: 1rem 0;
+        }
+        .title-container img {
+            position: absolute;
+            right: 8px;
+        }
+        .headline {
+            font-size: 1.4rem;
+            margin: 0.5rem 0;
+        }
+        .subheadline {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+        .item {
+            margin-bottom: 0.2rem;
+            font-size: 12px;
+            width: 24%;
+            display: inline-block;
+        }
+        td, th {
+            font-size: 1rem;
+            text-align: center;
+            vertical-align: top;
+            border: 1px solid #e5e5e5;
+            padding: 0.4rem;
+        }
+        th {
+          font-weight: 500;
+        }
+        table {
+          border-collapse: collapse;
+          width: 100%;
+          table-layout: fixed;
+        }
+        .log {
+            font-size: 1rem;
+            margin: 0.5rem 0;
+        }
+        .title-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .title-container img {
+            height: 100%;
+        }
+        .body-container {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('https://chart.googleapis.com/chart?cht=qr&chs=240x240&chl=5783ce8c-e69c-4bed-84bc-d2fefe938784');
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .company-logo {
+            display: inline-block;
+        }
+        .company-logo svg {
+            height: 100%;
+        }
+    </style>
+    <head></head>
 <body>
-
-<h1>'Hello, world!' example</h1>
-
-<canvas id="the-canvas" style="border: 1px solid black; direction: ltr;"></canvas>
-
-<script src="../../node_modules/pdfjs-dist/build/pdf.js"></script>
-
-<script id="script">
-  //
-  // If absolute URL from the remote server is provided, configure the CORS
-  // header on that server.
-  //
-  var url = './helloworld.pdf';
-
-  //
-  // The workerSrc property shall be specified.
-  //
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
-    '../../node_modules/pdfjs-dist/build/pdf.worker.js';
-
-  //
-  // Asynchronous download PDF
-  //
-  var loadingTask = pdfjsLib.getDocument(url);
-  loadingTask.promise.then(function(pdf) {
-    //
-    // Fetch the first page
-    //
-    pdf.getPage(1).then(function(page) {
-      var scale = 1.5;
-      var viewport = page.getViewport({ scale: scale, });
-
-      //
-      // Prepare canvas using PDF page dimensions
-      //
-      var canvas = document.getElementById('the-canvas');
-      var context = canvas.getContext('2d');
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-
-      //
-      // Render PDF page into canvas context
-      //
-      var renderContext = {
-        canvasContext: context,
-        viewport: viewport,
-      };
-      page.render(renderContext);
-    });
-  });
-</script>
-
-<hr>
-<h2>JavaScript code:</h2>
-<pre id="code"></pre>
-<script>
-  document.getElementById('code').textContent =
-      document.getElementById('script').text;
-</script>
+    <div class='title-container'>
+        <h1 class='title'>Phiếu xác nhận yêu cầu đã duyệt ngân sách</h1>
+        <img src='https://chart.googleapis.com/chart?cht=qr&chs=160x160&chl=5783ce8c-e69c-4bed-84bc-d2fefe938784' alt=''/>
+    </div>
+    <hr/>
+    <div class='body-container'>
+    <h2 class='headline'>1. Thông tin chung</h2>
+    <table>
+      <tr>
+        <th>Người yêu cầu</th>
+        <th>Phòng ban</th>
+        <th>Công ty</th>
+        <th>Dự án</th>
+      </tr>
+      <tr>
+        <td>LA QUỐC ANH</td>
+        <td>Phòng Công nghệ thông tin</td>
+        <td>CÔNG TY CỔ PHẦN TẬP ĐOÀN TRUNG THỦY</td>
+        <td>Hội sở TTG</td>
+      </tr>
+      <tr>
+        <th>Mã yêu cầu</th>
+        <th>Số lần</th>
+        <th colspan='2'>Lý do</th>
+      </tr>
+      <tr>
+        <td>TTG-BU-IT2106-004</td>
+        <td>3</td>
+        <td colspan='2'>alo</td>
+      </tr>
+    </table>
+    <h2 class='headline'>2. Danh sách chi phí</h2>
+    <table>
+        <tr>
+            <th class='itemx'>Phân loại</th>
+            <th class='itemx'>Headcode</th>
+            <th class='itemx'>Số tiền phát sinh</th>
+            <th class='itemx'>Mô tả</th>
+        </tr>
+        <tbody>
+          
+          <tr>
+              <td class='itemx'>Vượt kế hoạch</td>
+              <td class='itemx'>17020200 - Vé máy bay, xe lửa, tàu thủy</td>
+              <td class='itemx'>999,999 Đồng</td>
+              <td class='itemx'>alo</td>
+          </tr>
+          
+        </tbody>
+    </table>
+    <h2 class='headline'>3. Thông tin tham khảo</h2>
+    <h3 class='subheadline'>3.1. Theo headcode</h3>
+    <table>
+        <tr>
+            <th class='itemx'>Headcode</th>
+            <th class='itemx'>Ngân sách năm</th>
+            <th class='itemx'>Ngân sách LK tháng</th>
+            <th class='itemx'>Thực hiện LK tháng</th>
+            <th class='itemx'>Phát sinh LK tháng</th>
+            <th class='itemx'>Ngân sách tháng</th>
+            <th class='itemx'>Thực hiện tháng</th>
+            <th class='itemx'>Phát sinh tháng</th>
+        </tr>
+        <tbody>
+          
+          <tr>
+              <td class='itemx'>17020200</td>
+              <td class='itemx'>5,700,000</td>
+              <td class='itemx'>2,850,000</td>
+              <td class='itemx'>99</td>
+              <td class='itemx'>1,000,001</td>
+              <td class='itemx'>0</td>
+              <td class='itemx'>0</td>
+              <td class='itemx'>1,000,001</td>
+          </tr>
+          
+        </tbody>
+    </table>
+    <div class='subheadline'>3.2. Theo Phòng</div>
+    <table>
+        <tr>
+          <th class='itemx'>Phát Sinh Lũy Kế Từ Đầu Năm</h4></th>
+          <th class='itemx'>Tỉ Lệ So Với Ngân Sách Năm</h4></th>
+        </tr>
+        <tr>
+          <td class='itemx'>6,500,001</td>
+          <td class='itemx'>0 %</td>
+        </tr>
+    </table>
+    <div class='subheadline'>3.3. Theo Tập Đoàn</div>
+    <table>
+      <tr>
+        <th class='itemx'>Phát Sinh Lũy Kế Từ Đầu Năm</h4></th>
+        <th class='itemx'>Tỉ Lệ So Với Ngân Sách Năm</h4></th>
+      </tr>
+      <tr>
+        <td class='itemx'>6,500,001</td>
+        <td class='itemx'>0.04 %</td>
+      </tr>
+    </table>
+    <h2 class='headline'>4. Lịch sử phê duyệt</h2>
+    <p class='log'>03/06/2021 15:58, La Quốc Anh đã tạo yêu cầu mới với lời nhắn: </p><p class='log'>03/06/2021 15:59, Phạm Văn Thuận đã duyệt yêu cầu với ý kiến: </p><p class='log'>03/06/2021 15:59, Hồ Lê Minh Đức đã duyệt yêu cầu với ý kiến: </p><p class='log'>03/06/2021 16:00, Nguyễn Thị Bạch Tuyết đã duyệt yêu cầu với ý kiến: </p><p class='log'>03/06/2021 16:00, Yêu cầu đã được phê duyệt thành công!</p>
 </body>
 </html>

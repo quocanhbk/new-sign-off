@@ -42,8 +42,13 @@ const useFormData = () => {
 
     const moveField = (fieldId, position) => updateField(fieldId, "position", position)
 
-    const resizeField = (fieldId, size) => updateField(fieldId, "size", size)
-
+    const resizeField = (fieldId, size) => {
+        console.log(size)
+        let newSize = {width: 5, height: 0.1}
+        newSize.width = size.width > newSize.width ? size.width : newSize.width
+        newSize.height = size.height > newSize.height ? size.height : newSize.height
+        updateField(fieldId, "size", newSize)
+    }
     const toggleRequire = (fieldId) => updateField(fieldId, "required", null)
 
     const initForm = (file) => {

@@ -73,3 +73,9 @@ export const FormNameInput = styled.input`
     border-radius: 0.5rem;
     font-size: 1rem;
 `
+export const ButtonContainer = styled.div`
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+`

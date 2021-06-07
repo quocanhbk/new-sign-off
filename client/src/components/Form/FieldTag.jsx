@@ -12,6 +12,7 @@ const Container = styled.div`
     user-select: none;
     cursor: pointer;
     background: #f6f8ff;
+    font-size: 1rem;
 
     & .name {
         position: absolute;

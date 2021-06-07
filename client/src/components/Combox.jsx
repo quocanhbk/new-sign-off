@@ -117,6 +117,7 @@ const Selection = styled.div`
         background-color: ${props => props.selected ? props.theme.color.border.primary : props.theme.color.background.secondary};
     }
     color: ${props => props.theme.color.text.primary};
+    border-bottom: 1px solid ${props => props.theme.color.border.primary};
 `;
 const StyledItem = styled.div`
     display: flex;
@@ -178,19 +179,11 @@ const SelectionContainer = styled.div`
         }
     }
 `
-const Divider = styled.div`
-    height: 0.5px;
-    transform: translateY(-0.5px);
-    background: ${props => props.theme.color.border.primary};
-    margin: 0px 0.2rem 0px 0.6rem;
-`
-function Combox(props) {
-    const {onSelect, children, selectTodo} = props
+function Combox({onSelect, children, multiple, searchable}) {
     const [isOpen, setIsOpen] = useState(false);
     const comboxRef = useClickOutside(() => setIsOpen(false))
     // Selected item
     const [items, setItems] = useState(children.filter(child => child.props.default).map(child => child.props))
-    const [returnItems, setReturnItems] = useState([])
     const [seachText, setSeachText] = useState("")
     const [removingItem, setRemovingItem] = useState("")
     const refSearchBar = useRef(null)
@@ -199,7 +192,7 @@ function Combox(props) {
   
     
     const addItem = (itemProp) => {
-        if (props.multiple) {
+        if (multiple) {
             if (items.map( item => item.id).includes(itemProp.id) ) { removeItem(itemProp.id) }
             else setItems([...items, itemProp])
         }
@@ -208,25 +201,19 @@ function Combox(props) {
             setIsOpen(false)
         } 
     }
-    
-    useEffect(()=>{
-        setItems(children.filter(child => child.props.default).map(child => child.props))
-    },[selectTodo])
-
     useEffect(() => {
-        setReturnItems(items.map(item => item.value))
-    },[items])
-
-
+        console.log("run");
+        setItems(children.filter(child => child.props.default).map(child => child.props))
+    }, [])
     useEffect(() => {
         if(firstTime.current)
         {
             firstTime.current = false
         }
         else {
-            onSelect(returnItems)
+            onSelect(items.map(item => item.value))
         }
-    }, [returnItems, onSelect])
+    }, [items])
 
     useEffect(() => {
         if (isOpen) {
@@ -253,12 +240,12 @@ function Combox(props) {
         setIsOpen(state)
     }
     return (
-        <Container ref={comboxRef} demo={props.demo}>
+        <Container ref={comboxRef}>
             <Bar open={isOpen} onClick={() => handleOpen(true)}>
                 <ItemContainer onClick={() => handleOpen(true)}>
                     <Dummy>X</Dummy>
                     {items.map(item => 
-                    <StyledItem multiple={props.multiple} key={item.id} className={removingItem === item.id ? "item-out" : ""}>
+                    <StyledItem multiple={multiple} key={item.id} className={removingItem === item.id ? "item-out" : ""}>
                         {item.children}
                         <XContainer onClick={() => removeItem(item.id)}>
                             <IconX/>
@@ -270,25 +257,22 @@ function Combox(props) {
             </Bar>
             {isOpen && 
                 <SelectContainer>
-                    {props.searchable &&
+                    {searchable &&
                     <SearchBarContainer>
                         <SearchBar ref={refSearchBar} type="input" spellCheck="false" placeholder="Search..." value={seachText} onChange={handleSearchText}/>
                     </SearchBarContainer>
                     }
                     <SelectionContainer>
                     {
-                        (props.searchable ? props.children
+                        (searchable ? children
                         .filter(child => child.props.searchText.concat([child.props.value]).map(c => c.toString().toUpperCase()).join("|").includes(seachText.toUpperCase().trim()))
-                        : props.children)
-                            .map(child => 
-                                <>
+                        : children)
+                            .map(child =>
                                 <Selection 
                                     selected={items.map(item => item.id).includes(child.props.id)} 
                                     key={child.props.id}
                                     onClick={() => addItem(child.props)}>{child.props.children}
                                 </Selection>
-                                <Divider/>
-                                </>
                             )
                     }
                     </SelectionContainer>

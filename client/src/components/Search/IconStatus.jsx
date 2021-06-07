@@ -4,13 +4,15 @@ import {  BiLike,GiPauseButton,IoMdTime ,BiDislike} from 'react-icons/all';
 import styled from 'styled-components'
 
 const StyleIconStatus = styled.span`
+    display: grid;
+    place-items: center;
 `
 
-function IconStatus({icon,className,size}) {
+function IconStatus({icon,size}) {
 
 
     return (
-        <StyleIconStatus className={className}>
+        <StyleIconStatus>
        {
         icon === "Approved" ?
         <BiLike size={size}/>

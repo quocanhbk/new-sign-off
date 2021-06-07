@@ -28,8 +28,9 @@ const Row = styled.tr`
 
 const HeaderCell = styled.th`
     cursor: pointer;
-    padding: 0.3rem 0rem;
-    font-weight: bold;
+    padding: 0.5rem;
+    font-weight: 500;
+    color: ${props => props.theme.color.fill.secondary};
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
     width: ${props => props.width || "auto"};
     text-align: ${props => props.textAlign || "center"};
@@ -41,7 +42,7 @@ HeaderCell.propTypes = {
 }
 const Body = styled.tbody``;
 const Cell = styled.td`
-    padding: 0.4rem 0;
+    padding: 0.5rem;
     text-overflow: ellipsis;
     text-align: ${props => props.textAlign || "left"};
     vertical-align: top;

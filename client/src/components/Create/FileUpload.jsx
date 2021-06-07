@@ -1,46 +1,52 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from 'react';
-import styled from 'styled-components'
-import {IoMdAddCircleOutline} from 'react-icons/all'
+import React from 'react'
+import styled from "styled-components";
+import {BsArrowBarUp} from 'react-icons/bs'
 
-const StyleWrapper = styled.div`
-    position: relative;
-    display : flex;
-    align-items: center;
-    flex-direction: column;
+const Container = styled.div`
     flex: 1;
-
-    padding: 1rem;
-
-    background-color: ${props => props.theme.color.background.secondary};
-    border: 1px dashed ${props => props.theme.color.border.primary};
-
-    input[type=file] {
-        color: transparent;
-    }
-`
-const InputFile = styled.input`
-    display:none;
-`
-const LabelFile = styled.label`
     cursor: pointer;
-
-    & svg{
-        color: ${props => props.theme.color.text.primary};
+    background: transparent;
+    position: relative;
+    color: ${props => props.theme.color.fill.primary};
+    border: 1px dashed ${props => props.theme.color.fill.primary};
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    & input, input::-webkit-file-upload-button {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 99;
+        cursor: pointer;
+        opacity: 0;
     }
+    &:active {
+        background: ${props => props.theme.color.border.primary};
+    }
+
 `
 
-function FileUpload({handleFile,name}) {
+const UploadButton = ({onSubmit}) => {
 
+    const handleChange = (e) => {
+        let files = e.target.files
+        onSubmit(Object.values(files).slice(0, files.length))
+    }
+    
     return (
-        <StyleWrapper>
-			<InputFile type="file" id={name} accept = "application/pdf" onChange={handleFile}/>
-            <LabelFile htmlFor={name} className="custom-file-upload" id={name}>
-                <IoMdAddCircleOutline size="3rem"/>
-            </LabelFile>			
-			<p>Upload files or Drag & Drop files here</p>
-		</StyleWrapper>
-    );
+        <Container>
+            <BsArrowBarUp size="2rem"/>
+            Click to choose or drop file here
+            <input type="file" multiple onChange={handleChange} title="" accept=".pdf"/>
+        </Container>
+    )
 }
 
-export default FileUpload;
+export default UploadButton

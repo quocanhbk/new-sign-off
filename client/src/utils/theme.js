@@ -3,8 +3,8 @@ const theme = {
     name: 'Light Theme',
     color: {
       text: {
-        primary: '#404040',
-        secondary: '#575757',
+        primary: '#303030',
+        secondary: '#888888',
         link: '#2F8DE3', // Opal 500
         visited: '#7B237B', // Amethyst 600
         disabled: '#A3A3A3',
@@ -46,7 +46,7 @@ const theme = {
       bold: 600,
     },
     shadow:
-      '0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)',
+      '0px 3px 1px -2px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)',
   },
   dark: {
     name: 'Dark Theme',
@@ -95,7 +95,7 @@ const theme = {
       bold: 500,
     },
     shadow:
-      '0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)',
+      '0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)',
   },
 };
 

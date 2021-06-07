@@ -1,74 +1,77 @@
 import styled from 'styled-components'
 import PropTypes from "prop-types"
-import React, { useState, useEffect } from 'react';
+import React, { useState, } from 'react';
+import { getFader } from '../utils/color';
 
 const Container = styled.div`
-    height: ${props => props.fullHeight ? "100%" : props.height ? props.height : "auto"};
+    flex: 1;
     display: flex;
-    flex-direction: column;    
+    flex-direction: column;
+    overflow: overlay;
 `;
 const DivTab = styled.div`
     display:flex;
+    position: relative;
     align-items:center;
     justify-content:center;
-    padding: 1rem;
+    background: ${props => props.theme.color.border.primary};
+    gap: 1px;
+    & span {
+        --abc: ${props => props.value - 1};
+        position: absolute;
+        bottom: 0;
+        left: calc(100%/3*var(--abc));
+        width: calc(100%/3);
+        height: 0.2rem;
+        background: ${props => props.theme.color.fill.primary};
+        transition: all 0.25s ease-in-out;
+    }
 `;
-const ButtonTab=styled.button`
+const ButtonTab = styled.button`
     display:block;
-    position:relative;
-    border:0;
-    border-radius:0;
+    border: none;
     cursor: pointer;
     width:100%;
     outline: none;
     padding: 1rem;
     font-size:1rem;
-    text-transform: uppercase;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
-    font-weight: bold;
-    color:${props => props.theme.color.text.primary};
-    background: transparent;
-    transition: .4s all;
-    background-color: ${props => props.theme.color.border.primary};
-    border-radius: 1rem 1rem 0 0;
+    font-weight: ${props => props.active ? 600 : 500};
+    color: ${props => props.active ? props.theme.color.fill.primary : props.theme.color.fill.secondary};
+    transition: background ease-in-out 0.2s;
+    background-color: ${props => props.active ? props.theme.color.background.secondary : props.theme.color.background.primary};
+    border-bottom: 1px solid ${props => props.theme.color.border.primary};
+    transition: all 0.25s ease-out;
+    &:hover {
+        background: ${props => getFader(props.theme.color.border.primary, 0.2)}
+    }
     &:disabled {
         color: ${props => props.theme.color.text.disabled};
     }
-    &.active{
-        background: ${props => props.theme.color.text.secondary};
-        color: ${props => props.theme.color.border.primary};
-
-        transition: .4s all;
-    }
 `;
 const TabContent=styled.div`
-    height: 100%;
-    padding: 1rem 0;
+    flex: 1;
+    overflow: auto;
     background: ${props => props.theme.color.background.secondary};
 `;
 
 const Tab = (props) => {
-    const [tabs,SetTabs]= useState((props.children.find(child => child.props.selected) || props.children.find(child => !child.props.disabled)).props.value)
-    const [index, setIndex] = useState(0)
+    const [currentTab, setCurrentTab] = useState((props.children.find(child => child.props.selected) || props.children.find(child => !child.props.disabled)).props.value)
     const selectTab = (value) => {
-        if (props.children.find(child => child.props.value === value).props.disabled)
-            return
-        SetTabs(value)
+        if (!props.children.find(child => child.props.value === value).props.disabled)
+            setCurrentTab(value)
     }
-    useEffect(() => {
-        setIndex(props.children.map(child => child.props.value).indexOf(tabs))
-    }, [setIndex, props.children, tabs])
-
     return(
-        <Container {...props}>
-            <DivTab  {...props}>
-                {props.children.map((tab) => (
-                    <ButtonTab className={`${tab.props.value==index + 1 ? "active" : ""}`} onClick={() => selectTab(tab.props.value)} key={tab.props.value} disabled={tab.props.disabled}>
+        <Container {...props} className="aloha">
+            <DivTab  {...props} value={currentTab}>
+                {props.children.map(tab => 
+                    <ButtonTab active={tab.props.value === currentTab} onClick={() => selectTab(tab.props.value)} key={tab.props.value} disabled={tab.props.disabled}>
                         {tab.props.name}
+                        
                     </ButtonTab>
-                ))}
+                )}
+                <span></span>
             </DivTab>
-            <TabContent {...props}>{props.children.find(child => child.props.value === tabs)}</TabContent>
+            <TabContent {...props}>{props.children.find(child => child.props.value === currentTab)}</TabContent>
         </Container>
     )
 }

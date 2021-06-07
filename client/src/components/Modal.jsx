@@ -1,8 +1,29 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
-import {getDarker} from '../utils/color'
 import PropTypes from 'prop-types'
+import {BsX} from 'react-icons/bs'
+import { getFader } from '../utils/color'
+
+const XContainer = styled.div`
+    display: grid;
+    place-items: center;
+    color: ${props => props.theme.color.fill.danger};
+    padding: 0.5rem;
+    border-radius: 99px;
+    transition: all 0.25s ease-in-out;
+    cursor: pointer;
+    &:hover {
+        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
+    }
+`
+const X = ({onClick}) => {
+    return (
+        <XContainer onClick={onClick}>
+            <BsX size="1.5rem"/>
+        </XContainer>
+    )
+}
 
 const StyledModal = styled.div`
     color: ${props => props.theme.color.text.primary};
@@ -16,41 +37,6 @@ const StyledModal = styled.div`
     opacity: ${props => props.ani ? 1: 0};
     z-index: 995;
     
-`;
-const ExitIcon = styled.div`
-    --clr: ${props => props.theme.color.fill.danger};
-    left: 100%;
-    top: 50%;
-    transform: translate(-140%, -50%) rotate(45deg);
-    width: 24px;
-    height: 24px;
-    position: absolute;
-    transition: all 0.3s ease-in-out;
-    &:hover {
-        transform: translate(-140%, -50%) rotate(225deg);
-        cursor: pointer;
-    }
-    &::before {
-        border-radius: 25%;
-        position: absolute;
-        content: "";
-        top: 2px;
-        left: 10px;
-        width: 4px;
-        height: 18px;
-        background: var(--clr);
-    }
-    &::after {
-        border-radius: 25%;
-        position: absolute;
-        content: "";
-        top: 2px;
-        left: 10px;
-        width: 4px;
-        height: 18px;
-        background: var(--clr);
-        transform: rotate(90deg);
-    }
 `;
 const modalEnter = keyframes`
     from { top: -20%; }
@@ -84,13 +70,17 @@ const StyledContainer = styled.div`
     z-index: 999;
     box-shadow: ${props => props.theme.shadow};
 `;
-const StyledTitle = styled.h1`
+const StyledTitle = styled.div`
     position: relative;
-    border-bottom: 2px solid ${props => props.theme.color.border.primary};
-    font-size: 1.4rem;
-    padding: 0.5rem 1rem;
-    text-align: left;
-    box-shadow: 0px 0px 5px ${props => getDarker(props.theme.color.border.primary)};
+    border-bottom: 1px solid ${props => props.theme.color.border.primary};
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    & h4 {
+        padding: 1rem 0;
+    }
 `;
 const StyledBody = styled.div`
     padding: 8px 16px;
@@ -127,8 +117,8 @@ const Modal = (props) => {
             <StyledContainer ani={runAni} {...props}>
                 {props.title && 
                     <StyledTitle>
-                        <ExitIcon onClick={props.onClickOutside}/>
-                        {props.title}
+                        <h4>{props.title}</h4>
+                        <X onClick={props.onClickOutside}/>
                     </StyledTitle>}
                 <StyledBody>
                     {props.children}

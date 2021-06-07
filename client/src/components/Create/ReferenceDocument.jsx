@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import styled from 'styled-components'
-import Combox from '../Combox';
+import Combox from '../ControlledCombox';
 import FileUpload from './FileUpload'
 import TableReference from './TableReference';
 

@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import propTypes from "prop-types";
 import Avatar from "./Avatar";
-import { IoCloseCircleSharp, FaCheckCircle } from "react-icons/all";
+import { BsCheck, BsDash, BsX } from "react-icons/bs";
 
 const Span = styled.span`
   width: auto;
@@ -24,29 +24,30 @@ const Span = styled.span`
 `;
 const Icon = styled.span`
   position: absolute;
-  top: 68%;
+  bottom: 0;
   right: 0;
+  background: ${props => props.theme.color.fill[props.status === "approved" ? "success" : props.status === "rejected" ? "danger" : "warning"]};
+  color: ${props => props.theme.color.background.primary};
+  padding: 0.1rem;
+  border-radius: 99px;
+  display: flex;
+  align-items: center;
 `;
-Icon.defaultProps = {
-  status: true,
-};
 
-function AvatarStatus(props) {
-  const { src } = props;
-  const status = true;
+function AvatarStatus({src, status}) {
   return (
-    <Span {...props}>
+    <Span>
       <Avatar
         src={src}
-        width="3rem"
-        height="3rem"
+        width="2.5rem"
+        height="2.5rem"
       />
-      <Icon>
-        {status === true ? (
-          <FaCheckCircle color="#00875A" size="1rem" />
-        ) : (
-          <IoCloseCircleSharp color="red" size="1rem" />
-        )}
+      <Icon status={status}>
+        {
+          status === "approved" ? <BsCheck size="0.8rem" /> :
+          status === "rejected" ? <BsX size="0.8rem" /> :
+          <BsDash size="0.8rem" />
+        }
       </Icon>
     </Span>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import DisplayContent from './DisplayContent'
+import Detail from './Detail'
 import List from './List'
 import sampleData from './sampleData'
 
@@ -18,7 +18,7 @@ const Search = () => {
                 data={sampleData} 
                 setSelectedId={setSelectedId}
             />
-            <DisplayContent data={sampleData.find(item => item.id === selectedId)}/>
+            <Detail data={sampleData.find(item => item.id === selectedId)}/>
         </StyleContainer>
     )
 }

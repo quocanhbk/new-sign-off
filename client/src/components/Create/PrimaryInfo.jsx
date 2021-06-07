@@ -1,217 +1,102 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components'
 import Combox from '../Combox'
-import Calendar from '../Calendar'
-
-const StyleWrapper = styled.div`
-    padding: 0.5rem 0;
-`
-
-const StyleItemsColumn = styled.div`
-    display:flex;
+import ControlledCombox from '../ControlledCombox'
+import Calendar from '../TeamsCalendar'
+import {procedureList} from './sampleData'
+import FormControl from './FormControl';
+import {approvalTypeList, priorityList, projectList} from './localData'
+const Container = styled.div`
+    display: flex;
     flex-direction: column;
-
+    gap: 0.5rem;
 `
-const StyleItemRow = styled.div`
+
+const Row = styled.div`
     display:flex;
-    flex-direction: row;
     justify-content:space-between;
     gap: 1rem;
- `
-const StyleItems = styled.div`
-    display:flex;
-    flex-direction: column;
-    flex: 1;
 `
-const Text = styled.label`
-    display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;flex-wrap: wrap;-webkit-flex-wrap: wrap; 
 
-    font-size: 0.9rem;
-    color : ${props => props.theme.color.text.primary};
-
-    padding: 0.5rem 0;
-`
-const Text1 = styled.label`
-    display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;flex-wrap: wrap;-webkit-flex-wrap: wrap; 
-
-    font-size: 0.9rem;
-    color : ${props => props.theme.color.text.secondary};
-
-    padding: 0.5rem 0;
-`
 const Input = styled.input`
     background-color: ${props=> props.theme.color.background.secondary};
     color : ${props => props.theme.color.text.primary};
-    border: none;
-
+    border: 1px solid ${props => props.theme.color.border.primary};
+    outline: none;
     border-radius: 4px;
-    padding: 0.5rem;
+    padding: 0.4em 0.8em;
     font-size: 1rem;
+    font-weight: 400;
 
     &:focus{
         border: 1px solid ${props => props.theme.color.fill.primary};
-        outline: none;
     }
 `
 
-const priority = [
-    {
-        id: 1,
-        name: 'Normal'
-    },
-    {
-        id: 2,
-        name: 'Urgent'
-    }
-]
-const project = [
-    {
-        id: 1,
-        name: 'TTG - Tập Đoàn Trung Thủy'
-    },
-    {
-        id: 2,
-        name: 'Lumina'
-    },
-    {
-        id: 3,
-        name: 'Eden'
-    },
-    {
-        id: 4,
-        name: 'Lancaster'
-    }
-]
-
-function PrimaryInfo({approvalNavigate,form , setGetDataForm,typeValue,setTypeValue,types}) {
-
-    const PopupProcess = (value) =>{
-        setTypeValue(value[0])
-    }
-    const handleSelectProcess = (value) =>{
-        setGetDataForm(value[0])
-    }
+function PrimaryInfo({data}) {
+    const inputRef = useRef()
+    useEffect(() => {
+        inputRef.current.focus()
+    })
     return (
-        <StyleWrapper>
-            <StyleItemsColumn>
-                <StyleItems>
-                    <Text>Approval Title <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
-                    <Input placeholder="Input document title..."/>
-                    <Text1>Little caption goes here</Text1>
-                </StyleItems>
-            </StyleItemsColumn>
-            <StyleItemRow>
-                <StyleItems>
-                    <Text>Approval Type <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
-                    <Combox
-                        className="combox-type"
-                        onSelect={v => PopupProcess(v)}
-                        selectTodo={approvalNavigate}
-                    >
-                        {types.map((data, index) => {
-                            return(
-                            <Combox.Option
-                            default={(approvalNavigate ? data.id === 2 : data.id === 1)}
-                            id={data.id}
-                            searchText={[data.name]}
-                            value={data.name}    
-                            key={index}
-                            approval={true}
-                            >
-                            {
-                                data.name
-                            }
-                            </Combox.Option>
-                            )
-                        })}
-                    </Combox>
-                    <Text1>Little caption goes here</Text1>
-                </StyleItems>
-                {
-                    typeValue === "Process" ?
-                    <StyleItems>
-                        <Text>Process Name <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
-                        <Combox
-                            className="combox-type"
-                            onSelect={v => handleSelectProcess(v)}
-                        >
-                            {form.map((data,index) => {
-                                return(
-                                <Combox.Option
-                                default={data.id === 1}
-                                id={data.id}
-                                value={data}    
-                                key={index}
+        <Container>
+            <Row>
+                <FormControl headline="Document Title" required>
+                    <Input 
+                        ref={inputRef}
+                        value={data.title} 
+                        onChange={(e) => data.setTitle(e.target.value)} 
+                        placeholder="Input document title..."
+                        spellCheck="false"
+                    />
+                </FormControl>
+            </Row>
+            <Row>
+                <FormControl headline="Approval Type" required>
+                    <ControlledCombox 
+                        selection={approvalTypeList}
+                        value={approvalTypeList.find(a => a.id === data.approvalType)}
+                        onSelect={newValue => data.setApprovalType(newValue.id)}
+                    />
+                </FormControl>
+                {data.approvalType === "process" &&
+                    <FormControl headline="Process Name" required>
+                        <Combox onSelect={v => data.setProcess(v[0])}>
+                            {procedureList.map((procedure) =>
+                                <Combox.Option default={data.process && data.process.id === procedure.id} id={procedure.id}
+                                    value={procedure}    
+                                    key={procedure.id}
                                 >
-                                {
-                                    data.name
-                                }
+                                    {procedure.name}
                                 </Combox.Option>
-                                )
-                            })}
+                            )}
                         </Combox>
-                        <Text1>Little caption goes here</Text1>
-                    </StyleItems>
-                : ""
+                    </FormControl>
                 }
-                </StyleItemRow>
-            <StyleItemRow>
-                <StyleItems>
-                    <Text>Priority <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
-                    <Combox
-                        className="combox-priority"
-                        // onSelect={v => console.log(v)}
-                    >
-                        {priority.map((data, index) => {
-                            return(
-                            <Combox.Option
-                            default={data.id === 1}
-                            id={data.id}
-                            searchText={[data.name]}
-                            value={data.name}    
-                            key={index}
-                            >
-                            {
-                                data.name
-                            }
-                            </Combox.Option>
-                            )
-                        })}
-                    </Combox>
-                    <Text1>Little caption goes here</Text1>
-                </StyleItems>
-                <StyleItems>
-                    <Text>Deadline <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
-                    <Calendar fullWidth/>
-                    <Text1>Expected date to receive final approval</Text1>
-                </StyleItems>
-                <StyleItems>
-                    <Text>Related Project <p style={{color: 'red', paddingLeft: '0.3rem'}}>*</p></Text>
-                    <Combox
-                        className="combox-project"
-                        // onSelect={v => console.log(v)}
-                    >
-                        {project.map((data, index) => {
-                            return(
-                            <Combox.Option
-                            default={data.id === 1}
-                            id={data.id}
-                            searchText={[data.name]}
-                            value={data.name}    
-                            key={index}
-                            >
-                            {
-                                data.name
-                            }
-                            </Combox.Option>
-                            )
-                        })}
-                    </Combox>
-                    <Text1>Little caption goes here</Text1>
-                </StyleItems>
-            </StyleItemRow>
-        </StyleWrapper>
+            </Row>
+            <Row>
+                <FormControl headline={"Priority"} required>
+                    <ControlledCombox 
+                        selection={priorityList} 
+                        value={priorityList.find(p => p.id === data.priority)}
+                        onSelect={newValue => data.setPriority(newValue.id)}
+                    />
+                </FormControl>
+                <FormControl headline={"Deadline"} sub={"Expected date to receive final approval"} required>
+                    <Calendar fullWidth onSelect={(v) => data.setDeadline(v)} defaultDate={data.deadline}/>
+                </FormControl>
+                <FormControl headline={"Related Project"} required>
+                    <ControlledCombox 
+                        selection={projectList}
+                        value={projectList.find(p => p.id === data.relatedProject)}
+                        onSelect={newValue => data.setRelatedProject(newValue.id)}
+                    /> 
+                </FormControl>
+            </Row>
+        </Container>
+
     );
 }
 

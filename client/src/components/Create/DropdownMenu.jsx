@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import FileUpload from "./FileUpload";
-import Combox from "../Combox";
+import Combox from "../ControlledCombox";
 
 const StyleDropDownMenu = styled.div`
   position: relative;

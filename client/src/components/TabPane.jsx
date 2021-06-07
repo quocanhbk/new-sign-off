@@ -7,6 +7,9 @@ const DivTab = styled.div`
   background: transparent;
   height: 100%;
   flex : 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 `;
 const TabPane = (props) => {
   return <DivTab {...props} />;

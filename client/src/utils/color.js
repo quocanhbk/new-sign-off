@@ -77,5 +77,5 @@ export const getFader = (hex, opa = 0.2) => {
       clr[y] += v * 16 ** (1 - i);
     }
   });
-  return "RGBA(" + clr[0] + ", " + clr[1] + ", " + clr[2] + ", " + opa + ")";
+  return "rgba(" + clr[0] + ", " + clr[1] + ", " + clr[2] + ", " + opa + ")";
 };

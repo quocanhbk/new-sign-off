@@ -15,6 +15,7 @@ const SidebarContainer = styled.div`
   flex: 5;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
 `;
 
 const Logo = styled.img`
@@ -84,6 +85,7 @@ const Header = styled.div`
   & h1 {
     font-size: calc(1.0rem + .4vw);
     color: ${props => props.theme.color.fill.primary};
+    font-family: Campton;
   }
 `
 const Footer = styled.div`

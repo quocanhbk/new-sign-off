@@ -5,13 +5,15 @@
   box-sizing: border-box;
   transition: background 0.15s ease-in-out;
 }
+@font-face {
+  font-family: Campton;
+  src: url('./asset/Campton/CamptonMedium.otf');
+}
 html {
   font-size: 15px;
 }
 body {
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Segoe UI';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

@@ -1,10 +1,8 @@
-/* eslint-disable no-unreachable */
 /* eslint-disable no-unused-vars */
-import { Router } from '@reach/router';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from "styled-components";
-import CreatePage from './CreatePage'
-import ViewPage from './ViewPage';
+import Calendar from '../Calendar'
+import TeamsCalendar from '../TeamsCalendar'
 const Container = styled.div`
     display:flex;
     flex-direction: column;
@@ -13,15 +11,15 @@ const Container = styled.div`
     & .router {
         height: 100%;
     }
+    padding: 5rem;
 `
 
 const Playground3 = () => {
+    const [myDate, setMyDate] = useState((new Date()).toDateString())
+    // myDate is a date string, to convert to date type, use new Date(myDate)
     return (
         <Container>
-            <Router className="router">
-                <ViewPage path="/" />
-                <CreatePage path="create" />
-            </Router>
+            <TeamsCalendar value={myDate} onChange={newDateString => setMyDate(newDateString)}/>
         </Container>
     )
 }

@@ -61,7 +61,16 @@ const DocContent = ({file, addingTag, fieldData, handleClickDoc, numPage, setNum
     const renderPage = () => {
         let arr = []
         for (let i = 1; i <= numPage; i++) {
-            arr.push(<Page key={i} inputRef={i === 1 ? pageRef : null} width={docRef.current.getBoundingClientRect().width} pageNumber={i} renderTextLayer={false} renderAnnotationLayer={false}/>)
+            arr.push(
+                <Page 
+                    key={i} 
+                    inputRef={i === 1 ? pageRef : null} 
+                    width={docRef.current.getBoundingClientRect().width} 
+                    pageNumber={i} 
+                    renderTextLayer={false} 
+                    renderAnnotationLayer={false}
+                    renderMode="canvas"
+                />)
         }
         return arr
     }

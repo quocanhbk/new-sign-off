@@ -1,6 +1,8 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React, {useState, useRef} from 'react'
-import styled, { css, keyframes } from 'styled-components'
-import {FiChevronLeft,FiChevronRight} from 'react-icons/all'
+import styled, { keyframes } from 'styled-components'
+import {BsChevronLeft, BsChevronRight} from 'react-icons/bs'
 import {getFader} from '../utils/color'
 import useClickOutside from '../hooks/useClickOutside'
 import useKeyEvent from '../hooks/useKeyEvent'
@@ -64,7 +66,7 @@ const Input = styled.input`
     font-size: ${props => props.theme.textSize.medium};
     transition: border 0.15s linear;
     //pointer-events: ${props => props.displayMode !== "edit" ? "none" : "auto"};
-    background-color: ${props => props.theme.color.background.secondary};
+    background-color: transparent;
     pointer-events: none;
     
     &:disabled {
@@ -74,15 +76,13 @@ const Input = styled.input`
 `;
 const popupCalendar = keyframes`
     from {max-height: 0px; opacity: 0;}
-    to {max-height: 350px; opacity: 1;}
+    to {max-height: 250px; opacity: 1;}
 `;
 const StyledCalendar = styled.div`
     position: absolute;
-    display: flex;
     z-index: 999;
-    width: 480px;
-    border: 1px solid ${props => props.theme.color.border.primary};
-    box-shadow: ${props => props.theme.shadow};
+    width: 240px;
+    border: 1px solid #ccc;
     border-radius: 8px;
     overflow: hidden;
     top: ${props => props.bottom ? "110%" : "auto"};
@@ -91,31 +91,20 @@ const StyledCalendar = styled.div`
     transform: ${props => props.left ? "translate(0%, 0)" : "translate(-100%, 0)"};
     transition: all 1s linear;
     animation: ${popupCalendar} 0.25s ease-out 0s 1 forwards normal;
-    background: ${props => props.theme.color.background.primary};
-    padding-bottom: 0.5rem;
 `;
-const Left = styled.div`
-    flex: 7;
-    
-`
-const Right = styled.div`
-    flex: 6;
-`
 const CalendarHead = styled.div`
     width: 100%;
-    background: ${props => props.theme.color.background.primary};
-    padding: 0.5rem;
+    background: ${props => props.theme.color.fill.primary};
+    color: ${props => props.theme.color.background.primary};
+    padding: 0.2rem;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     font-size: ${props => props.theme.textSize.medium};
     user-select: none;
 `;
-const IconGroup = styled.div`
-    margin-left: auto;
-`
 const StyledCalendarDate = styled.div`
-    padding-left: 0.5rem;
-    font-weight: 700;
+    transition: all 3s linear;
 `;
 
 const StyledCalendarBar = styled.ul`
@@ -123,8 +112,8 @@ const StyledCalendarBar = styled.ul`
     width: 100%;
     padding: 4px;
     gap: 4px;
-    background: ${props => props.theme.color.background.primary};
-    justify-content: center;
+    background: ${props => props.theme.color.background.secondary};
+    justify-content: flex-start;
     flex-wrap: wrap;
     user-select: none;
 `;
@@ -136,29 +125,7 @@ const CalendarContent = styled.ul`
     flex-wrap: wrap;
     gap: 4px;
     padding: 4px;
-    
 `;
-const StyledMonthItem = styled.li`
-    width: 44px;
-    height: 44px;
-    background: transparent;
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0.2rem;
-    cursor: pointer;
-    border-radius: 999px;
-    &:hover {
-        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
-    }
-    ${props => props.selected && css`
-        font-weight: 700;
-        color: ${props => props.theme.color.fill.primary};
-        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
-    `}
-`
-
 const StyledLi = styled.li`
     list-style-type: none;
     //width: calc(100%/7);
@@ -166,40 +133,35 @@ const StyledLi = styled.li`
     border-radius: 99px;
     text-align: center;
     padding: 0.4rem;
-    font-size: ${props => props.theme.textSize.medium};
+    font-size: ${props => props.theme.textSize.small};
     cursor: pointer;
     user-select: none;
     &.date-item {
-        background: ${props => props.selected ? getFader(props.theme.color.border.primary, 0.5) : "transparent"};
-        color: ${props => props.selected ? props.theme.color.fill.primary : props => props.current ? props.theme.color.text.primary : getFader(props.theme.color.text.primary, 0.6)};
-        font-weight: ${props => props.selected ? 700 : 500};
+        background: ${props => props.selected ? props.theme.color.fill.primary : "transparent"};
+        color: ${props => props.selected ? props.theme.color.background.primary : props => props.current ? props.theme.color.text.primary : getFader(props.theme.color.text.primary, 0.6)};
     }
     &.date-item:hover {
-        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
+        background: ${props => getFader(props.theme.color.fill.primary, 0.4)};
     }
     
     &.date-title {
         color: ${props => props.theme.color.text.primary};
+        font-weight: 700;
     }
 `;
 
-function Calendar(props) {
-    const closePopup = () => setPopup(false)
-    let ref = useClickOutside(closePopup)
+function Calendar({value, onChange}) {
+
     const [position, setPosition] = useState('bottom')
-    const [viewMonth, setViewMonth] = useState(true)
     let {dayName, months} = calendarData
-    let date = useRef(new Date())
     useKeyEvent("Escape", () => {if (popup) setPopup(false)})
     const [popup, setPopup] = useState(false)
-    const [firstYear, setFirstYear] = useState(2020)
     // carry return date
-    const [myDate, setMyDate] = useState({day: date.current.getDay(), date: date.current.getDate(), month: date.current.getMonth(), year: date.current.getFullYear()})
-    const [yearState, setYearState] = useState(myDate.year)
-
+    let date = useRef(new Date(value))
+    //const [myDate, setMyDate] = useState({day: value.getDay(), date: value.getDate(), month: value.getMonth(), year: value.getFullYear()})
+    const closePopup = () => setPopup(false)
+    let ref = useClickOutside(closePopup)
     const getMonthName = (id) => months.find(month => month.id === id).name
-    
-
     const getDaysInMonth = (m, y) => {
         m += 1;
         return /8|3|5|10/.test(--m)?30:m===1?(!(y%4)&&y%100)||!(y%400)?29:28:31;
@@ -223,50 +185,20 @@ function Calendar(props) {
         return dayofmonth
     }
     // calendar table
-    const [calendar, setCalendar] = useState(updateCalendarTable())
+    const [calendarTable, setCalendarTable] = useState(updateCalendarTable())
 
     const swipe = (type) => {
         date.current.setMonth(date.current.getMonth() + (type === "next" ? 1 : -1), 1)
-        setCalendar(updateCalendarTable())
+        setCalendarTable(updateCalendarTable())
     }
-    const updateMonth = (month) => {
-        date.current.setMonth(month)
-        date.current.setFullYear(yearState)
-        setCalendar(updateCalendarTable())
-    }
-    const swipeYear = (type) => {
-        setYearState(yearState + (type === "next" ? 1 : -1))
-    }
-    const swipe12 = (type) => {
-        setFirstYear(firstYear + (type === "next" ? 12 : -12))
-    }
+
     const selectDate = (day) => {
         date.current.setMonth(date.current.getMonth() + (day.month === "previous" ? -1 : day.month === "next" ? 1 : 0))
         date.current.setDate(day.value)
-        setMyDate({day: date.current.getDay(), date: date.current.getDate(), month: date.current.getMonth(), year: date.current.getFullYear()})
-        props.onSelect(new Date(`${date.current.getFullYear()}-${date.current.getMonth() + 1}-${date.current.getDate()}`))
+        //setMyDate({day: date.current.getDay(), date: date.current.getDate(), month: date.current.getMonth(), year: date.current.getFullYear()})
+        onChange(date.current.toDateString())
         closePopup()
-        setCalendar(updateCalendarTable())
-    }
-    const displayYear = () => {
-        return firstYear + " - " + (firstYear + 11)
-    }
-    const selectYear = (year) => {
-        date.current.setFullYear(year)
-        setYearState(year)
-        setCalendar(updateCalendarTable())
-        setViewMonth(true)
-    }
-    const render12Year = () => {
-        let arr = []
-        for (let i = firstYear; i < firstYear + 12; i++) {
-            arr.push(
-                <StyledMonthItem onClick={() => selectYear(i)}>
-                    {i}
-                </StyledMonthItem>
-            )
-        }
-        return arr
+        setCalendarTable(updateCalendarTable())
     }
     const clickIcon = () => {
         if (!popup) {
@@ -280,83 +212,40 @@ function Calendar(props) {
         setPopup(!popup)
     }
     return (
-        <Container {...props} ref={ref}>
+        <Container ref={ref}>
             <Input 
-                focus={popup} 
-                type="text" 
-                value={myDate.date.toLocaleString(undefined, {minimumIntegerDigits: 2}) + " / " + (myDate.month+1).toLocaleString(undefined, {minimumIntegerDigits: 2}) +  " / " + myDate.year}
+                focus={popup}
+                readOnly
+                value={(new Date(value)).getDate().toLocaleString(undefined, {minimumIntegerDigits: 2}) + " / " + ((new Date(value)).getMonth()+1).toLocaleString(undefined, {minimumIntegerDigits: 2}) +  " / " + (new Date(value)).getFullYear()}
             />
             <StyledSpan onClick={clickIcon} focus={popup}>
                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             </StyledSpan>
             {popup && 
             <StyledCalendar bottom={position[1] === "bottom"} left={position[0] === "left"}>
-                <Left>
-                    <CalendarHead>
-                        
-                        <StyledCalendarDate >
-                            {getMonthName(date.current.getMonth()) +  " " + date.current.getFullYear()}
-                        </StyledCalendarDate>
-                        <IconGroup>
-                            <FiChevronLeft size="22px" onClick={() => swipe('prev')}>Prev</FiChevronLeft>
-                            <FiChevronRight size="22px" onClick={() => swipe('next')}>Next</FiChevronRight>
-                        </IconGroup>
-                        
-                    </CalendarHead>
-                    <StyledCalendarBar>
-                        {dayName.map(day => <StyledLi className="date-title" key={day}>{day}</StyledLi>)}
-                    </StyledCalendarBar>
-                    <CalendarContent>
-                        {calendar.map(
-                            day => 
-                                <StyledLi
-                                    current={day.month === "current"}
-                                    className="date-item" 
-                                    key={day.id} 
-                                    onClick={() => selectDate(day)} 
-                                    selected={day.value === myDate.date && day.month === "current" && date.current.getMonth() === myDate.month}>
-                                    {day.value}
-                                </StyledLi>)
-                        }
-                    </CalendarContent>
-                </Left>
-                <Right>
-                    {viewMonth ? 
-                        <>
-                            <CalendarHead>
-                                <StyledCalendarDate onClick={() => {setViewMonth(!viewMonth); setFirstYear(yearState - yearState % 10)}}>
-                                    {yearState}
-                                </StyledCalendarDate>
-                                <IconGroup>
-                                    <FiChevronLeft size="22px" onClick={() => swipeYear('prev')}>Prev</FiChevronLeft>
-                                    <FiChevronRight size="22px" onClick={() => swipeYear('next')}>Next</FiChevronRight>
-                                </IconGroup>
-                            </CalendarHead>
-                            <StyledCalendarBar>
-                                {months.map(month => 
-                                    <StyledMonthItem key={month.id} selected={month.id === date.current.getMonth()} onClick={() => updateMonth(month.id)}>
-                                        {month.name.slice(0, 3)}
-                                    </StyledMonthItem>)
-                                }
-                            </StyledCalendarBar>
-                        </>
-                    :    
-                        <>
-                            <CalendarHead>
-                                <StyledCalendarDate onClick={() => setViewMonth(!viewMonth)}>
-                                    {displayYear()}
-                                </StyledCalendarDate>
-                                <IconGroup>
-                                    <FiChevronLeft onClick={() => swipe12('prev')}>Prev</FiChevronLeft>
-                                    <FiChevronRight onClick={() => swipe12('next')}>Next</FiChevronRight>
-                                </IconGroup>
-                            </CalendarHead>
-                            <StyledCalendarBar>
-                                {render12Year()}
-                            </StyledCalendarBar>
-                        </>
+                <CalendarHead>
+                    <BsChevronLeft onClick={() => swipe('prev')}>Prev</BsChevronLeft>
+                    <StyledCalendarDate >
+                        {getMonthName(date.current.getMonth()) +  " " + date.current.getFullYear()}
+                    </StyledCalendarDate>
+                    <BsChevronRight onClick={() => swipe('next')}>Next</BsChevronRight>
+                </CalendarHead>
+                <StyledCalendarBar>
+                    {dayName.map(day => <StyledLi className="date-title" key={day}>{day}</StyledLi>)}
+                </StyledCalendarBar>
+                <CalendarContent>
+                      {calendarTable.map(
+                        day => 
+                            <StyledLi
+                                current={day.month === "current"}
+                                className="date-item" 
+                                key={day.id} 
+                                onClick={() => selectDate(day)} 
+                                selected={day.value === (new Date(value)).getDate() && day.month === "current" && date.current.getMonth() === (new Date(value)).getMonth()}>
+                                {day.value}
+                            </StyledLi>)
                     }
-                </Right>
+                </CalendarContent>
             </StyledCalendar>
             }
         </Container>
@@ -364,11 +253,13 @@ function Calendar(props) {
 }
 
 Calendar.propTypes = {
-    onSelect: PropTypes.func
+    onChange: PropTypes.func,
+    value: PropTypes.value
 }
 
 Calendar.defaultProps = {
-    onSelect: (date) => console.log(date)
+    onChange: () => {},
+    value: (new Date()).toDateString()
 }
 
 export default Calendar
