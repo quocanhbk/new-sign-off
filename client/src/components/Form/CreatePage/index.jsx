@@ -1,7 +1,7 @@
 /* eslint-disable no-unreachable */
 /* eslint-disable no-unused-vars */
 import React, {useRef, useState} from 'react'
-import {PDFDocument, StandardFonts, rgb, drawTextField} from 'pdf-lib'
+import {PDFDocument, StandardFonts, rgb} from 'pdf-lib'
 import Button from '../../Button';
 import FieldContentInput from './FieldContentInput'
 import DocDisplay from './DocDisplay'
@@ -59,15 +59,12 @@ const CreatePage = () => {
             let pctPage = 100 / pages.length
             let pageOfField = Math.floor(field.position.Y / pctPage)
             let relativeY = field.position.Y - pctPage*pageOfField
-            let {height: pageHeight} = pageRef.current.getBoundingClientRect()
-            let newFontSize = height / window.innerHeight * 15
-            console.log(pageHeight)
-            console.log(newFontSize)
+            
             pages[pageOfField].drawText(field.content, {
                 x: field.position.X * width / 100,
-                y: height - relativeY * height * pages.length / 100 - 9,
+                y: height - relativeY * height * pages.length / 100 -10,
                 font: helveticaFont,
-                size: 11,
+                size: 12,
                 color: rgb(0,0,0)
             })
         });
@@ -75,20 +72,8 @@ const CreatePage = () => {
         let blob = new Blob([pdfBytes], {type: "application/pdf"})
         let link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob)
-        link.download="name.pdf"
+        link.download=`${formName}.pdf`
         link.click()
-    }
-    const downloadForm2 = (e) => {
-        e.preventDefault()
-        let docSize = docRef.current.getBoundingClientRect()
-        let pageSize = pageRef.current.getBoundingClientRect()
-        let pdf = new jsPDF('p', 'pt', [pageSize.width, pageSize.height])
-        pdf.html(docRef.current, {
-            callback: () => {
-                pdf.save('myDoc.pdf')
-                window.open(pdf.output('bloburl'))
-            }
-        })
     }
     
     return (
@@ -126,7 +111,6 @@ const CreatePage = () => {
                             </ToolbarContainer>
                         </ToolbarElement>
                         <ButtonContainer>
-                            <Button onClick={downloadForm2}>Download Form 2</Button>
                             <Button onClick={downloadForm}>Download Form</Button>
                             <Button onClick={saveForm}>Save Form</Button>
                         </ButtonContainer>

@@ -16,6 +16,10 @@ const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+
+  @media (max-width: 2000px) {
+    
+  }
 `;
 
 const Logo = styled.img`

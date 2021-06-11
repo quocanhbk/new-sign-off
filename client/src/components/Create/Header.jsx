@@ -34,6 +34,7 @@ const StyleTitle = styled.div`
   & h3 {
     color: ${(props) => props.theme.color.fill.primary};
     padding: 1rem 0;
+    font-weight: 500;
   }
 `;
 const Header = () => {

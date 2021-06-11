@@ -35,11 +35,11 @@ const Input = styled.input`
     }
 `
 
-function PrimaryInfo({data}) {
+const PrimaryInfo = ({data}) => {
     const inputRef = useRef()
     useEffect(() => {
         inputRef.current.focus()
-    })
+    }, [])
     return (
         <Container>
             <Row>
@@ -85,7 +85,7 @@ function PrimaryInfo({data}) {
                     />
                 </FormControl>
                 <FormControl headline={"Deadline"} sub={"Expected date to receive final approval"} required>
-                    <Calendar fullWidth onSelect={(v) => data.setDeadline(v)} defaultDate={data.deadline}/>
+                    <Calendar fullWidth value={data.deadline} onChange={v => data.setDeadline(v)}/>
                 </FormControl>
                 <FormControl headline={"Related Project"} required>
                     <ControlledCombox 

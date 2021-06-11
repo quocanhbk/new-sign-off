@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import styled from "styled-components";
+import { getFader } from "../../../utils/color";
 
 const ContentInfo = styled.div`
   display: flex;
@@ -29,23 +30,27 @@ const ContentProperties = styled.div`
   flex-direction: column;
   font-size: 0.9rem;
   gap: 0.5rem;
-  & span {
+  & div {
     text-align: center;
     font-weight: 600  ;
-    padding: 0.5rem 1rem;
-    border-radius: 0.2rem;
+    padding: 0.4rem 2rem;
+    background: ${props => getFader(props.theme.color.border.primary, 0.5)};
   }
   & .content-approved {
     background: ${(props) => props.theme.color.border.primary};
     color: ${props => props.theme.color.text.primary};
+    border-bottom: 2px solid ${props => props.theme.color.fill.primary};
   }
 `;
-const ApproveStatus = styled.span`
-  background: ${(props) => props.status === "Approved" ? props.theme.color.fill.success 
+const ApproveStatus = styled.div`
+  border-bottom: 2px solid ${(props) => props.status === "Approved" ? props.theme.color.fill.success 
               : props.status === "Stopped" ? props.theme.color.fill.info 
               : props.status === "Pending" ? props.theme.color.fill.warning 
               : props.theme.color.fill.danger};
-    color: ${(props) => props.theme.color.background.primary};
+  color: ${(props) => props.status === "Approved" ? props.theme.color.fill.success 
+              : props.status === "Stopped" ? props.theme.color.fill.info 
+              : props.status === "Pending" ? props.theme.color.fill.warning 
+              : props.theme.color.fill.danger};
 `
 const ContentHeaderTab = ({data}) => {
   return (
@@ -58,7 +63,7 @@ const ContentHeaderTab = ({data}) => {
       </ContentTitle>
       <ContentProperties>
         <ApproveStatus status={data.status}>{data.status}</ApproveStatus>
-        <span className="content-approved">{data.approved}</span>
+        <div className="content-approved">{data.approved}</div>
       </ContentProperties>
     </ContentInfo>
   );

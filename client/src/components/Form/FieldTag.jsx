@@ -11,9 +11,11 @@ const Container = styled.div`
     z-index: 3;
     user-select: none;
     cursor: pointer;
-    background: #f6f8ff;
+    background: #fffef6;
     font-size: 1rem;
-
+    & p {
+        word-break: keep-all;
+    }
     & .name {
         position: absolute;
         transform: translateY(-110%);
@@ -37,8 +39,8 @@ const Background = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    border: 1px solid #02467e;
-    background: #d3e6ff;
+    border: 1px solid #000000;
+    background: #fff493;
     border-radius: 0.2rem;
     z-index: -1;
 `

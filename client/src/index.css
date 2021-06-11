@@ -5,6 +5,9 @@
   box-sizing: border-box;
   transition: background 0.15s ease-in-out;
 }
+button {
+  font-family: inherit;
+}
 @font-face {
   font-family: Campton;
   src: url('./asset/Campton/CamptonMedium.otf');

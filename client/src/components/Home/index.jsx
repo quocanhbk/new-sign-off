@@ -92,14 +92,13 @@ const Info = styled.div`
     }
 `
 const Home = () => {
-    const {navigateContext} = Context.useContainer()
-    const {navigatePath} = navigateContext
-
+    const {navigateContext: {navigatePath}} = Context.useContainer()
     const navigateProcess = () =>{
         localStorage.setItem('approval' , JSON.stringify('Process'))
         navigatePath('/create')
     }
     return (
+        
         <StyleContainer>
            <StyleTitle>Please select service</StyleTitle>
            <ContainerItems >

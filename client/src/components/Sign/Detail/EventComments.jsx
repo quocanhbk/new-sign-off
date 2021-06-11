@@ -2,57 +2,55 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'
 import {IoMdSend} from 'react-icons/all'
-import Avatar from '../Avatar'
 import CardEvents from './CardEvents';
+import { getFader } from '../../../utils/color';
 
 const StyleWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+`
 
-`
-const TableForm = styled.div`
-
-`
-const TableTitle = styled.h4`
-    padding: 0.5rem 0;
-`
 const Input = styled.input`
-    flex: 10;
-    height: auto;
-    border:none;
-
-    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
-
-    background: transparent;
+    flex: 1;
+    border: 1px solid ${props => props.theme.color.border.primary};
+    border-radius: 99px;
+    background: ${props => props.theme.color.background.primary};
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
     color: ${props => props.theme.color.text.primary};
+    outline: none;
 
-    &:focus{
-        outline: none;
+    &:focus {
+        border-color: ${props => props.theme.color.fill.primary};
     }
 `
 const Form = styled.div`
     display:flex;
     align-items: center;
-
-    background: ${props => props.theme.color.background.primary};
-    border: 1px solid ${props => props.theme.color.border.primary};
-
     width: 100%;
-    padding: 0.3rem;
-    
+    padding: 0rem;
+    gap: 0.5rem;
+
     & button{
-        flex: 1;
         display:flex;
         align-items: center;
         justify-content: center;
-
         cursor: pointer;
         background: transparent;
         border : none;
-        
-        color: ${props => props.theme.color.text.primary};
+        color: ${props => props.theme.color.fill.primary};
+        padding: 0.5rem;
+        border-radius: 99px;
+        &:hover {
+            background: ${props => getFader(props.theme.color.border.primary, 0.5)}
+        }
     }
 `
 const TableEvents = styled.div`
-
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 `
 
 function EventComents({dataList,setComment}) {
@@ -71,21 +69,17 @@ function EventComents({dataList,setComment}) {
 
     return (
         <StyleWrapper>
-            <TableForm>
-                <TableTitle>Event & Comments ({dataList.length})</TableTitle>
-                <Form>
-                    <Avatar width="2.5rem" height="2.5rem" src={`/avatar.png`} />
-                    <Input placeholder="Write comment here ..." value={value} onChange={(e) => setValue(e.target.value)}/>
-                    <button onClick={handleSubmit}><IoMdSend size="1.5rem"/></button>
-                </Form>
-            </TableForm>
+            <Form>
+                <Input placeholder="Write comment here ..." value={value} onChange={(e) => setValue(e.target.value)}/>
+                <button onClick={handleSubmit}><IoMdSend size="1.2rem"/></button>
+            </Form>
             <TableEvents>
                 {dataList.map((task) => (
                         <CardEvents
                         key={task.id}
                         title={task.title}
-                        create_date={task.create_date}
-                        create_by={task.create_by}
+                        createdDate={task.create_date}
+                        createdBy={task.create_by}
                         />
                     ))}
             </TableEvents>

@@ -1,10 +1,10 @@
 export const priorityList = [
-    {id: "NORMAL", text: "Normal"},
-    {id: "URGENT", text: "Urgent"}
+    {id: "Normal", text: "Normal"},
+    {id: "Urgent", text: "Urgent"}
 ]
 export const approvalTypeList = [
-    {id: "FLEXIBLE", text: "Flexible"},
-    {id: "PROCESS", text: "Process"}
+    {id: "Flexible", text: "Flexible"},
+    {id: "Procedure", text: "Procedure"}
 ]
 export const projectList = [
     {id: "M01", text: "M01 - Lincoln"},

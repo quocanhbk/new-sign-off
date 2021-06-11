@@ -89,27 +89,31 @@ const OpenButton = styled.div`
     transition: all 0.15s linear;
 `;
 const slideDown = keyframes`
-    from {max-height: 0px; opacity: 0;}
-    to {max-height: 15rem; opacity: 1;}
+    from {max-height: 0px; opacity: 0; margin-top: 0;}
+    to {max-height: 12rem; opacity: 1; margin-top: 0.4rem;}
 `;
 const SelectContainer = styled.div`
-    border: 1px solid ${props => props.theme.color.border.primary};
+    border: 2px solid ${props => props.theme.color.border.primary};
     background: ${props => props.theme.color.background.primary};
     position: absolute;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     z-index: 2;
     border-radius: 5px;
-    margin-top: 0.4rem;
     top: 100%;
-    animation: ${slideDown} 0.15s ease-out 0s 1 forwards normal;
+    animation: ${slideDown} 0.15s ease-in-out 0s 1 forwards normal;
+
+    &:nth-child(odd) {
+        background-color: red;
+    }
 `;
 const Selection = styled.div`
     padding: 0.5rem;
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
-    background-color: ${props => props.selected ? props.theme.color.border.primary: "transparent"};
+    background-color: ${props => props.selected ? props.theme.color.border.primary: "initial"};
     &:hover {
-        background-color: ${props => props.selected ? props.theme.color.border.primary : props.theme.color.background.secondary};
+        background-color: ${props => props.selected ? props.theme.color.border.primary : getFader(props.theme.color.border.primary, 0.5)};
     }
     color: ${props => props.theme.color.text.primary};
 `;
@@ -138,22 +142,21 @@ const XContainer = styled.div`
     border-left: 1px solid ${props => props.theme.color.border.primary};
 `;
 const SearchBarContainer = styled.div`
-    background: transparent;
+    border-bottom: 1px solid ${props => props.theme.color.border.primary};
     padding: 0.5rem 0.5rem;
 `;
 const SearchBar = styled.input`
     background: transparent;
-    padding: 0.25rem 0.5rem;
     font-size: 1rem;
     outline: 0;
     width: 100%;
     border: none;
-    border-bottom: 1px solid ${props => props.theme.color.border.primary};
+    //border-bottom: 1px solid ${props => props.theme.color.border.primary};
     color: ${props => props.theme.color.fill.primary};
 `;
 const SelectionContainer = styled.div`
-    overflow: auto;
-    max-height: 12rem;
+    overflow: overlay;
+    flex: 1;
     &::-webkit-scrollbar {
         width: 0rem;
     }

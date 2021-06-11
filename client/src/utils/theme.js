@@ -4,7 +4,7 @@ const theme = {
     color: {
       text: {
         primary: '#303030',
-        secondary: '#888888',
+        secondary: '#666666',
         link: '#2F8DE3', // Opal 500
         visited: '#7B237B', // Amethyst 600
         disabled: '#A3A3A3',

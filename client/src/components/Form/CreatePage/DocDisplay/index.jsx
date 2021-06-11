@@ -4,7 +4,7 @@ import React, {} from 'react'
 import IconWrapper from '../IconWrapper';
 import DocContent from './DocContent'
 import {MainContainer, Bar, DocWrapper} from './StyledComponent'
-import {BsCardText, BsPen, BsFileEarmarkArrowUp, BsTrash} from 'react-icons/bs'
+import {BsCardText} from 'react-icons/bs'
 
 const DocDisplay = ({file, initForm, addingTag, setAddingTag, fieldData, handleClickDoc, numPage, setNumPage, docRef, pageRef, moveField, resizeField}) => {
     return (
@@ -15,18 +15,12 @@ const DocDisplay = ({file, initForm, addingTag, setAddingTag, fieldData, handleC
                         <IconWrapper onClick={() => setAddingTag(addingTag === null ? "field" : null)}>
                             <BsCardText/> Add Field
                         </IconWrapper>
-                        <IconWrapper>
-                            <BsPen/> Add Signature
-                        </IconWrapper>
                     </div>
-                    <div style={{marginLeft: "auto"}}>
+                    {/* <div style={{marginLeft: "auto"}}>
                         <IconWrapper color="warning">
                             <BsFileEarmarkArrowUp/> Change File
                         </IconWrapper>
-                        <IconWrapper color="danger">
-                            <BsTrash/> Delete File
-                        </IconWrapper>
-                    </div>
+                    </div> */}
                 </Bar>
             }
             <DocWrapper>

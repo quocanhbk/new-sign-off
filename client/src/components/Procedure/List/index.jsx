@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components'
-import Card from './Card';
+import Cardv2 from './Cardv2';
 import ListToolbar from './ListToolbar';
-import {getFader} from '../../utils/color'
+import {getFader} from '../../../utils/color'
 
 const StyleListWrapper =styled.div`
     flex: 5;
@@ -64,11 +64,12 @@ function List({data,setSelectedId}) {
                 </TagContainer>
             </TagBar>
             <CardList>
-                {data.map((task) => (
-                    <Card
-                    key={task.id}
-                    task={task}
-                    setSelectedId={setSelectedId}
+                {data.map((procedure) => (
+                    <Cardv2
+                        key={procedure.id}
+                        title={procedure.title}
+                        running={procedure.running}
+                        setSelectedId={() => setSelectedId(procedure.id)}
                     />
                 ))}
             </CardList>

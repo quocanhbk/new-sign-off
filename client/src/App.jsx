@@ -10,6 +10,9 @@ const StyledApp = styled.div`
   height: 100vh;
   overflow: hidden;
   transition: background 0.25s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 const Container = () => {
   const {themeContext} = Context.useContainer()

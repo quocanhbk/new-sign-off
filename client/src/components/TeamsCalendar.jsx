@@ -113,6 +113,8 @@ const CalendarHead = styled.div`
 `
 const IconGroup = styled.div`
     margin-left: auto;
+    display: flex;
+    align-items: center;
 `
 const StyledCalendarDate = styled.div`
     border-bottom: 1px solid ${props => props.theme.color.fill.primary};
@@ -128,28 +130,33 @@ const StyledCalendarBar = styled.ul`
     justify-content: center;
     flex-wrap: wrap;
     user-select: none;
+    border-left: 1px solid ${props => props.theme.color.border.primary};
 `
 const CalendarContent = styled.ul`
     display: flex;
     width: 100%;
     background: ${props => props.theme.color.background.primary};
-    justify-content: flex-start;
     flex-wrap: wrap;
     gap: 4px;
     padding: 4px;
     
 `
 const StyledMonthItem = styled.li`
-    width: 44px;
-    height: 44px;
+    /* width: 44px;
+    height: 44px; */
+    flex: 1 0 20%;
     background: transparent;
     list-style: none;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0.2rem;
     cursor: pointer;
     border-radius: 999px;
+    &:before {
+        content: '';
+        padding-top: 100%;
+        display: block;
+    }
     &:hover {
         background: ${props => getFader(props.theme.color.border.primary, 0.5)};
     }
@@ -164,11 +171,17 @@ const StyledLi = styled.li`
     //width: calc(100%/7);
     flex: 1 0 12%;
     border-radius: 99px;
-    text-align: center;
-    padding: 0.4rem;
-    font-size: ${props => props.theme.textSize.medium};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
     cursor: pointer;
     user-select: none;
+    &:before {
+        content: '';
+        padding-top: 100%;
+        display: block;
+    }
     &.date-item {
         background: ${props => props.selected ? getFader(props.theme.color.border.primary, 0.5) : "transparent"};
         color: ${props => props.selected ? props.theme.color.fill.primary : props => props.current ? props.theme.color.text.primary : getFader(props.theme.color.text.primary, 0.6)};
@@ -192,7 +205,7 @@ function Calendar({value, onChange}) {
     
     let ref = useClickOutside(closePopup)
     let {dayName, months} = calendarData
-    let date = useRef(new Date(value))
+    let date = useRef(new Date(value ? value : (new Date()).toDateString()))
     useKeyEvent("Escape", () => {if (popup) setPopup(false)})
     
     const getMonthName = (id) => months.find(month => month.id === id).name
@@ -225,8 +238,8 @@ function Calendar({value, onChange}) {
 
     const swipe = (type) => {
         date.current.setMonth(date.current.getMonth() + (type === "next" ? 1 : -1), 1)
-        if (type === "next" && date.current.getMonth() === 0) swipeYear("next")
-        if (type === "prev" && date.current.getMonth() === 11) swipeYear("prev")
+        if ((type === "next" && date.current.getMonth() === 0) || (type === "prev" && date.current.getMonth() === 11))
+            setYearState(date.current.getFullYear())
         setCalendar(updateCalendarTable())
     }
     const updateMonth = (month) => {
@@ -235,7 +248,9 @@ function Calendar({value, onChange}) {
         setCalendar(updateCalendarTable())
     }
     const swipeYear = (type) => {
+        date.current.setFullYear(date.current.getFullYear() + (type === "next" ? 1 : -1))
         setYearState(yearState + (type === "next" ? 1 : -1))
+        setCalendar(updateCalendarTable())
     }
     const swipe12 = (type) => {
         setFirstYear(firstYear + (type === "next" ? 12 : -12))
@@ -283,7 +298,7 @@ function Calendar({value, onChange}) {
             <Input 
                 focus={popup} 
                 type="text" 
-                value={(new Date(value)).getDate().toLocaleString(undefined, {minimumIntegerDigits: 2}) + " / " + ((new Date(value)).getMonth()+1).toLocaleString(undefined, {minimumIntegerDigits: 2}) +  " / " + (new Date(value)).getFullYear()}
+                value={value && (new Date(value)).getDate().toLocaleString(undefined, {minimumIntegerDigits: 2}) + " / " + ((new Date(value)).getMonth()+1).toLocaleString(undefined, {minimumIntegerDigits: 2}) +  " / " + (new Date(value)).getFullYear()}
                 readOnly
             />
             <StyledSpan onClick={clickIcon} focus={popup}>
@@ -293,15 +308,13 @@ function Calendar({value, onChange}) {
             <StyledCalendar bottom={position[1] === "bottom"} left={position[0] === "left"}>
                 <Left>
                     <CalendarHead>
-                        
                         <StyledCalendarDate >
                             {getMonthName(date.current.getMonth()) +  " " + date.current.getFullYear()}
                         </StyledCalendarDate>
                         <IconGroup>
-                            <FiChevronLeft size="22px" onClick={() => swipe('prev')}>Prev</FiChevronLeft>
-                            <FiChevronRight size="22px" onClick={() => swipe('next')}>Next</FiChevronRight>
-                        </IconGroup>
-                        
+                            <FiChevronLeft size="1.2rem" onClick={() => swipe('prev')}>Prev</FiChevronLeft>
+                            <FiChevronRight size="1.2rem" onClick={() => swipe('next')}>Next</FiChevronRight>
+                        </IconGroup> 
                     </CalendarHead>
                     <StyledCalendarBar>
                         {dayName.map(day => <StyledLi className="date-title" key={day}>{day}</StyledLi>)}
@@ -328,8 +341,8 @@ function Calendar({value, onChange}) {
                                     {yearState}
                                 </StyledCalendarDate>
                                 <IconGroup>
-                                    <FiChevronLeft size="22px" onClick={() => swipeYear('prev')}>Prev</FiChevronLeft>
-                                    <FiChevronRight size="22px" onClick={() => swipeYear('next')}>Next</FiChevronRight>
+                                    <FiChevronLeft size="1.2rem" onClick={() => swipeYear('prev')}>Prev</FiChevronLeft>
+                                    <FiChevronRight size="1.2rem" onClick={() => swipeYear('next')}>Next</FiChevronRight>
                                 </IconGroup>
                             </CalendarHead>
                             <StyledCalendarBar>
@@ -347,8 +360,8 @@ function Calendar({value, onChange}) {
                                     {displayYear()}
                                 </StyledCalendarDate>
                                 <IconGroup>
-                                    <FiChevronLeft onClick={() => swipe12('prev')}>Prev</FiChevronLeft>
-                                    <FiChevronRight onClick={() => swipe12('next')}>Next</FiChevronRight>
+                                    <FiChevronLeft size="1.2rem" onClick={() => swipe12('prev')}>Prev</FiChevronLeft>
+                                    <FiChevronRight size="1.2rem" onClick={() => swipe12('next')}>Next</FiChevronRight>
                                 </IconGroup>
                             </CalendarHead>
                             <StyledCalendarBar>

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Searchbar from "../Searchbar";
+import Searchbar from "../../Searchbar";
 import { BsFunnel } from "react-icons/bs";
-import useClickOutside from "../../hooks/useClickOutside";
+import useClickOutside from "../../../hooks/useClickOutside";
 
 const StyleToolbar = styled.div`
   display: flex;
@@ -17,6 +17,7 @@ const IconWrapper = styled.button`
   height: 2.5rem;
   padding: 0.5rem;
   border-radius: 99px;
+  border: 1px solid ${props => props.theme.color.border.primary};
   display: flex;
   align-items: center;
   justify-content: center;

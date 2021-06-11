@@ -6,7 +6,11 @@ import {Router} from '@reach/router'
 const PageContainer = styled.div`
     display: flex;
     height: 100%;
-    
+    max-width: 1464px;
+    width: 100%;
+    background: ${props => props.theme.color.background.primary};
+    border-left: 1px solid ${props => props.theme.color.border.primary};
+    border-right: 1px solid ${props => props.theme.color.border.primary};
 `
 
 const BodyContainer = styled.div`
@@ -19,9 +23,9 @@ const BodyContainer = styled.div`
 
 const MainPage = () => {
     return (
-        <PageContainer>
+        <PageContainer className="main">
             <SideBar/>
-            <BodyContainer className="abc">
+            <BodyContainer>
                 <Router className="router">
                 {
                     pageList.map(page => {

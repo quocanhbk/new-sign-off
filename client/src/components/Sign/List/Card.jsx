@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components'
-import IconStatus from './IconStatus';
+import IconStatus from '../IconStatus';
 import {BsChevronRight} from 'react-icons/all'
 
 const CardWrapper = styled.div`
