@@ -298,7 +298,7 @@ function Calendar({value, onChange}) {
             <Input 
                 focus={popup} 
                 type="text" 
-                value={value && (new Date(value)).getDate().toLocaleString(undefined, {minimumIntegerDigits: 2}) + " / " + ((new Date(value)).getMonth()+1).toLocaleString(undefined, {minimumIntegerDigits: 2}) +  " / " + (new Date(value)).getFullYear()}
+                value={value ? (new Date(value)).getDate().toLocaleString(undefined, {minimumIntegerDigits: 2}) + " / " + ((new Date(value)).getMonth()+1).toLocaleString(undefined, {minimumIntegerDigits: 2}) +  " / " + (new Date(value)).getFullYear() : ""}
                 readOnly
             />
             <StyledSpan onClick={clickIcon} focus={popup}>

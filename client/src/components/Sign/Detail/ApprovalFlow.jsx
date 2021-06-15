@@ -5,6 +5,7 @@ import { getFader } from "../../../utils/color";
 import { BiCheck } from "react-icons/all";
 import FlowTag from "./FlowTag";
 import data from './sampleData'
+
 const Approval = styled.div`
   display: flex;
   flex-direction: column;
@@ -47,7 +48,6 @@ const JoinGroup = styled.div`
     font-size: 1.1rem;
   }
 `;
-
 const Flow = styled.div`
   height: ${props => props.height}px;
   position: absolute;

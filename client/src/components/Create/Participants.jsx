@@ -1,48 +1,79 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, {memo, useState} from 'react';
 import styled from 'styled-components'
 import ControlledCombox from '../ControlledCombox'
 import FormControl from './FormControl';
-import {userList} from './sampleData'
+import {useStoreState} from 'easy-peasy'
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 `
+const TagContainer = styled.div`
+    display: flex;
+    height: 100%;
+    align-items: center;
+    gap: 0.5rem;
+    & img {
+        height: 1.2rem;
+        border-radius: 99px;
+    }
+`
+const Tag = ({email, name}) => {
+    return (
+        <TagContainer>
+            <img src={"/api/v1/avatar/" + email} alt=""/>
+            {name}
+        </TagContainer>
+    )
+}
+const Participants = ({advisors, approvers, observators, set}) => {
+    
+    const users = useStoreState(s => s.users).map(s => ({...s, display: <Tag email={s.email} name={s.name}/>}))
 
-const Participants = ({data}) => {
     return (
         <Container>
-            <FormControl headline={"Advisor List"}>
+            <FormControl 
+                headline={"Advisor List"} 
+                errorText={advisors.some(v => approvers.concat(observators).includes(v)) && "Duplicate"}
+            >
                 <ControlledCombox
                     multiple searchable
-                    selection={userList}
-                    value={data.advisors}
-                    onSelect={newValue => data.setAdvisors(newValue)}
-                    displayField={"name"}
+                    selection={users}
+                    value={users.filter(u => advisors.includes(u.id))}
+                    onSelect={newValue => set("advisors", newValue.map(_ => _.id))}
+                    displayField={"display"}
                 />
             </FormControl>
-            <FormControl headline={"Approver List"} required>
+            <FormControl 
+                headline={"Approver List"} 
+                required 
+                errorText={approvers.some(v => advisors.concat(observators).includes(v)) && "Duplicate"}
+            >
                 <ControlledCombox
                     multiple searchable
-                    selection={userList}
-                    value={data.approvers}
-                    onSelect={newValue => data.setApprovers(newValue)}
-                    displayField={"name"}
+                    selection={users}
+                    value={users.filter(u => approvers.includes(u.id))}
+                    onSelect={newValue => set("approvers", newValue.map(_ => _.id))}
+                    displayField={"display"}
                 />
             </FormControl>
-            <FormControl headline={"Observator List"}>
+            <FormControl 
+                headline={"Observator List"} 
+                errorText={observators.some(v => advisors.concat(approvers).includes(v)) && "Duplicate"}
+            >
                 <ControlledCombox
                     multiple searchable
-                    selection={userList}
-                    value={data.observators}
-                    onSelect={newValue => data.setObservators(newValue)}
-                    displayField={"name"}
+                    selection={users}
+                    value={users.filter(u => observators.includes(u.id))}
+                    onSelect={newValue => set("observators", newValue.map(_ => _.id))}
+                    displayField={"display"}
                 />
             </FormControl>
         </Container>
     );
-}
+};
 
-export default Participants;
+export default memo(Participants)

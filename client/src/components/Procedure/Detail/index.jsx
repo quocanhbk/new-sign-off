@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { getFader } from "../../../utils/color";
 import Participants from "./Participants";
@@ -9,7 +9,7 @@ import Header from "./Header";
 import SectionContainer from "../../SectionContainer";
 import useProcedure from "../useProcedure";
 import AttachmentChecklist from "./AttachmentChecklist";
-import { BsCheckBox, BsPlus } from "react-icons/bs";
+import { BsPlus } from "react-icons/bs";
 
 const StyleContainer = styled.div`
 	flex: 10;

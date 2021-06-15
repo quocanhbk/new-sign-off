@@ -1,12 +1,11 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 import { BsThreeDotsVertical} from 'react-icons/bs';
-import Avatar from './Avatar';
-import Context from '../Context'
-import ThemeToggle from './ThemeToggle'
-import pageList from '../pageList'
-import { getFader } from '../utils/color';
-
+import Avatar from '../Avatar';
+import ThemeToggle from '../ThemeToggle'
+import pageList from '../../pageList'
+import { getFader } from '../../utils/color';
+import {useStoreActions, useStoreState} from 'easy-peasy'
 const SidebarContainer = styled.div`
   background-color: ${props => props.theme.color.background.secondary};
   padding-top: 0.5rem;
@@ -16,10 +15,6 @@ const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-
-  @media (max-width: 2000px) {
-    
-  }
 `;
 
 const Logo = styled.img`
@@ -115,12 +110,15 @@ const Footer = styled.div`
   }
 `
 const SideBar = () => {
-  const {themeContext, navigateContext} = Context.useContainer()
-  const {path, navigatePath} = navigateContext
+  const theme = useStoreState(_ => _.theme)
+  const setTheme = useStoreActions(_ => _.setTheme)
+  const setPath = useStoreActions(_ => _.setPath)
+  const path = useStoreState(_ => _.path)
+  
   return (
     <SidebarContainer>
       <Header>
-        <Logo src={themeContext.isDark ? '/iconNoTextDark.svg' : '/iconNoTextLight.svg'} />
+        <Logo src={theme ? '/iconNoTextDark.svg' : '/iconNoTextLight.svg'} />
         <h1>TTG Approval Online</h1>
       </Header>
       <UserDisplayCard>
@@ -133,7 +131,7 @@ const SideBar = () => {
       </UserDisplayCard>
       <NavList>
         {pageList.map(item => 
-          <NavItem key={item.text} onClick={() =>{navigatePath(item.link)}} active={item.link === path}>
+          <NavItem key={item.text} onClick={() =>{setPath(item.link)}} active={item.link === path}>
             {item.icon}
             <p>{item.text}</p>
           </NavItem>  
@@ -141,7 +139,7 @@ const SideBar = () => {
       </NavList>
       <Footer>
         <div className="toggleContainer">
-          <ThemeToggle value={themeContext.isDark} onSelect={() => themeContext.toggleTheme()}/>
+          <ThemeToggle value={theme} onSelect={() => setTheme()}/>
         </div>
         <p>Version: v0.01</p>
       </Footer>

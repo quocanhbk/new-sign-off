@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 
 const Container = styled.div`
     flex: 1;
@@ -11,6 +12,7 @@ const Container = styled.div`
 const Headline = styled.label`
     font-size: .9rem;
 `
+
 const Sub = styled.p`
     font-size: 0.8rem;
     color : ${props => props.theme.color.text.secondary};
@@ -20,13 +22,16 @@ const Sub = styled.p`
         height: auto;
         margin-top: -0.25rem;
     `}
+    ${props => props.error && css`
+        color : ${props => props.theme.color.text.danger};
+    `}
 `
 
 const Asterisk = styled.span`
     color: ${props => props.theme.color.fill.danger};
     padding-left: 0.3rem;
 `
-const FormControl = ({headline, children, sub, required, noSpace}) => {
+const FormControl = ({headline, children, sub, required, noSpace, errorText}) => {
     return (
         <Container>
             <Headline>
@@ -34,7 +39,10 @@ const FormControl = ({headline, children, sub, required, noSpace}) => {
                 {required && <Asterisk>*</Asterisk>}
             </Headline>
             {children}
-            <Sub noSpace={noSpace}>{sub}</Sub>
+            {errorText ? 
+                <Sub noSpace={noSpace} error>{errorText}</Sub> :
+                <Sub noSpace={noSpace}>{sub}</Sub>
+            }
         </Container>
     )
 }

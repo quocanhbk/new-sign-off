@@ -1,10 +1,6 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef} from 'react';
 import styled from 'styled-components'
-import Combox from '../../Combox'
-import ControlledCombox from '../../ControlledCombox'
-import Calendar from '../../TeamsCalendar'
 import FormControl from './FormControl';
 
 const Container = styled.div`

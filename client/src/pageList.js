@@ -12,8 +12,8 @@ const pageList = [
     {icon: <BsHouse size="24px"/>, text: "Home", path: "/", link: "/", comp: <HomePage/>},
     {icon: <BsSearch size="24px"/>, text: "Search Document", path: "/search/*", link: "/search", comp: <SearchPage/>},
     {icon: <BsFileEarmarkPlus size="24px"/>, text: "Create Document", path: "/create", link: "/create", comp: <CreatePage/>},
-    {icon: <BsPencilSquare size="24px"/>, text: "Sign Document", path: "/sign", link: "/sign", comp: <SignPage/>},
-    //{icon: <BsFileEarmarkCheck size="24px"/>, text: "Verify Document", path: "/verify", link: "/verify", comp: <VerifyPage/>},
+    {icon: <BsPencilSquare size="24px"/>, text: "Sign Document", path: "/sign/*", link: "/sign", comp: <SignPage/>},
+    {icon: <BsFileEarmarkCheck size="24px"/>, text: "Verify Document", path: "/verify", link: "/verify", comp: <VerifyPage/>},
     {icon: <BsFileText size="24px"/>, text: "Create Form", path: "/form/*", link: "/form", comp: <Form/>},
     {icon: <BsGear size="24px"/>, text: "Create Procedure", path: "/procedure/*", link: "/procedure", comp: <Procedure/>}
 

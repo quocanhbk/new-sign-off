@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import {getFader} from '../../utils/color'
-import Context from '../../Context'
+import { useStoreActions } from 'easy-peasy'
 
 const StyleContainer = styled.div`
     display:flex;
@@ -26,7 +26,10 @@ const ContainerItems = styled.div`
 `
 const DivItem = styled.div`
     flex: 1 0 40%;
-    background: ${props => props.theme.color.background.secondary};
+    background: ${props => 
+        "linear-gradient(135deg, " + props.theme.color.background.primary + ", " + props.theme.color.background.secondary + ")"
+    };
+    background-size: cover;
     display: flex;
     align-items: center;
     box-shadow: ${props => props.theme.shadow};
@@ -92,18 +95,14 @@ const Info = styled.div`
     }
 `
 const Home = () => {
-    const {navigateContext: {navigatePath}} = Context.useContainer()
-    const navigateProcess = () =>{
-        localStorage.setItem('approval' , JSON.stringify('Process'))
-        navigatePath('/create')
-    }
+    const setPath = useStoreActions(_ => _.setPath)
     return (
         
         <StyleContainer>
            <StyleTitle>Please select service</StyleTitle>
            <ContainerItems >
                <Row>
-                    <DivItem onClick={() => navigatePath('/search')}>
+                    <DivItem onClick={() => setPath('/search')}>
                             <IconContainer>
                                 <img src="iconHomeFile.svg"/>
                             </IconContainer>
@@ -145,8 +144,8 @@ const Home = () => {
                                 <h4>CREATE DOCUMENT</h4>
                                 <p>Create & submit document for approval</p>
                                 <div>
-                                    <p onClick={() => navigatePath('/create')}>Flexible approval flow</p>
-                                    <p onClick={() => navigateProcess()}>Process approval flow</p>
+                                    <p>Flexible approval flow</p>
+                                    <p>Process approval flow</p>
                                 </div>
                             </Info>
                     </DivItem>

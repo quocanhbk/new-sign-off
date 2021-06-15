@@ -9,7 +9,6 @@ const XContainer = styled.div`
     display: grid;
     place-items: center;
     color: ${props => props.theme.color.fill.danger};
-    padding: 0.5rem;
     border-radius: 99px;
     transition: all 0.25s ease-in-out;
     cursor: pointer;
@@ -39,8 +38,8 @@ const StyledModal = styled.div`
     
 `;
 const modalEnter = keyframes`
-    from { top: -20%; }
-    to { top: 50%; }
+    from { top: -20%; opacity: 0;}
+    to { top: 50%; opacity: 1;}
 `;
 const grayen = keyframes`
     from { background: rgba(0,0,0,0);}
@@ -55,23 +54,23 @@ const StyledBackground = styled.div`
     animation: ${grayen} 0.5s ease-out 0s 1 forwards normal;
 `;
 const StyledContainer = styled.div`
+    display: flex;
+    flex-direction: column;
     border: 1px solid ${props => props.theme.color.border.primary};
     background: ${props => props.theme.color.background.primary};
-    border-radius: 8px;
-    display: inline-block;
-    overflow: hidden;
+    border-radius: 0.5rem;
     position: absolute;
-    left: ${props => props.children2 ? '40%' : '50%'};
+    left: 50%;
     transition: all 500ms linear;
     height: ${props => props.height || "auto"};
     width: ${props => props.width || "auto"};
-    transform: ${props => !props.children2 ? "translate(-50%, -50%)" : "translate(-50%, -70%)"};
-    animation: ${modalEnter} 0.5s ease-out 0s 1 forwards normal;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    animation: ${modalEnter} 0.25s ease-out 0s 1 forwards normal;
     z-index: 999;
     box-shadow: ${props => props.theme.shadow};
 `;
 const StyledTitle = styled.div`
-    position: relative;
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
     font-size: 1.2rem;
     display: flex;
@@ -79,11 +78,12 @@ const StyledTitle = styled.div`
     justify-content: space-between;
     padding: 0 1rem;
     & h4 {
-        padding: 1rem 0;
+        padding: 0.5rem 0;
+        font-weight: 500;
     }
 `;
 const StyledBody = styled.div`
-    padding: 8px 16px;
+    height: 100%;
 `;
 const Modal = (props) => {
     const [open, setOpen] = useState(props.visible)
@@ -114,13 +114,13 @@ const Modal = (props) => {
       }, [onClickOutside])
     return (
         <StyledModal visible={open} ani={runAni}>
-            <StyledContainer ani={runAni} {...props}>
+            <StyledContainer ani={runAni} height={props.height} width={props.width}>
                 {props.title && 
                     <StyledTitle>
                         <h4>{props.title}</h4>
                         <X onClick={props.onClickOutside}/>
                     </StyledTitle>}
-                <StyledBody>
+                <StyledBody className="body">
                     {props.children}
                 </StyledBody>
             </StyledContainer>

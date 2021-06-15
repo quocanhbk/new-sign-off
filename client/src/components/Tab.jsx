@@ -14,12 +14,10 @@ const DivTab = styled.div`
     position: relative;
     align-items:center;
     justify-content:center;
-    background: ${props => props.theme.color.border.primary};
-    gap: 1px;
     & span {
         --abc: ${props => props.value - 1};
         position: absolute;
-        bottom: 0;
+        top: 0;
         left: calc(100%/3*var(--abc));
         width: calc(100%/3);
         height: 0.2rem;
@@ -30,14 +28,18 @@ const DivTab = styled.div`
 const ButtonTab = styled.button`
     display:block;
     border: none;
+    border-left: 1px solid ${props => props.theme.color.border.primary};
+    &:first-child {
+        border-left: none;
+    }
     cursor: pointer;
     width:100%;
     outline: none;
     padding: 1rem;
     font-size:1rem;
-    font-weight: ${props => props.active ? 600 : 500};
+    font-weight: ${props => props.active ? 700 : 500};
     color: ${props => props.active ? props.theme.color.fill.primary : props.theme.color.fill.secondary};
-    transition: background ease-in-out 0.2s;
+    transition: all 0.25s ease-in-out;
     background-color: ${props => props.active ? props.theme.color.background.secondary : props.theme.color.background.primary};
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
     transition: all 0.25s ease-out;
@@ -61,8 +63,8 @@ const Tab = (props) => {
             setCurrentTab(value)
     }
     return(
-        <Container {...props} className="aloha">
-            <DivTab  {...props} value={currentTab}>
+        <Container>
+            <DivTab value={currentTab}>
                 {props.children.map(tab => 
                     <ButtonTab active={tab.props.value === currentTab} onClick={() => selectTab(tab.props.value)} key={tab.props.value} disabled={tab.props.disabled}>
                         {tab.props.name}
@@ -71,7 +73,7 @@ const Tab = (props) => {
                 )}
                 <span></span>
             </DivTab>
-            <TabContent {...props}>{props.children.find(child => child.props.value === currentTab)}</TabContent>
+            <TabContent>{props.children.find(child => child.props.value === currentTab)}</TabContent>
         </Container>
     )
 }

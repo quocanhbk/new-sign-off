@@ -99,7 +99,7 @@ const SelectContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    z-index: 2;
+    z-index: 5;
     border-radius: 5px;
     top: 100%;
     animation: ${slideDown} 0.15s ease-in-out 0s 1 forwards normal;
@@ -157,6 +157,7 @@ const SearchBar = styled.input`
 const SelectionContainer = styled.div`
     overflow: overlay;
     flex: 1;
+    z-index: 10;
     &::-webkit-scrollbar {
         width: 0rem;
     }

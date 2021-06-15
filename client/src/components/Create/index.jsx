@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { getFader } from "../../utils/color";
 import FlexibleApprovalAttachment from "./FlexibleApprovalAttachment";
@@ -8,7 +8,6 @@ import ApprovalDocumentProcess from "./ApprovalDocumentProcess";
 import DescriptionEditor from "./DescriptionEditor";
 import Participants from "./Participants";
 import PrimaryInfo from "./PrimaryInfo";
-import ReferenceDocument from "./ReferenceDocument";
 import {procedureList, data} from './sampleData'
 import Header from "./Header";
 import SectionContainer from "../SectionContainer";
@@ -45,84 +44,71 @@ const ContainerItems = styled.div`
 `;
 
 const Create = () => {
-  const [getDataForm, setGetDataForm] = useState(procedureList[0]);
-  const [tempForm , setTempForm ]= useState()
+	const [tempForm , setTempForm ]= useState()
 
-  useEffect(() =>{
-    if(getDataForm !== undefined)
-    {
-      setTempForm(getDataForm)
-    }
-  },[getDataForm])
+	const {
+		title, description, type,
+        priority, deadline, relatedProjects,
+        advisors, approvers, observators,
+        approvalAttachments, referenceAttachments,
+        set,
+        //Helper function
+        removeAttachment, submitRequest, error, setError
+	} = useDocument()
 
-  const {
-    title, setTitle, 
-    description, setDescription,
-    approvalType, setApprovalType, 
-    priority, setPriority, 
-    deadline, setDeadline, 
-    relatedProject, setRelatedProject,
-    advisors, setAdvisors, approvers, setApprovers, observators, setObservators,
-    process, setProcess,
-    approvalAttachment, setApprovalAttachment, referenceAttachment, setReferenceAttachment,
-    removeAttachment
-  } = useDocument()
+	return (
+		<StyleContainer>
+			<Header/>
+			<ContainerItems>
 
-  return (
-    <StyleContainer>
-      <Header/>
-      <ContainerItems>
+				{/* SECTION PRIMARY INFO */}
+				<SectionContainer headline="Primary Information" haveBorder>
+					<PrimaryInfo
+						error={error}
+						title={title}
+						type={type}
+						priority={priority}
+						deadline={deadline}
+						relatedProjects={relatedProjects}
+						set={set}
+					/>
+				</SectionContainer>
 
-        {/* SECTION PRIMARY INFO */}
-        <SectionContainer headline="Primary Information" haveBorder>
-          <PrimaryInfo
-            data={{
-              title, setTitle, 
-              approvalType, setApprovalType, 
-              priority, setPriority, 
-              deadline, setDeadline, 
-              relatedProject, setRelatedProject,
-              process, setProcess
-            }}
-          />
-        </SectionContainer>
-
-        {/* SECTION PARTICIPANTS */}
-        <SectionContainer headline="Participants" haveBorder>
-          <Participants 
-            data={{
-              advisors, setAdvisors,
-              approvers, setApprovers,
-              observators, setObservators
-            }}
-          />
-        </SectionContainer>
-        
-        {/* SECTION APPROVAL DOCUMENT */}
-        <SectionContainer headline="Approval Attachment" haveBorder>
-          {false ? 
-            <ApprovalDocumentProcess tempForm={tempForm} setTempForm={setTempForm} form={procedureList}/> : 
-            <FlexibleApprovalAttachment 
-              attachment={approvalAttachment} 
-              setAttachment={setApprovalAttachment}
-              onRemoveAttachment={id => removeAttachment("approval", id)}
-            />
-          }
-        </SectionContainer>
-        
-        {/* SECTION REFERENCE DOCUMENT */}
-        <SectionContainer headline="Reference Document" haveBorder>
-          <FlexibleApprovalAttachment attachment={referenceAttachment} setAttachment={setReferenceAttachment}/>
-        </SectionContainer>
-        
-        {/* SECTION DESCRIPTION */}
-        <SectionContainer headline="Description" haveBorder>
-          <DescriptionEditor description={description} setDescription={setDescription}/>
-        </SectionContainer>
-      
-      </ContainerItems>
-    </StyleContainer>
-  );
+				{/* SECTION PARTICIPANTS */}
+				<SectionContainer headline="Participants" haveBorder>
+					<Participants
+						advisors={advisors}
+						approvers={approvers}
+						observators={observators}
+						set={set}
+					/>
+				</SectionContainer>
+				
+				{/* SECTION APPROVAL DOCUMENT */}
+				<SectionContainer headline="Approval Attachment" haveBorder>
+					{false ? 
+						<ApprovalDocumentProcess tempForm={tempForm} setTempForm={setTempForm} form={procedureList}/> : 
+						<FlexibleApprovalAttachment 
+							attachments={approvalAttachments}
+							set={set}
+							onRemoveAttachment={id => removeAttachment("approval", id)}
+						/>
+					}
+				</SectionContainer>
+				
+				{/* SECTION REFERENCE DOCUMENT */}
+				<SectionContainer headline="Reference Document" haveBorder>
+					<FlexibleApprovalAttachment attachments={referenceAttachments} set={set}/>
+				</SectionContainer>
+				
+				{/* SECTION DESCRIPTION */}
+				<SectionContainer headline="Description" haveBorder>
+					<DescriptionEditor description={description} set={set}/>
+				</SectionContainer>
+			</ContainerItems>
+			<button onClick={() => submitRequest()}>Submit</button>
+		</StyleContainer>
+	);
 };
 
 export default Create;

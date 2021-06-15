@@ -46,14 +46,14 @@ const VerticalBar = styled.div`
     background: ${props => props.theme.color.border.primary};
 `
 
-const FlexibleApprovalAttachment = ({attachment, setAttachment, onRemoveAttachment}) => {
+const FlexibleApprovalAttachment = ({attachments, set, onRemoveAttachment}) => {
     // eslint-disable-next-line no-unused-vars
     const [selectedDynamicForm, setSelectedDynamicForm] = useState()
     
     const selectDynamicForm = () => {
         if (!selectedDynamicForm) return
         let dynamicForm = dynamicFormList.find(form => form.id === selectedDynamicForm)
-        setAttachment([...attachment, {
+        set("referenceAttachments", [...attachments, {
             id: uuid().slice(0, 8),
             name: dynamicForm.name,
             type: 'FROM_DATABASE',
@@ -68,14 +68,14 @@ const FlexibleApprovalAttachment = ({attachment, setAttachment, onRemoveAttachme
         setSelectedDynamicForm(null)
     }
 
-    const handleFile = (fileList) =>{
-        setAttachment(attachment.concat(fileList.map(file => ({
+    const handleFile = (fileList) => {
+        set("referenceAttachments", (attachments.concat(fileList.map(file => ({
             id: uuid().slice(0, 8),
             name: file.name,
             type: 'FROM_COMPUTER',
             file: file,
             fields: []
-        }))))
+        })))))
     }
 
     return (
@@ -101,7 +101,7 @@ const FlexibleApprovalAttachment = ({attachment, setAttachment, onRemoveAttachme
                 </Col>
                 
             </Wrapper>
-            {attachment.length > 0 && <AttachmentTable approvalAttachment={attachment} onRemoveAttachment={onRemoveAttachment}/>}
+            {attachments.length > 0 && <AttachmentTable approvalAttachment={attachments} onRemoveAttachment={onRemoveAttachment}/>}
         </Container>
     );
 }

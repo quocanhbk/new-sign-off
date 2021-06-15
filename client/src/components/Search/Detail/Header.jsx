@@ -30,15 +30,13 @@ const ContentProperties = styled.div`
   flex-direction: column;
   font-size: 0.9rem;
   gap: 0.5rem;
-
   & div {
     text-align: center;
-    font-weight: 500;
+    font-weight: 600  ;
     padding: 0.4rem 2rem;
     background: ${props => getFader(props.theme.color.border.primary, 0.5)};
   }
-
-  & .content-approved {
+  & .request-type {
     background: ${(props) => props.theme.color.border.primary};
     color: ${props => props.theme.color.text.primary};
     border-bottom: 2px solid ${props => props.theme.color.fill.primary};
@@ -54,21 +52,20 @@ const ApproveStatus = styled.div`
               : props.status === "Pending" ? props.theme.color.fill.warning 
               : props.theme.color.fill.danger};
 `
-const ContentHeaderTab = ({data}) => {
-  return (
-    <ContentInfo>
-      <ContentTitle>
-        <p className="content-modified">Last modified at 05:35 pm 04/05/2021</p>
-        <p className="content-title">
-         {data.title}
-        </p>
-      </ContentTitle>
-      <ContentProperties>
-        <ApproveStatus status={data.status}>{data.status}</ApproveStatus>
-        <div className="content-approved">{data.approved}</div>
-      </ContentProperties>
-    </ContentInfo>
-  );
+const Header = ({title, status, type}) => {
+	return (
+		<ContentInfo>
+		<ContentTitle>
+			<p className="content-modified">Last modified at 05:35 pm 04/05/2021</p>
+			<p className="content-title">{title}
+			</p>
+		</ContentTitle>
+		<ContentProperties>
+			<ApproveStatus status={status}>{status}</ApproveStatus>
+			<div className="request-type">{type}</div>
+		</ContentProperties>
+		</ContentInfo>
+	);
 };
 
-export default ContentHeaderTab;
+export default Header;

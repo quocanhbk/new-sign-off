@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 import styled from 'styled-components'
-import Combox from '../Combox'
+import useFocus from '../../hooks/useFocus';
 import ControlledCombox from '../ControlledCombox'
 import Calendar from '../TeamsCalendar'
-import {procedureList} from './sampleData'
 import FormControl from './FormControl';
 import {approvalTypeList, priorityList, projectList} from './localData'
 const Container = styled.div`
@@ -35,37 +34,36 @@ const Input = styled.input`
     }
 `
 
-const PrimaryInfo = ({data}) => {
-    const inputRef = useRef()
-    useEffect(() => {
-        inputRef.current.focus()
-    }, [])
+const PrimaryInfo = ({title, type, priority, deadline, relatedProjects, set, error}) => {
+    
+    let ref = useFocus()
+    
     return (
         <Container>
             <Row>
-                <FormControl headline="Document Title" required>
+                <FormControl headline="Document Title" required errorText={error.title}>
                     <Input 
-                        ref={inputRef}
-                        value={data.title} 
-                        onChange={(e) => data.setTitle(e.target.value)} 
+                        ref={ref}
+                        value={title} 
+                        onChange={(e) => set("title", e.target.value)} 
                         placeholder="Input document title..."
                         spellCheck="false"
                     />
                 </FormControl>
             </Row>
             <Row>
-                <FormControl headline="Approval Type" required>
+                <FormControl headline="Type" required>
                     <ControlledCombox 
                         selection={approvalTypeList}
-                        value={approvalTypeList.find(a => a.id === data.approvalType)}
-                        onSelect={newValue => data.setApprovalType(newValue.id)}
+                        value={approvalTypeList.find(a => a.id === type)}
+                        onSelect={newValue => set("type", newValue.id)}
                     />
                 </FormControl>
-                {data.approvalType === "process" &&
+                {/* {approvalType === "process" &&
                     <FormControl headline="Process Name" required>
-                        <Combox onSelect={v => data.setProcess(v[0])}>
+                        <Combox onSelect={v => setProcess(v[0])}>
                             {procedureList.map((procedure) =>
-                                <Combox.Option default={data.process && data.process.id === procedure.id} id={procedure.id}
+                                <Combox.Option default={process && process.id === procedure.id} id={procedure.id}
                                     value={procedure}    
                                     key={procedure.id}
                                 >
@@ -74,24 +72,25 @@ const PrimaryInfo = ({data}) => {
                             )}
                         </Combox>
                     </FormControl>
-                }
+                } */}
             </Row>
             <Row>
                 <FormControl headline={"Priority"} required>
                     <ControlledCombox 
                         selection={priorityList} 
-                        value={priorityList.find(p => p.id === data.priority)}
-                        onSelect={newValue => data.setPriority(newValue.id)}
+                        value={priorityList.find(p => p.id === priority)}
+                        onSelect={newValue => set("priority", newValue.id)}
                     />
                 </FormControl>
-                <FormControl headline={"Deadline"} sub={"Expected date to receive final approval"} required>
-                    <Calendar fullWidth value={data.deadline} onChange={v => data.setDeadline(v)}/>
+                <FormControl headline={"Deadline"} sub={"Expected date to receive final approval"} required errorText={error.deadline}>
+                    <Calendar fullWidth value={deadline} onChange={v => set("deadline", v)}/>
                 </FormControl>
-                <FormControl headline={"Related Project"} required>
+                <FormControl headline={"Related Project"} required errorText={error.relatedProjects}>
                     <ControlledCombox 
+                        multiple
                         selection={projectList}
-                        value={projectList.find(p => p.id === data.relatedProject)}
-                        onSelect={newValue => data.setRelatedProject(newValue.id)}
+                        value={projectList.filter(p => relatedProjects.includes(p.id))}
+                        onSelect={newValue => set("relatedProjects", newValue.map(_ => _.id))}
                     /> 
                 </FormControl>
             </Row>
@@ -100,4 +99,4 @@ const PrimaryInfo = ({data}) => {
     );
 }
 
-export default PrimaryInfo;
+export default memo(PrimaryInfo);

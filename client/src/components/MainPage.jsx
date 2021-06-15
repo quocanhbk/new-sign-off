@@ -1,5 +1,5 @@
 import React from 'react';
-import SideBar from './SideBar';
+import SideBar from './SideBar'
 import styled from 'styled-components';
 import pageList from '../pageList';
 import {Router} from '@reach/router'

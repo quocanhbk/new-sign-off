@@ -1,10 +1,13 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
+// Request Card, used to display in Search and Sign Page
 import React from 'react';
 import styled from 'styled-components'
-import {BsChevronRight} from 'react-icons/all'
+import {BiDislike, BiLike, BsChevronRight, BsClock, GiPauseButton} from 'react-icons/all'
 import {getFader} from '../../../utils/color'
-import IconStatus from '../IconStatus';
-const CardWrapper = styled.div`
+import { navigate } from '@reach/router';
+
+const Container = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
     border-radius: 0.5rem;
     display: flex;
@@ -56,10 +59,11 @@ const StyleButton = styled.button`
     }
 `
 const ApproveStatus = styled.span`
-    background: ${(props) => props.status === "Approved" ? props.theme.color.fill.success 
-              : props.status === "Stopped" ? props.theme.color.fill.info 
-              : props.status === "Pending" ? props.theme.color.fill.warning 
-              : props.theme.color.fill.danger};
+    background: ${(props) => 
+        props.status === "Approved" ? props.theme.color.fill.success : 
+        props.status === "Rejected" ? props.theme.color.fill.danger : 
+        props.status === "Pending" ? props.theme.color.fill.warning : 
+        props.theme.color.fill.secondary};
     color: ${(props) => props.theme.color.background.primary};
     padding: 0.2rem 0.4rem;
     border-radius: 0.2rem;
@@ -68,7 +72,7 @@ const ApproveStatus = styled.span`
     gap: 0.2rem;
     
 `
-const DocType = styled.span`
+const RequestType = styled.span`
     background: ${(props) => props.theme.color.border.primary};
     color: ${props => props.theme.color.text.primary};
     text-align: center;
@@ -80,30 +84,47 @@ const ButtonContainer = styled.div`
     align-items: center;
     padding: 0.5rem;
 `
-const Card = ({task,setSelectedId}) => {
+const Card = ({id, title, type, createdBy, status, deadline, page}) => {
+
+    const renderIcon = (status) => {
+        switch(status) {
+            case "Approved":
+                return <BiLike/>
+            case "Pending":
+                return <BsClock/>
+            case "Rejected":
+                return <BiDislike/>
+            default:
+                return <GiPauseButton/>
+        }
+    }
+
     return (
-        <CardWrapper>
+        <Container>
             <DivInfo>
-                <Title>{task.title}</Title>
+                <Title>{title}</Title>
                 <Line>
-                    <span>Created by: {task.create_by}</span>
-                    {task.status === "Pending" && 
+                    <span>Created: {createdBy}</span>
+                    {status === "Pending" && 
                         <>
                             <span>|</span>
-                            <span>Deadline: {task.deadline}</span>
+                            <span className="deadline">Deadline: {deadline}</span>
                         </>
                     }
                 </Line>
                 <Line>
-                    <ApproveStatus status={task.status}><IconStatus icon={task.status}/>{task.status}</ApproveStatus>
-                    <DocType>{task.approved}</DocType>
+                    <ApproveStatus status={status}>
+                        {renderIcon(status)}
+                        {status}
+                    </ApproveStatus>
+                    <RequestType>{type}</RequestType>
                 </Line>
             </DivInfo>
             <ButtonContainer>
-                <StyleButton onClick={() => setSelectedId(task.id)}><BsChevronRight size="1rem"/></StyleButton>
+                <StyleButton onClick={() => navigate(`/${page}/${id}`)}><BsChevronRight size="1.2rem"/></StyleButton>
             </ButtonContainer>
             
-        </CardWrapper>
+        </Container>
     )
 }
 

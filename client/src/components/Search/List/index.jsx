@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components'
-import Cardv2 from './Cardv2';
+import RequestCard from './RequestCard';
 import ListToolbar from './ListToolbar';
 import {getFader} from '../../../utils/color'
-
+import sampleData from '../sampleData'
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -53,7 +53,7 @@ const CardList = styled.div`
     gap: 0.5rem;
 `
 
-function List({data,setSelectedId}) {
+function List() {
     return (
         <StyleListWrapper>
             <ListToolbar/>
@@ -64,11 +64,16 @@ function List({data,setSelectedId}) {
                 </TagContainer>
             </TagBar>
             <CardList>
-                {data.map((task) => (
-                    <Cardv2
+                {sampleData.map((task) => (
+                    <RequestCard
                         key={task.id}
-                        task={task}
-                        setSelectedId={setSelectedId}
+                        id={task.id}
+                        title={task.title}
+                        status={task.status}
+                        type={task.type}
+                        deadline={task.deadline}
+                        createdBy={task.create_by}
+                        page={"search"}
                     />
                 ))}
             </CardList>

@@ -6,7 +6,6 @@ import ListToolbar from './ListToolbar';
 import {getFader} from '../../../utils/color'
 import { navigate } from '@reach/router';
 import {BsFileEarmarkPlus} from 'react-icons/bs'
-import Context from '../../../Context';
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -62,21 +61,19 @@ const IconContainer = styled.div`
         background: ${props => getFader(props.theme.color.border.primary,0.5)};
     }
 `
-function List({setSelectedForm}) {
-    let {formContext} = Context.useContainer()
-    
+function List({setSelectedForm}) {    
     return (
         <StyleListWrapper>
             <ListToolbar/>
             <AddNewContainer>
-                <p>{formContext.forms.length} {formContext.forms.length > 1 ? "results" : "result"}</p>
+                <p>How many result</p>
                 <IconContainer onClick={() => navigate('/form/create')}>
                     <BsFileEarmarkPlus size="1.4rem"/> Add
                 </IconContainer>
             </AddNewContainer>
             <CardList>
                 {
-                    formContext.forms.map(form => 
+                    [].map(form => 
                         <Card key={form.name} name={form.name} fileName={form.file.name} onClick={() => setSelectedForm(form)}/>
                     )
                 }

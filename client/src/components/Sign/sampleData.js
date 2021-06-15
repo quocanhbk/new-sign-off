@@ -3,8 +3,8 @@ const data = [
         id: 1,
         title: 'Đề nghị thanh toán chi phí tiếp khách hàng abc def transform',
         deadline: '04/05/2021',
-        status: 'Pending',
-        approved: 'Flexible',
+        status: 'Approved',
+        type: 'Flexible',
         create_by: 'Nguyễn Văn Chuối',
         create_date: '01/05/2021'
     },
@@ -12,8 +12,8 @@ const data = [
         id: 2,
         title: 'Đề nghị thanh toán',
         deadline: '04/05/2021',
-        status: 'Pending',
-        approved: 'Flexible',
+        status: 'Stopped',
+        type: 'Flexible',
         create_by: 'Nguyễn Văn Chuối',
         create_date: '01/05/2021'
     },
@@ -22,7 +22,7 @@ const data = [
         title: 'Khách hàng abc def transform',
         deadline: '04/05/2021',
         status: 'Pending',
-        approved: 'Process',
+        type: 'Process',
         create_by: 'Nguyễn Văn Chuối',
         create_date: '01/05/2021'
     },
@@ -30,8 +30,8 @@ const data = [
         id: 4,
         title: 'Chi phí tiếp khách hàng abc def transform',
         deadline: '04/05/2021',
-        status: 'Pending',
-        approved: 'Flexible',
+        status: 'Rejected',
+        type: 'Flexible',
         create_by: 'Nguyễn Văn Chuối',
         create_date: '01/05/2021'
     },

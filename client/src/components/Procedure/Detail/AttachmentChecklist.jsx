@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { getFader } from "../../../utils/color";
-import {BsTrash, BsFileEarmarkText, BsPlus, BsX, BsCheckBox, BsPlusCircle} from 'react-icons/bs'
+import {BsTrash, BsFileEarmarkText, BsCheckBox, BsPlusCircle} from 'react-icons/bs'
 import FieldTable from "./FieldTable";
 import ControlledCombox from "../../ControlledCombox";
 import {dynamicFormList} from '../sampleData'

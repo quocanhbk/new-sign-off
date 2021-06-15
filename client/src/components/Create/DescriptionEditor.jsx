@@ -39,7 +39,7 @@ const Text = styled.label`
     color : ${props => props.theme.color.text.secondary};
 `
 
-function DescriptionEditor({description, setDescription}) {
+function DescriptionEditor({description, set}) {
 
     return (
         <StyleWrapper>
@@ -53,7 +53,7 @@ function DescriptionEditor({description, setDescription}) {
                 }}
                 onChange={ ( event, editor ) => {
                     const data = editor.getData();
-                    setDescription(data)
+                    set("description", data)
                 }}
                 // onBlur={ ( event, editor ) => {
                 //     console.log( 'Blur.', editor );

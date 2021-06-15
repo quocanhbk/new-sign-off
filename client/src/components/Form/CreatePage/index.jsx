@@ -5,13 +5,11 @@ import {PDFDocument, StandardFonts, rgb} from 'pdf-lib'
 import Button from '../../Button';
 import FieldContentInput from './FieldContentInput'
 import DocDisplay from './DocDisplay'
-import Context from '../../../Context'
 import {BsChevronLeft} from 'react-icons/bs'
 import { navigate } from '@reach/router';
 import {ButtonContainer, Container, Wrapper, StyleTitle, Toolbar, ToolbarContainer, ToolbarElement, NoField, FormNameInput} from './IndexStyledComponents'
 import useFormData from './useFormData';
 import axios from 'axios'
-import jsPDF from 'jspdf';
 const CreatePage = () => {
     
     let docRef = useRef()
@@ -26,7 +24,6 @@ const CreatePage = () => {
     } = useFormData()
     
     const [numPage, setNumPage] = useState()
-    const {formContext} = Context.useContainer()
     const handleClickDoc = (pos) => {
         addNewField(pos)
     }
@@ -36,14 +33,7 @@ const CreatePage = () => {
         data.append('file', file)
         data.append('formName', formName)
         data.append('fieldData', fieldData)
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        }
-        axios.post('/api/form', data, config)
-        formContext.addForm({name: formName, file: file, fieldData: fieldData})
-        console.log(formContext.forms);
+        axios.post('/api/form', data)
         navigate('/form')
     }
     const downloadForm = async () => {

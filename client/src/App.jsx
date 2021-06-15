@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import MainPage from './components/MainPage';
 import theme from './utils/theme';
-import Context from './Context';
+import {StoreProvider, useStoreState, useStoreActions} from 'easy-peasy'
+import store from './store';
 
 const StyledApp = styled.div`
   background: ${(props) => props.theme.color.background.primary};
@@ -15,21 +16,25 @@ const StyledApp = styled.div`
   align-items: center;
 `;
 const Container = () => {
-  const {themeContext} = Context.useContainer()
+  const isDark = useStoreState(s => s.theme)
+  const getUsers = useStoreActions(s => s.getUsers)
 
+  useEffect(() => {
+    getUsers()
+  })
   return (
-    <ThemeProvider theme={themeContext.isDark ? theme.dark : theme.light}>
+    <ThemeProvider theme={isDark ? theme.dark : theme.light}>
         <StyledApp>
             <MainPage/>
         </StyledApp>
     </ThemeProvider>
   );
 };
-function App() {
+const App = () => {
   return (
-    <Context.Provider>
+    <StoreProvider store={store}>
       <Container />
-    </Context.Provider>
+    </StoreProvider>
   );
 }
 
