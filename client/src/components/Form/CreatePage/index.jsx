@@ -21,6 +21,8 @@ const CreatePage = () => {
         formName, changeFormName, file, addingTag, setAddingTag,
         //Helper function
         addNewField, changeContent, moveField, resizeField, changeName, deleteField, toggleRequire, initForm,
+
+        saveForm
     } = useFormData()
     
     const [numPage, setNumPage] = useState()
@@ -28,14 +30,6 @@ const CreatePage = () => {
         addNewField(pos)
     }
 
-    const saveForm = () => {
-        const data = new FormData()
-        data.append('file', file)
-        data.append('formName', formName)
-        data.append('fieldData', fieldData)
-        axios.post('/api/form', data)
-        navigate('/form')
-    }
     const downloadForm = async () => {
         let existingPdf = await file.arrayBuffer()
         const pdfDoc = await PDFDocument.load(existingPdf)

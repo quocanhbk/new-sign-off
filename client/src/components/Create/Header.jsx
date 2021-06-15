@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Modal from '../../components/Modal'
 import styled from 'styled-components'
-import Preview from './Preview'
+import SubmitPopup from './SubmitPopup';
 
 const StyleButton = styled.div`
 	display: flex;
@@ -51,8 +51,8 @@ const Header = () => {
 			<Modal height="80%" width="80%" visible={modal === "draft"} onClickOutside = {() => setModal("")} title="Loading document">
 				Draft
 			</Modal>
-			<Modal height="80%" width="80%" visible={modal === "preview"} onClickOutside = {() => setModal("")}>
-				<Preview request={{title: "abc", status: "Pending", type: "Flexible"}}/>
+			<Modal visible={modal === "preview"} onClickOutside = {() => setModal("")}>
+				<SubmitPopup/>
 			</Modal>
 			</>
 		)

@@ -1,11 +1,15 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import Card from './Card';
 import ListToolbar from './ListToolbar';
 import {getFader} from '../../../utils/color'
 import { navigate } from '@reach/router';
 import {BsFileEarmarkPlus} from 'react-icons/bs'
+import axios from 'axios';
+import ListLoader from '../../ListLoader'
+
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -61,7 +65,25 @@ const IconContainer = styled.div`
         background: ${props => getFader(props.theme.color.border.primary,0.5)};
     }
 `
-function List({setSelectedForm}) {    
+function List() {
+
+    const [loading, setLoading] = useState(true)
+    const [forms, setForms] = useState([])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            let {data} = await axios.get('/api/v1/forms')
+            console.log(data)
+            setForms(data)
+            setLoading(false)
+        }
+        fetchData()
+    }, [])
+
+    const handle = (formId) => {
+        navigate('/form/' + formId)
+    }
+
     return (
         <StyleListWrapper>
             <ListToolbar/>
@@ -72,9 +94,9 @@ function List({setSelectedForm}) {
                 </IconContainer>
             </AddNewContainer>
             <CardList>
-                {
-                    [].map(form => 
-                        <Card key={form.name} name={form.name} fileName={form.file.name} onClick={() => setSelectedForm(form)}/>
+                { loading ? <ListLoader/> :
+                    forms.map(form => 
+                        <Card key={form.form_id} name={form.name} onClick={() => handle(form.form_id)}/>
                     )
                 }
             </CardList>

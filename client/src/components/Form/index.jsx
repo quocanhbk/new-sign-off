@@ -19,8 +19,8 @@ const Form = () => {
     return (
         <Container>
             <Router className="router">
-                <ViewPage path="/" />
                 <CreatePage path="create" />
+                <ViewPage path="/*" />
             </Router>
         </Container>
     )

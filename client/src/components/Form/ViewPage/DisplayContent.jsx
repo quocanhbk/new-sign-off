@@ -1,47 +1,40 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import FieldTag from "../FieldTag";
+import ViewFieldTag from "./ViewFieldTag";
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import NoFile from '../NoFile'
-import LoadingFile from "../LoadingFile";
-import { getFader } from "../../../utils/color";
-const StyleContentWrapper = styled.div`
-  flex: 10;
-  height: 100%;
-  background-color: #333 ;//${(props) => props.theme.color.background.secondary};
-  color: ${(props) => props.theme.color.text.primary};
-  border-left: 1px solid ${(props) => props.theme.color.border.primary};
-  height: 100%;
-  position: relative;
-  overflow-y: overlay;
-  overflow-x: hidden;
-  ::-webkit-scrollbar {
-    width: 0.5rem;
-    }
-    ::-webkit-scrollbar-track {
-    background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-    background: ${props => getFader(props.theme.color.fill.secondary, 0.5)};
-    border-radius: 99px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-    background: ${props => props.theme.color.fill.secondary};
-  }
-`;
+import axios from "axios";
+import ListLoader from "../../ListLoader";
+
 const DocWrapper = styled.div`
     position: relative;
     min-height: 100%;
-    & .abc {
+    & .form-document {
         min-height: 100%;
     }
 `
-function DisplayContent({form}) {
+function DisplayContent({id}) {
   const [numPage, setNumPage] = useState(0)
-  const [displayTag, setDisplayTag] = useState(false)
+  const [form, setForm] = useState()
+  const [doc, setDoc] = useState()
+  const [loading, setLoading] = useState(true)
   let docRef = useRef()
+
+  useEffect(() => {
+    const fetchForm = async () => {
+      setLoading(true)
+      let {data} = await axios.get('/api/v1/forms/' + id)
+      console.log(data)
+      setForm(data)
+      setLoading(false)
+      let res = await axios.get(data.file.webUrl)
+      console.log("Res", res)
+    }
+    fetchForm()
+  }, [id])
+
   const renderPage = () => {
     let arr = []
     for (let i = 1; i <= numPage; i++) {
@@ -50,26 +43,26 @@ function DisplayContent({form}) {
     return arr
   }
   return (
-    <StyleContentWrapper ref={docRef} className="contentw">
-      {form ? 
-      <DocWrapper className="doc-display">
-        {displayTag && form.fieldData.map(tag => 
-            <FieldTag 
-                key={tag.id} 
-                data={tag}
+    <div>
+      {loading ? <ListLoader/> :
+      <DocWrapper className="doc-display" ref={docRef}>
+        {form.fields.map(field => 
+            <ViewFieldTag 
+                key={field.default_form_field_id} 
+                data={field}
             />
         )}
         <Document 
-            file={form.file}
-            className="abc" 
-            onLoadSuccess={(numPage) => {setNumPage(numPage._pdfInfo.numPages); setTimeout(() => setDisplayTag(true), 5000)}}
+            file={form.file.webUrl}
+            className="form-document" 
+            onLoadSuccess={(numPage) => {setNumPage(numPage._pdfInfo.numPages)}}
             noData={<NoFile/>}
         >
             {renderPage()}
         </Document>
-      </DocWrapper> :
-      <NoFile/> }
-    </StyleContentWrapper>
+      </DocWrapper>
+      }
+    </div>
   );
 }
 

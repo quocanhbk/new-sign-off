@@ -90,7 +90,7 @@ const DocContent = ({file, addingTag, fieldData, handleClickDoc, numPage, setNum
             <DocWrapper
                 ref={docRef}
                 onMouseMove={handleMouseMoveDoc}
-                onClick={() => {handleClickDoc(curPos); setCurPos({X: -100, Y: -100}); console.log(floatRef.current)}}
+                onClick={() => {handleClickDoc(curPos); setCurPos({X: -100, Y: -100})}}
                 onMouseUp={handleMouseUp}
                 className="doc-display"
             >

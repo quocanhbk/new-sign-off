@@ -80,7 +80,9 @@ const useDocument = () => {
         // catch projects error
         if (relatedProjects.length === 0)
             setError("relatedProjects", "At least 1 project must be selected")
-        else console.log("Success")
+        else {
+            //Perform submit here
+        }
     }
     return {
         title, description, type,

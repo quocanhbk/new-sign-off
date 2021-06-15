@@ -56,7 +56,7 @@ const StyledBackground = styled.div`
 const StyledContainer = styled.div`
     display: flex;
     flex-direction: column;
-    border: 1px solid ${props => props.theme.color.border.primary};
+    //border: 1px solid ${props => props.theme.color.border.primary};
     background: ${props => props.theme.color.background.primary};
     border-radius: 0.5rem;
     position: absolute;

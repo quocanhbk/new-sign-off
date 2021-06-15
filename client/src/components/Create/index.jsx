@@ -53,7 +53,7 @@ const Create = () => {
         approvalAttachments, referenceAttachments,
         set,
         //Helper function
-        removeAttachment, submitRequest, error, setError
+        removeAttachment, submitRequest, error
 	} = useDocument()
 
 	return (

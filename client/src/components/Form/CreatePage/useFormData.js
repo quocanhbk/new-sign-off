@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+import { navigate } from "@reach/router"
+import axios from "axios"
 import {useState} from "react"
 import {v4 as uuid} from 'uuid'
 const useFormData = () => {
@@ -43,7 +45,6 @@ const useFormData = () => {
     const moveField = (fieldId, position) => updateField(fieldId, "position", position)
 
     const resizeField = (fieldId, size) => {
-        console.log(size)
         let newSize = {width: 5, height: 0.1}
         newSize.width = size.width > newSize.width ? size.width : newSize.width
         newSize.height = size.height > newSize.height ? size.height : newSize.height
@@ -60,6 +61,32 @@ const useFormData = () => {
         setFormName(e.target.value)
     }
 
+    const saveForm = async () => {
+        //post file
+        const data = new FormData()
+        data.append('file', file, file.name)
+        const {data: {file_id}} = await axios.post('/api/v1/files', data)
+        console.log("Post file OK, file id", file_id)
+        //post form name
+        let {data: {form_id}} = await axios.post('/api/v1/forms', {name: formName, fileId: file_id}) 
+        console.log("Post form name OK, form_id", form_id)
+        //post default fields
+        let res = (await axios.post(`/api/v1/forms/${form_id}/default-fields`, {
+            defaultFields: fieldData.map(field => ({
+                field: field.name,
+                type: "Field",
+                value: field.content,
+                x: field.position.X,
+                y: field.position.Y,
+                width: field.size.width,
+                height: field.size.height,
+                required: field.required
+            }))
+        })).data
+        console.log("Post fields OK", res)
+        navigate('/form')
+    }
+    
     return {
         // Field data
         fieldData, 
@@ -67,6 +94,8 @@ const useFormData = () => {
         formName, changeFormName, file, addingTag, setAddingTag,
         //Helper function
         addNewField, changeContent, moveField, resizeField, changeName, deleteField, toggleRequire, initForm,
+
+        saveForm
         //
     }
 }

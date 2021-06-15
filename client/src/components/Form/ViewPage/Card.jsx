@@ -44,22 +44,21 @@ let FormName = styled.div`
     text-overflow: ellipsis;
     display: -webkit-box;
 `
-let SubInfo = styled.div`
-    font-size: 0.8rem;
-    color: ${props => props.theme.color.text.secondary};
-    font-style: italic;
-`
+// let SubInfo = styled.div`
+//     font-size: 0.8rem;
+//     color: ${props => props.theme.color.text.secondary};
+//     font-style: italic;
+// `
 
-function Card({name, fileName, onClick}) {
+function Card({name, onClick}) {
 
     return (
         <CardWrapper onClick={onClick}>
             <IconWrapper>
-                <BsFileEarmarkText size="1.5rem"/>
+                <BsFileEarmarkText size="1.2rem"/>
             </IconWrapper>
             <InfoWrapper>
                 <FormName>{name}</FormName>
-                <SubInfo>{fileName}</SubInfo>
             </InfoWrapper>
         </CardWrapper>
     );
