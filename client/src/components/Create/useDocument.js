@@ -96,20 +96,8 @@ const useDocument = () => {
     }
 
     const submitRequest = () => {
-        // catch title error
-        if (title === "")
-            setError("title", "Document title is required")
-        // catch deadline error
-        if (!deadline)
-            setError("deadline", "Deadline is required")
-        else if ((new Date(deadline).getTime() < (new Date()).getTime()))
-            setError("deadline", "Deadline must be after today")
-        // catch projects error
-        if (relatedProjects.length === 0)
-            setError("relatedProjects", "At least 1 project must be selected")
-        else {
-            //Perform submit here
-        }
+        // No need to check for error anymore
+        // TO DO
     }
     return {
         title, description, type,

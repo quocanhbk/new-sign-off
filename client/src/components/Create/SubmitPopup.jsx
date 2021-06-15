@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react'
 import styled from "styled-components";
 import { getFader } from '../../utils/color';
@@ -21,7 +22,7 @@ const ButtonContainer = styled.div`
         border: none;
         padding: 0.5rem 1rem;
         min-width: 7rem;
-        border-radius: 0.5rem;
+        border-radius: 0.2rem;
         font-size: 1rem;
         cursor: pointer;
         color: ${props => props.theme.color.background.primary};
@@ -52,7 +53,7 @@ const Text = styled.div`
         font-weight: 600;
     }
 `
-const SubmitPopup = () => {
+const SubmitPopup = ({closeSubmit, submitRequest}) => {
     return (
         <Container>
             <ImgContainer>
@@ -63,8 +64,8 @@ const SubmitPopup = () => {
                 <p className="request-title">Lorem ipsum dolor sit amet consectetur adipisicing elit!</p>
             </Text>
             <ButtonContainer>
-                <button className="request-cancel">Cancel</button>
-                <button className="request-confirm">Confirm</button>
+                <button className="request-cancel" onClick={closeSubmit}>Cancel</button>
+                <button className="request-confirm" onClick={submitRequest}>Confirm</button>
             </ButtonContainer>
         </Container>
     )

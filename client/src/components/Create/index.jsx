@@ -70,9 +70,8 @@ const Create = () => {
 	} = useDocument()
 
 	const popupSubmit = () => {
-		if (!isSubmittable()) {
-			setErrorNotify(true)
-		} else setModal("preview")
+		if (!isSubmittable()) setErrorNotify(true)
+		else setModal("preview")
 	}
 
 	const renderModal = () => {
@@ -85,7 +84,7 @@ const Create = () => {
 				Draft
 			</Modal>
 			<Modal visible={modal === "preview"} onClickOutside = {() => setModal("")}>
-				<SubmitPopup/>
+				<SubmitPopup closeSubmit={() => setModal("")} submitRequest={submitRequest}/>
 			</Modal>
 			</>
 		)
