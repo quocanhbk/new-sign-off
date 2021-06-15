@@ -29,8 +29,8 @@ function DisplayContent({id}) {
       console.log(data)
       setForm(data)
       setLoading(false)
-      let res = await axios.get(data.file.webUrl)
-      console.log("Res", res)
+      let res = (await axios.get('/api/v1/files/' + data.file.file_id)).data
+      setDoc(res.downloadUrl)
     }
     fetchForm()
   }, [id])
@@ -43,9 +43,9 @@ function DisplayContent({id}) {
     return arr
   }
   return (
-    <div>
+    <div ref={docRef}>
       {loading ? <ListLoader/> :
-      <DocWrapper className="doc-display" ref={docRef}>
+      <DocWrapper className="doc-display">
         {form.fields.map(field => 
             <ViewFieldTag 
                 key={field.default_form_field_id} 
@@ -53,7 +53,7 @@ function DisplayContent({id}) {
             />
         )}
         <Document 
-            file={form.file.webUrl}
+            file={doc}
             className="form-document" 
             onLoadSuccess={(numPage) => {setNumPage(numPage._pdfInfo.numPages)}}
             noData={<NoFile/>}

@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
-import Modal from '../../components/Modal'
+/* eslint-disable react/prop-types */
+import React from 'react'
 import styled from 'styled-components'
-import SubmitPopup from './SubmitPopup';
 
 const StyleButton = styled.div`
 	display: flex;
@@ -39,34 +38,15 @@ const Title = styled.h3`
 	padding: 1rem 0;
 	font-weight: 500;
 `
-const Header = () => {
-    const [modal, setModal] = useState("")
-
-	const renderModal = () => {
-		return (
-			<>
-			<Modal height="80%" width="80%" visible={modal === "store"} onClickOutside = {() => setModal("")} title="Loading document">
-				Store
-			</Modal>
-			<Modal height="80%" width="80%" visible={modal === "draft"} onClickOutside = {() => setModal("")} title="Loading document">
-				Draft
-			</Modal>
-			<Modal visible={modal === "preview"} onClickOutside = {() => setModal("")}>
-				<SubmitPopup/>
-			</Modal>
-			</>
-		)
-	}
-
+const Header = ({openSubmit}) => {
     return (
 		<StyleTitle>
 			<Title>CREATE A NEW APPROVAL DOCUMENT</Title>
 			<StyleButton>
-				<button onClick={() => setModal("store")} className="btn-stored">Load from stored</button>
-				<button onClick={() => setModal("draft")} className="btn-draft">Save Draft</button>
-				<button onClick={() => setModal("preview")} className="btn-preview">Preview</button>
+				<button onClick={() => {}} className="btn-stored">Load from stored</button>
+				<button onClick={() => {}} className="btn-draft">Save Draft</button>
+				<button onClick={openSubmit} className="btn-preview">Submit</button>
 			</StyleButton>
-			{renderModal()}
 		</StyleTitle>
     )
 }

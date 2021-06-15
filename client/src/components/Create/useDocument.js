@@ -23,9 +23,7 @@ const reducer = (state, action) => {
                 [action.payload.field]: action.payload.value
             }
         case 'RESET':
-            return {
-                initState
-            }
+            return initState
     }
 }
 
@@ -68,6 +66,35 @@ const useDocument = () => {
         if (error[field] !== "") setError(field, "")
     }
     
+    const isSubmittable = () => {
+        let submittable = true
+        if (title === "") {
+            setError("title", "Document title is required")
+            submittable = false
+        }
+        // catch deadline error
+        if (!deadline) {
+            setError("deadline", "Deadline is required")
+            submittable = false
+        }
+        else if ((new Date(deadline).getTime() < (new Date()).getTime())) {
+            setError("deadline", "Deadline must be after today")
+            submittable = false
+        }
+        // catch projects error
+        if (relatedProjects.length === 0) {
+            setError("relatedProjects", "At least 1 project must be selected")
+            submittable = false
+        }
+        if (
+            advisors.some(v => approvers.concat(observators).includes(v)) ||
+            approvers.some(v => advisors.concat(observators).includes(v)) ||
+            observators.some(v => approvers.concat(advisors).includes(v))) {
+                submittable = false
+        }
+        return submittable
+    }
+
     const submitRequest = () => {
         // catch title error
         if (title === "")
@@ -91,7 +118,7 @@ const useDocument = () => {
         approvalAttachments, referenceAttachments,
         set,
         //Helper function
-        removeAttachment, submitRequest,
+        removeAttachment, submitRequest, isSubmittable,
         //Error
         error, setError
 

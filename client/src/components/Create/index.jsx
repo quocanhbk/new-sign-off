@@ -12,6 +12,10 @@ import {procedureList, data} from './sampleData'
 import Header from "./Header";
 import SectionContainer from "../SectionContainer";
 import useDocument from "./useDocument";
+import Modal from '../Modal'
+import SubmitPopup from './SubmitPopup'
+import Snackbar from "../Snackbar";
+import { BsCheckCircle, BsXCircle } from "react-icons/bs";
 
 const StyleContainer = styled.div`
   display: flex;
@@ -42,10 +46,19 @@ const ContainerItems = styled.div`
     background: ${(props) => props.theme.color.fill.secondary};
   }
 `;
-
+const Notify = styled.div`
+    padding: 1rem;
+    background: ${props => props.theme.color.fill.danger};
+    color: ${props => props.theme.color.background.primary};
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+`
 const Create = () => {
 	const [tempForm , setTempForm ]= useState()
-
+	const [modal, setModal] = useState()
+	const [errorNotify, setErrorNotify] = useState(false)
 	const {
 		title, description, type,
         priority, deadline, relatedProjects,
@@ -53,12 +66,37 @@ const Create = () => {
         approvalAttachments, referenceAttachments,
         set,
         //Helper function
-        removeAttachment, submitRequest, error
+        removeAttachment, submitRequest, error, isSubmittable
 	} = useDocument()
+
+	const popupSubmit = () => {
+		if (!isSubmittable()) {
+			setErrorNotify(true)
+		} else setModal("preview")
+	}
+
+	const renderModal = () => {
+		return (
+			<>
+			<Modal height="80%" width="80%" visible={modal === "store"} onClickOutside = {() => setModal("")} title="Loading document">
+				Store
+			</Modal>
+			<Modal height="80%" width="80%" visible={modal === "draft"} onClickOutside = {() => setModal("")} title="Loading document">
+				Draft
+			</Modal>
+			<Modal visible={modal === "preview"} onClickOutside = {() => setModal("")}>
+				<SubmitPopup/>
+			</Modal>
+			</>
+		)
+	}
+
+
 
 	return (
 		<StyleContainer>
-			<Header/>
+			{renderModal()}
+			<Header openSubmit={popupSubmit}/>
 			<ContainerItems>
 
 				{/* SECTION PRIMARY INFO */}
@@ -106,7 +144,12 @@ const Create = () => {
 					<DescriptionEditor description={description} set={set}/>
 				</SectionContainer>
 			</ContainerItems>
-			<button onClick={() => submitRequest()}>Submit</button>
+			<Snackbar visible={errorNotify} onClose={() => setErrorNotify(false)} timeOut={2000}>
+                <Notify>
+                    <BsXCircle size="1.2rem"/>
+                    <p>Please fix all fields before submitting!</p>
+                </Notify>
+            </Snackbar>
 		</StyleContainer>
 	);
 };

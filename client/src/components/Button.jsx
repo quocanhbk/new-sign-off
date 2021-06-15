@@ -5,19 +5,22 @@ import styled from "styled-components";
 const Container = styled.button`
     background: ${props => props.theme.color.fill.primary};
     color: ${props => props.theme.color.background.primary};
-    padding: 0.5rem;
+    padding: ${props => props.padding || "0.5rem"};
     text-align: center;
     border-radius: 0.5rem;
     cursor: pointer;
     border: none;
     font-size: 1rem;
-    display: block;
-    width: 100%;
 `
 
-const Button = ({onClick, children}) => {
+const Button = ({onClick, children, padding, radius, fullWidth, }) => {
     return (
-        <Container onClick={onClick}>
+        <Container 
+            onClick={onClick} 
+            padding={padding}
+            radius={radius}
+            fullWidth={fullWidth}
+        >
             {children}
         </Container>
     )
