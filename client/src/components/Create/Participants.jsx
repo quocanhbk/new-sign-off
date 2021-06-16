@@ -24,7 +24,7 @@ const TagContainer = styled.div`
 const Tag = ({email, name}) => {
     return (
         <TagContainer>
-            <img src={"/api/v1/avatar/" + email} alt=""/>
+            <img src={"/api/v1/avatar/" + email} alt="" loading="lazy"/>
             {name}
         </TagContainer>
     )

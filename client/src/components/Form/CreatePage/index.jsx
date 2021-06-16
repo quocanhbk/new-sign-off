@@ -11,9 +11,6 @@ import {ButtonContainer, Container, Wrapper, StyleTitle, Toolbar, ToolbarContain
 import useFormData from './useFormData';
 import axios from 'axios'
 const CreatePage = () => {
-    
-    let docRef = useRef()
-    let pageRef = useRef()
     let {
         // Field data : array of field (name, content, position (%), size (%), required)
         fieldData, 
@@ -110,8 +107,8 @@ const CreatePage = () => {
                     handleClickDoc={handleClickDoc}
                     numPage={numPage}
                     setNumPage={setNumPage}
-                    docRef={docRef}
-                    pageRef={pageRef}
+                    // docRef={docRef}
+                    // pageRef={pageRef}
                     moveField={moveField}
                     resizeField={resizeField}
                 />

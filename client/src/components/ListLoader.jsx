@@ -12,6 +12,7 @@ const Container = styled.div`
     justify-content: center;
     flex-direction: column;
     gap: 0.5rem;
+    z-index: 255;
     background: ${props => props.theme.color.background.primary};
 `
 const Logo = styled.div`

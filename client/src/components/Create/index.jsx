@@ -8,14 +8,14 @@ import ApprovalDocumentProcess from "./ApprovalDocumentProcess";
 import DescriptionEditor from "./DescriptionEditor";
 import Participants from "./Participants";
 import PrimaryInfo from "./PrimaryInfo";
-import {procedureList, data} from './sampleData'
+import {procedureList} from './sampleData'
 import Header from "./Header";
 import SectionContainer from "../SectionContainer";
 import useDocument from "./useDocument";
 import Modal from '../Modal'
 import SubmitPopup from './SubmitPopup'
 import Snackbar from "../Snackbar";
-import { BsCheckCircle, BsXCircle } from "react-icons/bs";
+import { BsXCircle } from "react-icons/bs";
 
 const StyleContainer = styled.div`
   display: flex;

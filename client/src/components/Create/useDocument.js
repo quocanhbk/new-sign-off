@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 import {useReducer } from 'react'
+import axios from 'axios'
 
 const initState = {
     title: "",
     description: "",
-    type: "Procedure",
+    type: "Flexible",
     priority: "Normal",
     deadline: null,
     relatedProjects: [],
@@ -95,9 +96,13 @@ const useDocument = () => {
         return submittable
     }
 
-    const submitRequest = () => {
+    const submitRequest = async () => {
         // No need to check for error anymore
-        // TO DO
+        console.log("Submitting...")
+        let reqBody = {title, description, priority, type, deadline, relatedProjects, advisors, approvers, observators}
+        console.log(reqBody)
+        let {data} = await axios.post('/api/v1/requests', reqBody)
+        console.log(data)
     }
     return {
         title, description, type,

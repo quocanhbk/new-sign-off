@@ -6,7 +6,7 @@ import DocContent from './DocContent'
 import {MainContainer, Bar, DocWrapper} from './StyledComponent'
 import {BsCardText} from 'react-icons/bs'
 
-const DocDisplay = ({file, initForm, addingTag, setAddingTag, fieldData, handleClickDoc, numPage, setNumPage, docRef, pageRef, moveField, resizeField}) => {
+const DocDisplay = ({file, initForm, addingTag, setAddingTag, fieldData, handleClickDoc, numPage, setNumPage, moveField, resizeField}) => {
     return (
         <MainContainer className="maincontainer">
             {file && 
@@ -32,8 +32,8 @@ const DocDisplay = ({file, initForm, addingTag, setAddingTag, fieldData, handleC
                     handleClickDoc={handleClickDoc}
                     numPage={numPage}
                     setNumPage={setNumPage}
-                    docRef={docRef}
-                    pageRef={pageRef}
+                    // docRef={docRef}
+                    // pageRef={pageRef}
                     moveField={moveField}
                     resizeField={resizeField}
                 />

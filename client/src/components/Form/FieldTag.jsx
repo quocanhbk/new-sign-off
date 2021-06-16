@@ -12,7 +12,7 @@ const Container = styled.div`
     user-select: none;
     cursor: pointer;
     background: #fffef6;
-    font-size: 1rem;
+    font-size: ${props => props.fontSize || "1rem"};
     & p {
         word-break: keep-all;
     }
@@ -55,11 +55,12 @@ let Resizer = styled.div`
     background: #02467e;
     border-radius: 0.2rem;
 `
-const FieldTag = ({data, onMouseDown, onMouseDownResizer, reff}) => {
+const FieldTag = ({data, onMouseDown, onMouseDownResizer, reff, fontSize}) => {
     return (
         <Container 
             ref={reff}
             onMouseDown={onMouseDown}
+            fontSize={fontSize}
             style={{left: data.position.X + "%", top: data.position.Y + "%", width: data.size.width + "%", height: data.size.height + "%"}}
         >
             <Resizer onMouseDown={onMouseDownResizer} data-html2canvas-ignore/>

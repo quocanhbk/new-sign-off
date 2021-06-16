@@ -1,7 +1,7 @@
 /* eslint-disable no-unreachable */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import FieldTag from '../../FieldTag'
 import LoadingFile from '../../LoadingFile';
@@ -21,14 +21,16 @@ const UploadContainer = styled.div`
     display: grid;
     place-items: center;
 `
-const DocContent = ({file, addingTag, fieldData, handleClickDoc, numPage, setNumPage, docRef, pageRef, moveField, resizeField, initForm}) => {
+const DocContent = ({file, addingTag, fieldData, handleClickDoc, numPage, setNumPage, moveField, resizeField, initForm}) => {
 
     const [curPos, setCurPos] = useState({X: -100, Y: -100})
-
+    let docRef = useRef()
+    let pageRef = useRef()
     let floatRef = useRef()
     let selectedFieldId = useRef("")
     let selectedResizer = useRef(false)
     let oldPos = useRef({X: -100, Y: -100})
+
     const handleMouseMoveDoc = (e) => {
         if (addingTag === "field") {
             let {x, y, width, height} = docRef.current.getBoundingClientRect()  
@@ -84,7 +86,7 @@ const DocContent = ({file, addingTag, fieldData, handleClickDoc, numPage, setNum
         selectedResizer.current = false
     }
     const handleMouseDownResizer = () => selectedResizer.current = true
-
+    
     return (
         file ? 
             <DocWrapper
@@ -100,6 +102,7 @@ const DocContent = ({file, addingTag, fieldData, handleClickDoc, numPage, setNum
                         data={tag}
                         onMouseDown={(e) => handleMouseDownField(e, tag.id)}
                         onMouseDownResizer={handleMouseDownResizer}
+                        fontSize={docRef.current.getBoundingClientRect().width/60 + "px"}
                     />
                 )}
                 {addingTag === "field" && 

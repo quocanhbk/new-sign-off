@@ -11,8 +11,7 @@ const Container = styled.div`
     z-index: 3;
     user-select: none;
     cursor: pointer;
-    background: #fffef6;
-    font-size: 1rem;
+    font-size: ${props => props.fontSize || "1rem"};
     & p {
         word-break: keep-all;
     }
@@ -39,28 +38,17 @@ const Background = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    border: 1px solid #000000;
-    background: #fff493;
+    //border: 1px solid #000000;
+    background: #fff493a4;
     border-radius: 0.2rem;
     z-index: -1;
 `
-let Resizer = styled.div`
-    position: absolute;
-    cursor: se-resize;
-    right: 0;
-    bottom: 0;
-    height: 0.4rem;
-    width: 0.4rem;
-    transform: translate(45%,45%);
-    background: #02467e;
-    border-radius: 0.2rem;
-`
-const FieldTag = ({data}) => {
+const FieldTag = ({data, fontSize}) => {
     return (
         <Container
+            fontSize={fontSize}
             style={{left: data.x_position + "%", top: data.y_position + "%", width: data.width + "%", height: data.height + "%"}}
         >
-            <Resizer data-html2canvas-ignore/>
             <span className="name" data-html2canvas-ignore>{data.field}</span>
             <p>
                 {data.value}
