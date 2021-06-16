@@ -5,10 +5,11 @@ import styled from 'styled-components'
 import FileUpload from './FileUpload';
 import AttachmentTable from './AttachmentTable';
 import FormControl from './FormControl'
-import {dynamicFormList} from './sampleData'
 import {v4 as uuid} from 'uuid'
 import ControlledCombox from '../ControlledCombox';
 import { getFader } from '../../utils/color';
+import { useStoreState } from 'easy-peasy';
+import axios from 'axios';
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -49,23 +50,26 @@ const VerticalBar = styled.div`
 const FlexibleApprovalAttachment = ({attachments, set, onRemoveAttachment}) => {
     // eslint-disable-next-line no-unused-vars
     const [selectedDynamicForm, setSelectedDynamicForm] = useState()
-    
-    const selectDynamicForm = () => {
-        if (!selectedDynamicForm) return
-        let dynamicForm = dynamicFormList.find(form => form.id === selectedDynamicForm)
-        set("referenceAttachments", [...attachments, {
-            id: uuid().slice(0, 8),
-            name: dynamicForm.name,
-            type: 'FROM_DATABASE',
-            file: dynamicForm.linkPath,
-            fields: dynamicForm.fields.map(field => ({
-                id: field.id,
-                name: field.name,
-                value: field.defaultValue,
-                required: field.required
-            }))
-        }])
-        setSelectedDynamicForm(null)
+    const dynamicForms = useStoreState(_ => _.forms)
+
+    const selectDynamicForm = async () => {
+        // if (!selectedDynamicForm) return
+        // let dynamicForm = dynamicFormList.find(form => form.id === selectedDynamicForm)
+        // set("referenceAttachments", [...attachments, {
+        //     id: uuid().slice(0, 8),
+        //     name: dynamicForm.name,
+        //     type: 'FROM_DATABASE',
+        //     file: dynamicForm.linkPath,
+        //     fields: dynamicForm.fields.map(field => ({
+        //         id: field.id,
+        //         name: field.name,
+        //         value: field.defaultValue,
+        //         required: field.required
+        //     }))
+        // }])
+        // setSelectedDynamicForm(null)
+        let {data} = await axios.get('/api/v1/forms/' + selectedDynamicForm)
+        console.log(data)
     }
 
     const handleFile = (fileList) => {
@@ -91,10 +95,11 @@ const FlexibleApprovalAttachment = ({attachments, set, onRemoveAttachment}) => {
                 <Col>
                     <FormControl headline="Select from database" noSpace>
                         <ControlledCombox 
-                            selection={dynamicFormList}
-                            value={dynamicFormList.find(form => form.id === selectedDynamicForm)}
+                            selection={dynamicForms}
+                            keyField={"form_id"}
+                            value={dynamicForms.find(form => form.form_id === selectedDynamicForm)}
                             displayField={"name"}
-                            onSelect={newValue => setSelectedDynamicForm(newValue.id)} 
+                            onSelect={newValue => setSelectedDynamicForm(newValue.form_id)} 
                         />
                     </FormControl>
                     <Button onClick={() => selectDynamicForm()}>Use form</Button>

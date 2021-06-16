@@ -27,6 +27,16 @@ const store = createStore({
             name: d.last_name + " " + d.middle_name + " " + d.first_name,
             email: d.email
         })))
+    }),
+
+    forms:[],
+    setForms: action((state, payload) => {
+        state.forms = payload
+    }),
+    getForms: thunk(async (actions, payload) => {
+        const {data} = await axios.get('/api/v1/forms')
+        console.log(data)
+        actions.setForms(data)
     })
 })  
 

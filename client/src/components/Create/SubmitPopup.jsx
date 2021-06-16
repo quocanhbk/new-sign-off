@@ -53,7 +53,7 @@ const Text = styled.div`
         font-weight: 600;
     }
 `
-const SubmitPopup = ({closeSubmit, submitRequest}) => {
+const SubmitPopup = ({closeSubmit, submitRequest, title}) => {
     return (
         <Container>
             <ImgContainer>
@@ -61,7 +61,7 @@ const SubmitPopup = ({closeSubmit, submitRequest}) => {
             </ImgContainer>
             <Text>
                 <p className="request-sub">Are you sure to submit?</p>
-                <p className="request-title">Lorem ipsum dolor sit amet consectetur adipisicing elit!</p>
+                <p className="request-title">{title}</p>
             </Text>
             <ButtonContainer>
                 <button className="request-cancel" onClick={closeSubmit}>Cancel</button>

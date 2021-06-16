@@ -84,7 +84,7 @@ const Create = () => {
 				Draft
 			</Modal>
 			<Modal visible={modal === "preview"} onClickOutside = {() => setModal("")}>
-				<SubmitPopup closeSubmit={() => setModal("")} submitRequest={submitRequest}/>
+				<SubmitPopup closeSubmit={() => setModal("")} submitRequest={submitRequest} title={title}/>
 			</Modal>
 			</>
 		)

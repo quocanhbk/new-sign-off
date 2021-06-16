@@ -18,9 +18,11 @@ const StyledApp = styled.div`
 const Container = () => {
   const isDark = useStoreState(s => s.theme)
   const getUsers = useStoreActions(s => s.getUsers)
+  const getForms = useStoreActions(s => s.getForms)
 
   useEffect(() => {
     getUsers()
+    getForms()
   })
   return (
     <ThemeProvider theme={isDark ? theme.dark : theme.light}>

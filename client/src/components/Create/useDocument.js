@@ -99,8 +99,17 @@ const useDocument = () => {
     const submitRequest = async () => {
         // No need to check for error anymore
         console.log("Submitting...")
-        let reqBody = {title, description, priority, type, deadline, relatedProjects, advisors, approvers, observators}
-        console.log(reqBody)
+        let reqBody = {
+            title, 
+            description, 
+            priority, 
+            type, 
+            deadline: (new Date(deadline)).toLocaleDateString('en-CA'), 
+            relatedProjects, 
+            advisors, 
+            approvers, 
+            observators
+        }
         let {data} = await axios.post('/api/v1/requests', reqBody)
         console.log(data)
     }

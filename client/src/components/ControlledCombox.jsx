@@ -177,7 +177,7 @@ const SelectionContainer = styled.div`
         }
     }
 `
-function ControlledCombox({selection, value, onSelect, multiple, searchable, displayField}) {
+function ControlledCombox({selection, value, onSelect, multiple, searchable, displayField, keyField}) {
     const [isOpen, setIsOpen] = useState(false);
     const comboxRef = useClickOutside(() => setIsOpen(false))
     const [seachText, setSeachText] = useState("")
@@ -264,7 +264,7 @@ function ControlledCombox({selection, value, onSelect, multiple, searchable, dis
                             .map(child => 
                                 <Selection 
                                     selected={value && (multiple ? value : [value]).map(item => item.id).includes(child.id)} 
-                                    key={child.id}
+                                    key={child[keyField]}
                                     onClick={() => addItem(child)}>{child[displayField]}
                                 </Selection>
                             )
@@ -282,14 +282,16 @@ ControlledCombox.propTypes = {
     searchable: PropTypes.bool,
     onSelect: PropTypes.func,
     selection: PropTypes.array,
-    displayField: PropTypes.string
+    displayField: PropTypes.string,
+    keyField: PropTypes.string
 }
 ControlledCombox.defaultProps = {
     multiple: false,
     searchable: false,
     onSelect: () => {},
     selection: [],
-    displayField: "text"
+    displayField: "text",
+    keyField: "id"
 }
 
 export default ControlledCombox
