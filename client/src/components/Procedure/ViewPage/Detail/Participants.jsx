@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components'
-import ControlledCombox from '../../ControlledCombox'
+import ControlledCombox from '../../../ControlledCombox'
 import FormControl from './FormControl';
-import {userList} from '../sampleData'
+import {userList} from '../../sampleData'
 
 const Container = styled.div`
     display: flex;

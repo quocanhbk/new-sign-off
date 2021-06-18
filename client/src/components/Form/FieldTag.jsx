@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const Container = styled.div`
     position: absolute;
@@ -10,8 +10,7 @@ const Container = styled.div`
     padding-left: 0.2rem;
     z-index: 3;
     user-select: none;
-    cursor: pointer;
-    background: #fffef6;
+    cursor: ${props => props.view ? "default" : "pointer"};
     font-size: ${props => props.fontSize || "1rem"};
     & p {
         word-break: keep-all;
@@ -39,10 +38,12 @@ const Background = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    border: 1px solid #000000;
-    background: #fff493;
-    border-radius: 0.2rem;
+    background: #1b97fc39;
+    border-radius: 0.1rem;
     z-index: -1;
+    ${props => !props.view && css`
+        border: 1px solid #3f3cff;
+    `}
 `
 let Resizer = styled.div`
     position: absolute;
@@ -52,24 +53,22 @@ let Resizer = styled.div`
     height: 0.4rem;
     width: 0.4rem;
     transform: translate(45%,45%);
-    background: #02467e;
-    border-radius: 0.2rem;
+    background: #3f3cff;
 `
-const FieldTag = ({data, onMouseDown, onMouseDownResizer, reff, fontSize}) => {
+const FieldTag = ({data, onMouseDown, onMouseDownResizer, reff, fontSize, view}) => {
     return (
         <Container 
             ref={reff}
             onMouseDown={onMouseDown}
             fontSize={fontSize}
+            view={view}
             style={{left: data.position.X + "%", top: data.position.Y + "%", width: data.size.width + "%", height: data.size.height + "%"}}
         >
-            <Resizer onMouseDown={onMouseDownResizer} data-html2canvas-ignore/>
-            <span className="name" data-html2canvas-ignore>{data.name}</span>
-            <p>
-                {data.content}
-            </p>
-            <span className="type" data-html2canvas-ignore>Field</span>
-            <Background data-html2canvas-ignore/>
+            {!view && <Resizer onMouseDown={onMouseDownResizer}/>}
+            <span className="name">{data.name}</span>
+            <p>{data.content}</p>
+            {/* <span className="type">Field</span> */}
+            <Background view={view}/>
         </Container>
     )
 }

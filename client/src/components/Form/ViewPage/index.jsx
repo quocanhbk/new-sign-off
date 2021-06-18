@@ -1,10 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 import styled from "styled-components";
-import { getFader } from "../../../utils/color";
-import NoFile from "../NoFile";
+import NoFile from "./NoFile";
 import DisplayContent from "./DisplayContent";
 import List from "./List";
 import {Router} from '@reach/router'
+import { getFader } from "../../../utils/color";
 
 const Container = styled.div`
     display: flex;
@@ -13,7 +13,7 @@ const Container = styled.div`
 const StyleContentWrapper = styled.div`
     flex: 10;
     height: 100%;
-    background-color: #333 ;//${(props) => props.theme.color.background.secondary};
+    background-color: ${(props) => props.theme.color.background.secondary};
     color: ${(props) => props.theme.color.text.primary};
     border-left: 1px solid ${(props) => props.theme.color.border.primary};
     height: 100%;
@@ -33,7 +33,6 @@ const StyleContentWrapper = styled.div`
     ::-webkit-scrollbar-thumb:hover {
         background: ${props => props.theme.color.fill.secondary};
     }
-
     & .form-router {
         height: 100%;
     }

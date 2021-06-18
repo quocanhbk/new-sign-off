@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { getFader } from '../../../utils/color'
 
 export const Container = styled.div`
@@ -8,15 +8,15 @@ export const Container = styled.div`
     width: 100%;
 `
 export const Wrapper = styled.div`
+    position: relative;
     display: flex;
     flex: 1;
-    height: 100%;
-    overflow-y: auto;
+    overflow-y: overlay;
 `
 export const StyleTitle = styled.h3`
     width: 100%;
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
-    overflow: auto;
+    overflow: overlay;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -40,9 +40,11 @@ export const Toolbar = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    height: 100%;
+    gap: 0.5rem;
     padding: 1rem;
     border-right: 1px solid ${props => props.theme.color.border.primary};
+    overflow: overlay;
     & h3 {
         font-weight: 500;
         font-size: 1rem;
@@ -54,12 +56,30 @@ export const ToolbarContainer = styled.div`
     border-radius: 0.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1rem;
+    overflow: overlay;
+    ::-webkit-scrollbar {
+        width: 0.5rem;
+        }
+        ::-webkit-scrollbar-track {
+        background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+        background: ${props => getFader(props.theme.color.fill.secondary, 0.5)};
+        border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+        background: ${props => props.theme.color.fill.secondary};
+        }
 `
 export const ToolbarElement = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
+    ${props => props.fieldList && css`
+        flex: 1;
+        overflow: overlay;
+    `}
 `
 export const NoField = styled.div`
     font-style: italic;

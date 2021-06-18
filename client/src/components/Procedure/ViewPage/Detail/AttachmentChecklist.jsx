@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled, { keyframes } from "styled-components";
-import { getFader } from "../../../utils/color";
+import { getFader } from "../../../../utils/color";
 import {BsTrash, BsFileEarmarkText, BsCheckBox, BsPlusCircle} from 'react-icons/bs'
 import FieldTable from "./FieldTable";
-import ControlledCombox from "../../ControlledCombox";
-import {dynamicFormList} from '../sampleData'
+import ControlledCombox from "../../../ControlledCombox";
+import {dynamicFormList} from '../../sampleData'
 const TableWrapper = styled.div`
 
 `;

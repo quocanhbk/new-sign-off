@@ -2,12 +2,12 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import styled from "styled-components";
-import { getFader } from "../../../utils/color";
+import { getFader } from "../../../../utils/color";
 import Participants from "./Participants";
 import PrimaryInfo from "./PrimaryInfo";
 import Header from "./Header";
-import SectionContainer from "../../SectionContainer";
-import useProcedure from "../useProcedure";
+import SectionContainer from "../../../SectionContainer";
+import useProcedure from "../../useProcedure";
 import AttachmentChecklist from "./AttachmentChecklist";
 import { BsPlus } from "react-icons/bs";
 

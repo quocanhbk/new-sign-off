@@ -259,7 +259,7 @@ function ControlledCombox({selection, value, onSelect, multiple, searchable, dis
                     <SelectionContainer>
                     {
                         (searchable ? 
-                        selection.filter(child => Object.entries(child).map(c => c.toString().toUpperCase()).join("|").includes(seachText.toUpperCase().trim()))
+                        selection.filter(child => Object.values(child).map(c => c.toString().toUpperCase()).join("|").includes(seachText.toUpperCase().trim()))
                         : selection)
                             .map(child => 
                                 <Selection 

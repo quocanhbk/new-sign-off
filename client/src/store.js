@@ -2,6 +2,7 @@
 import { navigate } from '@reach/router'
 import {createStore, action, thunk} from 'easy-peasy'
 import axios from 'axios'
+import { getForms } from './api/form'
 
 const store = createStore({
     theme: localStorage.getItem('ttgTheme') === "true",
@@ -34,8 +35,7 @@ const store = createStore({
         state.forms = payload
     }),
     getForms: thunk(async (actions, payload) => {
-        const {data} = await axios.get('/api/v1/forms')
-        console.log(data)
+        const data = await getForms()
         actions.setForms(data)
     })
 })  

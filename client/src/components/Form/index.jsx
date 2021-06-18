@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 /* eslint-disable no-unused-vars */
-import { Router } from '@reach/router';
+import { Redirect, Router } from '@reach/router';
 import React, {useRef, useState} from 'react'
 import styled from "styled-components";
 import CreatePage from './CreatePage'
@@ -19,8 +19,10 @@ const Form = () => {
     return (
         <Container>
             <Router className="router">
-                <CreatePage path="create" />
-                <ViewPage path="/*" />
+                <CreatePage path="/create" />
+                <CreatePage path="/create/:id" />
+                <ViewPage path="/view/*" />
+                <Redirect from="/" to="/form/view" noThrow/>
             </Router>
         </Container>
     )

@@ -1,28 +1,30 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import Detail from './Detail'
-import List from './List'
-import sampleData from './sampleData'
-
-const StyleContainer = styled.div`
+/* eslint-disable no-unreachable */
+/* eslint-disable no-unused-vars */
+import { Router, Redirect } from '@reach/router';
+import React, {useRef, useState} from 'react'
+import styled from "styled-components";
+import CreatePage from './CreatePage'
+import ViewPage from './ViewPage';
+const Container = styled.div`
     display:flex;
-    width: 100%;
+    flex-direction: column;
     height: 100%;
+    width: 100%;
+    & .router {
+        height: 100%;
+    }
 `
 
 const Procedure = () => {
-    const [selectedId, setSelectedId] = useState()
-    useEffect(() => {
-        console.log(selectedId)
-    })
     return (
-        <StyleContainer>
-            <List 
-                data={sampleData} 
-                setSelectedId={setSelectedId}
-            />
-            <Detail data={sampleData.find(item => item.id === selectedId)}/>
-        </StyleContainer>
+        <Container>
+            <Router className="router">
+                <CreatePage path="/create" />
+                <CreatePage path="/create/:id" />
+                <ViewPage path="/view/*" />
+                <Redirect from="/" to="/procedure/view" noThrow/>
+            </Router>
+        </Container>
     )
 }
 

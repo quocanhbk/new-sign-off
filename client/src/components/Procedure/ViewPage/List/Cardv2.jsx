@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import {BsChevronRight, BsPlayFill, BsStopFill} from 'react-icons/all'
-import {getFader} from '../../../utils/color'
+import {getFader} from '../../../../utils/color'
 const CardWrapper = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
     border-radius: 0.5rem;

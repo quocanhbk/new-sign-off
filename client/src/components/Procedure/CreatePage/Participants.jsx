@@ -1,10 +1,9 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, {memo} from 'react';
+import React from 'react';
 import styled from 'styled-components'
-import ControlledCombox from '../ControlledCombox'
-import FormControl from '../FormControl';
-import {useStoreState} from 'easy-peasy'
+import ControlledCombox from '../../ControlledCombox'
+import FormControl from '../../FormControl'
+import { useStoreState } from 'easy-peasy';
 
 const Container = styled.div`
     display: flex;
@@ -29,14 +28,14 @@ const Tag = ({email, name}) => {
         </TagContainer>
     )
 }
+
 const Participants = ({advisors, approvers, observators, set}) => {
-    
     const users = useStoreState(s => s.users).map(s => ({...s, display: <Tag email={s.email} name={s.name}/>}))
 
     return (
         <Container>
             <FormControl 
-                headline={"Advisor List"} 
+                headline={"Advisor List"}
                 errorText={advisors.some(v => approvers.concat(observators).includes(v)) && "Duplicate"}
             >
                 <ControlledCombox
@@ -48,8 +47,7 @@ const Participants = ({advisors, approvers, observators, set}) => {
                 />
             </FormControl>
             <FormControl 
-                headline={"Approver List"} 
-                required 
+                headline={"Approver List"}
                 errorText={approvers.some(v => advisors.concat(observators).includes(v)) && "Duplicate"}
             >
                 <ControlledCombox
@@ -61,8 +59,8 @@ const Participants = ({advisors, approvers, observators, set}) => {
                 />
             </FormControl>
             <FormControl 
-                headline={"Observator List"} 
-                errorText={observators.some(v => advisors.concat(approvers).includes(v)) && "Duplicate"}
+                headline={"Observator List"}
+                errorText={observators.some(v => approvers.concat(advisors).includes(v)) && "Duplicate"}
             >
                 <ControlledCombox
                     multiple searchable
@@ -74,6 +72,6 @@ const Participants = ({advisors, approvers, observators, set}) => {
             </FormControl>
         </Container>
     );
-};
+}
 
-export default memo(Participants)
+export default Participants;

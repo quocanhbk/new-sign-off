@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import useFocus from '../../hooks/useFocus';
 import ControlledCombox from '../ControlledCombox'
 import Calendar from '../TeamsCalendar'
-import FormControl from './FormControl';
+import FormControl from '../FormControl';
 import {approvalTypeList, priorityList, projectList} from './localData'
 const Container = styled.div`
     display: flex;

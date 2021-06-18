@@ -3,7 +3,10 @@ import React from 'react';
 import styled from 'styled-components'
 import Cardv2 from './Cardv2';
 import ListToolbar from './ListToolbar';
-import {getFader} from '../../../utils/color'
+import {getFader} from '../../../../utils/color'
+import { navigate } from '@reach/router';
+import Button from '../../../Button'
+import { BsFileEarmarkPlus } from 'react-icons/bs';
 
 const StyleListWrapper =styled.div`
     flex: 5;
@@ -14,18 +17,12 @@ const StyleListWrapper =styled.div`
     height: 100%;
     padding: 0 0.5rem;
 `
-const TagBar = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  height: 2.5rem;
-  align-items: center;
-`;
-const TagContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-`;
-
+const AddNewContainer = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    justify-content: space-between;
+`
 const CardList = styled.div`
     width: 100%;
     flex: 1;
@@ -57,12 +54,17 @@ function List({data,setSelectedId}) {
     return (
         <StyleListWrapper>
             <ListToolbar/>
-            <TagBar>
+            <AddNewContainer>
                 <p>Filter: </p>
-                <TagContainer>
-                Dữ liệu ảo
-                </TagContainer>
-            </TagBar>
+                <Button 
+                    onClick={() => navigate('/procedure/create')} 
+                    padding="0.2rem 0.4rem" 
+                    gap="0.4rem"
+                    variant="border"
+                >
+                    <BsFileEarmarkPlus size="1rem"/> Add
+                </Button>
+            </AddNewContainer>
             <CardList>
                 {data.map((procedure) => (
                     <Cardv2

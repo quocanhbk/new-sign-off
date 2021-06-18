@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components'
@@ -43,7 +44,7 @@ function DescriptionEditor({description, set}) {
 
     return (
         <StyleWrapper>
-            <Text>Use the following editor to compose description for your approvall doucument. Please summary the purpose/ reason why are you submitting this document. </Text>
+            {/* <Text>Use the following editor to compose description for your approval document. Please summary the purpose/reason why are you submitting this document. </Text> */}
             <CKEditor
                 editor={ClassicEditor}
                 data={description}

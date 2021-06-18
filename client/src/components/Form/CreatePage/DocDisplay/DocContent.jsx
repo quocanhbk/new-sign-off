@@ -1,7 +1,7 @@
 /* eslint-disable no-unreachable */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import FieldTag from '../../FieldTag'
 import LoadingFile from '../../LoadingFile';
@@ -9,11 +9,13 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import UploadButton from './UploadButton'
 
 
-const DocWrapper = styled.div`
+const Container = styled.div`
     position: relative;
     min-height: 100%;
-    & .abc {
+    width: 100%;
+    & .react-document {
         min-height: 100%;
+        width: 200px;
     }
 `
 const UploadContainer = styled.div`
@@ -89,7 +91,7 @@ const DocContent = ({file, addingTag, fieldData, handleClickDoc, numPage, setNum
     
     return (
         file ? 
-            <DocWrapper
+            <Container
                 ref={docRef}
                 onMouseMove={handleMouseMoveDoc}
                 onClick={() => {handleClickDoc(curPos); setCurPos({X: -100, Y: -100})}}
@@ -113,13 +115,13 @@ const DocContent = ({file, addingTag, fieldData, handleClickDoc, numPage, setNum
                 }
                 <Document 
                     file={file}
-                    className="abc" 
-                    onLoadSuccess={(numPage) => setNumPage(numPage._pdfInfo.numPages)}
+                    className="react-document" 
+                    onLoadSuccess={(numPage) => {setNumPage(numPage._pdfInfo.numPages)}}
                     loading={<LoadingFile/>}
                 >
                     {renderPage()}
                 </Document>
-            </DocWrapper> :
+            </Container> :
             <UploadContainer>
                 <UploadButton onSubmit={initForm}>
                     Upload Document

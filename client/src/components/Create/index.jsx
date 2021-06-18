@@ -15,7 +15,7 @@ import useDocument from "./useDocument";
 import Modal from '../Modal'
 import SubmitPopup from './SubmitPopup'
 import Snackbar from "../Snackbar";
-import { BsXCircle } from "react-icons/bs";
+import { BsFillExclamationTriangleFill } from "react-icons/bs";
 
 const StyleContainer = styled.div`
   display: flex;
@@ -126,6 +126,7 @@ const Create = () => {
 					{false ? 
 						<ApprovalDocumentProcess tempForm={tempForm} setTempForm={setTempForm} form={procedureList}/> : 
 						<FlexibleApprovalAttachment 
+							type="approvalAttachments"
 							attachments={approvalAttachments}
 							set={set}
 							onRemoveAttachment={id => removeAttachment("approval", id)}
@@ -134,8 +135,13 @@ const Create = () => {
 				</SectionContainer>
 				
 				{/* SECTION REFERENCE DOCUMENT */}
-				<SectionContainer headline="Reference Document" haveBorder>
-					<FlexibleApprovalAttachment attachments={referenceAttachments} set={set}/>
+				<SectionContainer headline="Reference Attachment" haveBorder>
+					<FlexibleApprovalAttachment
+						type="referenceAttachments"
+						attachments={referenceAttachments} 
+						set={set} 
+						onRemoveAttachment={id => removeAttachment("reference", id)}
+					/>
 				</SectionContainer>
 				
 				{/* SECTION DESCRIPTION */}
@@ -145,7 +151,7 @@ const Create = () => {
 			</ContainerItems>
 			<Snackbar visible={errorNotify} onClose={() => setErrorNotify(false)} timeOut={2000}>
                 <Notify>
-                    <BsXCircle size="1.2rem"/>
+                    <BsFillExclamationTriangleFill size="1.2rem"/>
                     <p>Please fix all fields before submitting!</p>
                 </Notify>
             </Snackbar>

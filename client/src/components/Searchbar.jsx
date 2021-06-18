@@ -47,7 +47,6 @@ const StyledInput = styled.input`
 `
 const Searchbar = ({search, setSearch}) => {
     const handleChange = (e) => {
-        e.preventDefault()
         setSearch(e.target.value)
     }
     return (

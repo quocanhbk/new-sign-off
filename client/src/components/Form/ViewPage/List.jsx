@@ -1,3 +1,4 @@
+/* eslint-disable no-constant-condition */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
@@ -5,11 +6,13 @@ import styled from 'styled-components'
 import Card from './Card';
 import ListToolbar from './ListToolbar';
 import {getFader} from '../../../utils/color'
-import { navigate } from '@reach/router';
+import { navigate, useLocation } from '@reach/router';
 import {BsFileEarmarkPlus} from 'react-icons/bs'
-import axios from 'axios';
-import ListLoader from '../../ListLoader'
-
+import ProgressLoader from '../../ProgressLoader'
+import { getForms } from '../../../api/form';
+import Button from '../../Button';
+import { useStoreState } from 'easy-peasy';
+import useLoading from '../../../hooks/useLoading';
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -52,51 +55,49 @@ const AddNewContainer = styled.div`
     padding: 0.5rem 0;
     justify-content: space-between;
 `
-const IconContainer = styled.div`
-    cursor: pointer;
-    display: flex;
-    padding: 0.2rem 0.4rem;
-    background: ${props => props.theme.color.border.primary};
-    font-size: 0.9rem;
-    align-items: center;
-    gap: 0.4rem;
-    border-radius: 0.5rem;
-    &:hover {
-        background: ${props => getFader(props.theme.color.border.primary,0.5)};
-    }
-`
 function List() {
-
-    const [loading, setLoading] = useState(true)
     const [forms, setForms] = useState([])
+    const [searchText, setSearchText] = useState("")
+    const location = useLocation().pathname.split("/")
+    const users = useStoreState(_ => _.users)
+    const {loading, percent, setPercent} = useLoading()
 
     useEffect(() => {
         const fetchData = async () => {
-            let {data} = await axios.get('/api/v1/forms')
-            console.log(data)
-            setForms(data)
-            setLoading(false)
+            const forms = await getForms((v) => setPercent(v))
+            setForms(forms)
         }
         fetchData()
     }, [])
 
     const handle = (formId) => {
-        navigate('/form/' + formId)
+        navigate('/form/view/' + formId)
     }
 
     return (
         <StyleListWrapper>
-            <ListToolbar/>
+            <ListToolbar search={searchText} setSearch={setSearchText}/>
             <AddNewContainer>
-                <p>How many result</p>
-                <IconContainer onClick={() => navigate('/form/create')}>
-                    <BsFileEarmarkPlus size="1.4rem"/> Add
-                </IconContainer>
+                <p>Result: {forms.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())).length}</p>
+                <Button 
+                    onClick={() => navigate('/form/create')} 
+                    padding="0.2rem 0.4rem" 
+                    gap="0.4rem"
+                    variant="border"
+                >
+                    <BsFileEarmarkPlus size="1rem"/> Add
+                </Button>
             </AddNewContainer>
             <CardList>
-                { loading ? <ListLoader/> :
-                    forms.map(form => 
-                        <Card key={form.form_id} name={form.name} onClick={() => handle(form.form_id)}/>
+                { (loading)  ? <ProgressLoader percent={percent}/> :
+                    forms.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())).map(form => 
+                        <Card 
+                            key={form.id} 
+                            name={form.name}
+                            createdBy={users.find(u => u.id === form.createdBy)}
+                            onClick={() => handle(form.id)}
+                            active={form.id == location[location.length - 1]}
+                        />
                     )
                 }
             </CardList>

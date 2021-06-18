@@ -25,6 +25,8 @@ const reducer = (state, action) => {
             }
         case 'RESET':
             return initState
+        default:
+            return state
     }
 }
 
@@ -54,11 +56,11 @@ const useDocument = () => {
     const [error, dispatchError] = useReducer(errorReducer, initError)
 
     const removeAttachment = (type = "approval", id) => {
-        // if (type === "approval")
-        //     setApprovalAttachment(approvalAttachment.filter(attachment => attachment.id !== id))
-        // else if (type === "reference")
-        //     setReferenceAttachment(referenceAttachment.filter(attachment => attachment.id !== id))
-        console.log("What")
+        if (type === "approval")
+            set("approvalAttachments", approvalAttachments.filter(attachment => attachment.id !== id))
+        else if (type === "reference")
+            set("referenceAttachments", referenceAttachments.filter(attachment => attachment.id !== id))
+
     }
     const setError = (field, value) => dispatchError({type: "SET", payload: {field, value}})
 

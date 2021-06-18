@@ -1,13 +1,41 @@
 /* eslint-disable no-unused-vars */
 import { navigate } from "@reach/router"
-import axios from "axios"
-import {useState} from "react"
+import { useStoreActions } from "easy-peasy"
+import {useEffect, useRef, useState} from "react"
 import {v4 as uuid} from 'uuid'
-const useFormData = () => {
-    const [formName, setFormName] = useState("")
-    const [file, setFile] = useState()
-    const [fieldData, setFieldData] = useState([])
+import { getFormDetail, postForm, updateForm } from "../../../api/form"
+import useLoading from "../../../hooks/useLoading"
+
+const initData = {
+    name: "",
+    fields: [],
+    file: null
+}
+
+const useFormData = (id = null) => {
+
+    const getForms = useStoreActions(s => s.getForms)
+    const [formName, setFormName] = useState(initData.name)
+    const [file, setFile] = useState(initData.file)
+    const [fieldData, setFieldData] = useState(initData.fields)
     const [addingTag, setAddingTag] = useState(null)
+    const {loading, percent, setPercent, setLoading, reset} = useLoading(!!id)
+    const formId = useRef()
+    useEffect(() => {
+        if (id) {
+            const fetchDetail = async () => {
+                const formDetail = await getFormDetail(id, (v) => setPercent(v)).catch(err => {setLoading(false);return;})
+                setPercent(100)
+                if (formDetail) {
+                    setFormName(formDetail.name)
+                    setFile(formDetail.file)
+                    setFieldData(formDetail.fields)
+                    formId.current = formDetail.id
+                }
+            }
+            fetchDetail()
+        }
+    }, [])
 
     const addNewField = (pos) => {
         if (addingTag === "field") {
@@ -26,6 +54,7 @@ const useFormData = () => {
 
     const deleteField = (fieldId) => {
         setFieldData([...fieldData.filter(field => field.id !== fieldId)])
+        
     }
 
     const updateField = (fieldId, fieldProp, data) => {
@@ -63,27 +92,10 @@ const useFormData = () => {
 
     const saveForm = async () => {
         //post file
-        const data = new FormData()
-        data.append('file', file, file.name)
-        const {data: {file_id}} = await axios.post('/api/v1/files', data)
-        console.log("Post file OK, file id", file_id)
-        //post form name
-        let {data: {form_id}} = await axios.post('/api/v1/forms', {name: formName, fileId: file_id}) 
-        console.log("Post form name OK, form_id", form_id)
-        //post default fields
-        let res = (await axios.post(`/api/v1/forms/${form_id}/default-fields`, {
-            defaultFields: fieldData.map(field => ({
-                field: field.name,
-                type: "Field",
-                value: field.content,
-                x: field.position.X,
-                y: field.position.Y,
-                width: field.size.width,
-                height: field.size.height,
-                required: field.required
-            }))
-        })).data
-        console.log("Post fields OK", res)
+        reset()
+        if (id) await updateForm(id, formName, fieldData, (v) => setPercent(v))
+        else await postForm(formName, file, fieldData, (v) => setPercent(v))
+        getForms()
         navigate('/form')
     }
     
@@ -91,11 +103,11 @@ const useFormData = () => {
         // Field data
         fieldData, 
         // Some basic state
-        formName, changeFormName, file, addingTag, setAddingTag,
+        formName, changeFormName, file, addingTag, setAddingTag, loading,
         //Helper function
         addNewField, changeContent, moveField, resizeField, changeName, deleteField, toggleRequire, initForm,
 
-        saveForm
+        saveForm, percent, setPercent
         //
     }
 }
