@@ -3,8 +3,8 @@ import React from 'react';
 import styled from 'styled-components'
 import RequestCard from './RequestCard';
 import ListToolbar from './ListToolbar';
-import {getFader} from '../../../utils/color'
-import sampleData from '../sampleData'
+import {getFader} from '../../../utils/color';
+import { useGetRequests } from '../../../api/request';
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -54,6 +54,7 @@ const CardList = styled.div`
 `
 
 function List() {
+  const [requests] = useGetRequests();
     return (
         <StyleListWrapper>
             <ListToolbar/>
@@ -64,15 +65,15 @@ function List() {
                 </TagContainer>
             </TagBar>
             <CardList>
-                {sampleData.map((task) => (
+                {requests.map((task) => (
                     <RequestCard
-                        key={task.id}
-                        id={task.id}
+                        key={task.approval_request_id}
+                        id={task.approval_request_id}
                         title={task.title}
                         status={task.status}
                         type={task.type}
                         deadline={task.deadline}
-                        createdBy={task.create_by}
+                        createdBy={task.author}
                         page={"search"}
                     />
                 ))}

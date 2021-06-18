@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Tab from "../../Tab";
 import TabPane from "../../TabPane";
 import Content from "./Content";
 import Header from "./Header";
 import ApprovalFlow from "./ApprovalFlow";
 import ApprovalInfo from "./ApprovalInfo";
-import sampleData from '../sampleData'
 import styled from "styled-components";
+import { useGetRequestById } from "../../../api/request";
 
 const Container = styled.div`
 	height: 100%;
@@ -16,14 +16,8 @@ const Container = styled.div`
 `
 
 const  DisplayContent = ({id}) => {
-	const [request, setRequest] = useState()
-	const [loading, setLoading] = useState(true)
+	const [loading ,request] = useGetRequestById(id);
 
-	useEffect(() => {
-		setLoading(true)
-		setRequest(sampleData.find(data => data.id == id))
-		setLoading(false)
-	})
     return (
 		loading ? <div>Loading</div> :
 		<Container className="container">
