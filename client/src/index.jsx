@@ -6,7 +6,7 @@ import './index.css';
 import App from './App';
 import config from 'msalConfig';
 
-const msalInstance = new msal.PublicClientApplication(config);
+export const msalInstance = new msal.PublicClientApplication(config);
 
 ReactDOM.render(
   <React.StrictMode>
