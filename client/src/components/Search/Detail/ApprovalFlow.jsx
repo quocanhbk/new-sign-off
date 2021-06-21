@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
@@ -81,8 +82,7 @@ const Circle = styled.div`
     z-index: 1;
   }
 `;
-
-function ApprovalFlow() {
+function ApprovalFlow({approvers, creator, observators}) {
   const [position1, setPosition1] = useState(0);
   const [position2, setPosition2] = useState(0);
   const [position3, setPosition3] = useState(0);
@@ -107,6 +107,8 @@ function ApprovalFlow() {
     setFlowHeight(position3 - position1)
     setFlowLeft(dotRect.left - contentRect.left + dotRect.width/2)
   });
+  const flowAdvisors = approvers.filter(approver => approver.type === 'advisor');
+  const flowApprovers = approvers.filter(approver => approver.type === 'approver');
   return (
     <Approval>
       <ApprovalContent className="content" ref={contentRef}>
@@ -118,20 +120,20 @@ function ApprovalFlow() {
         {/* end draw flow */}
         <JoinGroup>
           <h4>Submitter</h4>
-          <FlowTag reff={submitterRef} data={data.submitter}/>
+          <FlowTag reff={submitterRef} data={creator} userInfo={creator}/>
         </JoinGroup>
         <JoinGroup>
-          <h4>Advisor (2)</h4>
-          {data.advisor.map((advisor, index) => <FlowTag key={advisor.id} reff={index === 0 ? advisorRef : null} data={advisor}/>)}
+          <h4>Advisor ({flowAdvisors.length})</h4>
+          {flowAdvisors.map((advisor, index) => <FlowTag key={advisor.approver_id} reff={index === 0 ? advisorRef : null} userInfo={advisor.user_info}/>)}
         </JoinGroup>
         <JoinGroup>
-          <h4>Approver (1)</h4>
-          {data.approver.map((approver, index) => <FlowTag key={approver.id} reff={index === 0 ? approverRef : null} data={approver}/>)}
+          <h4>Approver ({flowApprovers.length})</h4>
+          {flowApprovers.map((approver, index) => <FlowTag key={approver.approver_id} reff={index === 0 ? approverRef : null} userInfo={approver.user_info}/>)}
         </JoinGroup>
       </ApprovalContent>
       <JoinGroup>
-        <h4>Observator (1)</h4>
-        {data.observator.map((observator, index) => <FlowTag key={observator.id} data={observator}/>)}
+        <h4>Observator ({observators.length})</h4>
+        {observators.map((observator) => <FlowTag key={observator.user_id} userInfo={observator}/>)}
       </JoinGroup>
     </Approval>
   );

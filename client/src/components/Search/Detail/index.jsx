@@ -27,7 +27,7 @@ const  DisplayContent = ({id}) => {
 				<Content request={request} />
 				</TabPane>
 				<TabPane name="Approval Flow" key={2} value={2}>
-				<ApprovalFlow />
+				<ApprovalFlow approvers={request.approvers} creator={request.created_by} observators={request.observators}/>
 				</TabPane>
 				<TabPane name="Info" key={3} value={3}>
 				<ApprovalInfo />
