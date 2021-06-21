@@ -24,7 +24,7 @@ const  DisplayContent = ({id}) => {
 			<Header title={request.title} status={request.status} type={request.type}/>
 			<Tab fullHeight className="tab-container">
 				<TabPane name="Content" key={1} value={1}>
-				<Content />
+				<Content request={request} />
 				</TabPane>
 				<TabPane name="Approval Flow" key={2} value={2}>
 				<ApprovalFlow />
