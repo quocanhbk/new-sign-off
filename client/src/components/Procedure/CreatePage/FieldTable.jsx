@@ -26,7 +26,7 @@ const FieldTable = ({fields}) => {
         <Table>
             {fields.map(field => 
                 <Row key={field.name}>
-                    <Cell className="field-name" width="30%">{field.name}</Cell>
+                    <Cell className="field-name" width="40%">{field.name}</Cell>
                     <Cell className="field-value">{field.defaultValue}</Cell>
                 </Row>
             )}

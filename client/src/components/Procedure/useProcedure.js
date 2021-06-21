@@ -1,15 +1,17 @@
-/* eslint-disable no-unused-vars */
-import { useReducer } from 'react'
+import { useEffect, useReducer } from 'react'
 import {v4} from 'uuid'
-import { postProcedure } from '../../api/procedure'
-import {getFormDetail} from '../../api/form'
+import { getProcedureDetail, getProcedures, postProcedure } from 'api/procedure'
+import {getFormDetail} from 'api/form'
+import {navigate} from '@reach/router'
+import useLoading from 'hooks/useLoading'
+
 const initState = {
     title: "",
     description:"",
     advisors: [],
     approvers: [],
     observators: [],
-    checkList: []
+    checklist: []
 }
 
 const reducer = (state, action) => {
@@ -19,6 +21,8 @@ const reducer = (state, action) => {
                 ...state,
                 [action.payload.field]: action.payload.value
             }
+        case 'INIT':
+            return action.payload
         default:
             return state
     }
@@ -35,10 +39,25 @@ const errorReducer = (state, action) => {
             }
     }
 }
-const useProcedure = () => {
-    const [{title, description, advisors, approvers, observators, checkList}, dispatch] = useReducer(reducer, initState)
+const useProcedure = (id) => {
+    const [{title, description, advisors, approvers, observators, checklist}, dispatch] = useReducer(reducer, initState)
     const [error, dispatchError] = useReducer(errorReducer, initError)
-    
+    const {loading, percent, setPercent, setLoading, reset} = useLoading(!!id)
+
+    useEffect(() => {
+        if (id) {
+            const fetchDetail = async () => {
+                const procedure = await getProcedureDetail(id, (v) => setPercent(v)).catch(() => {setLoading(false);return;})
+                setPercent(100)
+                if (procedure) {
+                    dispatch({type: "INIT", payload: procedure})
+                }
+            }
+            fetchDetail()
+        }
+    }, [id])
+
+
     const setError = (field, value) => dispatchError({type: "SET", payload: {field, value}})
     const set = (field, value) => {
         dispatch({type: "SET", payload: {field, value}})
@@ -60,13 +79,15 @@ const useProcedure = () => {
         return submittable
     }
 
-    const submitProcedure = () => {
-        // postProcedure(title, description, advisors, approvers, observators)
-        console.log(checkList)
+    const submitProcedure = async () => {
+        reset()
+        await postProcedure({title, description, advisors, approvers, observators, checklist}, (p) => setPercent(p))
+        getProcedures()
+        navigate('/procedure')        
     }
 
     const addCheckItem = () => {
-        set("checkList", [...checkList, {
+        set("checklist", [...checklist, {
             id: v4().slice(0, 8),
             name: "",
             defaultForms: [],
@@ -74,55 +95,55 @@ const useProcedure = () => {
         }])
     }
     const removeCheckItem = (checkItemId) => {
-        set("checkList", checkList.filter(item => item.id !== checkItemId))
+        set("checklist", checklist.filter(item => item.id !== checkItemId))
     }
     const setCheckItemName = (checkItemId, name) => {
-        let checkitemIndex = checkList.map(_ => _.id).indexOf(checkItemId)
-		set("checkList", [
-			...checkList.slice(0, checkitemIndex),
-			{...checkList[checkitemIndex], name},
-			...checkList.slice(checkitemIndex + 1, checkList.length)
+        let checkitemIndex = checklist.map(_ => _.id).indexOf(checkItemId)
+		set("checklist", [
+			...checklist.slice(0, checkitemIndex),
+			{...checklist[checkitemIndex], name},
+			...checklist.slice(checkitemIndex + 1, checklist.length)
 		])
     }
     const toggleAdding = (checkItemId) => {
-		let checkitemIndex = checkList.map(_ => _.id).indexOf(checkItemId)
-		set("checkList", [
-			...checkList.slice(0, checkitemIndex),
-			{...checkList[checkitemIndex], adding: !checkList[checkitemIndex].adding},
-			...checkList.slice(checkitemIndex + 1, checkList.length)
+		let checkitemIndex = checklist.map(_ => _.id).indexOf(checkItemId)
+		set("checklist", [
+			...checklist.slice(0, checkitemIndex),
+			{...checklist[checkitemIndex], adding: !checklist[checkitemIndex].adding},
+			...checklist.slice(checkitemIndex + 1, checklist.length)
 		])
 	}
 
     const addForm = async (checkItemId, formId) => {
-        let checkItemIndex = checkList.map(_ => _.id).indexOf(checkItemId)
-		let checkItemObj = checkList[checkItemIndex]
-        let formDetail = await getFormDetail(formId)
+        let checkItemIndex = checklist.map(_ => _.id).indexOf(checkItemId)
+		let checkItemObj = checklist[checkItemIndex]
+        let formDetail = await getFormDetail(formId, () => {}, false)
 
-		set("checkList", [
-			...checkList.slice(0, checkItemIndex),
+		set("checklist", [
+			...checklist.slice(0, checkItemIndex),
 			{...checkItemObj, defaultForms: [...checkItemObj.defaultForms, formDetail], adding: false},
-			...checkList.slice(checkItemIndex + 1, checkList.length)
+			...checklist.slice(checkItemIndex + 1, checklist.length)
 		])
     }
 
     const removeForm = (checkItemId, formId) => {
-        let checkItemIndex = checkList.map(_ => _.id).indexOf(checkItemId)
-        let checkItemObj = checkList[checkItemIndex]
-        set("checkList", [
-            ...checkList.slice(0, checkItemIndex),
+        let checkItemIndex = checklist.map(_ => _.id).indexOf(checkItemId)
+        let checkItemObj = checklist[checkItemIndex]
+        set("checklist", [
+            ...checklist.slice(0, checkItemIndex),
             {...checkItemObj, defaultForms: checkItemObj.defaultForms.filter(form => form.id !== formId)},
-            ...checkList.slice(checkItemIndex + 1, checkList.length)
+            ...checklist.slice(checkItemIndex + 1, checklist.length)
         ])
     }
 
-    const checkListUtil = {
+    const checklistUtil = {
         addCheckItem, removeCheckItem, setCheckItemName,
         toggleAdding, addForm, removeForm
     }
 
     return {
-        title, description, advisors, approvers, observators, checkList, checkListUtil, set,
-        error, isSubmittable, submitProcedure
+        title, description, advisors, approvers, observators, checklist, checklistUtil, set,
+        error, isSubmittable, submitProcedure, percent, loading
     }
 }
 

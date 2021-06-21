@@ -4,7 +4,7 @@ import NoFile from "./NoFile";
 import DisplayContent from "./DisplayContent";
 import List from "./List";
 import {Router} from '@reach/router'
-import { getFader } from "../../../utils/color";
+import { getFader } from "utils/color";
 
 const Container = styled.div`
     display: flex;

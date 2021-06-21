@@ -2,11 +2,10 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { getFader } from "../../../utils/color";
+import { getFader } from "utils/color";
 import {BsTrash, BsFileEarmarkText, BsCheckBox, BsPlusCircle} from 'react-icons/bs'
 import FieldTable from "./FieldTable";
-import ControlledCombox from "../../ControlledCombox";
-import {dynamicFormList} from '../sampleData'
+import ControlledCombox from "components/ControlledCombox";
 import { useStoreState } from "easy-peasy";
 const TableWrapper = styled.div`
 
@@ -82,13 +81,13 @@ const ComboxWrapper = styled.div`
 	overflow: hidden;
 	animation: ${stretchOut} 0.25s ease-in-out 0s 1 forwards normal;
 `
-const AttachmentCheckList = ({checkList, util}) => {
+const AttachmentCheckList = ({checklist, util}) => {
 	const forms = useStoreState(s => s.forms)	
 	return (
 		<TableWrapper>
 			<Table>
 				<tbody>
-					{checkList.map(item => 
+					{checklist.map(item => 
 						<React.Fragment key={item.id}>
 							<CheckItemRow>
 								<td colSpan={3} className="check-item-name">

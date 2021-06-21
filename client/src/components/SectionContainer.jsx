@@ -5,7 +5,7 @@ import styled, { css } from "styled-components";
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
 `
 const Headline = styled.h3`
     font-weight: 500;

@@ -3,7 +3,7 @@
 /* eslint-disable no-unused-vars */
 import React, {useState} from 'react'
 import {PDFDocument, StandardFonts, rgb} from 'pdf-lib'
-import Button from '../../Button';
+import Button from 'components/Button'
 import FieldContentInput from './FieldContentInput'
 import DocDisplay from './DocDisplay'
 import {BsChevronLeft} from 'react-icons/bs'
@@ -11,7 +11,7 @@ import { navigate } from '@reach/router';
 import {ButtonContainer, Container, Wrapper, StyleTitle, Toolbar, ToolbarContainer, ToolbarElement, NoField, FormNameInput} from './IndexStyledComponents'
 import useFormData from './useFormData';
 import FailedFile from '../FailedFile'
-import ProgressLoader from '../../ProgressLoader';
+import ProgressLoader from 'components/ProgressLoader'
 
 
 const CreatePage = ({id}) => {
@@ -66,7 +66,7 @@ const CreatePage = ({id}) => {
                 <div onClick={() => navigate('/form')}>
                     <BsChevronLeft/>
                 </div>
-                <p>{id ? "Edit Form" : "Create Form"}</p>
+                <p>{id ? "EDIT FORM" : "CREATE FORM"}</p>
             </StyleTitle>
             <Wrapper>
                 {loading ? <ProgressLoader percent={percent}/> :

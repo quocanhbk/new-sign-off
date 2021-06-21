@@ -1,17 +1,19 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
-import { getFader } from "../../../utils/color";
+import { getFader } from "utils/color";
 import Participants from "./Participants";
-import Snackbar from "../../Snackbar";
+import Snackbar from "components/Snackbar";
 import PrimaryInfo from "./PrimaryInfo";
 import Header from "./Header";
-import SectionContainer from "../../SectionContainer";
+import SectionContainer from "components/SectionContainer";
 import useProcedure from "../useProcedure";
 import AttachmentChecklist from "./AttachmentChecklist";
 import { BsPlus, BsFillExclamationTriangleFill } from "react-icons/bs";
-import Button from "../../Button";
+import Button from "components/Button";
+import ProgressLoader from "components/ProgressLoader";
 
 const StyleContainer = styled.div`
 	flex: 10;
@@ -19,6 +21,7 @@ const StyleContainer = styled.div`
 	flex-direction: column;
 	border-left: 1px solid ${(props) => props.theme.color.border.primary};
 	height: 100%;
+	position: relative;
 `;
 const ContainerItems = styled.div`
 	flex: 1;
@@ -66,34 +69,12 @@ const AddCheckListWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	padding: 0.5rem 0 2rem 0;
-	
-	& button {
-		border: 1px solid ${props => props.theme.color.border.primary};
-		border-radius: 0.5rem;
-		padding: 0.5rem;
-		background: transparent;
-		color: ${props => props.theme.color.fill.primary};
-		font-weight: 600;
-		font-size: 1rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.5rem;
-		cursor: pointer;
-		&:hover {
-			background: ${props => getFader(props.theme.color.border.primary, 0.5)}
-		}
-		&:active {
-			background: ${props => props.theme.color.border.primary};
-		}
-	}
 `
-const Detail = () => {
-
+const Detail = ({id}) => {
 	const {
-		title, description, advisors, approvers, observators, checkList, checkListUtil, set,
-		error, isSubmittable, submitProcedure
-	} = useProcedure()
+		title, description, advisors, approvers, observators, checklist, checklistUtil, set,
+		error, isSubmittable, submitProcedure, loading, percent
+	} = useProcedure(id)
 
 	const [errorNotify, setErrorNotify] = useState(false)
 	
@@ -104,7 +85,8 @@ const Detail = () => {
 
 	return (
 		<StyleContainer>
-			<Header onSubmit={handleSubmit}/>
+			{loading && <ProgressLoader percent={percent}/>}
+			<Header onSubmit={handleSubmit} id={id}/>
 			<ContainerItems>
 				<Column>
 					{/* SECTION PRIMARY INFO */}
@@ -130,9 +112,9 @@ const Detail = () => {
 				<Column borderLeft>
 					{/* SECTION CHECKLIST ATTACHMENT */}
 					<SectionContainer headline="Attachment Checklist" haveBorder>
-						<AttachmentChecklist checkList={checkList} util={checkListUtil}/>
+						<AttachmentChecklist checklist={checklist} util={checklistUtil}/>
 						<AddCheckListWrapper>
-							<Button onClick={() => checkListUtil.addCheckItem()}>
+							<Button onClick={() => checklistUtil.addCheckItem()} variant="outline" normalBorder radius="0.2rem">
 								<BsPlus size="1.2rem"/> Add Check Item
 							</Button>
 						</AddCheckListWrapper>

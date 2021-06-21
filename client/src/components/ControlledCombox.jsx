@@ -125,7 +125,7 @@ const StyledItem = styled.div`
     color: ${props => props.theme.color.text.primary};
     animation: ${opa} 0.15s linear 0s 1 normal forwards;
     border-radius: 2px;
-    padding: 0px 0px 0px 8px;
+    padding: 0px 8px 0px 8px;
     margin-right: 6px;
     margin-top: 4px;
     font-size: ${props=> props.theme.textSize.medium};
@@ -140,6 +140,7 @@ const XContainer = styled.div`
     margin-left: 6px;
     padding: 0px;
     border-left: 1px solid ${props => props.theme.color.border.primary};
+    margin-right: -8px;
 `;
 const SearchBarContainer = styled.div`
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
@@ -177,7 +178,7 @@ const SelectionContainer = styled.div`
         }
     }
 `
-function ControlledCombox({selection, value, onSelect, multiple, searchable, displayField, keyField}) {
+function ControlledCombox({selection, value, onSelect, multiple, searchable, displayField, keyField, readOnly}) {
     const [isOpen, setIsOpen] = useState(false);
     const comboxRef = useClickOutside(() => setIsOpen(false))
     const [seachText, setSeachText] = useState("")
@@ -219,7 +220,7 @@ function ControlledCombox({selection, value, onSelect, multiple, searchable, dis
     }
 
     const handleOpen = (state) => {
-        setIsOpen(state)
+        if (!readOnly) setIsOpen(state)
     }
 
     const renderItems = () => {
@@ -227,17 +228,17 @@ function ControlledCombox({selection, value, onSelect, multiple, searchable, dis
             value.map(item => 
                 <StyledItem multiple={multiple} key={item.id} className={removingItem === item.id ? "item-out" : ""}>
                     {item[displayField]}
-                    <XContainer onClick={() => removeItem(item.id)}>
+                    {!readOnly && <XContainer onClick={() => removeItem(item.id)}>
                         <IconX/>
-                    </XContainer>
+                    </XContainer>}
                 </StyledItem>
             ) : 
             (value &&
                 <StyledItem multiple={multiple} key={value.id} className={removingItem === value.id ? "item-out" : ""}>
                     {value[displayField]}
-                    <XContainer onClick={() => removeItem(value.id)}>
+                    {!readOnly && <XContainer onClick={() => removeItem(value.id)}>
                         <IconX/>
-                    </XContainer>
+                    </XContainer>}
                 </StyledItem>     
             )
     }

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import {getFader} from '../../utils/color'
 import { useStoreActions } from 'easy-peasy'
+import { getFader } from 'utils/color'
 
 const StyleContainer = styled.div`
     display:flex;

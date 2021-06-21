@@ -2,11 +2,11 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { getFader } from "../../../../utils/color";
+import { getFader } from "utils/color";
 import {BsTrash, BsFileEarmarkText, BsCheckBox, BsPlusCircle} from 'react-icons/bs'
 import FieldTable from "./FieldTable";
-import ControlledCombox from "../../../ControlledCombox";
-import {dynamicFormList} from '../../sampleData'
+import ControlledCombox from "components/ControlledCombox";
+import { useStoreState } from "easy-peasy";
 const TableWrapper = styled.div`
 
 `;
@@ -21,7 +21,7 @@ const AttachmentName = styled.td`
 `
 const AttachmentFields = styled.td`
 	padding: 0.5rem;
-	width: 70%;
+	width: 50%;
 `
 const AttachmentActions = styled.td`
 	vertical-align: top;
@@ -53,7 +53,7 @@ const NameContainer = styled.div`
 	padding-left: 0.5rem;
 `
 const CheckItemRow = styled.tr`
-	background: ${props => getFader(props.theme.color.border.primary, 0.5)};
+	background: ${props => getFader(props.theme.color.border.primary, 0.2)};
 	border: 1px solid ${props => props.theme.color.border.primary};
 	& .add-form {
 		width: 5%;
@@ -61,7 +61,7 @@ const CheckItemRow = styled.tr`
 `
 const CheckItemName = styled.div`
 	font-weight: 600;
-	padding: 0.2rem 0.5rem;
+	padding: 0.5rem 0 0.5rem 0rem;
 	display: flex;
 	& input {
 		border: none;
@@ -81,12 +81,13 @@ const ComboxWrapper = styled.div`
 	overflow: hidden;
 	animation: ${stretchOut} 0.25s ease-in-out 0s 1 forwards normal;
 `
-const AttachmentCheckList = ({checkList, util}) => {
+const AttachmentCheckList = ({checklist, util, readOnly}) => {
+	const forms = useStoreState(s => s.forms)	
 	return (
 		<TableWrapper>
 			<Table>
 				<tbody>
-					{checkList.map(item => 
+					{checklist.map(item => 
 						<React.Fragment key={item.id}>
 							<CheckItemRow>
 								<td colSpan={3} className="check-item-name">
@@ -98,13 +99,18 @@ const AttachmentCheckList = ({checkList, util}) => {
 											value={item.name} 
 											onChange={e => util.setCheckItemName(item.id, e.target.value)}
 											placeholder={"Check item name ..."}
+											readOnly={readOnly}
 										/>
-										<IconContainer color="info" onClick={() => util.toggleAdding(item.id)}>
-											<BsPlusCircle size="1rem"/>
-										</IconContainer>
-										<IconContainer color="danger" onClick={() => util.removeCheckItem(item.id)}>
-											<BsTrash/>
-										</IconContainer>
+										{!readOnly && 
+											<>
+												<IconContainer color="info" onClick={() => util.toggleAdding(item.id)}>
+													<BsPlusCircle size="1rem"/>
+												</IconContainer>
+												<IconContainer color="danger" onClick={() => util.removeCheckItem(item.id)}>
+													<BsTrash/>
+												</IconContainer>
+											</>
+										}
 									</CheckItemName>
 								</td>
 							</CheckItemRow>
@@ -113,31 +119,29 @@ const AttachmentCheckList = ({checkList, util}) => {
 								<td colSpan={3} className="add-form-cell">
 									<ComboxWrapper>
 										<ControlledCombox 
-											selection={dynamicFormList} 
+											selection={forms} 
 											displayField={"name"}
-											onSelect={newValue => util.addForm(item.id, newValue)}
+											onSelect={newValue => util.addForm(item.id, newValue.id)}
 										/>
 									</ComboxWrapper>
 								</td>
 							</AddFormRow>}
 							{item.defaultForms.map(form =>
-								<React.Fragment key={form.id}>
-									<AttachmentRow>
-										<AttachmentName>
-											<NameContainer>
-												<BsFileEarmarkText size="1rem"/>{form.name}
-											</NameContainer>
-										</AttachmentName>
-										<AttachmentFields>
-											<FieldTable fields={form.fields}/>
-										</AttachmentFields>
-										<AttachmentActions >
-											<IconContainer color="danger" onClick={() => util.removeForm(item.id, form.id)}>
-												<BsTrash size="1rem"/>
-											</IconContainer>	
-										</AttachmentActions>
-									</AttachmentRow>
-								</React.Fragment>
+								<AttachmentRow key={form.id}>
+									<AttachmentName>
+										<NameContainer>
+											<BsFileEarmarkText size="1rem"/>{form.name}
+										</NameContainer>
+									</AttachmentName>
+									<AttachmentFields>
+										<FieldTable fields={form.fields}/>
+									</AttachmentFields>
+									<AttachmentActions >
+										<IconContainer color="danger" onClick={() => util.removeForm(item.id, form.id)}>
+											<BsTrash size="1rem"/>
+										</IconContainer>	
+									</AttachmentActions>
+								</AttachmentRow>
 							)}
 						</React.Fragment>	
 					)}

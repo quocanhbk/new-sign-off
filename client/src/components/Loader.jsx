@@ -1,7 +1,14 @@
 /* eslint-disable react/prop-types */
-import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import React, { useEffect, useState } from 'react'
+import styled, { css, keyframes } from 'styled-components'
 import {useStoreState} from 'easy-peasy'
+
+const fadeOut = keyframes`
+    to {
+        transform: translateY(20px); 
+        opacity: 0;
+    }
+`
 
 const Container = styled.div`
     position: absolute;
@@ -22,6 +29,9 @@ const Logo = styled.div`
     height: 8rem;
     padding: 1em;
     position: relative;
+    ${props => props.isOut && css`
+        animation: ${fadeOut} 0.2s ease-in 0s 1 forwards normal;
+    `}
 `
 const spin = keyframes`
     from {transform: rotate(0deg)}
@@ -45,6 +55,9 @@ const ProgressContainer = styled.div`
     border-radius: 99px;
     position: relative;
     overflow: hidden;
+    ${props => props.isOut && css`
+        animation: ${fadeOut} 0.2s ease-in 0s 1 forwards normal;
+    `}
 `
 const ProgressBar = styled.div`
     position: absolute;
@@ -53,16 +66,26 @@ const ProgressBar = styled.div`
     background: ${props => props.theme.color.fill.primary};
     border-radius: 99px;
     transition: all 0.25s ease-in-out;
+    
 `
 const ProgressLoader = ({percent}) => {
     const theme = useStoreState(_ => _.theme)
+    const [isOut, setIsOut] = useState(false)
+
+    useEffect(() => {
+        if (percent === 100) {
+            setTimeout(() => setIsOut(true), 200)
+            //setTimeout(() => setIsOut(false), 300)
+        }
+    }, [percent])
+
     return (
-        <Container>
-            <Logo>
+        <Container isOut={isOut}>
+            <Logo isOut={isOut}>
                 <img src={theme ? '/iconNoTextDark.svg' : '/iconNoTextLight.svg'}/>
                 <Spinner/>
             </Logo>
-            <ProgressContainer>
+            <ProgressContainer isOut={isOut}>
                 <ProgressBar percent={percent}/>
             </ProgressContainer>
         </Container>

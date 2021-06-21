@@ -1,106 +1,143 @@
-/* eslint-disable no-constant-condition */
-/* eslint-disable no-unused-vars */
-import React from "react";
+/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getFader } from "../../../../utils/color";
-import Participants from "./Participants";
-import PrimaryInfo from "./PrimaryInfo";
-import Header from "./Header";
-import SectionContainer from "../../../SectionContainer";
-import useProcedure from "../../useProcedure";
-import AttachmentChecklist from "./AttachmentChecklist";
-import { BsPlus } from "react-icons/bs";
+import { deleteProcedure, getProcedureDetail } from "api/procedure";
+import useLoader from "hooks/useLoader";
+import ContentHeader from "../../../Form/ViewPage/ContentHeader";
+import SectionContainer from 'components/SectionContainer'
+import FormControl from "components/FormControl";
+import { useStoreState } from "easy-peasy";
+import ControlledCombox from "components/ControlledCombox";
+import { navigate } from "@reach/router";
+import Snackbar from "components/Snackbar";
+import Placeholder from "components/Placeholder";
+import { BsFillExclamationTriangleFill } from "react-icons/bs";
+import Checklist from './Checklist'
 
-const StyleContainer = styled.div`
-	flex: 10;
+const Container = styled.div`
+	position: relative;
+	height: 100%;
 	display: flex;
 	flex-direction: column;
-	border-left: 1px solid ${(props) => props.theme.color.border.primary};
-`;
-const ContainerItems = styled.div`
+`
+const ParticipantsContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+`
+const Body = styled.div`
 	flex: 1;
+	padding: 1rem;
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
-	padding: 1rem;
-	overflow: auto;
-	position: relative;
-
-	::-webkit-scrollbar {
-		width: 0.5rem;
-	}
-	::-webkit-scrollbar-track {
-		background: transparent;
-	}
-	::-webkit-scrollbar-thumb {
-		background: ${(props) => getFader(props.theme.color.fill.secondary, 0.5)};
-		border-radius: 99px;
-	}
-	::-webkit-scrollbar-thumb:hover {
-		background: ${(props) => props.theme.color.fill.secondary};
-	}
-`;
-const AddCheckListWrapper = styled.div`
-	padding: 0;
-	display: flex;
-	flex-direction: column;
-	padding: 0.5rem 0 2rem 0;
-	
-	& button {
-		border: 1px solid ${props => props.theme.color.border.primary};
-		border-radius: 0.5rem;
-		padding: 0.5rem;
-		background: transparent;
-		color: ${props => props.theme.color.fill.primary};
-		font-weight: 600;
-		font-size: 1rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.5rem;
-		cursor: pointer;
-		&:hover {
-			background: ${props => getFader(props.theme.color.border.primary, 0.5)}
-		}
-		&:active {
-			background: ${props => props.theme.color.border.primary};
-		}
-	}
 `
-const Detail = () => {
-
-	const {
-		title, setTitle, description, setDescription,
-		advisors, setAdvisors, approvers, setApprovers, observators, setObservators,
-		checkList, checkListUtil
-	} = useProcedure()
+const TagContainer = styled.div`
+    display: flex;
+    height: 100%;
+    align-items: center;
+    gap: 0.5rem;
+    & img {
+        height: 1.2rem;
+        border-radius: 99px;
+    }
+`
+const Notify = styled.div`
+    padding: 1rem;
+    background: ${props => props.theme.color.fill.danger};
+    color: ${props => props.theme.color.background.primary};
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+`
+const Tag = ({email, name}) => {
+    return (
+        <TagContainer>
+            <img src={"/api/v1/avatar/" + email} alt="" loading="lazy"/>
+            {name}
+        </TagContainer>
+    )
+}
+const Detail = ({id}) => {
+	const [procedure, setProcedures] = useState()
+	const [notify, setNotify] = useState(false)
+	const users = useStoreState(s => s.users).map(s => ({...s, display: <Tag email={s.email} name={s.name}/>}))
+	const onDeleteClick = async () => {
+		let message = await deleteProcedure(id)
+		if (message === "delete-success")
+			navigate('/procedure')
+		else setNotify(true)
+	}
+	const onEditClick = () => {
+		navigate('/procedure/create/' + id)
+	}
+	const render = () => 
+		procedure &&
+		<>
+			<ContentHeader title={procedure.title} onDeleteClick={onDeleteClick} onEditClick={onEditClick}/>
+			<Body>
+				<SectionContainer headline={"Description"}>
+					{procedure.description}
+				</SectionContainer>
+				<SectionContainer headline="Participants">
+					<ParticipantsContainer>
+					<FormControl headline={"Advisor List"} readOnly>
+						<ControlledCombox
+							multiple
+							selection={users}
+							value={users.filter(u => procedure.advisors.includes(u.id))}
+							displayField={"display"}
+							readOnly
+						/>
+					</FormControl>
+					<FormControl headline={"Approver List"} readOnly>
+						<ControlledCombox
+							multiple
+							selection={users}
+							value={users.filter(u => procedure.approvers.includes(u.id))}
+							displayField={"display"}
+							readOnly
+						/>
+					</FormControl>
+					<FormControl headline={"Observator List"} readOnly>
+						<ControlledCombox
+							multiple
+							selection={users}
+							value={users.filter(u => procedure.observators.includes(u.id))}
+							displayField={"display"}
+							readOnly
+						/>
+					</FormControl>
+				</ParticipantsContainer>
+				</SectionContainer>
+				<SectionContainer headline="Checklist">
+					<Checklist checklist={procedure.checklist} readOnly={true}/>
+				</SectionContainer>
+			</Body>
+			<Snackbar visible={notify} onClose={() => setNotify(false)} timeOut={2000}>
+				<Notify>
+					<BsFillExclamationTriangleFill size="1.2rem"/>
+					<p>Procedure is currently in use!</p>
+				</Notify>
+			</Snackbar>
+		</>
+	const {LoadingComponent, setPercent, setNotFound, reset} = useLoader(true, render(), <Placeholder type="NOT_FOUND" />)
+	useEffect(() => {
+		const fetchForm = async () => {
+			setProcedures(null)
+			setNotFound(false)
+			reset()
+			const proDetail = await getProcedureDetail(id, (v) => setPercent(v)).catch(() => {setNotFound(true)})
+			setProcedures(proDetail)
+		}
+		fetchForm()
+	}, [id])
 
 	return (
-		<StyleContainer>
-			<Header/>
-			<ContainerItems>
-
-				{/* SECTION PRIMARY INFO */}
-				<SectionContainer headline="Primary Information" haveBorder>
-					<PrimaryInfo data={{title, setTitle, description, setDescription}}/>
-				</SectionContainer>
-
-				{/* SECTION PARTICIPANTS */}
-				<SectionContainer headline="Participants" haveBorder>
-					<Participants data={{advisors, setAdvisors, approvers, setApprovers, observators, setObservators}}/>
-				</SectionContainer>
-					
-				{/* SECTION CHECKLIST ATTACHMENT */}
-				<SectionContainer headline="Attachment Checklist" haveBorder>
-					<AttachmentChecklist checkList={checkList} util={checkListUtil}/>
-					<AddCheckListWrapper>
-						<button onClick={() => checkListUtil.addCheckItem()}>
-							<BsPlus size="1.2rem"/> Add Check Item
-						</button>
-					</AddCheckListWrapper>
-				</SectionContainer>
-			</ContainerItems>
-		</StyleContainer>
+		<Container>
+			{LoadingComponent}
+		</Container>
 	);
 };
 

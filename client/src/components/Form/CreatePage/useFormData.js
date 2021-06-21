@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { navigate } from "@reach/router"
 import { useStoreActions } from "easy-peasy"
-import {useEffect, useRef, useState} from "react"
+import {useEffect, useState} from "react"
 import {v4 as uuid} from 'uuid'
-import { getFormDetail, postForm, updateForm } from "../../../api/form"
-import useLoading from "../../../hooks/useLoading"
+import {getFormDetail, postForm, updateForm} from "../../../api/form"
+import useLoading from "hooks/useLoading"
+
 
 const initData = {
     name: "",
@@ -20,7 +21,7 @@ const useFormData = (id = null) => {
     const [fieldData, setFieldData] = useState(initData.fields)
     const [addingTag, setAddingTag] = useState(null)
     const {loading, percent, setPercent, setLoading, reset} = useLoading(!!id)
-    const formId = useRef()
+
     useEffect(() => {
         if (id) {
             const fetchDetail = async () => {
@@ -30,7 +31,6 @@ const useFormData = (id = null) => {
                     setFormName(formDetail.name)
                     setFile(formDetail.file)
                     setFieldData(formDetail.fields)
-                    formId.current = formDetail.id
                 }
             }
             fetchDetail()

@@ -5,14 +5,14 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import Card from './Card';
 import ListToolbar from './ListToolbar';
-import {getFader} from '../../../utils/color'
+import {getFader} from 'utils/color'
 import { navigate, useLocation } from '@reach/router';
 import {BsFileEarmarkPlus} from 'react-icons/bs'
-import ProgressLoader from '../../ProgressLoader'
-import { getForms } from '../../../api/form';
-import Button from '../../Button';
+import ProgressLoader from 'components/ProgressLoader'
+import { getForms } from '../../../api/form'
+import Button from 'components/Button';
 import { useStoreState } from 'easy-peasy';
-import useLoading from '../../../hooks/useLoading';
+import useLoading from 'hooks/useLoading';
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};

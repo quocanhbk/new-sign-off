@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { getFader } from '../../../utils/color'
+import { getFader } from 'utils/color'
 
 export const Container = styled.div`
     display:flex;

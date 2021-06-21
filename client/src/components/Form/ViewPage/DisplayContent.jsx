@@ -4,14 +4,13 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import FieldTag from "../FieldTag";
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
-import ListLoader from "../../ListLoader";
 import FailedFile from "../FailedFile";
-import { getFader } from "../../../utils/color";
-import { getFormDetail, deleteForm } from "../../../api/form";
+import { getFader } from "utils/color";
+import { getFormDetail, deleteForm } from "api/form";
 import ContentHeader from "./ContentHeader";
 import { navigate } from "@reach/router";
-import ProgressLoader from "../../ProgressLoader";
-import useLoading from "../../../hooks/useLoading";
+import ProgressLoader from "components/Loader";
+import useLoading from "hooks/useLoading";
 
 const Container = styled.div`
 	position: relative;
@@ -53,6 +52,7 @@ const DisplayContent = ({id}) => {
 
 	useEffect(() => {
 		const fetchForm = async () => {
+			setNotFound(false)
 			setForm(null)
 			reset()
 			const formDetail = await getFormDetail(id, (v) => setPercent(v)).catch(_ => {setNotFound(true)})

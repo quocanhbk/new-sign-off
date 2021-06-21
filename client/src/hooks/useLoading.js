@@ -5,7 +5,7 @@ const useLoading = (load = true) => {
     const [percent, setPercent] = useState(load ? 0 : 100)
 
     useEffect(() => {
-        if (percent === 100 && load) setTimeout(() => setLoading(false), 250)
+        if (percent === 100 && load) setTimeout(() => setLoading(false), 500)
     }, [percent])
 
     const reset = () => {

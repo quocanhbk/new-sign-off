@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef} from 'react';
 import styled from 'styled-components'
-import FormControl from '../../FormControl';
+import FormControl from 'components/FormControl';
 
 const Container = styled.div`
     display: flex;

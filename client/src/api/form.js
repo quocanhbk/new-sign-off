@@ -11,12 +11,27 @@ export const getForms = async (callback = (v) => {v}) => {
     })) 
 }
 
-export const getFormDetail = async (id, callback = (v) => {v}) => {
+export const getFormDetail = async (id, callback = (v) => {v}, getFile = true) => {
     const res = await axios.get('/api/v1/forms/' + id)
     callback(33)
     if (res.status !== 404) {
         const form = res.data
         const {data: {downloadUrl: file}} = await axios.get('/api/v1/files/' + form.file.file_id)
+        if (!getFile) {
+            callback(100)
+            return {
+                id: form.form_id,
+                name: form.name,
+                fields: form.fields.map(field => ({
+                    id: field.default_form_field_id,
+                    name: field.field,
+                    content: field.value,
+                    position: {X: field.x_position, Y: field.y_position},
+                    size: {width: field.width, height: field.height},
+                    required: field.required
+                })),
+            }
+        }
         callback(66)
         const formDetail = {
             id: form.form_id,
@@ -58,7 +73,7 @@ export const postForm = async (name, file, fields, callback = (v) => {v}) => {
     callback(66)
 
     //post default fields
-    let res = (await axios.post(`/api/v1/forms/${form_id}/default-fields`, {
+    await axios.post(`/api/v1/forms/${form_id}/default-fields`, {
         defaultFields: fields.map(field => ({
             field: field.name,
             type: "Field",
@@ -69,7 +84,7 @@ export const postForm = async (name, file, fields, callback = (v) => {v}) => {
             height: field.size.height,
             required: field.required
         }))
-    })).data
+    })
     callback(100)
 }
 

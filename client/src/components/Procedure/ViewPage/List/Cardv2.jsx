@@ -1,13 +1,22 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import {BsChevronRight, BsPlayFill, BsStopFill} from 'react-icons/all'
-import {getFader} from '../../../../utils/color'
+import {getFader} from 'utils/color'
 const CardWrapper = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
     border-radius: 0.5rem;
     display: flex;
     box-shadow: ${props => props.theme.shadow};
+
+    ${props => props.active && css`
+        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
+        color: ${props => props.theme.color.fill.primary};
+        font-weight: 600;
+        &:hover {
+            background: ${props => props.theme.color.border.primary};
+        }
+    `}
 `
 const DivInfo = styled.div`
     flex: 1;
@@ -69,23 +78,23 @@ const ButtonContainer = styled.div`
     align-items: center;
     padding: 0.5rem;
 `
-const Card = ({title, running, setSelectedId}) => {
+const Card = ({title, isActive, createdBy, active, onClick}) => {
     return (
-        <CardWrapper>
+        <CardWrapper active={active}>
             <DivInfo>
                 <Title>{title}</Title>
                 <Line>
-                    <span>Created by: John Doe</span>
+                    <span>Created by: {createdBy && createdBy.name}</span>
                 </Line>
                 <Line>
-                    <Status running={running}>
-                        {running ? <BsPlayFill/> : <BsStopFill/>}
-                        {running ? "Running" : "Stopped"}
+                    <Status running={isActive}>
+                        {isActive ? <BsPlayFill/> : <BsStopFill/>}
+                        {isActive ? "Running" : "Stopped"}
                     </Status>
                 </Line>
             </DivInfo>
             <ButtonContainer>
-                <StyleButton onClick={() => setSelectedId()}><BsChevronRight size="1rem"/></StyleButton>
+                <StyleButton onClick={onClick}><BsChevronRight size="1rem"/></StyleButton>
             </ButtonContainer>
             
         </CardWrapper>

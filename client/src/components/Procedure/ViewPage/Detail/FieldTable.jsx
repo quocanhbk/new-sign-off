@@ -4,10 +4,8 @@ import styled from 'styled-components'
 
 const Table = styled.table`
     border: none;
-    border-left: 1px solid ${props => props.theme.color.border.primary};
-    border-right: 1px solid ${props => props.theme.color.border.primary};
     width: 100%;
-    background: ${props => props.theme.color.background.secondary};
+    background: ${props => props.theme.color.border.primary};
 `
 const Row = styled.tr`
 
@@ -24,12 +22,14 @@ const Cell = styled.td`
 const FieldTable = ({fields}) => {
     return (
         <Table>
+            <tbody>
             {fields.map(field => 
                 <Row key={field.name}>
-                    <Cell className="field-name" width="30%">{field.name}</Cell>
+                    <Cell className="field-name" width="35%">{field.name}</Cell>
                     <Cell className="field-value">{field.defaultValue}</Cell>
                 </Row>
             )}
+            </tbody>
         </Table>
     )
 }

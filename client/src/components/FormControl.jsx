@@ -17,7 +17,7 @@ const Sub = styled.p`
     font-size: 0.8rem;
     color : ${props => props.theme.color.text.secondary};
     font-style: italic;
-    height: 1rem;
+    height: ${props => props.readOnly ? "auto" : "1rem"};
     ${props => props.noSpace && css`
         height: auto;
         margin-top: -0.25rem;
@@ -31,7 +31,7 @@ const Asterisk = styled.span`
     color: ${props => props.theme.color.fill.danger};
     padding-left: 0.3rem;
 `
-const FormControl = ({headline, children, sub, required, noSpace, errorText}) => {
+const FormControl = ({headline, children, sub, required, noSpace, errorText, readOnly}) => {
     return (
         <Container>
             <Headline>
@@ -41,7 +41,7 @@ const FormControl = ({headline, children, sub, required, noSpace, errorText}) =>
             {children}
             {errorText ? 
                 <Sub noSpace={noSpace} error>{errorText}</Sub> :
-                <Sub noSpace={noSpace}>{sub}</Sub>
+                <Sub noSpace={noSpace} readOnly={readOnly}>{sub}</Sub>
             }
         </Container>
     )

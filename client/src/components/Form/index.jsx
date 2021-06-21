@@ -1,7 +1,7 @@
 /* eslint-disable no-unreachable */
 /* eslint-disable no-unused-vars */
 import { Redirect, Router } from '@reach/router';
-import React, {useRef, useState} from 'react'
+import React from 'react'
 import styled from "styled-components";
 import CreatePage from './CreatePage'
 import ViewPage from './ViewPage';
