@@ -37,7 +37,9 @@ const DivInfo = styled.div`
         line-height: 1.2;
     }
 `
-function CardEvents({create_by,create_date,title}) {
+function CardEvents({created_at, created_by, description}) {
+    const { first_name, middle_name, last_name} = created_by;
+    const fullname = `${last_name} ${middle_name} ${first_name}`;
     return (
         <CardWrapper>
             <DivAvatar>
@@ -45,10 +47,10 @@ function CardEvents({create_by,create_date,title}) {
             </DivAvatar>
             <DivInfo>
                 <span className="create-event">
-                    <p className="create-by-event">{create_by}</p>
-                    <p className="create-date-event">{create_date}</p>
+                    <p className="create-by-event">{fullname}</p>
+                    <p className="create-date-event">{created_at}</p>
                 </span>
-                <p className="title-event">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, similique, cupiditate nesciunt ullam officia nulla eum tempora ea distinctio natus, sed rerum magni et. Aperiam ut reiciendis expedita explicabo voluptate quaerat, corrupti natus ad est. Quia quod sit dicta autem!</p>
+                <p className="title-event">{description}</p>
             </DivInfo>
         </CardWrapper>
     );

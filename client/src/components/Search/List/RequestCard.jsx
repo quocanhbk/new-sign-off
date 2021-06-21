@@ -104,7 +104,7 @@ const Card = ({id, title, type, createdBy, status, deadline, page}) => {
             <DivInfo>
                 <Title>{title}</Title>
                 <Line>
-                    <span>Created: {createdBy}</span>
+                    <span>Created: {createdBy.full_name}</span>
                     {status === "Pending" && 
                         <>
                             <span>|</span>

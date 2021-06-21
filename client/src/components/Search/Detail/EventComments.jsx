@@ -53,7 +53,7 @@ const TableEvents = styled.div`
     gap: 0.5rem;
 `
 
-function EventComents({dataList,setComment}) {
+function EventComents({logs ,dataList,setComment}) {
     const [value,setValue] = useState()
 
     const handleSubmit = (e) =>{
@@ -74,12 +74,12 @@ function EventComents({dataList,setComment}) {
                 <button onClick={handleSubmit}><IoMdSend size="1.2rem"/></button>
             </Form>
             <TableEvents>
-                {dataList.map((task) => (
+                {logs && logs.map((log) => (
                         <CardEvents
-                        key={task.id}
-                        title={task.title}
-                        create_date={task.create_date}
-                        create_by={task.create_by}
+                        key={log.log_id}
+                        description={log.description}
+                        created_at={log.created_at}
+                        created_by={log.author}
                         />
                     ))}
             </TableEvents>

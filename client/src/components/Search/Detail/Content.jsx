@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import styled from 'styled-components'
 import {getFader} from '../../../utils/color'
@@ -83,15 +84,15 @@ const events = [
         create_date: '16:20 20/04/2021',
     }
 ]
-function Content() {
-    const [comment,setComment] = useState(events)
+function Content({request}) {
+    const [comment,setComment] = useState(events);
     return (
         <ContentWrapper className="abc">
             <SectionContainer headline="1. Related Project">
-                TTG - Tap doan trung thuy
+                {request.title}
             </SectionContainer>
             <SectionContainer headline="2. Description">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, ab. Amet quaerat sunt voluptatibus ab nostrum, temporibus quisquam saepe placeat?
+                <div dangerouslySetInnerHTML={{__html: request.description}}></div>
             </SectionContainer>
             <SectionContainer headline="3. Approval File">
                 <TableApproval dataList={dataList}/>
@@ -100,7 +101,7 @@ function Content() {
                 <TableApproval dataList={dataList}/>
             </SectionContainer>
             <SectionContainer headline="5. Event & Comments">
-                <EventComments dataList={comment} setComment={setComment} />
+                <EventComments logs={request.logs} dataList={comment} setComment={setComment} />
             </SectionContainer>
         </ContentWrapper>
     );

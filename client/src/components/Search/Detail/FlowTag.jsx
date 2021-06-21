@@ -39,13 +39,15 @@ const CardChild = styled.div`
   }
 `;
 
-const FlowTag = ({reff, data, bell, onBellClick}) => {
+const FlowTag = ({reff, bell, onBellClick, userInfo}) => {
+    const {first_name, last_name, middle_name, fullname} = userInfo;
+    const joinFullname = `${last_name} ${middle_name} ${first_name}`;
     return (
         <CardChild ref={reff}>
             <AvatarStatus src="/avatar.png" status={"approved"} />
             <div className="info">
-                <p className="name">{data.name}</p>
-                <p className="job">{data.job}</p>
+                <p className="name">{fullname ? fullname : joinFullname}</p>
+                <p className="job">{'Very cool, thank you'}</p>
             </div>
             {bell && <button onClick={onBellClick}><BsBellFill size="1.2rem"/></button>}
         </CardChild>
