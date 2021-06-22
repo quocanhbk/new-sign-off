@@ -11,7 +11,7 @@ export const getRequests = async () => {
 			Authorization: `Bearer ${token.accessToken}`
 		}
 	}
-	let res = await axios.get('/api/v1/requests', token)
+	let res = await axios.get('/api/v1/requests', token, config)
 	console.log(res)
 }
 export const getRequestDetail = async (id) => {
