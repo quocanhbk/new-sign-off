@@ -13,6 +13,9 @@ import { getForms } from '../../../api/form'
 import Button from 'components/Button';
 import { useStoreState } from 'easy-peasy';
 import useLoading from 'hooks/useLoading';
+import useLoader from 'hooks/useLoader'
+import Placeholder from 'components/Placeholder';
+
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -60,19 +63,30 @@ function List() {
     const [searchText, setSearchText] = useState("")
     const location = useLocation().pathname.split("/")
     const users = useStoreState(_ => _.users)
-    const {loading, percent, setPercent} = useLoading()
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const forms = await getForms((v) => setPercent(v))
-            setForms(forms)
-        }
-        fetchData()
-    }, [])
+    //const {loading, percent, setPercent} = useLoading()
 
     const handle = (formId) => {
         navigate('/form/view/' + formId)
     }
+
+    const renderList = () => 
+        forms.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())).map(form => 
+            <Card 
+                key={form.id} 
+                name={form.name}
+                createdBy={users.find(u => u.id === form.createdBy)}
+                onClick={() => handle(form.id)}
+                active={form.id == location[location.length - 1]}
+            />
+        )
+    useEffect(() => {
+        const fetchData = async () => {
+            const forms = await getForms((v) => setPercent(v)).catch(() => setNotFound(true))
+            setForms(forms)
+        }
+        fetchData()
+    }, [])
+    const {LoadingComponent, setNotFound, setPercent} = useLoader(true, renderList(), <Placeholder type="NOT_FOUND"/>)
 
     return (
         <StyleListWrapper>
@@ -89,17 +103,7 @@ function List() {
                 </Button>
             </AddNewContainer>
             <CardList>
-                { (loading)  ? <ProgressLoader percent={percent}/> :
-                    forms.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())).map(form => 
-                        <Card 
-                            key={form.id} 
-                            name={form.name}
-                            createdBy={users.find(u => u.id === form.createdBy)}
-                            onClick={() => handle(form.id)}
-                            active={form.id == location[location.length - 1]}
-                        />
-                    )
-                }
+                {LoadingComponent}
             </CardList>
         </StyleListWrapper>
     );

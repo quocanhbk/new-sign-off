@@ -30,7 +30,8 @@ const Container = styled.div`
 `
 const types = [
     {id: "NOT_FOUND", text: "Data not found", sub: "Try again later", Icon: BsX, color: "danger"},
-    {id: "PROCEDURE_NOT_SELECTED", text: "Select procedure to view", sub: "No procedure is selected", Icon: BsInfoCircle, color: "secondary"}
+    {id: "PROCEDURE_NOT_SELECTED", text: "Select procedure to view", sub: "No procedure is selected", Icon: BsInfoCircle, color: "secondary"},
+    {id: "FORM_NOT_SELECTED", text: "Select form to view", sub: "No form is selected", Icon: BsInfoCircle, color: "secondary"}
 ]
 
 
@@ -46,7 +47,7 @@ const Placeholder = ({type}) => {
 }
 
 Placeholder.propTypes = {
-    type: pt.oneOf(["NOT_FOUND", "PROCEDURE_NOT_SELECTED"])
+    type: pt.oneOf(["NOT_FOUND", "PROCEDURE_NOT_SELECTED", "FORM_NOT_SELECTED"])
 }
 
 export default Placeholder

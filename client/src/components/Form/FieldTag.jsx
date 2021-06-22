@@ -39,7 +39,7 @@ const Background = styled.div`
     width: 100%;
     height: 100%;
     background: #1b97fc39;
-    border-radius: 0.1rem;
+    border-radius: 0.25rem;
     z-index: -1;
     ${props => !props.view && css`
         border: 1px solid #3f3cff;
@@ -50,10 +50,12 @@ let Resizer = styled.div`
     cursor: se-resize;
     right: 0;
     bottom: 0;
-    height: 0.4rem;
-    width: 0.4rem;
+    height: 8px;
+    width: 8px;
+    border-radius: 99px;
     transform: translate(45%,45%);
-    background: #3f3cff;
+    background: #fff;
+    border: 2px solid #3f3cff;
 `
 const FieldTag = ({data, onMouseDown, onMouseDownResizer, reff, fontSize, view}) => {
     return (

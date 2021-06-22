@@ -1,32 +1,53 @@
-import { useEffect, useState } from "react"
-import { baseUrl } from "./baseUrl";
+/* eslint-disable no-unused-vars */
+import axios from 'axios'
+import baseURL from "./baseURL";
 
-export const useGetRequests = () => {
-  const [ data, setData ] = useState([]);
-  const getRequests = async() => {
-    const response = await fetch(`${baseUrl}/api/v1/requests`);
-    const requests = await response.json();
-    setData(requests);
-  }
-  useEffect(() => {
-    getRequests();
-  }, [])
-  return [data];
+export const getRequests = async () => {
+	let res = await axios.get('/api/v1/requests', {baseURL})
+	console.log(res)
 }
+export const getRequestDetail = async (id) => {
+	let {data} = await axios.get('/api/v1/requests/' + id, {baseURL})
+	return data.map(d => ({
+		id: d.approval_request_id,
+		title: d.title,
+		author: d.author,
+		createdAt: d.createdAt,
+		deadline: d.deadline,
+		description: d.description,
+		priority: d.priority,
+		relatedProjects: d.related_projects,
+		status: d.status,
+		type: d.type
+	}))
+}
+export const postRequest = async (input, callback = (v) => {v}) => {
+	const {
+		title, 
+		description, 
+		priority, 
+		type, 
+		deadline,
+		relatedProjects, 
+		advisors, 
+		approvers, 
+		observators
+	} = input
 
-export const useGetRequestById = (id) => {
-  const [ data, setData ] = useState({});
-  const [loading, setLoading] = useState(false);
-  const getRequest = async() => {
-    setLoading(true);
-    const response = await fetch(`${baseUrl}/api/v1/requests/${id}`);
-    const request = await response.json();
-    setData(request);
-    setLoading(false);
-  }
-  useEffect(() => {
-    getRequest();
-    return () => setLoading(false);
-  },[id])
-  return [loading ,data];
+	let sendData = {
+		title, 
+		description, 
+		priority,
+		type,
+		deadline: (new Date(deadline)).toLocaleDateString('en-CA'),
+		relatedProjects,
+		advisors,
+		approvers,
+		observators
+	}
+
+	let {data: {approval_request_id: id}} = await axios.post('/api/v1/requests', sendData, {baseURL})
+	callback(100)
+	console.log(id)
+	return id
 }

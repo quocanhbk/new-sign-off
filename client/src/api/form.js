@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import axios from 'axios'
-
+import baseURL from './baseURL'
 export const getForms = async (callback = (v) => {v}) => {
-    const {data} = await axios.get('/api/v1/forms')
+    const {data} = await axios.get('/api/v1/forms', {baseURL})
     callback(100)
     return data.map(d => ({
         id: d.form_id,
@@ -12,11 +12,11 @@ export const getForms = async (callback = (v) => {v}) => {
 }
 
 export const getFormDetail = async (id, callback = (v) => {v}, getFile = true) => {
-    const res = await axios.get('/api/v1/forms/' + id)
+    const res = await axios.get('/api/v1/forms/' + id, {baseURL})
     callback(33)
     if (res.status !== 404) {
         const form = res.data
-        const {data: {downloadUrl: file}} = await axios.get('/api/v1/files/' + form.file.file_id)
+        const {data: {downloadUrl: file}} = await axios.get('/api/v1/files/' + form.file.file_id, {baseURL})
         if (!getFile) {
             callback(100)
             return {
@@ -65,11 +65,11 @@ export const deleteForm = async (id) => {
 export const postForm = async (name, file, fields, callback = (v) => {v}) => {
     const data = new FormData()
     data.append('file', file, file.name)
-    const {data: {file_id}} = await axios.post('/api/v1/files', data)
+    const {data: {file_id}} = await axios.post('/api/v1/files', data, {baseURL})
     callback(33)
 
     //post form name
-    let {data: {form_id}} = await axios.post('/api/v1/forms', {name: name, fileId: file_id}) 
+    let {data: {form_id}} = await axios.post('/api/v1/forms', {name: name, fileId: file_id}, {baseURL}) 
     callback(66)
 
     //post default fields
@@ -84,16 +84,13 @@ export const postForm = async (name, file, fields, callback = (v) => {v}) => {
             height: field.size.height,
             required: field.required
         }))
-    })
+    }, {baseURL})
     callback(100)
 }
 
 export const updateForm = async (id, name, fields, callback = (v) => {v}) => {
-    await axios.patch('/api/v1/forms/' + id, {
-        name
-    })
+    await axios.patch('/api/v1/forms/' + id, {name}, {baseURL})
     callback(50)
-    console.log(fields.map(field => field.position))
     await axios.put('/api/v1/forms/' + id + '/default-fields', {
         defaultFields: fields.map(field => ({
             field: field.name,
@@ -105,6 +102,6 @@ export const updateForm = async (id, name, fields, callback = (v) => {v}) => {
             height: field.size.height,
             required: field.required
         }))
-    })
+    }, {baseURL})
     callback(100)
 }

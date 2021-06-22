@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components'
 import RequestCard from './RequestCard';
 import ListToolbar from './ListToolbar';
 import {getFader} from '../../../utils/color';
-import { useGetRequests } from '../../../api/request';
+import { getRequests } from 'api/request';
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -54,7 +55,15 @@ const CardList = styled.div`
 `
 
 function List() {
-  const [requests] = useGetRequests();
+  //const [requests] = useGetRequests();
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await getRequests()
+        }
+        fetchData()
+    })
     return (
         <StyleListWrapper>
             <ListToolbar/>
@@ -65,7 +74,7 @@ function List() {
                 </TagContainer>
             </TagBar>
             <CardList>
-                {requests.map((task) => (
+                {/* {requests.map((task) => (
                     <RequestCard
                         key={task.approval_request_id}
                         id={task.approval_request_id}
@@ -76,7 +85,7 @@ function List() {
                         createdBy={task.author}
                         page={"search"}
                     />
-                ))}
+                ))} */}
             </CardList>
         </StyleListWrapper>
     );

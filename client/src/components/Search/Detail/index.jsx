@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Tab from "../../Tab";
 import TabPane from "../../TabPane";
 import Content from "./Content";
@@ -7,7 +7,8 @@ import Header from "./Header";
 import ApprovalFlow from "./ApprovalFlow";
 import ApprovalInfo from "./ApprovalInfo";
 import styled from "styled-components";
-import { useGetRequestById } from "../../../api/request";
+import {getRequestDetail} from 'api/request'
+//import { useGetRequestById } from "../../../api/request";
 
 const Container = styled.div`
 	height: 100%;
@@ -16,10 +17,18 @@ const Container = styled.div`
 `
 
 const  DisplayContent = ({id}) => {
-	const [loading ,request] = useGetRequestById(id);
+
+	const [request, setRequest] = useState(null)
+
+	useEffect(() => {
+		const fetchData = async () => {
+			let res = await getRequestDetail(id)
+			setRequest(res)
+		}
+		fetchData()
+	})
 
     return (
-		loading ? <div>Loading</div> :
 		<Container className="container">
 			<Header title={request.title} status={request.status} type={request.type}/>
 			<Tab fullHeight className="tab-container">

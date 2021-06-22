@@ -24,12 +24,14 @@ const Cell = styled.td`
 const FieldTable = ({fields}) => {
     return (
         <Table>
+            <tbody>
             {fields.map(field => 
                 <Row key={field.name}>
                     <Cell className="field-name" width="40%">{field.name}</Cell>
                     <Cell className="field-value">{field.defaultValue}</Cell>
                 </Row>
             )}
+            </tbody>
         </Table>
     )
 }

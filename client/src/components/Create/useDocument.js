@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars */
 import {useReducer } from 'react'
 import axios from 'axios'
+import { postRequest } from 'api/request'
+import { navigate } from '@reach/router'
+import { useStoreActions } from 'easy-peasy'
 
 const initState = {
     title: "",
@@ -45,7 +48,7 @@ const errorReducer = (state, action) => {
     }
 }
 const useDocument = () => {
-
+    const setPath = useStoreActions(_ => _.setPath)
     const [{
         title, description, type, priority, 
         deadline, relatedProjects, 
@@ -101,19 +104,19 @@ const useDocument = () => {
     const submitRequest = async () => {
         // No need to check for error anymore
         console.log("Submitting...")
-        let reqBody = {
+        const input = {
             title, 
             description, 
             priority, 
             type, 
-            deadline: (new Date(deadline)).toLocaleDateString('en-CA'), 
+            deadline,
             relatedProjects, 
             advisors, 
             approvers, 
             observators
         }
-        let {data} = await axios.post('/api/v1/requests', reqBody)
-        console.log(data)
+        //let id = await postRequest(input)
+        //setPath("/search/" + id)
     }
     return {
         title, description, type,

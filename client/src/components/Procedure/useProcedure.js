@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from 'react'
 import {v4} from 'uuid'
-import { getProcedureDetail, getProcedures, postProcedure } from 'api/procedure'
+import { getProcedureDetail, postProcedure, updateProcedure } from 'api/procedure'
 import {getFormDetail} from 'api/form'
 import {navigate} from '@reach/router'
 import useLoading from 'hooks/useLoading'
@@ -11,7 +11,9 @@ const initState = {
     advisors: [],
     approvers: [],
     observators: [],
-    checklist: []
+    checklist: [],
+    tags: [],
+    isActive: true
 }
 
 const reducer = (state, action) => {
@@ -40,7 +42,7 @@ const errorReducer = (state, action) => {
     }
 }
 const useProcedure = (id) => {
-    const [{title, description, advisors, approvers, observators, checklist}, dispatch] = useReducer(reducer, initState)
+    const [{title, description, advisors, approvers, observators, tags, isActive, checklist}, dispatch] = useReducer(reducer, initState)
     const [error, dispatchError] = useReducer(errorReducer, initError)
     const {loading, percent, setPercent, setLoading, reset} = useLoading(!!id)
 
@@ -81,8 +83,8 @@ const useProcedure = (id) => {
 
     const submitProcedure = async () => {
         reset()
-        await postProcedure({title, description, advisors, approvers, observators, checklist}, (p) => setPercent(p))
-        getProcedures()
+        if (id) await postProcedure({title, description, advisors, approvers, observators, tags, isActive, checklist}, (p) => setPercent(p))
+        else await updateProcedure(id, {title, description, advisors, approvers, observators, tags, isActive, checklist}, (p) => setPercent(p))
         navigate('/procedure')        
     }
 

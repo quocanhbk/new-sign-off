@@ -10,8 +10,8 @@ import {BsChevronLeft} from 'react-icons/bs'
 import { navigate } from '@reach/router';
 import {ButtonContainer, Container, Wrapper, StyleTitle, Toolbar, ToolbarContainer, ToolbarElement, NoField, FormNameInput} from './IndexStyledComponents'
 import useFormData from './useFormData';
-import FailedFile from '../FailedFile'
 import ProgressLoader from 'components/ProgressLoader'
+import Placeholder from 'components/Placeholder'
 
 
 const CreatePage = ({id}) => {
@@ -70,7 +70,7 @@ const CreatePage = ({id}) => {
             </StyleTitle>
             <Wrapper>
                 {loading ? <ProgressLoader percent={percent}/> :
-                (!loading && !!id && !file) ? <FailedFile/> :
+                (!loading && !!id && !file) ? <Placeholder type="NOT_FOUND"/> :
 
                 (file && 
                     <Toolbar className="toolbar">
