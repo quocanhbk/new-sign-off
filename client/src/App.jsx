@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import styled, { ThemeProvider } from 'styled-components';
 import MainPage from './components/MainPage';
 import theme from './utils/theme';
@@ -15,6 +16,7 @@ const StyledApp = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
 const Container = () => {
   const isDark = useStoreState(s => s.theme)
   const getUsers = useStoreActions(s => s.getUsers)
@@ -33,10 +35,19 @@ const Container = () => {
   );
 };
 const App = () => {
+  const { instance } = useMsal();
   return (
-    <StoreProvider store={store}>
-      <Container />
-    </StoreProvider>
+    <>
+      <UnauthenticatedTemplate>
+        <div>Login please</div>
+        <button onClick={() => instance.loginRedirect()}>Login</button>
+      </UnauthenticatedTemplate>
+      <AuthenticatedTemplate>
+        <StoreProvider store={store}>
+          <Container />
+        </StoreProvider>
+      </AuthenticatedTemplate>
+    </>
   );
 }
 

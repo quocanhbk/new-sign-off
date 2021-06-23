@@ -1,9 +1,17 @@
 /* eslint-disable no-unused-vars */
 import axios from 'axios'
 import baseURL from "./baseURL";
+import getToken from './getToken';
 
 export const getRequests = async () => {
-	let res = await axios.get('/api/v1/requests', {baseURL})
+	const token = await getToken();
+	const config = {
+		baseURL,
+		headers: {
+			Authorization: `Bearer ${token.accessToken}`
+		}
+	}
+	let res = await axios.get('/api/v1/requests', token, config)
 	console.log(res)
 }
 export const getRequestDetail = async (id) => {
