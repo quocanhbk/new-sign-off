@@ -44,7 +44,8 @@ export const getFormDetail = async (id, callback = (v) => {v}, getFile = true) =
                 size: {width: field.width, height: field.height},
                 required: field.required
             })),
-            file: file
+            file: file,
+            fileId: form.file.file_id
         }
         return formDetail
     } else throw Error("not-found")

@@ -1,21 +1,21 @@
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getFader } from "../../utils/color";
+import { getFader } from "utils/color";
 import FlexibleApprovalAttachment from "./FlexibleApprovalAttachment";
-import ApprovalDocumentProcess from "./ApprovalDocumentProcess";
 import DescriptionEditor from "./DescriptionEditor";
 import Participants from "./Participants";
 import PrimaryInfo from "./PrimaryInfo";
-import {procedureList} from './sampleData'
 import Header from "./Header";
 import SectionContainer from "../SectionContainer";
 import useDocument from "./useDocument";
 import Modal from '../Modal'
 import SubmitPopup from './SubmitPopup'
-import Snackbar from "../Snackbar";
+import Snackbar from "components/Snackbar";
 import { BsFillExclamationTriangleFill } from "react-icons/bs";
+import { getProcedures } from "api/procedure";
+import AttachmentCheckList from "./AttachmentChecklist";
 
 const StyleContainer = styled.div`
   display: flex;
@@ -56,14 +56,14 @@ const Notify = styled.div`
     border-radius: 0.5rem;
 `
 const Create = () => {
-	const [tempForm , setTempForm ]= useState()
 	const [modal, setModal] = useState()
 	const [errorNotify, setErrorNotify] = useState(false)
+	const [procedureList, setProcedureList] = useState([])
 	const {
 		title, description, type,
         priority, deadline, relatedProjects,
         advisors, approvers, observators,
-        approvalAttachments, referenceAttachments,
+        approvalAttachments, referenceAttachments, procedure, checklist,
         set,
         //Helper function
         removeAttachment, submitRequest, error, isSubmittable
@@ -90,7 +90,13 @@ const Create = () => {
 		)
 	}
 
-
+	useEffect(() => {
+		const fetchProcedures = async () => {
+			let data = await getProcedures()
+			setProcedureList(data.filter(d => d.isActive))
+		}
+		fetchProcedures()
+	}, [])
 
 	return (
 		<StyleContainer>
@@ -108,6 +114,8 @@ const Create = () => {
 						deadline={deadline}
 						relatedProjects={relatedProjects}
 						set={set}
+						procedureList={procedureList}
+						procedure={procedure}
 					/>
 				</SectionContainer>
 
@@ -123,8 +131,8 @@ const Create = () => {
 				
 				{/* SECTION APPROVAL DOCUMENT */}
 				<SectionContainer headline="Approval Attachment" haveBorder>
-					{false ? 
-						<ApprovalDocumentProcess tempForm={tempForm} setTempForm={setTempForm} form={procedureList}/> : 
+					{type === "Procedure" ? 
+						<AttachmentCheckList checklist={checklist} attachments={approvalAttachments}/> : 
 						<FlexibleApprovalAttachment 
 							type="approvalAttachments"
 							attachments={approvalAttachments}

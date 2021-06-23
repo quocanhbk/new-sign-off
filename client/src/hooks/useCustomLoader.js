@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react"
 import Loader from "components/Loader"
 
-const useLoading = (load = true, value = null, placeholder = null) => {
+const useCustomLoader = (load = true, placeholder = null, mask = false) => {
     const [loading, setLoading] = useState(load)
     const [percent, setPercent] = useState(load ? 0 : 100)
     const [notFound, setNotFound] = useState(false)
@@ -19,12 +19,18 @@ const useLoading = (load = true, value = null, placeholder = null) => {
         setLoading(true)
         setPercent(0)
     }
-
+    const render = (body) => {
+        return (
+            !mask ? 
+            (loading) ? <Loader percent={percent}/> : (notFound ? placeholder : body) : 
+            <>{(loading) && <Loader percent={percent}/>}{(notFound ? placeholder : body)}</>
+        )
+    }
     return {
         reset, 
         setPercent, setNotFound,
-        LoadingComponent: <>{(loading) && <Loader percent={percent}/>}{(notFound ? placeholder : value)}</>
+        render
     }
 }
 
-export default useLoading
+export default useCustomLoader

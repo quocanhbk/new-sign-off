@@ -13,7 +13,6 @@ import useProcedure from "../useProcedure";
 import AttachmentChecklist from "./AttachmentChecklist";
 import { BsPlus, BsFillExclamationTriangleFill } from "react-icons/bs";
 import Button from "components/Button";
-import ProgressLoader from "components/ProgressLoader";
 
 const StyleContainer = styled.div`
 	flex: 10;
@@ -73,7 +72,7 @@ const AddCheckListWrapper = styled.div`
 const Detail = ({id}) => {
 	const {
 		title, description, advisors, approvers, observators, checklist, checklistUtil, set,
-		error, isSubmittable, submitProcedure, loading, percent
+		error, isSubmittable, submitProcedure, render
 	} = useProcedure(id)
 
 	const [errorNotify, setErrorNotify] = useState(false)
@@ -85,42 +84,46 @@ const Detail = ({id}) => {
 
 	return (
 		<StyleContainer>
-			{loading && <ProgressLoader percent={percent}/>}
-			<Header onSubmit={handleSubmit} id={id}/>
-			<ContainerItems>
-				<Column>
-					{/* SECTION PRIMARY INFO */}
-					<SectionContainer headline="Primary Information" haveBorder>
-						<PrimaryInfo 
-							title={title}
-							description={description}
-							set={set}
-							error={error}
-						/>
-					</SectionContainer>
+			{render(
+				<>
+					<Header onSubmit={handleSubmit} id={id}/>
+					<ContainerItems>
+						<Column>
+							{/* SECTION PRIMARY INFO */}
+							<SectionContainer headline="Primary Information" haveBorder>
+								<PrimaryInfo 
+									title={title}
+									description={description}
+									set={set}
+									error={error}
+								/>
+							</SectionContainer>
 
-					{/* SECTION PARTICIPANTS */}
-					<SectionContainer headline="Participants" haveBorder>
-						<Participants 
-							advisors={advisors}
-							approvers={approvers}
-							observators={observators}
-							set={set}
-						/>
-					</SectionContainer>
-				</Column>
-				<Column borderLeft>
-					{/* SECTION CHECKLIST ATTACHMENT */}
-					<SectionContainer headline="Attachment Checklist" haveBorder>
-						<AttachmentChecklist checklist={checklist} util={checklistUtil}/>
-						<AddCheckListWrapper>
-							<Button onClick={() => checklistUtil.addCheckItem()} variant="outline" normalBorder radius="0.2rem">
-								<BsPlus size="1.2rem"/> Add Check Item
-							</Button>
-						</AddCheckListWrapper>
-					</SectionContainer>
-				</Column>
-			</ContainerItems>
+							{/* SECTION PARTICIPANTS */}
+							<SectionContainer headline="Participants" haveBorder>
+								<Participants 
+									advisors={advisors}
+									approvers={approvers}
+									observators={observators}
+									set={set}
+								/>
+							</SectionContainer>
+						</Column>
+						<Column borderLeft>
+							{/* SECTION CHECKLIST ATTACHMENT */}
+							<SectionContainer headline="Attachment Checklist" haveBorder>
+								<AttachmentChecklist checklist={checklist} util={checklistUtil}/>
+								<AddCheckListWrapper>
+									<Button onClick={() => checklistUtil.addCheckItem()} variant="outline" normalBorder radius="0.2rem">
+										<BsPlus size="1.2rem"/> Add Check Item
+									</Button>
+								</AddCheckListWrapper>
+							</SectionContainer>
+						</Column>
+					</ContainerItems>
+				</>
+			)}
+			
 			<Snackbar visible={errorNotify} onClose={() => setErrorNotify(false)} timeOut={2000}>
                 <Notify>
                     <BsFillExclamationTriangleFill size="1.2rem"/>

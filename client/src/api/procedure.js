@@ -16,10 +16,9 @@ export const getProcedures = async (callback = (v) => {v}) => {
     }))
 }
 
-export const getProcedureDetail = async (id, callback = (v) => {v}) => {
+export const getProcedureDetail = async (id, getFile = false, callback = (v) => {v}) => {
     const {data} = await axios.get('/api/v1/procedures/' + id, {baseURL})
     callback(30)
-    console.log(data)
     let checklist = data.checklist.map(item => ({
         id: item.checklist_item_id,
         name: item.name,
@@ -46,7 +45,7 @@ export const getProcedureDetail = async (id, callback = (v) => {v}) => {
     // 1 check item contains array of form, 1 form contains id, name, and array of field
     const checklistData = await Promise.all(checklist.map(async (i) => {
         let defaultFormsDetail = await Promise.all(i.defaultForms.map(async (form) => {
-            let formDetail = await getFormDetail(form, (v) => {v}, false)
+            let formDetail = await getFormDetail(form, (v) => {v}, getFile)
             return formDetail
         }))
         return {
@@ -80,18 +79,17 @@ export const postProcedure = async (data, callback = (v) => {v}) => {
 export const updateProcedure = async (id, data, callback = (v) => {v}) => {
     let {title, description, isActive, advisors, approvers, observators, checklist, tags} = data
     let body = {title, description, isActive, advisors, approvers, observators, tags}
-    await axios.put('/api/v1/procedures/' + id, body, {baseURL})
+    let {data: {procedure_id: newId}} = await axios.put('/api/v1/procedures/' + id, body, {baseURL})
     callback(50)
-    console.log("Update form body")
-    await axios.put("/api/v1/procedures/" + id + "/checklist", {
+
+    await axios.put("/api/v1/procedures/" + newId + "/checklist", {
         checklist: checklist.map(item => ({
             name: item.name,
             formIds: item.defaultForms.map(form => form.id)
         }))
     }, {baseURL})
     callback(100)
-    console.log("Update form checklist")
-    return
+    return newId
 }
 
 export const deleteProcedure = async (id, callback = (v) => {v}) => {
@@ -104,4 +102,11 @@ export const deleteProcedure = async (id, callback = (v) => {v}) => {
         return "delete-success"
     }
     else return "delete-wrong"
+}
+
+export const toggleActive = async (id, data, callback = v => {v}) => {
+    let {title, description, isActive, advisors, approvers, observators, tags} = data
+    let body = {title, description, isActive, advisors, approvers, observators, tags}
+    await axios.put('/api/v1/procedures/' + id, body, {baseURL})
+    callback(100)
 }

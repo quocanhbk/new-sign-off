@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, {useState} from 'react'
+import React from 'react'
 import styled from "styled-components";
 import Button from 'components/Button'
-
+import Toggle from './Toggle';
+import { getFader } from 'utils/color';
 const Container = styled.div`
     display: flex;
     justify-content: space-between;
@@ -21,15 +22,6 @@ const ButtonContainer = styled.div`
     display: flex;
     gap: 1rem;
 
-    & button {
-        border: none;
-        border-radius: 0.2rem;
-        padding: 0.5rem 1rem;
-        outline: none;
-        font-size: 1rem;
-        color: ${props => props.theme.color.background.primary};
-        cursor: pointer;
-    }
     & .form-delete {
         background: ${props => props.theme.color.fill.danger};
     }
@@ -37,12 +29,24 @@ const ButtonContainer = styled.div`
         background: ${props => props.theme.color.fill.info};
     }
 `
-const ContentHeader = ({title, onDeleteClick, onEditClick}) => {
+const ToggleContainer = styled.div`
+    display: grid;
+    place-items: center;
+    padding: 0 0.5rem;
+    border: 1px solid ${props => props.theme.color.border.primary};
+    background: ${props => getFader(props.theme.color.border.primary, 0.5)};
+    border-radius: 0.2rem;
+    color: ${props => props.theme.color.text[props.isActive ? "success" : "danger"]};
+`
+const ContentHeader = ({title, isActive, onDeleteClick, onEditClick, onToggleActive}) => {
 
     return (
         <Container>
             <h3>{title}</h3>
             <ButtonContainer>
+                <ToggleContainer isActive={isActive}>
+                    <Toggle value={isActive} onSelect={(v) => onToggleActive(v)}>Active</Toggle>
+                </ToggleContainer>
                 <Button color="danger" onClick={() => onDeleteClick()}>Delete</Button>
                 <Button color="info" onClick={onEditClick}>Edit</Button>
             </ButtonContainer>

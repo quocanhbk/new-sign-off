@@ -1,9 +1,7 @@
 /* eslint-disable no-unused-vars */
-import {useReducer } from 'react'
-import axios from 'axios'
-import { postRequest } from 'api/request'
-import { navigate } from '@reach/router'
-import { useStoreActions } from 'easy-peasy'
+import {useEffect, useReducer } from 'react'
+import { getProcedureDetail } from 'api/procedure'
+import { v4 } from 'uuid'
 
 const initState = {
     title: "",
@@ -17,7 +15,8 @@ const initState = {
     observators: [],
     approvalAttachments: [],
     referenceAttachments: [],
-    procedure: null
+    procedure: null,
+    checklist: []
 }
 const reducer = (state, action) => {
     switch(action.type) {
@@ -38,6 +37,7 @@ const initError = {
     deadline: "",
     relatedProjects: ""
 }
+
 const errorReducer = (state, action) => {
     switch(action.type) {
         case 'SET':
@@ -48,13 +48,40 @@ const errorReducer = (state, action) => {
     }
 }
 const useDocument = () => {
-    const setPath = useStoreActions(_ => _.setPath)
     const [{
         title, description, type, priority, 
         deadline, relatedProjects, 
         advisors, approvers, observators, 
-        approvalAttachments, referenceAttachments
+        approvalAttachments, referenceAttachments, procedure, checklist
     }, dispatch] = useReducer(reducer, initState)
+
+    useEffect(() => {
+        const fetchProcedure = async () => {
+            let data = await getProcedureDetail(procedure, true)
+            set("advisors", data.advisors)
+            set("approvers", data.approvers)
+            set("observators", data.observators)
+
+            set("checklist", data.checklist.map(c => ({id: c.id, name: c.name})))
+            let arr = data.checklist.reduce((pre, cur) => {
+                
+                let forms = cur.defaultForms.map(f => ({
+                    id: v4().slice(0, 8),
+                    name: f.name,
+                    checklistItemId: cur.id,
+                    reference: false,
+                    fileId: f.fileId,
+                    file: f.file,
+                    fields: f.fields
+                }))
+                return pre.concat(forms)
+            }, [])
+            console.log("Array", arr)
+            set("approvalAttachments", arr)
+        }
+        if (procedure)
+            fetchProcedure()
+    }, [procedure])
 
     const [error, dispatchError] = useReducer(errorReducer, initError)
 
@@ -123,6 +150,7 @@ const useDocument = () => {
         priority, deadline, relatedProjects,
         advisors, approvers, observators,
         approvalAttachments, referenceAttachments,
+        procedure, checklist,
         set,
         //Helper function
         removeAttachment, submitRequest, isSubmittable,

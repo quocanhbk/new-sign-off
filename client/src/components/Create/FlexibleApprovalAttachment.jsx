@@ -7,10 +7,9 @@ import AttachmentTable from './AttachmentTable';
 import FormControl from '../FormControl'
 import {v4 as uuid} from 'uuid'
 import ControlledCombox from '../ControlledCombox';
-import { getFader } from '../../utils/color';
 import { useStoreState } from 'easy-peasy';
-import axios from 'axios';
 import { getFormDetail } from '../../api/form';
+import Button from 'components/Button'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -29,19 +28,6 @@ const Wrapper = styled.div`
     display:flex;
     gap: 1rem;
 `
-const Button = styled.button`
-    border: none;
-    background: ${props => props.theme.color.fill.success};
-    color: ${props => props.theme.color.background.primary};
-    padding: 0.4em 1em;
-    font-size: 1rem;
-    border-radius: 0.2rem;
-    cursor: pointer;
-
-    &:hover {
-        background: ${props => getFader(props.theme.color.fill.success, 0.8)}
-    }
-`
 const VerticalBar = styled.div`
     height: 100%;
     width: 1px;
@@ -53,22 +39,35 @@ const FlexibleApprovalAttachment = ({type, attachments, set, onRemoveAttachment}
     const [selectedDynamicForm, setSelectedDynamicForm] = useState()
     const dynamicForms = useStoreState(_ => _.forms)
 
+    /*
+        id: v4(),
+        name: f.name,
+        checklistItemId: cur.id,
+        reference: false,
+        fileId: f.fileId,
+        file: f.file,
+        fields: f.fields
+    */
     const selectDynamicForm = async () => {
         if (!selectedDynamicForm) return
-        let formDetail = await getFormDetail(selectedDynamicForm)
+        let formDetail = await getFormDetail(selectedDynamicForm) //formDetail = {id, name, fields, file, fileId}
+        console.log("Form detail", formDetail);
         set(type, [...attachments, {
             ...formDetail,
             id: uuid().slice(0, 8),
-            type: "FROM_DATABASE",
+            checklistItemId: null,
+            reference: type === "referenceAttachments"
         }])
         setSelectedDynamicForm(null)
     }
 
     const handleFile = (fileList) => {
-        set("referenceAttachments", (attachments.concat(fileList.map(file => ({
+        set(type, (attachments.concat(fileList.map(file => ({
             id: uuid().slice(0, 8),
             name: file.name,
-            type: 'FROM_COMPUTER',
+            checklistItemId: null,
+            reference: type === "referenceAttachments",
+            fileId: null, // will be updated after the file is submitted. REMEMBER !!
             file: file,
             fields: []
         })))))
@@ -93,11 +92,15 @@ const FlexibleApprovalAttachment = ({type, attachments, set, onRemoveAttachment}
                             onSelect={newValue => setSelectedDynamicForm(newValue.id)} 
                         />
                     </FormControl>
-                    <Button onClick={() => selectDynamicForm()}>Use form</Button>
+                    <Button 
+                        color="info"
+                        padding="0.4rem"
+                        onClick={() => selectDynamicForm()}
+                    >Use form</Button>
                 </Col>
                 
             </Wrapper>
-            {attachments.length > 0 && <AttachmentTable approvalAttachment={attachments} onRemoveAttachment={onRemoveAttachment}/>}
+            {attachments.length > 0 && <AttachmentTable attachments={attachments} onRemoveAttachment={onRemoveAttachment}/>}
         </Container>
     );
 }

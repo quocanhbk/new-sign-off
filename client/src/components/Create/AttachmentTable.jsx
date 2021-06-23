@@ -63,27 +63,29 @@ const Icon = styled.div`
     background: ${props => getFader(props.theme.color.border.primary, 0.5)}
   }
 `
-const TableApproval = ({approvalAttachment, onRemoveAttachment}) => {
+const TableApproval = ({attachments, onRemoveAttachment, noHeader}) => {
   return (
     <TableWrapper>
       <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell className="header-cell" textAlign="left" width="20%">
-              File Name
-            </Table.HeaderCell>
-            <Table.HeaderCell className="header-cell" textAlign="center">
-              Data Field
-            </Table.HeaderCell>
-            <Table.HeaderCell className="header-cell" textAlign="center" width="10%">
-              Action
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
+        {!noHeader &&  
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell className="header-cell" textAlign="left" width="20%">
+                File Name
+              </Table.HeaderCell>
+              <Table.HeaderCell className="header-cell" textAlign="center">
+                Data Field
+              </Table.HeaderCell>
+              <Table.HeaderCell className="header-cell" textAlign="center" width="10%">
+                Action
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+        }
         <Table.Body>
-          {approvalAttachment.map(attachment =>
+          {attachments.map(attachment =>
               <Table.Row key={attachment.id}>
-                <Table.Cell textAlign="left">
+                <Table.Cell textAlign="left" width="20%">
                   {attachment.name}
                 </Table.Cell>
                 <Table.Cell textAlign="left">
@@ -103,7 +105,7 @@ const TableApproval = ({approvalAttachment, onRemoveAttachment}) => {
                     </tbody>
                   </TableField>}
                 </Table.Cell>
-                <Table.Cell textAlign="center">
+                <Table.Cell textAlign="center" width="10%">
                   <IconContainer>
                     <Icon className="trash" onClick={() => onRemoveAttachment(attachment.id)}><BsTrash/></Icon>
                     <Icon><BsThreeDotsVertical/></Icon>
