@@ -20,10 +20,9 @@ const Header = styled.thead`
 
 const Row = styled.tr`
     background: transparent;
-    transition: all 150ms ease-in;
     padding: ${props => props.footer ? "0.5rem" : "0"};
     font-size: 1rem;
-    border-bottom: 1px solid ${props => props.theme.color.border.primary};
+    border-bottom: 1px solid ${props => props.theme.color.fill.success};
 `;
 
 const HeaderCell = styled.th`

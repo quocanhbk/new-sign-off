@@ -17,6 +17,7 @@ import { BsFillExclamationTriangleFill } from "react-icons/bs";
 import { getProcedures } from "api/procedure";
 import AttachmentCheckList from "./AttachmentChecklist";
 import AttachmentPopup from './AttachmentPopup'
+import AbsoluteModal from 'components/AbsoluteModal'
 
 const StyleContainer = styled.div`
   display: flex;
@@ -83,10 +84,6 @@ const Create = () => {
 		else setModal("preview")
 	}
 
-	useEffect(() => {
-		console.log(addingAttachment)
-	}, [addingAttachment])
-
 	const renderModal = () => {
 		return (
 			<>
@@ -117,7 +114,15 @@ const Create = () => {
 			<Header openSubmit={popupSubmit}/>
 			
 			<ContainerItems className="ContainerItems">
-				{addingAttachment && <AttachmentPopup/>}
+				<AbsoluteModal visible={addingAttachment !== null} onClickOutside={() => setAddingAttachment(null)} width="50%">
+					<AttachmentPopup 
+						checkItemId={addingAttachment}
+						set={set}
+						attachments={approvalAttachments}
+						closePopup={() => setAddingAttachment(null)}
+						checklist={checklist}
+					/>
+				</AbsoluteModal>
 				{render(
 				<Container className="Container">
 				{/* SECTION PRIMARY INFO */}

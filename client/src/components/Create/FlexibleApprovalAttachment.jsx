@@ -93,10 +93,11 @@ const FlexibleApprovalAttachment = ({type, attachments, set, onRemoveAttachment,
                         />
                     </FormControl>
                     <Button 
-                        color="info"
+                        color="success"
+                        variant="outline"
                         padding="0.4rem"
                         onClick={() => selectDynamicForm()}
-                    >Use form</Button>
+                    >Apply</Button>
                 </Col>
             </Wrapper>
             {
