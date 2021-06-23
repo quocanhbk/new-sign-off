@@ -6,10 +6,10 @@ const getConfig = async () => {
 	const config = {
 		baseURL,
 		headers: {
-			Authorization: `Bearer ${token.accessToken}`
+			Authorization: `Bearer ${token.accessToken}`,
 		}
 	}
-    return {token, config}
+    return config
 }
 
 export default getConfig

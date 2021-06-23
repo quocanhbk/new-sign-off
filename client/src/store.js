@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { navigate } from '@reach/router'
 import {createStore, action, thunk} from 'easy-peasy'
-import axios from 'axios'
+import {getUsersApi} from 'api/user'
 import { getForms } from './api/form'
 
 const store = createStore({
@@ -23,7 +23,7 @@ const store = createStore({
         state.users = payload
     }),
     getUsers: thunk(async (actions, payload) => {
-        const {data} = await axios.get('/api/v1/users')
+        const data = await getUsersApi()
         actions.setUsers(data.map(d => ({
             id: d.user_id,
             name: d.last_name + " " + d.middle_name + " " + d.first_name,
