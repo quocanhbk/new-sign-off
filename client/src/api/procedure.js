@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 import axios from 'axios'
 import { getFormDetail } from './form'
-import baseURL from './baseURL'
+import getConfig from './getConfig'
 
 export const getProcedures = async (callback = (v) => {v}) => {
-    let {data} = await axios.get('/api/v1/procedures', {baseURL})
+    const config = await getConfig()
+    let {data} = await axios.get('/api/v1/procedures', config)
     callback(100)
     return data.map(d => ({
         id: d.procedure_id,
@@ -17,7 +18,8 @@ export const getProcedures = async (callback = (v) => {v}) => {
 }
 
 export const getProcedureDetail = async (id, getFile = false, callback = (v) => {v}) => {
-    const {data} = await axios.get('/api/v1/procedures/' + id, {baseURL})
+    const config = await getConfig()
+    const {data} = await axios.get('/api/v1/procedures/' + id, config)
     callback(30)
     let checklist = data.checklist.map(item => ({
         id: item.checklist_item_id,
@@ -60,10 +62,10 @@ export const getProcedureDetail = async (id, getFile = false, callback = (v) => 
 }
 
 export const postProcedure = async (data, callback = (v) => {v}) => {
+    const config = await getConfig()
     let {title, description, advisors, approvers, observators, checklist, isActive, tags} = data
-
     let body = {title, description, advisors, approvers, observators, isActive, tags}
-    let {data: {procedure_id: id}} = await axios.post('/api/v1/procedures', body, {baseURL}).catch(_ => {return})
+    let {data: {procedure_id: id}} = await axios.post('/api/v1/procedures', body, config).catch(_ => {return})
 
     callback(50)
     await axios.put("/api/v1/procedures/" + id + "/checklist", {
@@ -71,15 +73,16 @@ export const postProcedure = async (data, callback = (v) => {v}) => {
             name: item.name,
             formIds: item.defaultForms.map(form => form.id)
         }))
-    }, {baseURL})
+    }, config)
     callback(100)
     return
 }
 
 export const updateProcedure = async (id, data, callback = (v) => {v}) => {
+    const config = await getConfig()
     let {title, description, isActive, advisors, approvers, observators, checklist, tags} = data
     let body = {title, description, isActive, advisors, approvers, observators, tags}
-    let {data: {procedure_id: newId}} = await axios.put('/api/v1/procedures/' + id, body, {baseURL})
+    let {data: {procedure_id: newId}} = await axios.put('/api/v1/procedures/' + id, body, config)
     callback(50)
 
     await axios.put("/api/v1/procedures/" + newId + "/checklist", {
@@ -87,13 +90,14 @@ export const updateProcedure = async (id, data, callback = (v) => {v}) => {
             name: item.name,
             formIds: item.defaultForms.map(form => form.id)
         }))
-    }, {baseURL})
+    }, config)
     callback(100)
     return newId
 }
 
 export const deleteProcedure = async (id, callback = (v) => {v}) => {
-    let res = await axios.delete('/api/v1/procedures/' + id, {baseURL})
+    const config = await getConfig()
+    let res = await axios.delete('/api/v1/procedures/' + id, config)
     callback(100)
     if (res.status === 403) {
         return "delete-forbidden"
@@ -105,8 +109,9 @@ export const deleteProcedure = async (id, callback = (v) => {v}) => {
 }
 
 export const toggleActive = async (id, data, callback = v => {v}) => {
+    const config = await getConfig()
     let {title, description, isActive, advisors, approvers, observators, tags} = data
     let body = {title, description, isActive, advisors, approvers, observators, tags}
-    await axios.put('/api/v1/procedures/' + id, body, {baseURL})
+    await axios.put('/api/v1/procedures/' + id, body, config)
     callback(100)
 }
