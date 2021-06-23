@@ -12,7 +12,7 @@ const useCustomLoader = (load = true, placeholder = null, mask = false) => {
     }, [notFound])
 
     useEffect(() => {
-        if (percent === 100 && load) setTimeout(() => setLoading(false), 400)
+        if (percent === 100 && loading) setTimeout(() => setLoading(false), 400)
     }, [percent])
 
     const reset = () => {

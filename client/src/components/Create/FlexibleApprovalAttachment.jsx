@@ -98,7 +98,6 @@ const FlexibleApprovalAttachment = ({type, attachments, set, onRemoveAttachment,
                         onClick={() => selectDynamicForm()}
                     >Use form</Button>
                 </Col>
-                
             </Wrapper>
             {
                 attachments.length > 0 && 

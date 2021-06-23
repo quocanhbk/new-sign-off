@@ -1,9 +1,12 @@
 /* eslint-disable no-unused-vars */
+import React from 'react'
 import {useEffect, useReducer } from 'react'
 import { getProcedureDetail } from 'api/procedure'
 import { v4 } from 'uuid'
 import { postRequest } from 'api/request'
 import { useStoreActions } from 'easy-peasy'
+import useCustomLoader from 'hooks/useCustomLoader'
+import Placeholder from 'components/Placeholder'
 
 const initState = {
     title: "",
@@ -37,7 +40,8 @@ const reducer = (state, action) => {
 const initError = {
     title: "",
     deadline: "",
-    relatedProjects: ""
+    relatedProjects: "",
+    procedure: "",
 }
 
 const errorReducer = (state, action) => {
@@ -57,10 +61,14 @@ const useDocument = () => {
         approvalAttachments, referenceAttachments, procedure, checklist
     }, dispatch] = useReducer(reducer, initState)
     const setPath = useStoreActions(action => action.setPath)
+    const {render, reset, setPercent} = useCustomLoader(false, <Placeholder type="NOT_FOUND"/>)
+
+    // fetch procedure detail after user select procedure from combo box
     useEffect(() => {
         
         const fetchProcedure = async () => {
-            let data = await getProcedureDetail(procedure, true)
+            reset()
+            let data = await getProcedureDetail(procedure, true, (p) => setPercent(p))
             set("advisors", data.advisors)
             set("approvers", data.approvers)
             set("observators", data.observators)
@@ -80,9 +88,17 @@ const useDocument = () => {
             }, [])
             set("approvalAttachments", arr)
         }
+        set("advisors", [])
+        set("approvers", [])
+        set("observators", [])
         if (procedure)
             fetchProcedure()
     }, [procedure])
+
+    useEffect(() => {
+        if (type === "Flexible" && procedure)
+            set("procedure", null)
+    }, [type])
 
     const [error, dispatchError] = useReducer(errorReducer, initError)
 
@@ -135,6 +151,11 @@ const useDocument = () => {
             setError("relatedProjects", "At least 1 project must be selected")
             submittable = false
         }
+        // catch procedure error
+        if (type === "Procedure" && !procedure) {
+            setError("procedure", "Procedure is required")
+            submittable = false
+        }
         if (
             advisors.some(v => approvers.concat(observators).includes(v)) ||
             approvers.some(v => advisors.concat(observators).includes(v)) ||
@@ -161,9 +182,9 @@ const useDocument = () => {
             referenceAttachments,
             procedure
         }
-        //let id = await postRequest(input)
+        let id = await postRequest(input)
         //setPath("/search/" + id)
-        setPath("/search/")
+        //setPath("/search/")
     }
     return {
         title, description, type,
@@ -175,7 +196,7 @@ const useDocument = () => {
         //Helper function
         removeAttachment, submitRequest, isSubmittable, changeFieldContent,
         //Error
-        error, setError
+        error, setError, render
 
 
     }

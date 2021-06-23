@@ -16,6 +16,7 @@ import Snackbar from "components/Snackbar";
 import { BsFillExclamationTriangleFill } from "react-icons/bs";
 import { getProcedures } from "api/procedure";
 import AttachmentCheckList from "./AttachmentChecklist";
+import AttachmentPopup from './AttachmentPopup'
 
 const StyleContainer = styled.div`
   display: flex;
@@ -24,27 +25,12 @@ const StyleContainer = styled.div`
   height: 100%;
 `;
 const ContainerItems = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
-  overflow: auto;
-  position: relative;
-
-  ::-webkit-scrollbar {
-    width: 0.5rem;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: ${(props) => getFader(props.theme.color.fill.secondary, 0.5)};
-    border-radius: 99px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: ${(props) => props.theme.color.fill.secondary};
-  }
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	overflow: overlay;
+  
 `;
 const Notify = styled.div`
     padding: 1rem;
@@ -55,10 +41,33 @@ const Notify = styled.div`
     gap: 0.5rem;
     border-radius: 0.5rem;
 `
+const Container = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1rem;
+	overflow: auto;
+	position: relative;
+	overflow: overlay;
+	::-webkit-scrollbar {
+    	width: 0.5rem;
+	}
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	::-webkit-scrollbar-thumb {
+		background: ${(props) => getFader(props.theme.color.fill.secondary, 0.5)};
+		border-radius: 99px;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background: ${(props) => props.theme.color.fill.secondary};
+	}
+`
 const Create = () => {
 	const [modal, setModal] = useState()
 	const [errorNotify, setErrorNotify] = useState(false)
 	const [procedureList, setProcedureList] = useState([])
+	const [addingAttachment, setAddingAttachment] = useState(null)
 	const {
 		title, description, type,
         priority, deadline, relatedProjects,
@@ -66,13 +75,17 @@ const Create = () => {
         approvalAttachments, referenceAttachments, procedure, checklist,
         set,
         //Helper function
-        removeAttachment, submitRequest, error, isSubmittable, changeFieldContent
+        removeAttachment, submitRequest, error, isSubmittable, changeFieldContent, render
 	} = useDocument()
 
 	const popupSubmit = () => {
 		if (!isSubmittable()) setErrorNotify(true)
 		else setModal("preview")
 	}
+
+	useEffect(() => {
+		console.log(addingAttachment)
+	}, [addingAttachment])
 
 	const renderModal = () => {
 		return (
@@ -102,8 +115,11 @@ const Create = () => {
 		<StyleContainer>
 			{renderModal()}
 			<Header openSubmit={popupSubmit}/>
-			<ContainerItems>
-
+			
+			<ContainerItems className="ContainerItems">
+				{addingAttachment && <AttachmentPopup/>}
+				{render(
+				<Container className="Container">
 				{/* SECTION PRIMARY INFO */}
 				<SectionContainer headline="Primary Information" haveBorder>
 					<PrimaryInfo
@@ -136,6 +152,7 @@ const Create = () => {
 							checklist={checklist} 
 							attachments={approvalAttachments}
 							onRemoveAttachment={id => removeAttachment("approval", id)}
+							setAddingAttachment={setAddingAttachment}
 							changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("approvalAttachments", attachmentId, fieldId, content)}
 						/> : 
 						<FlexibleApprovalAttachment 
@@ -163,6 +180,10 @@ const Create = () => {
 				<SectionContainer headline="Description" haveBorder>
 					<DescriptionEditor description={description} set={set}/>
 				</SectionContainer>
+				</Container>
+				)}
+
+
 			</ContainerItems>
 			<Snackbar visible={errorNotify} onClose={() => setErrorNotify(false)} timeOut={2000}>
                 <Notify>

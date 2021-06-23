@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { getFader } from "utils/color";
 import {BsCheckCircle, BsPlus} from 'react-icons/bs'
 import AttachmentTable from './AttachmentTable'
@@ -41,7 +41,7 @@ const CheckItemName = styled.div`
 	}
 `
 
-const AttachmentCheckList = ({checklist, attachments, onRemoveAttachment, changeFieldContent}) => {
+const AttachmentCheckList = ({checklist, attachments, onRemoveAttachment, changeFieldContent, setAddingAttachment}) => {
 
 	return (
 		<TableWrapper>
@@ -61,7 +61,7 @@ const AttachmentCheckList = ({checklist, attachments, onRemoveAttachment, change
 									</CheckItemName>
 								</td>
 								<td width="10%">
-									<IconContainer color="info">
+									<IconContainer color="info" onClick={() => setAddingAttachment(checkItem.id)}>
 										<BsPlus size="1.2rem"/>
 									</IconContainer>
 								</td>

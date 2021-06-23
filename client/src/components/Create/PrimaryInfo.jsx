@@ -59,7 +59,7 @@ const PrimaryInfo = ({title, type, priority, deadline, relatedProjects, set, err
                         onSelect={newValue => set("type", newValue.id)}
                     />
                 </FormControl>
-                <FormControl headline="Procedure" required disabled={type !== "Procedure"}>
+                <FormControl headline="Procedure" required disabled={type !== "Procedure"} errorText={error.procedure}>
                     <ControlledCombox
                         selection={procedureList}
                         value={procedureList.find(p => p.id === procedure)}
