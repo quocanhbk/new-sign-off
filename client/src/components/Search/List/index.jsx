@@ -6,6 +6,8 @@ import RequestCard from './RequestCard';
 import ListToolbar from './ListToolbar';
 import {getFader} from '../../../utils/color';
 import { getRequests } from 'api/request';
+import useCustomLoader from 'hooks/useCustomLoader';
+import Placeholder from 'components/Placeholder';
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -57,13 +59,16 @@ const CardList = styled.div`
 function List() {
     const [requests, setRequests] = useState([])
 
+    const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
+    
     useEffect(() => {
         const fetchRequests = async () => {
-            let requestsData = await getRequests()
+            let requestsData = await getRequests((p) => setPercent(p)).catch(() => setNotFound(true))
             setRequests(requestsData)
         }
         fetchRequests()
     }, [])
+
 
     return (
         <StyleListWrapper>
@@ -75,7 +80,7 @@ function List() {
                 </TagContainer>
             </TagBar>
             <CardList>
-                {requests.map((task) => (
+                {render(requests.map((task) => (
                     <RequestCard
                         key={task.id}
                         id={task.id}
@@ -86,7 +91,7 @@ function List() {
                         createdBy={task.author.full_name}
                         page={"search"}
                     />
-                ))}
+                )))}
             </CardList>
         </StyleListWrapper>
     );

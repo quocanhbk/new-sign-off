@@ -15,6 +15,7 @@ import { useStoreState } from 'easy-peasy';
 import useLoading from 'hooks/useLoading';
 import useLoader from 'hooks/useLoader'
 import Placeholder from 'components/Placeholder';
+import useCustomLoader from 'hooks/useCustomLoader';
 
 const StyleListWrapper =styled.div`
     flex: 5;
@@ -63,22 +64,7 @@ function List() {
     const [searchText, setSearchText] = useState("")
     const location = useLocation().pathname.split("/")
     const users = useStoreState(_ => _.users)
-    //const {loading, percent, setPercent} = useLoading()
-
-    const handle = (formId) => {
-        navigate('/form/view/' + formId)
-    }
-
-    const renderList = () => 
-        forms.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())).map(form => 
-            <Card 
-                key={form.id} 
-                name={form.name}
-                createdBy={users.find(u => u.id === form.createdBy)}
-                onClick={() => handle(form.id)}
-                active={form.id == location[location.length - 1]}
-            />
-        )
+    const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
     useEffect(() => {
         const fetchData = async () => {
             const forms = await getForms((v) => setPercent(v)).catch(() => setNotFound(true))
@@ -86,7 +72,10 @@ function List() {
         }
         fetchData()
     }, [])
-    const {LoadingComponent, setNotFound, setPercent} = useLoader(true, renderList(), <Placeholder type="NOT_FOUND"/>)
+
+    const handle = (formId) => {
+        navigate('/form/view/' + formId)
+    }
 
     return (
         <StyleListWrapper>
@@ -103,7 +92,16 @@ function List() {
                 </Button>
             </AddNewContainer>
             <CardList>
-                {LoadingComponent}
+                {render(
+                    forms.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())).map(form => 
+                        <Card 
+                            key={form.id} 
+                            name={form.name}
+                            createdBy={users.find(u => u.id === form.createdBy)}
+                            onClick={() => handle(form.id)}
+                            active={form.id == location[location.length - 1]}
+                        />
+                ))}
             </CardList>
         </StyleListWrapper>
     );

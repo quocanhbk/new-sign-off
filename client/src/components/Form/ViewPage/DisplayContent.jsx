@@ -8,8 +8,8 @@ import { getFader } from "utils/color";
 import { getFormDetail, deleteForm } from "api/form";
 import ContentHeader from "./ContentHeader";
 import { navigate } from "@reach/router";
-import useLoader from 'hooks/useLoader'
 import Placeholder from "components/Placeholder";
+import useCustomLoader from "hooks/useCustomLoader";
 
 const Container = styled.div`
 	position: relative;
@@ -45,9 +45,9 @@ const DocDisplay = styled.div`
 const DisplayContent = ({id}) => {
 	const [numPage, setNumPage] = useState(0)
 	const [form, setForm] = useState()
-	//const [notFound, setNotFound] = useState(false)
 	let docRef = useRef()
-	//const {loading, percent, setPercent, reset} = useLoading()
+	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>, true)
+
 	const onDeleteClick = async () => {
 		await deleteForm(id)
 		navigate('/form')
@@ -90,11 +90,10 @@ const DisplayContent = ({id}) => {
 			</DocWrapper>
 		</>
 	
-	const {LoadingComponent, reset, setNotFound, setPercent} = useLoader(true, renderDoc(), <Placeholder type="NOT_FOUND"/>, true)
+	//const {LoadingComponent, reset, setNotFound, setPercent} = useLoader(true, renderDoc(), <Placeholder type="NOT_FOUND"/>, true)
 
 	useEffect(() => {
 		const fetchForm = async () => {
-			setNotFound(false)
 			setForm(null)
 			reset()
 			const formDetail = await getFormDetail(id, (v) => setPercent(v)).catch(_ => {setNotFound(true)})
@@ -105,7 +104,7 @@ const DisplayContent = ({id}) => {
 
 	return (
 		<Container ref={docRef} className="container">
-			{LoadingComponent}
+			{render(renderDoc())}
 		</Container>
 	);
 }

@@ -2,7 +2,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { BsFillCircleFill } from "react-icons/bs";
-import {getFader} from '../../../../../utils/color'
+import {getFader} from 'utils/color'
 
 const Container = styled.td`
     padding: 0.5rem;

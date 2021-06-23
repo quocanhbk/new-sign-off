@@ -2,9 +2,10 @@
 import axios from 'axios'
 import getConfig from './getConfig';
 
-export const getRequests = async () => {
+export const getRequests = async (callback = (v) => {v}) => {
 	const config = await getConfig()
 	let {data} = await axios.get('/api/v1/requests', config)
+	callback(100)
 	return data.map(request => ({
 		id: request.approval_request_id,
 		type: request.type,
