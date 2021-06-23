@@ -18,19 +18,24 @@ export const getRequests = async (callback = (v) => {v}) => {
 }
 export const getRequestDetail = async (id) => {
 	const config = await getConfig()
-	let {data} = await axios.get('/api/v1/requests/' + id, config)
-	return data.map(d => ({
-		id: d.approval_request_id,
-		title: d.title,
-		author: d.author,
-		createdAt: d.createdAt,
-		deadline: d.deadline,
-		description: d.description,
-		priority: d.priority,
-		relatedProjects: d.related_projects,
-		status: d.status,
-		type: d.type
-	}))
+	let {data} = await axios.get('/api/v1/requests/' + id, config);
+	console.log(data);
+	return {
+		id: data.approval_request_id,
+		title: data.title,
+		author: data.author,
+		createdAt: new Date(data.created_at),
+		deadline: new Date(data.deadline),
+		description: data.description,
+		priority: data.priority,
+		relatedProjects: data.related_projects,
+		status: data.status,
+		type: data.type,
+		attachments: data.attachments,
+		approvers: data.approvers,
+		observators: data.observators,
+		logs: data.logs,
+	}
 }
 export const postRequest = async (input, callback = (v) => {v}) => {
 	// REMEMBER to post all the file without the fileId first

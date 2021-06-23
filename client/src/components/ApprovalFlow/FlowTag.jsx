@@ -72,6 +72,8 @@ const Text = styled.div`
     }
 `
 const FlowTag = ({data}) => {
+    const email = data.email ? data.email : data.user_info.email;
+    const fullname = data.email ? data.fullname : `${data.user_info.last_name} ${data.user_info.middle_name} ${data.user_info.first_name}`;
     return (
         <tr>
             <Side>
@@ -80,14 +82,14 @@ const FlowTag = ({data}) => {
                         <BsFillCircleFill size="0.8rem"/>
                     </CheckWrapper>
                 </CheckContainer>
-                <Vertical last={data.last}/>
+                <Vertical last={false}/>
             </Side>
             <Container>
-                <Body status={data.status}>
-                    <img src={"/api/v1/avatar/" + data.email}/>
+                <Body status={data.decision}>
+                    <img src={"/api/v1/avatar/" + email}/>
                     <Text>
-                        <p className="flow-tag-name">{data.name}</p>
-                        <p className="flow-tag-email">{data.email}</p>
+                        <p className="flow-tag-name">{fullname}</p>
+                        <p className="flow-tag-email">{email}</p>
                     </Text>
                 </Body> 
             </Container>
