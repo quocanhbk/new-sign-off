@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import {getFader} from '../../../utils/color'
 import EventComments from './EventComments';
@@ -31,7 +31,10 @@ const ContentWrapper = styled.div`
 `
 
 function Content({request}) {
-    const [comment,setComment] = useState('');
+    const [logs, setLogs] = useState('');
+    useEffect(() => {
+        setLogs(request.logs);
+    }, [request])
     return (
         <ContentWrapper className="abc">
             <SectionContainer headline="1. Related Project">
@@ -47,7 +50,7 @@ function Content({request}) {
                 <TableApproval dataList={request.attachments}/>
             </SectionContainer>
             <SectionContainer headline="5. Event & Comments">
-                <EventComments logs={request.logs} dataList={comment} setComment={setComment} />
+                <EventComments logs={logs} setLogs={setLogs} requestId={request.id} />
             </SectionContainer>
         </ContentWrapper>
     );

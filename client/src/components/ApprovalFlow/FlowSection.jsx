@@ -42,14 +42,16 @@ const CheckContainer = styled.div`
     display: grid;
     place-items: center;
 `
-const FlowSection = ({headline, data, type}) => {
+const FlowSection = ({headline, data, type, done}) => {
     return (
         <Fragment>
             <tr>
                 <Side>
                     <CheckContainer>
                         <CheckWrapper>
-                            <BsFillCircleFill size="0.8rem"/>
+                            {
+                                done ? <BsCheck size="0.8rem" /> : <BsFillCircleFill size="0.8rem"/>
+                            }
                         </CheckWrapper>
                     </CheckContainer>
                     <Vertical type={type}/>
@@ -57,7 +59,7 @@ const FlowSection = ({headline, data, type}) => {
                 <Headline>{headline}</Headline>
             </tr>
             {data.map(d => 
-                <FlowTag key={d.email} data={d}/> 
+                <FlowTag key={d.email? d.email : d.user_info.email} data={d}/> 
             )}
         </Fragment>
        

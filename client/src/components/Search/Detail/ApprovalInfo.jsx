@@ -1,4 +1,6 @@
+/* eslint-disable react/prop-types */
 import React from "react";
+import format from 'date-fns/format';
 import { getFader } from "../../../utils/color";
 import styled from "styled-components";
 import SectionContainer from '../../SectionContainer'
@@ -31,32 +33,62 @@ const LineContainer = styled.div`
   gap: 0.5rem;
 `
 
-const ApprovalInfo = () => {
+const ApprovalInfo = ({request}) => {
+  const lastApprover = request.approvers[request.approvers.length - 1].user_info;
   return (
     <Container>
       <SectionContainer headline="Document">
         <LineContainer>
-          <InfoLine headline={"Document Id"} content={"01061999"}/>
-          <InfoLine headline={"Priority"} content={"Normal"}/>
-          <InfoLine headline={"Deadline"} content={"June 1st 1999"}/>
-          <InfoLine headline={"Related project"} content={"TTG - Trung Thuy"}/>
-          <InfoLine headline={"Number of approval file"} content={"2"}/>
-          <InfoLine headline={"Final approval by"} content={"Thomas Shelby"}/>
-          <InfoLine headline={"Final approval at"} content={"May 29th 1999 17:30"}/>
+          <InfoLine headline={'Document Id'} content={request.id} />
+          <InfoLine headline={'Priority'} content={request.priority} />
+          <InfoLine
+            headline={'Deadline'}
+            content={format(request.deadline, 'yyyy-MM-dd hh:mm')}
+          />
+          <InfoLine
+            headline={'Related project'}
+            content={request.relatedProjects.join(', ')}
+          />
+          <InfoLine
+            headline={'Number of approval file'}
+            content={request.attachments.length}
+          />
+          <InfoLine
+            headline={'Final approval by'}
+            content={`${lastApprover.last_name} ${lastApprover.middle_name} ${lastApprover.first_name}`}
+          />
+          <InfoLine
+            headline={'Final approval at'}
+            content={
+              lastApprover.decision_timestamp
+                ? lastApprover.decision_timestamp
+                : 'N/A'
+            }
+          />
         </LineContainer>
       </SectionContainer>
-      <SectionContainer headline="Creator"> 
+      <SectionContainer headline="Creator">
         <LineContainer>
-          <InfoLine headline={"Name"} content={"Arthur Shelby"}/>
-          <InfoLine headline={"Job title"} content={"Software developer"}/>
-          <InfoLine headline={"Created"} content={"May 26th 1999 9:00"}/>
+          <InfoLine headline={'Name'} content={request.author.fullname} />
+          <InfoLine headline={'Job title'} content={request.author.email} />
+          <InfoLine
+            headline={'Created'}
+            content={format(request.createdAt, 'yyyy-MM-dd hh:mm')}
+          />
         </LineContainer>
       </SectionContainer>
       <SectionContainer headline="Log">
         <LineContainer>
-          <InfoLine headline="Nothing to see here...."/>
-          <InfoLine headline="Nothing to see here...."/>
-          <InfoLine headline="Nothing to see here...."/>
+          {request.logs
+            .filter((log) => log.type !== 'Comment')
+            .map((log) => (
+              <InfoLine
+                key={log.log_id}
+                headline={`${log.author.first_name} ${
+                  log.description
+                } at ${format(new Date(log.created_at), 'yyyy-MM-dd hh:mm')}`}
+              />
+            ))}
         </LineContainer>
       </SectionContainer>
     </Container>

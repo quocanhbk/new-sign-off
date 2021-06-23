@@ -4,10 +4,10 @@ import Tab from "../../Tab";
 import TabPane from "../../TabPane";
 import Content from "./Content";
 import Header from "./Header";
-import ApprovalFlow from "./ApprovalFlow";
 import ApprovalInfo from "./ApprovalInfo";
 import styled from "styled-components";
 import {getRequestDetail} from 'api/request'
+import ApprovalFlow from "components/ApprovalFlow";
 //import { useGetRequestById } from "../../../api/request";
 
 const Container = styled.div`
@@ -42,14 +42,15 @@ const  DisplayContent = ({id}) => {
                 <Content request={request} />
               </TabPane>
               <TabPane name="Approval Flow" key={2} value={2}>
-                <ApprovalFlow
-                  approvers={request.approvers}
-                  creator={request.created_by}
-                  observators={request.observators}
-                />
+                <ApprovalFlow 
+									submitter={[request.author]}
+									advisors={request.approvers.filter(approver => approver.type === 'advisor')}
+									approvers={request.approvers.filter(approver => approver.type === 'approver')}
+									observators={request.observators}
+								/>
               </TabPane>
               <TabPane name="Info" key={3} value={3}>
-                <ApprovalInfo />
+                <ApprovalInfo request={request}/>
               </TabPane>
             </Tab>
           </>

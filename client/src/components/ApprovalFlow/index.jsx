@@ -1,3 +1,8 @@
+/* eslint-disable react/prop-types */
+import baseURL from 'api/baseURL';
+import Avatar from 'components/Avatar';
+import { UserDisplayCardInfo } from 'components/SideBar';
+import { UserDisplayCard } from 'components/SideBar';
 import React from 'react'
 import styled from "styled-components";
 import FlowSection from './FlowSection';
@@ -7,33 +12,62 @@ const Container = styled.div`
         border-collapse: collapse;
     }
 `
-const data = {
-    submitter: [{
-        name: "La Quoc Anh",
-        email: "anh.lq@ttgvn.com",
-        status: "Done"
-    }],
-    advisor: [
-        {name: "Ngo Kim Son", email: "son.nk@ttgvn.com", status: "Waiting"},
-        {name: "Le Hoang Vu", email: "vu.lh@ttgvn.com", status: "Rejected"},
-    ],
-    approver: [
-        {name: "Tran Thach Thao", email: "thao.tt@ttgvn.com", status: "Waiting"},
-        {name: "Nguyen Hoang Tan", email: "tan.nh@ttgvn.com", status: "Waiting", last: true},
-    ]
-}
-const ApprovalFlow = () => {
+
+const Headline = styled.div`
+    padding: 0.5rem;
+    font-weight: 600;
+    color: ${props => props.theme.color.fill.primary};
+    //border: 1px solid black;
+`;
+
+const ObservatorsWrapper = styled.div`
+`
+
+const Divider = styled.div`
+    height: 2px;
+    width: 96%;
+    margin-top: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: ${props => props.theme.color.fill.primary};
+`;
+const ApprovalFlow = ({submitter, advisors, approvers, observators}) => {
+    console.log(observators);
     return (
-        <Container>
-            <table>
-                <tbody>
-                    <FlowSection headline="Submitter" data={data.submitter} type="submitter"/>
-                    <FlowSection headline="Advisor" data={data.advisor} type="advisor"/>
-                    <FlowSection headline="Approver" data={data.approver} type="approver"/>
-                </tbody>
-            </table>
-        </Container>
-    )
+      <Container>
+        <table>
+          <tbody>
+            <FlowSection
+              headline="Submitter"
+              data={submitter}
+              type="submitter"
+              done={true}
+            />
+            {submitter && submitter.length > 0 && (
+              <FlowSection headline="Advisor" data={advisors} type="advisor" />
+            )}
+            <FlowSection headline="Approver" data={approvers} type="approver" />
+          </tbody>
+        </table>
+        <Divider />
+        <Headline>Observators</Headline>
+        <ObservatorsWrapper>
+          {observators.map((obs) => (
+            <UserDisplayCard key={obs.email}>
+              <Avatar
+                src={
+                  baseURL + '/api/v1/avatar/' + obs.fullname + '/96x96'
+                }
+              />
+              <UserDisplayCardInfo>
+                <h3>{obs.fullname}</h3>
+                <p>{obs.email}</p>
+              </UserDisplayCardInfo>
+            </UserDisplayCard>
+          ))}
+        </ObservatorsWrapper>
+      </Container>
+    );
 }
 
 export default ApprovalFlow

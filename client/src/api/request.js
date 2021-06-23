@@ -33,7 +33,7 @@ export const getRequestDetail = async (id) => {
 		type: data.type,
 		attachments: data.attachments,
 		approvers: data.approvers,
-		observators: data.logs,
+		observators: data.observators,
 		logs: data.logs,
 	}
 }

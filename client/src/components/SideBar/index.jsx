@@ -24,7 +24,7 @@ const Logo = styled.img`
   height: 64px;
 `;
 
-const UserDisplayCard = styled.div`
+export const UserDisplayCard = styled.div`
   display: flex;
   align-items: center;
   padding: 1rem;
@@ -41,7 +41,7 @@ const UserDisplayCard = styled.div`
     color: ${props => props.theme.color.text.secondary};
   }
 `;
-const UserDisplayCardInfo = styled.div`
+export const UserDisplayCardInfo = styled.div`
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
