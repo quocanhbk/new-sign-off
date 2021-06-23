@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import {IoMdSend} from 'react-icons/all'
 import CardEvents from './CardEvents';
 import { getFader } from '../../../utils/color';
+import format from 'date-fns/format'
 
 const StyleWrapper = styled.div`
     display: flex;
@@ -53,20 +54,14 @@ const TableEvents = styled.div`
     gap: 0.5rem;
 `
 
-function EventComents({logs ,dataList,setComment}) {
+function EventComents({logs}) {
     const [value,setValue] = useState()
 
     const handleSubmit = (e) =>{
         e.preventDefault()
-        setComment([{
-            id: Math.random(),
-            title: value,
-            create_by: 'Gấu',
-            create_date: '10:08 11/05/2021'
-        },...dataList])
+        
         setValue('')
     }
-
     return (
         <StyleWrapper>
             <Form>
@@ -78,7 +73,7 @@ function EventComents({logs ,dataList,setComment}) {
                         <CardEvents
                         key={log.log_id}
                         description={log.description}
-                        created_at={log.created_at}
+                        created_at={format(new Date(log.created_at), 'yyyy-MM-dd hh:mm')}
                         created_by={log.author}
                         />
                     ))}
