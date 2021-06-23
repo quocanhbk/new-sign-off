@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {  } from 'react';
 import styled, {css} from 'styled-components';
 import { BsThreeDotsVertical} from 'react-icons/bs';
 import Avatar from '../Avatar';
@@ -6,6 +6,9 @@ import ThemeToggle from '../ThemeToggle'
 import pageList from '../../pageList'
 import { getFader } from '../../utils/color';
 import {useStoreActions, useStoreState} from 'easy-peasy'
+import { useMsal } from '@azure/msal-react';
+import baseURL from 'api/baseURL';
+
 const SidebarContainer = styled.div`
   background-color: ${props => props.theme.color.background.secondary};
   padding-top: 0.5rem;
@@ -114,7 +117,10 @@ const SideBar = () => {
   const setTheme = useStoreActions(_ => _.setTheme)
   const setPath = useStoreActions(_ => _.setPath)
   const path = useStoreState(_ => _.path)
-  
+  const { instance, accounts } = useMsal();
+  const name = accounts[0].name.split("-")[accounts[0].name.split("-").length - 1]
+
+
   return (
     <SidebarContainer>
       <Header>
@@ -122,12 +128,12 @@ const SideBar = () => {
         <h1>TTG Approval Online</h1>
       </Header>
       <UserDisplayCard>
-        <Avatar src={`/avatar.png`} />
+        <Avatar src={baseURL + "/api/v1/avatar/" + accounts[0].username + "/96x96"} />
         <UserDisplayCardInfo>
-          <h3>John Doe</h3>
-          <p>johndoe@email.com</p>
+          <h3>{name}</h3>
+          <p>{accounts[0].username}</p>
         </UserDisplayCardInfo>
-        <BsThreeDotsVertical size="20px"/>
+        <BsThreeDotsVertical size="20px" onClick={() => instance.logoutRedirect()}/>
       </UserDisplayCard>
       <NavList>
         {pageList.map(item => 
