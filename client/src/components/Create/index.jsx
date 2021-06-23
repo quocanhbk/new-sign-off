@@ -66,7 +66,7 @@ const Create = () => {
         approvalAttachments, referenceAttachments, procedure, checklist,
         set,
         //Helper function
-        removeAttachment, submitRequest, error, isSubmittable
+        removeAttachment, submitRequest, error, isSubmittable, changeFieldContent
 	} = useDocument()
 
 	const popupSubmit = () => {
@@ -132,12 +132,18 @@ const Create = () => {
 				{/* SECTION APPROVAL DOCUMENT */}
 				<SectionContainer headline="Approval Attachment" haveBorder>
 					{type === "Procedure" ? 
-						<AttachmentCheckList checklist={checklist} attachments={approvalAttachments}/> : 
+						<AttachmentCheckList 
+							checklist={checklist} 
+							attachments={approvalAttachments}
+							onRemoveAttachment={id => removeAttachment("approval", id)}
+							changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("approvalAttachments", attachmentId, fieldId, content)}
+						/> : 
 						<FlexibleApprovalAttachment 
 							type="approvalAttachments"
 							attachments={approvalAttachments}
 							set={set}
 							onRemoveAttachment={id => removeAttachment("approval", id)}
+							changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("approvalAttachments", attachmentId, fieldId, content)}
 						/>
 					}
 				</SectionContainer>
@@ -149,6 +155,7 @@ const Create = () => {
 						attachments={referenceAttachments} 
 						set={set} 
 						onRemoveAttachment={id => removeAttachment("reference", id)}
+						changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("referenceAttachments", attachmentId, fieldId, content)}
 					/>
 				</SectionContainer>
 				

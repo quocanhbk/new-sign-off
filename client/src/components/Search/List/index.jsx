@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import RequestCard from './RequestCard';
 import ListToolbar from './ListToolbar';
@@ -55,15 +55,16 @@ const CardList = styled.div`
 `
 
 function List() {
-  //const [requests] = useGetRequests();
-
+    const [requests, setRequests] = useState([])
 
     useEffect(() => {
-        const fetchData = async () => {
-            await getRequests()
+        const fetchRequests = async () => {
+            let requestsData = await getRequests()
+            setRequests(requestsData)
         }
-        fetchData()
-    })
+        fetchRequests()
+    }, [])
+
     return (
         <StyleListWrapper>
             <ListToolbar/>
@@ -74,18 +75,18 @@ function List() {
                 </TagContainer>
             </TagBar>
             <CardList>
-                {/* {requests.map((task) => (
+                {requests.map((task) => (
                     <RequestCard
-                        key={task.approval_request_id}
-                        id={task.approval_request_id}
+                        key={task.id}
+                        id={task.id}
                         title={task.title}
                         status={task.status}
                         type={task.type}
                         deadline={task.deadline}
-                        createdBy={task.author}
+                        createdBy={task.author.full_name}
                         page={"search"}
                     />
-                ))} */}
+                ))}
             </CardList>
         </StyleListWrapper>
     );

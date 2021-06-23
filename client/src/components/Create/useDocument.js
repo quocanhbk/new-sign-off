@@ -2,6 +2,8 @@
 import {useEffect, useReducer } from 'react'
 import { getProcedureDetail } from 'api/procedure'
 import { v4 } from 'uuid'
+import { postRequest } from 'api/request'
+import { useStoreActions } from 'easy-peasy'
 
 const initState = {
     title: "",
@@ -54,8 +56,9 @@ const useDocument = () => {
         advisors, approvers, observators, 
         approvalAttachments, referenceAttachments, procedure, checklist
     }, dispatch] = useReducer(reducer, initState)
-
+    const setPath = useStoreActions(action => action.setPath)
     useEffect(() => {
+        
         const fetchProcedure = async () => {
             let data = await getProcedureDetail(procedure, true)
             set("advisors", data.advisors)
@@ -64,7 +67,6 @@ const useDocument = () => {
 
             set("checklist", data.checklist.map(c => ({id: c.id, name: c.name})))
             let arr = data.checklist.reduce((pre, cur) => {
-                
                 let forms = cur.defaultForms.map(f => ({
                     id: v4().slice(0, 8),
                     name: f.name,
@@ -76,7 +78,6 @@ const useDocument = () => {
                 }))
                 return pre.concat(forms)
             }, [])
-            console.log("Array", arr)
             set("approvalAttachments", arr)
         }
         if (procedure)
@@ -99,6 +100,21 @@ const useDocument = () => {
         if (error[field] !== "") setError(field, "")
     }
     
+    const changeFieldContent = (attachmentType, attachmentId, fieldId, content) => {
+        let attachments = [...(attachmentType === "approvalAttachments" ? approvalAttachments : referenceAttachments)]
+        let attachmentIndex = attachments.map(_ => _.id).indexOf(attachmentId)
+        let attachmentObject = attachments[attachmentIndex]
+        let fieldIndex = attachmentObject.fields.map(_ => _.id).indexOf(fieldId)
+        let fieldObject = attachmentObject.fields[fieldIndex]
+        fieldObject.content = content
+
+        set(attachmentType, [
+            ...attachments.slice(0, attachmentIndex),
+            attachmentObject,
+            ...attachments.slice(attachmentIndex + 1, attachments.length)
+        ])
+    }
+
     const isSubmittable = () => {
         let submittable = true
         if (title === "") {
@@ -140,10 +156,14 @@ const useDocument = () => {
             relatedProjects, 
             advisors, 
             approvers, 
-            observators
+            observators,
+            approvalAttachments,
+            referenceAttachments,
+            procedure
         }
         //let id = await postRequest(input)
         //setPath("/search/" + id)
+        setPath("/search/")
     }
     return {
         title, description, type,
@@ -153,7 +173,7 @@ const useDocument = () => {
         procedure, checklist,
         set,
         //Helper function
-        removeAttachment, submitRequest, isSubmittable,
+        removeAttachment, submitRequest, isSubmittable, changeFieldContent,
         //Error
         error, setError
 

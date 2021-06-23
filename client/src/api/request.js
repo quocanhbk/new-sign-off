@@ -1,21 +1,23 @@
 /* eslint-disable no-unused-vars */
 import axios from 'axios'
-import baseURL from "./baseURL";
-import getToken from './getToken';
+import getConfig from './getConfig';
 
 export const getRequests = async () => {
-	const token = await getToken();
-	const config = {
-		baseURL,
-		headers: {
-			Authorization: `Bearer ${token.accessToken}`
-		}
-	}
-	let res = await axios.get('/api/v1/requests', token, config)
-	console.log(res)
+	const config = await getConfig()
+	let {data} = await axios.get('/api/v1/requests', config)
+	return data.map(request => ({
+		id: request.approval_request_id,
+		type: request.type,
+		title: request.title,
+		status: request.status,
+		priority: request.priority,
+		deadline: request.deadline,
+		author: request.author
+	}))
 }
 export const getRequestDetail = async (id) => {
-	let {data} = await axios.get('/api/v1/requests/' + id, {baseURL})
+	const config = await getConfig()
+	let {data} = await axios.get('/api/v1/requests/' + id, config)
 	return data.map(d => ({
 		id: d.approval_request_id,
 		title: d.title,
@@ -30,6 +32,8 @@ export const getRequestDetail = async (id) => {
 	}))
 }
 export const postRequest = async (input, callback = (v) => {v}) => {
+	// REMEMBER to post all the file without the fileId first
+	const config = await getConfig()
 	const {
 		title, 
 		description, 
@@ -39,7 +43,10 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 		relatedProjects, 
 		advisors, 
 		approvers, 
-		observators
+		observators,
+		approvalAttachments,
+		referenceAttachments,
+		procedure : procedureId
 	} = input
 
 	let sendData = {
@@ -51,11 +58,50 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 		relatedProjects,
 		advisors,
 		approvers,
-		observators
+		observators,
+		procedureId
 	}
+	if (!sendData.procedureId) delete sendData.procedureId
 
-	let {data: {approval_request_id: id}} = await axios.post('/api/v1/requests', sendData, {baseURL})
+	console.log("Send data", sendData)
+
+	// 1. POST request data to get Request ID
+	let {data: {approval_request_id: id}} = await axios.post('/api/v1/requests', sendData, config)
+	console.log("POST request successfully!")
+	// 2. POST attachments
+	await Promise.all(approvalAttachments.concat(referenceAttachments).map(async (attachment) => {
+		if (!attachment.fileId) {
+			const data = new FormData()
+			data.append('file', attachment.file, attachment.file.name)
+			const {data: {file_id}} = await axios.post('/api/v1/files', data, config)
+			attachment.fileId = file_id
+		}
+		// POST attachment
+		let attachmentBody = {
+			name: attachment.name,
+			checklistItemid: attachment.checklistItemId,
+			reference: attachment.reference,
+			fileId: attachment.fileId,
+		}
+		if (!attachmentBody.checklistItemid) delete attachmentBody.checklistItemid
+		let {data: {attachment_id: attachmentId}} = await axios.post("/api/v1/requests/" + id + "/attachments", attachmentBody, config)
+
+		// POST field
+		let fields = attachment.fields.map((field) => ({
+			field: field.name,
+			type: "FIELD",
+			value: field.content,
+			x: field.position.X,
+			y: field.position.Y,
+			width: field.size.width,
+			height: field.size.height,
+			required: field.required
+		}))
+		await axios.post("/api/v1/requests/attachments/" + attachmentId + "/fields", {fields}, config)
+	}));
+
+
 	callback(100)
-	console.log(id)
+	console.log("SUCCESSFULLY!, Request ID:", id)
 	return id
 }

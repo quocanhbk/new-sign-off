@@ -84,6 +84,11 @@ const ButtonContainer = styled.div`
     align-items: center;
     padding: 0.5rem;
 `
+const formatDate = (dateString) => {
+    let date = new Date(dateString)
+    return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+}
+
 const Card = ({id, title, type, createdBy, status, deadline, page}) => {
 
     const renderIcon = (status) => {
@@ -108,7 +113,7 @@ const Card = ({id, title, type, createdBy, status, deadline, page}) => {
                     {status === "Pending" && 
                         <>
                             <span>|</span>
-                            <span className="deadline">Deadline: {deadline}</span>
+                            <span className="deadline">Deadline: {formatDate(deadline)}</span>
                         </>
                     }
                 </Line>
