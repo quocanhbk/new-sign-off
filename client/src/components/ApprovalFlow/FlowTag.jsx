@@ -54,7 +54,7 @@ const Vertical = styled.div`
     left: 50%;
     top: 0;
     width: 2px;
-    height: ${props => !props.last ? "900%" : "50%"};
+    height: ${props => props.last ? "50%" : "900%"};
     transform: translate(-50%, 0%);
     background: ${props => props.theme.color.fill.primary};
 `
@@ -71,9 +71,7 @@ const Text = styled.div`
         color: ${props => props.theme.color.text.secondary};
     }
 `
-const FlowTag = ({data}) => {
-    const email = data.email ? data.email : data.user.email;
-    const fullname = data.email ? data.fullname : data.user.fullname;
+const FlowTag = ({data, last}) => {
     return (
         <tr>
             <Side>
@@ -82,14 +80,14 @@ const FlowTag = ({data}) => {
                         <BsFillCircleFill size="0.8rem"/>
                     </CheckWrapper>
                 </CheckContainer>
-                <Vertical last={false}/>
+                <Vertical last={last}/>
             </Side>
             <Container>
                 <Body status={data.decision}>
-                    <img src={"/api/v1/avatar/" + email}/>
+                    <img src={"/api/v1/avatar/" + data.email}/>
                     <Text>
-                        <p className="flow-tag-name">{fullname}</p>
-                        <p className="flow-tag-email">{email}</p>
+                        <p className="flow-tag-name">{data.email}</p>
+                        <p className="flow-tag-email">{data.email}</p>
                     </Text>
                 </Body> 
             </Container>

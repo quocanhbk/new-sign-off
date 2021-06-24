@@ -55,7 +55,11 @@ export const getRequestDetail = async (id) => {
 			email: a.user.email,
 			fullname: a.user.fullname
 		})),
-		observators: data.observators.map(o => o.user_id),
+		observators: data.observators.map(o => ({
+			userId: o.user_id,
+			fullname: o.fullname,
+			email: o.email
+		})),
 		logs: data.logs,
 		currentApprover: data.current_approver,
 		procedureId: data.fk_procedure_id,

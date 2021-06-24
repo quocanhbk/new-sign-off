@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import {getFader} from '../../../utils/color'
 import EventComments from './EventComments';
 import SectionContainer from '../../SectionContainer';
+import AttachmentTable from 'components/Create/AttachmentTable';
 
 const ContentWrapper = styled.div`
     display:flex;
@@ -43,10 +44,10 @@ const Content = ({request}) => {
                 <div dangerouslySetInnerHTML={{__html: request.description}}></div>
             </SectionContainer>
             <SectionContainer headline="3. Approval File">
-                {/* <TableApproval dataList={request.approvalAttachments}/> */}
+                <AttachmentTable attachments={request.approvalAttachments} readOnly={true} />
             </SectionContainer>
             <SectionContainer headline="4. Reference File">
-                {/* <TableApproval dataList={request.referenceAttachments}/> */}
+                <AttachmentTable attachments={request.referenceAttachments} readOnly={true}/>
             </SectionContainer>
             <SectionContainer headline={"5. Event & Comments"}>
                 <EventComments logs={logs} setLogs={setLogs} requestId={request.id} />
