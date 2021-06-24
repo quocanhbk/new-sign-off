@@ -1,10 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 import styled from "styled-components";
-import NoFile from "./NoFile";
 import DisplayContent from "./DisplayContent";
 import List from "./List";
 import {Router} from '@reach/router'
 import { getFader } from "utils/color";
+import Placeholder from "components/Placeholder";
 
 const Container = styled.div`
     display: flex;
@@ -45,7 +45,7 @@ const ViewPage = () => {
             <StyleContentWrapper>
                 <Router className="form-router">
                     <DisplayContent path="/:id"/>
-                    <NoFile default/>
+                    <Placeholder default type="FORM_NOT_SELECTED"/>
                 </Router>
             </StyleContentWrapper>
         </Container>

@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components'
-import {getFader} from '../utils/color'
+import {getFader} from '../../../../utils/color'
 
 const LabelToggle = styled.label`
     position: relative;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
-    padding: 4px 8px 4px 0;
     pointer-events: ${props => props.displayMode !== "edit" ? "none" : "auto"};
 `;
 const ToggleSpan = styled.span`
@@ -24,7 +24,7 @@ const StyleInput = styled.input`
     }
     &:checked ~ .toggle-switch{
         transition: 0.4s;
-        background: ${props => props.displayMode === "disabled" ? props.theme.color.fill.disabled : props.theme.color.fill.primary};
+        background: ${props => props.displayMode === "disabled" ? props.theme.color.fill.disabled : props.theme.color.fill.success};
     }
 `;
 //the toggle
@@ -36,7 +36,7 @@ const StyleSpan = styled.span`
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: ${props => props.displayMode === "disabled" ? props.theme.color.fill.disabled : getFader(props.theme.color.fill.primary, 0.4)};
+    background-color: ${props => props.displayMode === "disabled" ? props.theme.color.fill.disabled : getFader(props.theme.color.fill.danger, 0.4)};
     transition: .4s;
     border-radius: 999px;
     box-shadow: ${props => props.theme.shadow};
@@ -62,7 +62,7 @@ const StyleName= styled.span`
     font-size:1rem;
     display:inline-block;
     padding: 0px 8px;
-    color: ${props => props.displayMode === "disabled" ? props.theme.color.text.disabled: props.theme.color.text.primary};
+    color: ${props => props.displayMode === "disabled" ? props.theme.color.text.disabled: "inherit"};
 `;
 const Toggle = (props) => {
 
@@ -75,10 +75,9 @@ const Toggle = (props) => {
             <ToggleSpan>
                 <StyleInput  displayMode={props.disabled ? "disabled" : props.displayMode} 
                 type="checkbox"
-                name={props.name} 
-                value={props.value} 
-                onChange={handleSelect} 
-                defaultChecked={props.default}
+                name={props.name}
+                onChange={handleSelect}
+                checked={props.value}
                 />
                 <StyleSpan displayMode={props.disabled ? "disabled" : props.displayMode} className="toggle-switch"/>
             </ToggleSpan>

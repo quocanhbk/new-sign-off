@@ -1,10 +1,13 @@
 /* eslint-disable no-unused-vars */
+import React from "react"
 import { navigate } from "@reach/router"
 import { useStoreActions } from "easy-peasy"
 import {useEffect, useState} from "react"
 import {v4 as uuid} from 'uuid'
-import {getFormDetail, postForm, updateForm} from "../../../api/form"
+import {getFormDetail, postForm, updateForm} from "api/form"
 import useLoading from "hooks/useLoading"
+import useCustomLoader from "hooks/useCustomLoader"
+import Placeholder from "components/Placeholder"
 
 
 const initData = {
@@ -20,12 +23,12 @@ const useFormData = (id = null) => {
     const [file, setFile] = useState(initData.file)
     const [fieldData, setFieldData] = useState(initData.fields)
     const [addingTag, setAddingTag] = useState(null)
-    const {loading, percent, setPercent, setLoading, reset} = useLoading(!!id)
-
+    //const {loading, percent, setPercent, setLoading, reset} = useLoading(!!id)
+    const {render, reset, setNotFound, setPercent} = useCustomLoader(!!id, <Placeholder type="NOT_FOUND"/>, true)
     useEffect(() => {
         if (id) {
             const fetchDetail = async () => {
-                const formDetail = await getFormDetail(id, (v) => setPercent(v)).catch(err => {setLoading(false);return;})
+                const formDetail = await getFormDetail(id, (v) => setPercent(v)).catch(err => {setNotFound(true);return;})
                 setPercent(100)
                 if (formDetail) {
                     setFormName(formDetail.name)
@@ -96,18 +99,18 @@ const useFormData = (id = null) => {
         if (id) await updateForm(id, formName, fieldData, (v) => setPercent(v))
         else await postForm(formName, file, fieldData, (v) => setPercent(v))
         getForms()
-        navigate('/form')
+        setTimeout(() => navigate('/form'), 250)
     }
     
     return {
         // Field data
         fieldData, 
         // Some basic state
-        formName, changeFormName, file, addingTag, setAddingTag, loading,
+        formName, changeFormName, file, addingTag, setAddingTag,
         //Helper function
         addNewField, changeContent, moveField, resizeField, changeName, deleteField, toggleRequire, initForm,
 
-        saveForm, percent, setPercent
+        saveForm, setPercent, render
         //
     }
 }

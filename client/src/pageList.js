@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import {BsHouse, BsSearch, BsFileEarmarkPlus, BsPencilSquare, BsFileEarmarkCheck, BsFileText, BsGear} from 'react-icons/bs'
-import HomePage from './components/Home'
+import HomePage from './components/NewHome'
 import CreatePage from './components/Create'
 import SearchPage from './components/Search'
 import SignPage from './components/Sign'
@@ -15,7 +15,7 @@ const pageList = [
     {icon: <BsPencilSquare size="24px"/>, text: "Sign Document", path: "/sign/*", link: "/sign", comp: <SignPage/>},
     {icon: <BsFileEarmarkCheck size="24px"/>, text: "Verify Document", path: "/verify", link: "/verify", comp: <VerifyPage/>},
     {icon: <BsFileText size="24px"/>, text: "Manage Form", path: "/form/*", link: "/form", comp: <Form/>},
-    {icon: <BsGear size="24px"/>, text: "Create Procedure", path: "/procedure/*", link: "/procedure", comp: <Procedure/>}
+    {icon: <BsGear size="24px"/>, text: "Manage Procedure", path: "/procedure/*", link: "/procedure", comp: <Procedure/>}
 
 ]
 

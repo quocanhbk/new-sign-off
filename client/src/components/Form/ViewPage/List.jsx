@@ -13,6 +13,10 @@ import { getForms } from '../../../api/form'
 import Button from 'components/Button';
 import { useStoreState } from 'easy-peasy';
 import useLoading from 'hooks/useLoading';
+import useLoader from 'hooks/useLoader'
+import Placeholder from 'components/Placeholder';
+import useCustomLoader from 'hooks/useCustomLoader';
+
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -60,11 +64,10 @@ function List() {
     const [searchText, setSearchText] = useState("")
     const location = useLocation().pathname.split("/")
     const users = useStoreState(_ => _.users)
-    const {loading, percent, setPercent} = useLoading()
-
+    const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
     useEffect(() => {
         const fetchData = async () => {
-            const forms = await getForms((v) => setPercent(v))
+            const forms = await getForms((v) => setPercent(v)).catch(() => setNotFound(true))
             setForms(forms)
         }
         fetchData()
@@ -89,7 +92,7 @@ function List() {
                 </Button>
             </AddNewContainer>
             <CardList>
-                { (loading)  ? <ProgressLoader percent={percent}/> :
+                {render(
                     forms.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())).map(form => 
                         <Card 
                             key={form.id} 
@@ -98,8 +101,7 @@ function List() {
                             onClick={() => handle(form.id)}
                             active={form.id == location[location.length - 1]}
                         />
-                    )
-                }
+                ))}
             </CardList>
         </StyleListWrapper>
     );

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SideBar from './SideBar'
 import styled from 'styled-components';
 import pageList from '../pageList';
 import {Router} from '@reach/router'
+import { useStoreActions } from 'easy-peasy';
 const PageContainer = styled.div`
     display: flex;
     height: 100%;
@@ -22,6 +23,12 @@ const BodyContainer = styled.div`
 `
 
 const MainPage = () => {
+    const getUsers = useStoreActions(s => s.getUsers)
+    const getForms = useStoreActions(s => s.getForms)
+    useEffect(() => {
+        getUsers()
+        getForms()
+    })
     return (
         <PageContainer className="main">
             <SideBar/>

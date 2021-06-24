@@ -25,6 +25,7 @@ const DetailWrapper = styled.div`
     }
 `;
 const Search = () => {
+
     return (
         <StyleContainer>
             <List/>

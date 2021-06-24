@@ -1,2 +1,0 @@
-GET http://bot.sipher.xyz:3000/api/chats/0xb9F33d9216F4b30A848500C29d4a0FE7285b717D
-

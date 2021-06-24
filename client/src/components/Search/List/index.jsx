@@ -1,10 +1,13 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import RequestCard from './RequestCard';
 import ListToolbar from './ListToolbar';
 import {getFader} from '../../../utils/color';
-import { useGetRequests } from '../../../api/request';
+import { getRequests } from 'api/request';
+import useCustomLoader from 'hooks/useCustomLoader';
+import Placeholder from 'components/Placeholder';
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -54,7 +57,19 @@ const CardList = styled.div`
 `
 
 function List() {
-  const [requests] = useGetRequests();
+    const [requests, setRequests] = useState([])
+
+    const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
+    
+    useEffect(() => {
+        const fetchRequests = async () => {
+            let requestsData = await getRequests((p) => setPercent(p)).catch(() => setNotFound(true))
+            setRequests(requestsData)
+        }
+        fetchRequests()
+    }, [])
+
+
     return (
         <StyleListWrapper>
             <ListToolbar/>
@@ -65,18 +80,18 @@ function List() {
                 </TagContainer>
             </TagBar>
             <CardList>
-                {requests.map((task) => (
+                {render(requests.map((task) => (
                     <RequestCard
-                        key={task.approval_request_id}
-                        id={task.approval_request_id}
+                        key={task.id}
+                        id={task.id}
                         title={task.title}
                         status={task.status}
                         type={task.type}
                         deadline={task.deadline}
-                        createdBy={task.author}
+                        createdBy={task.author.name}
                         page={"search"}
                     />
-                ))}
+                )))}
             </CardList>
         </StyleListWrapper>
     );

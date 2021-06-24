@@ -12,9 +12,11 @@ const CardWrapper = styled.div`
     ${props => props.active && css`
         background: ${props => getFader(props.theme.color.border.primary, 0.5)};
         color: ${props => props.theme.color.fill.primary};
-        font-weight: 600;
         &:hover {
             background: ${props => props.theme.color.border.primary};
+        }
+        & ${Title} {
+            font-weight: 600;
         }
     `}
 `
@@ -31,7 +33,7 @@ const Title = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    font-weight: 600;
+    font-weight: 500;
     color: ${props => props.theme.color.fill.primary};
 `
 const Line = styled.div`

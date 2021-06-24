@@ -37,15 +37,15 @@ const Container = styled.button`
             background: ${props => getFader(props.theme.color.border.primary, 1)}
         }
     ` : css`
-        background: ${props => props.theme.color.border.primary};
-        color: ${props => props.theme.color.text.primary};
+        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
+        color: ${props => props.theme.color.text[props.color]};
         border: 1px solid ${props => props.theme.color.border.primary};
 
         &:hover {
             background: ${props => getFader(props.theme.color.border.primary, 0.8)};
         }
         &:active {
-            background: ${props => getFader(props.theme.color.border.primary, 0.5)};
+            background: ${props => getFader(props.theme.color.border.primary, 1)};
         }
     `
     }

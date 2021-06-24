@@ -10,8 +10,8 @@ import {BsChevronLeft} from 'react-icons/bs'
 import { navigate } from '@reach/router';
 import {ButtonContainer, Container, Wrapper, StyleTitle, Toolbar, ToolbarContainer, ToolbarElement, NoField, FormNameInput} from './IndexStyledComponents'
 import useFormData from './useFormData';
-import FailedFile from '../FailedFile'
 import ProgressLoader from 'components/ProgressLoader'
+import Placeholder from 'components/Placeholder'
 
 
 const CreatePage = ({id}) => {
@@ -19,11 +19,11 @@ const CreatePage = ({id}) => {
         // Field data : array of field (name, content, position (%), size (%), required)
         fieldData, 
         // Some basic state
-        formName, changeFormName, file, addingTag, setAddingTag, loading,
+        formName, changeFormName, file, addingTag, setAddingTag,
         //Helper function
         addNewField, changeContent, moveField, resizeField, changeName, deleteField, toggleRequire, initForm,
 
-        saveForm, percent, setPercent
+        saveForm, setPercent, render
     } = useFormData(id)
     
     const [numPage, setNumPage] = useState()
@@ -69,39 +69,38 @@ const CreatePage = ({id}) => {
                 <p>{id ? "EDIT FORM" : "CREATE FORM"}</p>
             </StyleTitle>
             <Wrapper>
-                {loading ? <ProgressLoader percent={percent}/> :
-                (!loading && !!id && !file) ? <FailedFile/> :
-
-                (file && 
-                    <Toolbar className="toolbar">
-                        <ToolbarElement>
-                            <h3>Form Name</h3>
-                            <FormNameInput value={formName} onChange={changeFormName}/>
-                        </ToolbarElement>
-                        <ToolbarElement fieldList>
-                            <h3>Fields</h3>
-                            <ToolbarContainer>
-                                {
-                                    fieldData.length > 0 ? fieldData.map(field => 
-                                        <FieldContentInput 
-                                            key={field.id} 
-                                            name={field.name} 
-                                            content={field.content}
-                                            required={field.required}
-                                            onChangeName={(e) => changeName(field.id, e.target.value)}
-                                            onChangeContent={(e) => changeContent(field.id, e.target.value)}
-                                            onToggleRequire={() => toggleRequire(field.id)}
-                                            onDelete={() => deleteField(field.id)}
-                                        />
-                                    ) : <NoField>No Field</NoField>
-                                }
-                            </ToolbarContainer>
-                        </ToolbarElement>
-                        <ButtonContainer>
-                            {/* <Button onClick={downloadForm}>Download Form</Button> */}
-                            <Button onClick={saveForm}>Save Form</Button>
-                        </ButtonContainer>
-                    </Toolbar>
+                {render(
+                    (file && 
+                        <Toolbar className="toolbar">
+                            <ToolbarElement>
+                                <h3>Form Name</h3>
+                                <FormNameInput value={formName} onChange={changeFormName}/>
+                            </ToolbarElement>
+                            <ToolbarElement fieldList>
+                                <h3>Fields</h3>
+                                <ToolbarContainer>
+                                    {
+                                        fieldData.length > 0 ? fieldData.map(field => 
+                                            <FieldContentInput 
+                                                key={field.id} 
+                                                name={field.name} 
+                                                content={field.content}
+                                                required={field.required}
+                                                onChangeName={(e) => changeName(field.id, e.target.value)}
+                                                onChangeContent={(e) => changeContent(field.id, e.target.value)}
+                                                onToggleRequire={() => toggleRequire(field.id)}
+                                                onDelete={() => deleteField(field.id)}
+                                            />
+                                        ) : <NoField>No Field</NoField>
+                                    }
+                                </ToolbarContainer>
+                            </ToolbarElement>
+                            <ButtonContainer>
+                                {/* <Button onClick={downloadForm}>Download Form</Button> */}
+                                <Button onClick={saveForm}>Save Form</Button>
+                            </ButtonContainer>
+                        </Toolbar>
+                    )
                 )}
                 <DocDisplay 
                     file={file}

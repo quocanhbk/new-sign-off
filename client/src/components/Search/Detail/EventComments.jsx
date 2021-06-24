@@ -4,6 +4,9 @@ import styled from 'styled-components'
 import {IoMdSend} from 'react-icons/all'
 import CardEvents from './CardEvents';
 import { getFader } from '../../../utils/color';
+import format from 'date-fns/format'
+import getConfig from 'api/getConfig';
+import axios from 'axios';
 
 const StyleWrapper = styled.div`
     display: flex;
@@ -53,38 +56,48 @@ const TableEvents = styled.div`
     gap: 0.5rem;
 `
 
-function EventComents({logs ,dataList,setComment}) {
-    const [value,setValue] = useState()
+function EventComents({ requestId, logs, setLogs }) {
+  const [comment, setComment] = useState('');
 
-    const handleSubmit = (e) =>{
-        e.preventDefault()
-        setComment([{
-            id: Math.random(),
-            title: value,
-            create_by: 'Gấu',
-            create_date: '10:08 11/05/2021'
-        },...dataList])
-        setValue('')
-    }
-
-    return (
-        <StyleWrapper>
-            <Form>
-                <Input placeholder="Write comment here ..." value={value} onChange={(e) => setValue(e.target.value)}/>
-                <button onClick={handleSubmit}><IoMdSend size="1.2rem"/></button>
-            </Form>
-            <TableEvents>
-                {logs && logs.map((log) => (
-                        <CardEvents
-                        key={log.log_id}
-                        description={log.description}
-                        created_at={log.created_at}
-                        created_by={log.author}
-                        />
-                    ))}
-            </TableEvents>
-        </StyleWrapper>
-    );
+  const postComment = async (id, comment) => {
+    const config = await getConfig();
+    const data = {
+      comment,
+    };
+    const res = await axios.post(`/api/v1/requests/${id}/comment/`, data, config);
+    return res.data;
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newComment = await postComment(requestId, comment);
+    setLogs([newComment,...logs]);
+    setComment('');
+  };
+  return (
+    <StyleWrapper>
+      <Form>
+        <Input
+          placeholder="Write comment here ..."
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <button onClick={handleSubmit}>
+          <IoMdSend size="1.2rem" />
+        </button>
+      </Form>
+      <TableEvents>
+        {logs &&
+          logs.map((log) => (
+            <CardEvents
+              key={log.log_id}
+              description={log.description}
+              created_at={format(new Date(log.created_at), 'yyyy-MM-dd hh:mm')}
+              created_by={log.author}
+            />
+          ))}
+      </TableEvents>
+    </StyleWrapper>
+  );
 }
 
 export default EventComents;
