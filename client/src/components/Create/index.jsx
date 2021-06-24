@@ -1,21 +1,24 @@
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getFader } from "../../utils/color";
+import { getFader } from "utils/color";
 import FlexibleApprovalAttachment from "./FlexibleApprovalAttachment";
-import ApprovalDocumentProcess from "./ApprovalDocumentProcess";
 import DescriptionEditor from "./DescriptionEditor";
 import Participants from "./Participants";
 import PrimaryInfo from "./PrimaryInfo";
-import {procedureList} from './sampleData'
 import Header from "./Header";
 import SectionContainer from "../SectionContainer";
 import useDocument from "./useDocument";
 import Modal from '../Modal'
 import SubmitPopup from './SubmitPopup'
-import Snackbar from "../Snackbar";
+import Snackbar from "components/Snackbar";
 import { BsFillExclamationTriangleFill } from "react-icons/bs";
+import { getProcedures } from "api/procedure";
+import AttachmentCheckList from "./AttachmentChecklist";
+import AttachmentPopup from './AttachmentPopup'
+import AbsoluteModal from 'components/AbsoluteModal'
+import FormPopup from "./FormPopup";
 
 const StyleContainer = styled.div`
   display: flex;
@@ -24,27 +27,12 @@ const StyleContainer = styled.div`
   height: 100%;
 `;
 const ContainerItems = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
-  overflow: auto;
-  position: relative;
-
-  ::-webkit-scrollbar {
-    width: 0.5rem;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: ${(props) => getFader(props.theme.color.fill.secondary, 0.5)};
-    border-radius: 99px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: ${(props) => props.theme.color.fill.secondary};
-  }
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	overflow: overlay;
+  
 `;
 const Notify = styled.div`
     padding: 1rem;
@@ -55,18 +43,43 @@ const Notify = styled.div`
     gap: 0.5rem;
     border-radius: 0.5rem;
 `
+const Container = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1rem;
+	overflow: auto;
+	position: relative;
+	overflow: overlay;
+	::-webkit-scrollbar {
+    	width: 0.5rem;
+	}
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	::-webkit-scrollbar-thumb {
+		background: ${(props) => getFader(props.theme.color.fill.secondary, 0.5)};
+		border-radius: 99px;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background: ${(props) => props.theme.color.fill.secondary};
+	}
+`
 const Create = () => {
-	const [tempForm , setTempForm ]= useState()
 	const [modal, setModal] = useState()
 	const [errorNotify, setErrorNotify] = useState(false)
+	const [procedureList, setProcedureList] = useState([])
+	const [addingAttachment, setAddingAttachment] = useState(null)
+	const [editingAttachment, setEditingAttachment] = useState(null)
+
 	const {
 		title, description, type,
         priority, deadline, relatedProjects,
         advisors, approvers, observators,
-        approvalAttachments, referenceAttachments,
-        set,
+        approvalAttachments, referenceAttachments, procedure, checklist,
+        set, updateAttachment,
         //Helper function
-        removeAttachment, submitRequest, error, isSubmittable
+        removeAttachment, submitRequest, error, isSubmittable, changeFieldContent, render
 	} = useDocument()
 
 	const popupSubmit = () => {
@@ -90,14 +103,51 @@ const Create = () => {
 		)
 	}
 
-
+	useEffect(() => {
+		const fetchProcedures = async () => {
+			let data = await getProcedures()
+			setProcedureList(data.filter(d => d.isActive))
+		}
+		fetchProcedures()
+	}, [])
 
 	return (
 		<StyleContainer>
 			{renderModal()}
 			<Header openSubmit={popupSubmit}/>
-			<ContainerItems>
-
+			
+			<ContainerItems className="ContainerItems">
+				<AbsoluteModal 
+					visible={addingAttachment !== null} 
+					onClickOutside={() => setAddingAttachment(null)} 
+					width="50%"
+				>
+					<AttachmentPopup 
+						checkItemId={addingAttachment}
+						set={set}
+						attachments={approvalAttachments}
+						closePopup={() => setAddingAttachment(null)}
+						checklist={checklist}
+					/>
+				</AbsoluteModal>
+				<AbsoluteModal 
+					visible={editingAttachment !== null} 
+					onClickOutside={() => setEditingAttachment(null)}
+					fixed overflow="overlay" height="80%" width="90%"
+				>
+					{editingAttachment && 
+						<FormPopup
+							attachment={(editingAttachment.type === "approval" ? approvalAttachments : referenceAttachments)
+								.find(_ => _.id === editingAttachment.id)}
+							onUpdateAttachment={(name, fields) => {
+								updateAttachment(editingAttachment.type, editingAttachment.id, name, fields)
+								setEditingAttachment(null)
+							}}
+						/>
+					}
+				</AbsoluteModal>
+				{render(
+				<Container className="Container">
 				{/* SECTION PRIMARY INFO */}
 				<SectionContainer headline="Primary Information" haveBorder>
 					<PrimaryInfo
@@ -108,6 +158,8 @@ const Create = () => {
 						deadline={deadline}
 						relatedProjects={relatedProjects}
 						set={set}
+						procedureList={procedureList}
+						procedure={procedure}
 					/>
 				</SectionContainer>
 
@@ -123,13 +175,22 @@ const Create = () => {
 				
 				{/* SECTION APPROVAL DOCUMENT */}
 				<SectionContainer headline="Approval Attachment" haveBorder>
-					{false ? 
-						<ApprovalDocumentProcess tempForm={tempForm} setTempForm={setTempForm} form={procedureList}/> : 
+					{type === "Procedure" ? 
+						<AttachmentCheckList 
+							checklist={checklist} 
+							attachments={approvalAttachments}
+							onRemoveAttachment={id => removeAttachment("approval", id)}
+							onEditAttachment={id => setEditingAttachment({type: "approval", id})}
+							setAddingAttachment={setAddingAttachment}
+							changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("approvalAttachments", attachmentId, fieldId, content)}
+						/> : 
 						<FlexibleApprovalAttachment 
 							type="approvalAttachments"
 							attachments={approvalAttachments}
 							set={set}
 							onRemoveAttachment={id => removeAttachment("approval", id)}
+							onEditAttachment={id => setEditingAttachment({type: "approval", id})}
+							changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("approvalAttachments", attachmentId, fieldId, content)}
 						/>
 					}
 				</SectionContainer>
@@ -141,6 +202,8 @@ const Create = () => {
 						attachments={referenceAttachments} 
 						set={set} 
 						onRemoveAttachment={id => removeAttachment("reference", id)}
+						onEditAttachment={id => setEditingAttachment({type: "reference", id})}
+						changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("referenceAttachments", attachmentId, fieldId, content)}
 					/>
 				</SectionContainer>
 				
@@ -148,6 +211,10 @@ const Create = () => {
 				<SectionContainer headline="Description" haveBorder>
 					<DescriptionEditor description={description} set={set}/>
 				</SectionContainer>
+				</Container>
+				)}
+
+
 			</ContainerItems>
 			<Snackbar visible={errorNotify} onClose={() => setErrorNotify(false)} timeOut={2000}>
                 <Notify>

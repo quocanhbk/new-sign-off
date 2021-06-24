@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { deleteProcedure, getProcedureDetail } from "api/procedure";
+import { deleteProcedure, getProcedureDetail, toggleActive } from "api/procedure";
 import useLoader from "hooks/useLoader";
-import ContentHeader from "../../../Form/ViewPage/ContentHeader";
+import ContentHeader from "./ContentHeader";
 import SectionContainer from 'components/SectionContainer'
 import FormControl from "components/FormControl";
 import { useStoreState } from "easy-peasy";
@@ -69,13 +69,25 @@ const Detail = ({id}) => {
 			navigate('/procedure')
 		else setNotify(true)
 	}
+	const onToggleActive = async (v) => {
+		reset()
+		setProcedures({...procedure, isActive: v})
+		await toggleActive(id, {...procedure, isActive: v}, (p) => setPercent(p))
+
+	}
 	const onEditClick = () => {
 		navigate('/procedure/create/' + id)
 	}
 	const render = () => 
 		procedure &&
 		<>
-			<ContentHeader title={procedure.title} onDeleteClick={onDeleteClick} onEditClick={onEditClick}/>
+			<ContentHeader 
+				title={procedure.title} 
+				isActive={procedure.isActive} 
+				onDeleteClick={onDeleteClick} 
+				onEditClick={onEditClick}
+				onToggleActive={onToggleActive}
+			/>
 			<Body>
 				<SectionContainer headline={"Description"}>
 					{procedure.description}
@@ -128,7 +140,7 @@ const Detail = ({id}) => {
 			setProcedures(null)
 			setNotFound(false)
 			reset()
-			const proDetail = await getProcedureDetail(id, (v) => setPercent(v)).catch(() => {setNotFound(true)})
+			const proDetail = await getProcedureDetail(id, false, (v) => setPercent(v)).catch(() => {setNotFound(true)})
 			setProcedures(proDetail)
 		}
 		fetchForm()

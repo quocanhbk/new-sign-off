@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, {useState, useEffect, useRef} from 'react'
 import PropTypes from 'prop-types'
-import styled, {keyframes} from 'styled-components'
+import styled, {css, keyframes} from 'styled-components'
 import useClickOutside from '../hooks/useClickOutside'
 import { getFader } from '../utils/color'
 const Option = (props) => <div>{props.children}</div>
@@ -11,7 +11,7 @@ const StyledSpan = styled.span`
     justify-content: center;
     align-items: center;
     height: 100%;
-    color: ${props => props.theme.color.text.primary};
+    color: inherit; //${props => props.theme.color.text.danger};
 `;
 
 const IconX = () => {
@@ -61,6 +61,13 @@ const Bar = styled.div`
     border-radius: 5px;
     transition: border 0.15s linear;
     height: 2rem;
+
+    ${props => props.disabled && css`
+        background: ${props => props.disabled ? getFader(props.theme.color.border.primary, 0.2) : "transparent"};
+        color: ${props => props.theme.color.border.primary};
+        border: 1px solid ${props => getFader(props.theme.color.border.primary, 0.2)};
+        cursor: default;
+    `}
 `;
 const ItemContainer = styled.div`
     width: 100%;
@@ -178,7 +185,7 @@ const SelectionContainer = styled.div`
         }
     }
 `
-function ControlledCombox({selection, value, onSelect, multiple, searchable, displayField, keyField, readOnly}) {
+function ControlledCombox({selection, value, onSelect, multiple, searchable, displayField, keyField, readOnly, disabled}) {
     const [isOpen, setIsOpen] = useState(false);
     const comboxRef = useClickOutside(() => setIsOpen(false))
     const [seachText, setSeachText] = useState("")
@@ -220,7 +227,7 @@ function ControlledCombox({selection, value, onSelect, multiple, searchable, dis
     }
 
     const handleOpen = (state) => {
-        if (!readOnly) setIsOpen(state)
+        if (!readOnly && !disabled) setIsOpen(state)
     }
 
     const renderItems = () => {
@@ -228,7 +235,7 @@ function ControlledCombox({selection, value, onSelect, multiple, searchable, dis
             value.map(item => 
                 <StyledItem multiple={multiple} key={item.id} className={removingItem === item.id ? "item-out" : ""}>
                     {item[displayField]}
-                    {!readOnly && <XContainer onClick={() => removeItem(item.id)}>
+                    {(!readOnly && !disabled) && <XContainer onClick={() => removeItem(item.id)}>
                         <IconX/>
                     </XContainer>}
                 </StyledItem>
@@ -236,7 +243,7 @@ function ControlledCombox({selection, value, onSelect, multiple, searchable, dis
             (value &&
                 <StyledItem multiple={multiple} key={value.id} className={removingItem === value.id ? "item-out" : ""}>
                     {value[displayField]}
-                    {!readOnly && <XContainer onClick={() => removeItem(value.id)}>
+                    {(!readOnly && !disabled) && <XContainer onClick={() => removeItem(value.id)}>
                         <IconX/>
                     </XContainer>}
                 </StyledItem>     
@@ -244,7 +251,7 @@ function ControlledCombox({selection, value, onSelect, multiple, searchable, dis
     }
     return (
         <Container ref={comboxRef}>
-            <Bar open={isOpen} onClick={() => handleOpen(true)}>
+            <Bar open={isOpen} onClick={() => handleOpen(true)} disabled={disabled}>
                 <ItemContainer onClick={() => handleOpen(true)}>
                     {renderItems()}
                 </ItemContainer>
@@ -284,7 +291,9 @@ ControlledCombox.propTypes = {
     onSelect: PropTypes.func,
     selection: PropTypes.array,
     displayField: PropTypes.string,
-    keyField: PropTypes.string
+    keyField: PropTypes.string,
+    readOnly: PropTypes.bool,
+    disabled: PropTypes.bool
 }
 ControlledCombox.defaultProps = {
     multiple: false,
@@ -292,7 +301,9 @@ ControlledCombox.defaultProps = {
     onSelect: () => {},
     selection: [],
     displayField: "text",
-    keyField: "id"
+    keyField: "id",
+    readOnly: false,
+    disabled: false
 }
 
 export default ControlledCombox

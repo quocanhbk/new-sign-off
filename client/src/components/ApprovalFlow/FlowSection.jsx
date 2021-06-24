@@ -28,7 +28,7 @@ const Vertical = styled.div`
     left: 50%;
     top: ${props => props.type === "submitter" ? "50%" : "-2px"};
     width: 2px;
-    height: 300%;
+    height: 150%;
     transform: translate(-50%, 0%);
     background: ${props => props.theme.color.fill.primary};
 `
@@ -42,22 +42,24 @@ const CheckContainer = styled.div`
     display: grid;
     place-items: center;
 `
-const FlowSection = ({headline, data, type}) => {
+const FlowSection = ({headline, data, type, done}) => {
     return (
         <Fragment>
             <tr>
                 <Side>
                     <CheckContainer>
                         <CheckWrapper>
-                            <BsFillCircleFill size="0.8rem"/>
+                            {
+                                done ? <BsCheck size="0.8rem" /> : <BsFillCircleFill size="0.8rem"/>
+                            }
                         </CheckWrapper>
                     </CheckContainer>
                     <Vertical type={type}/>
                 </Side>
                 <Headline>{headline}</Headline>
             </tr>
-            {data.map(d => 
-                <FlowTag key={d.email} data={d}/> 
+            {data.map((d,idx) => 
+                <FlowTag key={d.email} data={d} last={type === 'approver' && idx === (data.length -1)}/> 
             )}
         </Fragment>
        

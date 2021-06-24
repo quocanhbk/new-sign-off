@@ -84,6 +84,14 @@ const ButtonContainer = styled.div`
     align-items: center;
     padding: 0.5rem;
 `
+const Deadline = styled.span`
+    color: ${props => props.theme.color.text[props.overdue ? "danger" : "inherit"]};
+`
+const formatDate = (dateString) => {
+    let date = new Date(dateString)
+    return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+}
+
 const Card = ({id, title, type, createdBy, status, deadline, page}) => {
 
     const renderIcon = (status) => {
@@ -104,11 +112,11 @@ const Card = ({id, title, type, createdBy, status, deadline, page}) => {
             <DivInfo>
                 <Title>{title}</Title>
                 <Line>
-                    <span>Created: {createdBy.full_name}</span>
+                    <span>Created: {createdBy}</span>
                     {status === "Pending" && 
                         <>
                             <span>|</span>
-                            <span className="deadline">Deadline: {deadline}</span>
+                            <Deadline overdue={(new Date(deadline)).getTime() < (new Date()).getTime()}>Deadline: {formatDate(deadline)}</Deadline>
                         </>
                     }
                 </Line>

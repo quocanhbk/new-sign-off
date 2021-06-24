@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
-import {useReducer } from 'react'
-import axios from 'axios'
+import React from 'react'
+import {useEffect, useReducer } from 'react'
+import { getProcedureDetail } from 'api/procedure'
+import { v4 } from 'uuid'
+import { postRequest } from 'api/request'
+import { useStoreActions } from 'easy-peasy'
+import useCustomLoader from 'hooks/useCustomLoader'
+import Placeholder from 'components/Placeholder'
 
 const initState = {
     title: "",
@@ -14,7 +20,8 @@ const initState = {
     observators: [],
     approvalAttachments: [],
     referenceAttachments: [],
-    procedure: null
+    procedure: null,
+    checklist: []
 }
 const reducer = (state, action) => {
     switch(action.type) {
@@ -33,8 +40,10 @@ const reducer = (state, action) => {
 const initError = {
     title: "",
     deadline: "",
-    relatedProjects: ""
+    relatedProjects: "",
+    procedure: "",
 }
+
 const errorReducer = (state, action) => {
     switch(action.type) {
         case 'SET':
@@ -45,13 +54,51 @@ const errorReducer = (state, action) => {
     }
 }
 const useDocument = () => {
-
     const [{
         title, description, type, priority, 
         deadline, relatedProjects, 
         advisors, approvers, observators, 
-        approvalAttachments, referenceAttachments
+        approvalAttachments, referenceAttachments, procedure, checklist
     }, dispatch] = useReducer(reducer, initState)
+    const setPath = useStoreActions(action => action.setPath)
+    const {render, reset, setPercent} = useCustomLoader(false, <Placeholder type="NOT_FOUND"/>)
+
+    // fetch procedure detail after user select procedure from combo box
+    useEffect(() => {
+        
+        const fetchProcedure = async () => {
+            reset()
+            let data = await getProcedureDetail(procedure, true, (p) => setPercent(p))
+            set("advisors", data.advisors)
+            set("approvers", data.approvers)
+            set("observators", data.observators)
+
+            set("checklist", data.checklist.map(c => ({id: c.id, name: c.name})))
+            let arr = data.checklist.reduce((pre, cur) => {
+                let forms = cur.defaultForms.map(f => ({
+                    id: v4().slice(0, 8),
+                    name: f.name,
+                    checklistItemId: cur.id,
+                    reference: false,
+                    fileId: f.fileId,
+                    file: f.file,
+                    fields: f.fields
+                }))
+                return pre.concat(forms)
+            }, [])
+            set("approvalAttachments", arr)
+        }
+        set("advisors", [])
+        set("approvers", [])
+        set("observators", [])
+        if (procedure)
+            fetchProcedure()
+    }, [procedure])
+
+    useEffect(() => {
+        if (type === "Flexible" && procedure)
+            set("procedure", null)
+    }, [type])
 
     const [error, dispatchError] = useReducer(errorReducer, initError)
 
@@ -69,6 +116,21 @@ const useDocument = () => {
         if (error[field] !== "") setError(field, "")
     }
     
+    const changeFieldContent = (attachmentType, attachmentId, fieldId, content) => {
+        let attachments = [...(attachmentType === "approvalAttachments" ? approvalAttachments : referenceAttachments)]
+        let attachmentIndex = attachments.map(_ => _.id).indexOf(attachmentId)
+        let attachmentObject = attachments[attachmentIndex]
+        let fieldIndex = attachmentObject.fields.map(_ => _.id).indexOf(fieldId)
+        let fieldObject = attachmentObject.fields[fieldIndex]
+        fieldObject.content = content
+
+        set(attachmentType, [
+            ...attachments.slice(0, attachmentIndex),
+            attachmentObject,
+            ...attachments.slice(attachmentIndex + 1, attachments.length)
+        ])
+    }
+
     const isSubmittable = () => {
         let submittable = true
         if (title === "") {
@@ -89,6 +151,11 @@ const useDocument = () => {
             setError("relatedProjects", "At least 1 project must be selected")
             submittable = false
         }
+        // catch procedure error
+        if (type === "Procedure" && !procedure) {
+            setError("procedure", "Procedure is required")
+            submittable = false
+        }
         if (
             advisors.some(v => approvers.concat(observators).includes(v)) ||
             approvers.some(v => advisors.concat(observators).includes(v)) ||
@@ -101,30 +168,50 @@ const useDocument = () => {
     const submitRequest = async () => {
         // No need to check for error anymore
         console.log("Submitting...")
-        let reqBody = {
+        const input = {
             title, 
             description, 
             priority, 
             type, 
-            deadline: (new Date(deadline)).toLocaleDateString('en-CA'), 
+            deadline,
             relatedProjects, 
             advisors, 
             approvers, 
-            observators
+            observators,
+            approvalAttachments,
+            referenceAttachments,
+            procedure
         }
-        let {data} = await axios.post('/api/v1/requests', reqBody)
-        console.log(data)
+        let id = await postRequest(input)
+        //setPath("/search/" + id)
+        //setPath("/search/")
+    }
+    const updateAttachment = (attachmentType, attachmentId, name, fields) => {
+        if (attachmentType === "approval") {
+            let newAttachments = [...approvalAttachments]
+            let updatingAttachment = newAttachments.find(_ => _.id === attachmentId)
+            updatingAttachment.name = name
+            updatingAttachment.fields = fields
+            set("approvalAttachments", newAttachments)
+        } else {
+            let newAttachments = [...referenceAttachments]
+            let updatingAttachment = newAttachments.find(_ => _.id === attachmentId)
+            updatingAttachment.name === name
+            updatingAttachment.fields = fields
+            set("referenceAttachments", newAttachments)
+        }
     }
     return {
         title, description, type,
         priority, deadline, relatedProjects,
         advisors, approvers, observators,
         approvalAttachments, referenceAttachments,
+        procedure, checklist,
         set,
         //Helper function
-        removeAttachment, submitRequest, isSubmittable,
+        removeAttachment, submitRequest, isSubmittable, changeFieldContent,
         //Error
-        error, setError
+        error, setError, render, updateAttachment
 
 
     }

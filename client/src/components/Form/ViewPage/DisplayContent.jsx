@@ -4,13 +4,12 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import FieldTag from "../FieldTag";
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
-import FailedFile from "../FailedFile";
 import { getFader } from "utils/color";
 import { getFormDetail, deleteForm } from "api/form";
 import ContentHeader from "./ContentHeader";
 import { navigate } from "@reach/router";
-import ProgressLoader from "components/Loader";
-import useLoading from "hooks/useLoading";
+import Placeholder from "components/Placeholder";
+import useCustomLoader from "hooks/useCustomLoader";
 
 const Container = styled.div`
 	position: relative;
@@ -46,28 +45,8 @@ const DocDisplay = styled.div`
 const DisplayContent = ({id}) => {
 	const [numPage, setNumPage] = useState(0)
 	const [form, setForm] = useState()
-	const [notFound, setNotFound] = useState(false)
 	let docRef = useRef()
-	const {loading, percent, setPercent, reset} = useLoading()
-
-	useEffect(() => {
-		const fetchForm = async () => {
-			setNotFound(false)
-			setForm(null)
-			reset()
-			const formDetail = await getFormDetail(id, (v) => setPercent(v)).catch(_ => {setNotFound(true)})
-			setForm(formDetail)
-		}
-		fetchForm()
-	}, [id])
-
-	const renderPage = () => {
-		let arr = []
-		for (let i = 1; i <= numPage; i++) {
-			arr.push(<Page key={i} width={docRef.current.getBoundingClientRect().width} pageNumber={i} renderTextLayer={false} renderAnnotationLayer={false}/>)
-		}
-		return arr
-	}
+	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>, true)
 
 	const onDeleteClick = async () => {
 		await deleteForm(id)
@@ -77,37 +56,55 @@ const DisplayContent = ({id}) => {
 	const editForm = () => {
 		navigate('/form/create/' + id)
 	}
+	const renderPage = () => {
+		let arr = []
+		for (let i = 1; i <= numPage; i++) {
+			arr.push(<Page key={i} width={docRef.current.getBoundingClientRect().width} pageNumber={i} renderTextLayer={false} renderAnnotationLayer={false}/>)
+		}
+		return arr
+	}
+	const renderDoc = () => 
+		form &&
+		<>
+			<ContentHeader title={form.name} onDeleteClick={onDeleteClick} onEditClick={editForm}/>
+			<DocWrapper className="doc-display">
+				<DocDisplay>
+					{form && form.fields.map(field => 
+						<FieldTag 
+							key={field.id} 
+							data={field}
+							fontSize={docRef.current.getBoundingClientRect().width/60 + "px"}
+							view
+						/>
+					)}
+					<Document 
+						file={form && form.file}
+						className="form-document" 
+						onLoadSuccess={(numPage) => {setNumPage(numPage._pdfInfo.numPages); setPercent(100)}}
+						noData={""}
+						loading={""}
+					>
+						{renderPage()}
+					</Document>
+				</DocDisplay>
+			</DocWrapper>
+		</>
+	
+	//const {LoadingComponent, reset, setNotFound, setPercent} = useLoader(true, renderDoc(), <Placeholder type="NOT_FOUND"/>, true)
+
+	useEffect(() => {
+		const fetchForm = async () => {
+			setForm(null)
+			reset()
+			const formDetail = await getFormDetail(id, (v) => setPercent(v)).catch(_ => {setNotFound(true)})
+			setForm(formDetail)
+		}
+		fetchForm()
+	}, [id])
 
 	return (
 		<Container ref={docRef} className="container">
-			{(loading && !notFound) && <ProgressLoader percent={percent}/>}
-			{notFound && <FailedFile/>}
-			{form && 
-				<>
-					<ContentHeader title={form.name} onDeleteClick={onDeleteClick} onEditClick={editForm}/>
-					<DocWrapper className="doc-display">
-						<DocDisplay>
-							{percent === 100 && form && form.fields.map(field => 
-								<FieldTag 
-									key={field.id} 
-									data={field}
-									fontSize={docRef.current.getBoundingClientRect().width/60 + "px"}
-									view
-								/>
-							)}
-							<Document 
-								file={form && form.file}
-								className="form-document" 
-								onLoadSuccess={(numPage) => {setNumPage(numPage._pdfInfo.numPages); setPercent(100)}}
-								noData={""}
-								loading={""}
-							>
-								{renderPage()}
-							</Document>
-						</DocDisplay>
-					</DocWrapper>
-				</>
-			}
+			{render(renderDoc())}
 		</Container>
 	);
 }

@@ -1,9 +1,12 @@
+import React from 'react'
 import { useEffect, useReducer } from 'react'
 import {v4} from 'uuid'
-import { getProcedureDetail, getProcedures, postProcedure } from 'api/procedure'
+import { getProcedureDetail, postProcedure, updateProcedure } from 'api/procedure'
 import {getFormDetail} from 'api/form'
 import {navigate} from '@reach/router'
-import useLoading from 'hooks/useLoading'
+//import useLoading from 'hooks/useLoading'
+import useCustomLoader from 'hooks/useCustomLoader'
+import Placeholder from 'components/Placeholder'
 
 const initState = {
     title: "",
@@ -11,7 +14,9 @@ const initState = {
     advisors: [],
     approvers: [],
     observators: [],
-    checklist: []
+    checklist: [],
+    tags: [],
+    isActive: true
 }
 
 const reducer = (state, action) => {
@@ -40,14 +45,15 @@ const errorReducer = (state, action) => {
     }
 }
 const useProcedure = (id) => {
-    const [{title, description, advisors, approvers, observators, checklist}, dispatch] = useReducer(reducer, initState)
+    const [{title, description, advisors, approvers, observators, tags, isActive, checklist}, dispatch] = useReducer(reducer, initState)
     const [error, dispatchError] = useReducer(errorReducer, initError)
-    const {loading, percent, setPercent, setLoading, reset} = useLoading(!!id)
+    //const {loading, percent, setPercent, setLoading, reset} = useLoading(!!id)
+    const {reset, render, setNotFound, setPercent} = useCustomLoader(!!id, <Placeholder type="NOT_FOUND"/>)
 
     useEffect(() => {
         if (id) {
             const fetchDetail = async () => {
-                const procedure = await getProcedureDetail(id, (v) => setPercent(v)).catch(() => {setLoading(false);return;})
+                const procedure = await getProcedureDetail(id, false, (v) => setPercent(v)).catch(() => {setNotFound(false);return;})
                 setPercent(100)
                 if (procedure) {
                     dispatch({type: "INIT", payload: procedure})
@@ -81,9 +87,14 @@ const useProcedure = (id) => {
 
     const submitProcedure = async () => {
         reset()
-        await postProcedure({title, description, advisors, approvers, observators, checklist}, (p) => setPercent(p))
-        getProcedures()
-        navigate('/procedure')        
+        if (id) {
+            let newId = await updateProcedure(id, {title, description, advisors, approvers, observators, tags, isActive, checklist}, (p) => setPercent(p))
+            setTimeout(() => navigate('/procedure/view/' + newId), 250)
+        }
+        else {
+            await postProcedure({title, description, advisors, approvers, observators, tags, isActive, checklist}, (p) => setPercent(p))
+            setTimeout(() => navigate('/procedure/view/' + id), 250)      
+        }  
     }
 
     const addCheckItem = () => {
@@ -91,7 +102,8 @@ const useProcedure = (id) => {
             id: v4().slice(0, 8),
             name: "",
             defaultForms: [],
-            adding: false
+            adding: false,
+            loading: false
         }])
     }
     const removeCheckItem = (checkItemId) => {
@@ -113,17 +125,27 @@ const useProcedure = (id) => {
 			...checklist.slice(checkitemIndex + 1, checklist.length)
 		])
 	}
-
-    const addForm = async (checkItemId, formId) => {
+    const toggleLoading = (checkItemId) => {
+        let checkitemIndex = checklist.map(_ => _.id).indexOf(checkItemId)
+		set("checklist", [
+			...checklist.slice(0, checkitemIndex),
+			{...checklist[checkitemIndex], loading: !checklist[checkitemIndex].loading},
+			...checklist.slice(checkitemIndex + 1, checklist.length)
+		])
+    }
+    const addForm = async (checkItemId, formId, callback = (v) => {v}) => {
+        toggleLoading(checkItemId)
         let checkItemIndex = checklist.map(_ => _.id).indexOf(checkItemId)
 		let checkItemObj = checklist[checkItemIndex]
         let formDetail = await getFormDetail(formId, () => {}, false)
-
-		set("checklist", [
-			...checklist.slice(0, checkItemIndex),
-			{...checkItemObj, defaultForms: [...checkItemObj.defaultForms, formDetail], adding: false},
-			...checklist.slice(checkItemIndex + 1, checklist.length)
-		])
+        
+        callback(100)
+        setTimeout(() => 
+            set("checklist", [
+                ...checklist.slice(0, checkItemIndex),
+                {...checkItemObj, defaultForms: [formDetail, ...checkItemObj.defaultForms], adding: false, loading: false},
+                ...checklist.slice(checkItemIndex + 1, checklist.length)
+            ]), 250)
     }
 
     const removeForm = (checkItemId, formId) => {
@@ -138,12 +160,12 @@ const useProcedure = (id) => {
 
     const checklistUtil = {
         addCheckItem, removeCheckItem, setCheckItemName,
-        toggleAdding, addForm, removeForm
+        toggleAdding, addForm, removeForm, toggleLoading
     }
 
     return {
         title, description, advisors, approvers, observators, checklist, checklistUtil, set,
-        error, isSubmittable, submitProcedure, percent, loading
+        error, isSubmittable, submitProcedure, render
     }
 }
 

@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef, memo } from 'react';
+import React, {memo } from 'react';
 import styled from 'styled-components'
 import useFocus from '../../hooks/useFocus';
 import ControlledCombox from '../ControlledCombox'
 import Calendar from '../TeamsCalendar'
 import FormControl from '../FormControl';
-import {approvalTypeList, priorityList, projectList} from './localData'
+import {approvalTypeList, priorityList, projectList} from 'constant'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -34,7 +34,7 @@ const Input = styled.input`
     }
 `
 
-const PrimaryInfo = ({title, type, priority, deadline, relatedProjects, set, error}) => {
+const PrimaryInfo = ({title, type, priority, deadline, relatedProjects, set, error, procedureList, procedure}) => {
     
     let ref = useFocus()
     
@@ -59,20 +59,15 @@ const PrimaryInfo = ({title, type, priority, deadline, relatedProjects, set, err
                         onSelect={newValue => set("type", newValue.id)}
                     />
                 </FormControl>
-                {/* {approvalType === "process" &&
-                    <FormControl headline="Process Name" required>
-                        <Combox onSelect={v => setProcess(v[0])}>
-                            {procedureList.map((procedure) =>
-                                <Combox.Option default={process && process.id === procedure.id} id={procedure.id}
-                                    value={procedure}    
-                                    key={procedure.id}
-                                >
-                                    {procedure.name}
-                                </Combox.Option>
-                            )}
-                        </Combox>
-                    </FormControl>
-                } */}
+                <FormControl headline="Procedure" required disabled={type !== "Procedure"} errorText={error.procedure}>
+                    <ControlledCombox
+                        selection={procedureList}
+                        value={procedureList.find(p => p.id === procedure)}
+                        onSelect={newValue => set("procedure", newValue.id)}
+                        displayField={"title"}
+                        disabled={type !== "Procedure"}
+                    />
+                </FormControl>
             </Row>
             <Row>
                 <FormControl headline={"Priority"} required>

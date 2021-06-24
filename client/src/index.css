@@ -10,7 +10,7 @@ button {
 }
 @font-face {
   font-family: Campton;
-  src: url('./asset/Campton/CamptonMedium.otf');
+  src: url('./asset/Campton/CamptonBold.otf');
 }
 html {
   font-size: 15px;
