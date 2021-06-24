@@ -10,7 +10,8 @@ const Container = styled.div`
     gap: 12rem;
     width: 100%;
     height: 100%;
-    background: ${props => props.theme.color.background.primary};
+    //background: ${props => props.theme.color.background.primary};
+    background: ${props => "linear-gradient(135deg, " + getFader(props.theme.color.background.primary, 0.5) + ", " + props.theme.color.fill.primary + ")"};
 `
 const AuthContainer = styled.div`
     
