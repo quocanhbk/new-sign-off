@@ -72,8 +72,8 @@ const Text = styled.div`
     }
 `
 const FlowTag = ({data}) => {
-    const email = data.email ? data.email : data.user_info.email;
-    const fullname = data.email ? data.fullname : `${data.user_info.last_name} ${data.user_info.middle_name} ${data.user_info.first_name}`;
+    const email = data.email ? data.email : data.user.email;
+    const fullname = data.email ? data.fullname : data.user.fullname;
     return (
         <tr>
             <Side>

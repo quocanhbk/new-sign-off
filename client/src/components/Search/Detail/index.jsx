@@ -43,7 +43,7 @@ const  DisplayContent = ({id}) => {
               </TabPane>
               <TabPane name="Approval Flow" key={2} value={2}>
                 <ApprovalFlow 
-									submitter={request.createdBy}
+									submitter={request.submitter}
 									advisors={request.advisors}
 									approvers={request.approvers}
 									observators={request.observators}

@@ -35,19 +35,25 @@ export const getRequestDetail = async (id) => {
 			id: 0,
 			order: 0,
 			decision: "Approved",
-			userId: data.author.user_id
+			userId: data.author.user_id,
+			email: data.author.email,
+			fullname: data.author.fullname
 		}],
 		advisors: data.approvers.filter(a => a.type === "advisors").map(a => ({
 			id: a.approver_id,
 			order: a.order,
 			decision: a.decision,
-			userId: a.user_info.user_id
+			userId: a.user.user_id,
+			email: a.user.email,
+			fullname: a.user.fullname
 		})),
 		approvers: data.approvers.filter(a => a.type === "approver").map(a => ({
 			id: a.approver_id,
 			order: a.order,
 			decision: a.decision,
-			userId: a.user_info.user_id
+			userId: a.user.user_id,
+			email: a.user.email,
+			fullname: a.user.fullname
 		})),
 		observators: data.observators.map(o => o.user_id),
 		logs: data.logs,

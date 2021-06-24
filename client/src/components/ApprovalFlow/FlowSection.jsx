@@ -59,7 +59,7 @@ const FlowSection = ({headline, data, type, done}) => {
                 <Headline>{headline}</Headline>
             </tr>
             {data.map(d => 
-                <FlowTag key={d.email? d.email : d.user_info.email} data={d}/> 
+                <FlowTag key={d.email? d.email : d.user.email} data={d}/> 
             )}
         </Fragment>
        

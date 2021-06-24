@@ -32,7 +32,6 @@ const Divider = styled.div`
     background-color: ${props => props.theme.color.fill.primary};
 `;
 const ApprovalFlow = ({submitter, advisors, approvers, observators}) => {
-    console.log(observators);
     return (
       <Container>
         <table>
@@ -43,7 +42,7 @@ const ApprovalFlow = ({submitter, advisors, approvers, observators}) => {
               type="submitter"
               done={true}
             />
-            {submitter && submitter.length > 0 && (
+            {advisors && advisors.length > 0 && (
               <FlowSection headline="Advisor" data={advisors} type="advisor" />
             )}
             <FlowSection headline="Approver" data={approvers} type="approver" />
@@ -56,7 +55,7 @@ const ApprovalFlow = ({submitter, advisors, approvers, observators}) => {
             <UserDisplayCard key={obs.email}>
               <Avatar
                 src={
-                  baseURL + '/api/v1/avatar/' + obs.fullname + '/96x96'
+                  baseURL + '/api/v1/avatar/' + obs.fullname + '/48x48'
                 }
               />
               <UserDisplayCardInfo>

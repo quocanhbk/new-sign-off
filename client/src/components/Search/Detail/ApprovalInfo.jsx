@@ -34,7 +34,7 @@ const LineContainer = styled.div`
 `
 
 const ApprovalInfo = ({request}) => {
-  const lastApprover = request.approvers[request.approvers.length - 1].user_info;
+  const lastApprover = request.approvers[request.approvers.length - 1];
   return (
     <Container>
       <SectionContainer headline="Document">
@@ -51,11 +51,11 @@ const ApprovalInfo = ({request}) => {
           />
           <InfoLine
             headline={'Number of approval file'}
-            content={request.attachments.length}
+            content={request.approvalAttachments.length}
           />
           <InfoLine
             headline={'Final approval by'}
-            content={`${lastApprover.last_name} ${lastApprover.middle_name} ${lastApprover.first_name}`}
+            content={lastApprover.fullname}
           />
           <InfoLine
             headline={'Final approval at'}
@@ -69,8 +69,8 @@ const ApprovalInfo = ({request}) => {
       </SectionContainer>
       <SectionContainer headline="Creator">
         <LineContainer>
-          <InfoLine headline={'Name'} content={request.author.fullname} />
-          <InfoLine headline={'Job title'} content={request.author.email} />
+          <InfoLine headline={'Name'} content={request.submitter.fullname} />
+          <InfoLine headline={'Job title'} content={request.submitter.email} />
           <InfoLine
             headline={'Created'}
             content={format(request.createdAt, 'yyyy-MM-dd hh:mm')}
