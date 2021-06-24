@@ -41,7 +41,7 @@ const CheckItemName = styled.div`
 	}
 `
 
-const AttachmentCheckList = ({checklist, attachments, onRemoveAttachment, changeFieldContent, setAddingAttachment}) => {
+const AttachmentCheckList = ({checklist, attachments, onRemoveAttachment, onEditAttachment, changeFieldContent, setAddingAttachment}) => {
 
 	return (
 		<TableWrapper>
@@ -71,6 +71,7 @@ const AttachmentCheckList = ({checklist, attachments, onRemoveAttachment, change
 									<AttachmentTable 
 										attachments={attachments.filter(a => a.checklistItemId === checkItem.id)}
 										onRemoveAttachment={onRemoveAttachment}
+										onEditAttachment={onEditAttachment}
 										noHeader
 										changeFieldContent={changeFieldContent}
 									/>

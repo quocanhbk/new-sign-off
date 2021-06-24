@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
 import PropTypes from 'prop-types'
 import {BsX} from 'react-icons/bs'
-import { getFader } from '../utils/color'
+import { getFader } from 'utils/color'
 
 const XContainer = styled.div`
     display: grid;
@@ -26,20 +26,21 @@ const X = ({onClick}) => {
 
 const StyledModal = styled.div`
     color: ${props => props.theme.color.text.primary};
-    position: absolute;
+    position: ${props => props.fixed ? "fixed" : "absolute"};
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    display: ${props => props.visible ? "block" : "none"};
+    display: ${props => props.visible ? "grid" : "none"};
+    place-items: center;
     transition: opacity 200ms ease-in-out;
     opacity: ${props => props.ani ? 1: 0};
     z-index: 995;
     
 `;
-const modalEnter = keyframes`
-    from { top: 30%; opacity: 0;}
-    to { top: 50%; opacity: 1;}
+const opa = keyframes`
+    from {opacity: 0;}
+    to {opacity: 1;}
 `;
 
 const StyledBackground = styled.div`
@@ -52,17 +53,12 @@ const StyledBackground = styled.div`
 const StyledContainer = styled.div`
     display: flex;
     flex-direction: column;
-    //border: 1px solid ${props => props.theme.color.border.primary};
-    background: ${props => props.theme.color.background.primary};
-    border-radius: 0.5rem;
-    position: absolute;
-    left: 50%;
+    //background: ${props => props.theme.color.background.primary};
     transition: all 500ms linear;
     height: ${props => props.height || "auto"};
     width: ${props => props.width || "auto"};
-    transform: translate(-50%, -50%);
-    overflow: visible;
-    animation: ${modalEnter} 0.25s ease-out 0s 1 forwards normal;
+    overflow: ${props => props.overflow ? props.overflow : "visible"};
+    animation: ${opa} 0.25s ease-out 0s 1 forwards normal;
     z-index: 999;
     box-shadow: ${props => props.theme.shadow};
 `;
@@ -85,15 +81,15 @@ const StyledBody = styled.div`
 const Modal = (props) => {
     const [open, setOpen] = useState(props.visible)
     const [runAni, setRunAni] = useState(true)
-    let { onClickOutside } = props
+    let { onClickOutside, visible, overflow, fixed} = props
     useEffect(() => {
         if (!props.visible) {
             setRunAni(false)
             setTimeout(() => {
-                setOpen(props.visible)
+                setOpen(visible)
             }, 200);
         } else {
-            setOpen(props.visible)
+            setOpen(visible)
             setRunAni(true)
         }
 
@@ -110,8 +106,8 @@ const Modal = (props) => {
         })
       }, [onClickOutside])
     return (
-        <StyledModal visible={open} ani={runAni}>
-            <StyledContainer ani={runAni} height={props.height} width={props.width}>
+        <StyledModal visible={open} ani={runAni} fixed={fixed}>
+            <StyledContainer ani={runAni} height={props.height} width={props.width} overflow={overflow}>
                 {props.title && 
                     <StyledTitle>
                         <h4>{props.title}</h4>
@@ -130,6 +126,7 @@ Modal.propTypes = {
     onClickOutside: PropTypes.func,
     visible: PropTypes.bool,
     title: PropTypes.string,
+    overflow: PropTypes.string,
     children2: PropTypes.bool
 }
 export default Modal

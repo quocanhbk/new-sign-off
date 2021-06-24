@@ -75,7 +75,7 @@ const Icon = styled.div`
 const AttachmentRow = styled.tr`
   border-bottom: 1px solid ${props => props.theme.color.border.primary};
 `
-const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeFieldContent}) => {
+const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeFieldContent, onEditAttachment}) => {
 	return (
 		<TableWrapper noHeader={noHeader}>
 		<Table>
@@ -125,7 +125,7 @@ const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeField
 					<Table.Cell textAlign="center" width="10%">
 					<IconContainer>
 						<Icon className="trash" onClick={() => onRemoveAttachment(attachment.id)}><BsTrash/></Icon>
-						<Icon><BsThreeDotsVertical/></Icon>
+						<Icon onClick={() => onEditAttachment(attachment.id)}><BsThreeDotsVertical/></Icon>
 					</IconContainer>
 					</Table.Cell>
 				</AttachmentRow>

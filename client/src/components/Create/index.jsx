@@ -18,6 +18,7 @@ import { getProcedures } from "api/procedure";
 import AttachmentCheckList from "./AttachmentChecklist";
 import AttachmentPopup from './AttachmentPopup'
 import AbsoluteModal from 'components/AbsoluteModal'
+import FormPopup from "./FormPopup";
 
 const StyleContainer = styled.div`
   display: flex;
@@ -69,12 +70,14 @@ const Create = () => {
 	const [errorNotify, setErrorNotify] = useState(false)
 	const [procedureList, setProcedureList] = useState([])
 	const [addingAttachment, setAddingAttachment] = useState(null)
+	const [editingAttachment, setEditingAttachment] = useState(null)
+
 	const {
 		title, description, type,
         priority, deadline, relatedProjects,
         advisors, approvers, observators,
         approvalAttachments, referenceAttachments, procedure, checklist,
-        set,
+        set, updateAttachment,
         //Helper function
         removeAttachment, submitRequest, error, isSubmittable, changeFieldContent, render
 	} = useDocument()
@@ -114,7 +117,11 @@ const Create = () => {
 			<Header openSubmit={popupSubmit}/>
 			
 			<ContainerItems className="ContainerItems">
-				<AbsoluteModal visible={addingAttachment !== null} onClickOutside={() => setAddingAttachment(null)} width="50%">
+				<AbsoluteModal 
+					visible={addingAttachment !== null} 
+					onClickOutside={() => setAddingAttachment(null)} 
+					width="50%"
+				>
 					<AttachmentPopup 
 						checkItemId={addingAttachment}
 						set={set}
@@ -122,6 +129,22 @@ const Create = () => {
 						closePopup={() => setAddingAttachment(null)}
 						checklist={checklist}
 					/>
+				</AbsoluteModal>
+				<AbsoluteModal 
+					visible={editingAttachment !== null} 
+					onClickOutside={() => setEditingAttachment(null)}
+					fixed overflow="overlay" height="80%" width="90%"
+				>
+					{editingAttachment && 
+						<FormPopup
+							attachment={(editingAttachment.type === "approval" ? approvalAttachments : referenceAttachments)
+								.find(_ => _.id === editingAttachment.id)}
+							onUpdateAttachment={(name, fields) => {
+								updateAttachment(editingAttachment.type, editingAttachment.id, name, fields)
+								setEditingAttachment(null)
+							}}
+						/>
+					}
 				</AbsoluteModal>
 				{render(
 				<Container className="Container">
@@ -157,6 +180,7 @@ const Create = () => {
 							checklist={checklist} 
 							attachments={approvalAttachments}
 							onRemoveAttachment={id => removeAttachment("approval", id)}
+							onEditAttachment={id => setEditingAttachment({type: "approval", id})}
 							setAddingAttachment={setAddingAttachment}
 							changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("approvalAttachments", attachmentId, fieldId, content)}
 						/> : 
@@ -165,6 +189,7 @@ const Create = () => {
 							attachments={approvalAttachments}
 							set={set}
 							onRemoveAttachment={id => removeAttachment("approval", id)}
+							onEditAttachment={id => setEditingAttachment({type: "approval", id})}
 							changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("approvalAttachments", attachmentId, fieldId, content)}
 						/>
 					}
@@ -177,6 +202,7 @@ const Create = () => {
 						attachments={referenceAttachments} 
 						set={set} 
 						onRemoveAttachment={id => removeAttachment("reference", id)}
+						onEditAttachment={id => setEditingAttachment({type: "reference", id})}
 						changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("referenceAttachments", attachmentId, fieldId, content)}
 					/>
 				</SectionContainer>

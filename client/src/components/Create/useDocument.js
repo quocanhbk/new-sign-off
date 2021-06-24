@@ -186,6 +186,21 @@ const useDocument = () => {
         //setPath("/search/" + id)
         //setPath("/search/")
     }
+    const updateAttachment = (attachmentType, attachmentId, name, fields) => {
+        if (attachmentType === "approval") {
+            let newAttachments = [...approvalAttachments]
+            let updatingAttachment = newAttachments.find(_ => _.id === attachmentId)
+            updatingAttachment.name = name
+            updatingAttachment.fields = fields
+            set("approvalAttachments", newAttachments)
+        } else {
+            let newAttachments = [...referenceAttachments]
+            let updatingAttachment = newAttachments.find(_ => _.id === attachmentId)
+            updatingAttachment.name === name
+            updatingAttachment.fields = fields
+            set("referenceAttachments", newAttachments)
+        }
+    }
     return {
         title, description, type,
         priority, deadline, relatedProjects,
@@ -196,7 +211,7 @@ const useDocument = () => {
         //Helper function
         removeAttachment, submitRequest, isSubmittable, changeFieldContent,
         //Error
-        error, setError, render
+        error, setError, render, updateAttachment
 
 
     }
