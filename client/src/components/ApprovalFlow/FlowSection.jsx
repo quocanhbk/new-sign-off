@@ -28,7 +28,7 @@ const Vertical = styled.div`
     left: 50%;
     top: ${props => props.type === "submitter" ? "50%" : "-2px"};
     width: 2px;
-    height: 300%;
+    height: 150%;
     transform: translate(-50%, 0%);
     background: ${props => props.theme.color.fill.primary};
 `

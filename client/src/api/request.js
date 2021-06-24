@@ -39,7 +39,7 @@ export const getRequestDetail = async (id) => {
 			email: data.author.email,
 			fullname: data.author.fullname
 		}],
-		advisors: data.approvers.filter(a => a.type === "advisors").map(a => ({
+		advisors: data.approvers.filter(a => a.type === "advisor").map(a => ({
 			id: a.approver_id,
 			order: a.order,
 			decision: a.decision,

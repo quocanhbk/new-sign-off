@@ -34,7 +34,7 @@ const VerticalBar = styled.div`
     background: ${props => props.theme.color.border.primary};
 `
 
-const FlexibleApprovalAttachment = ({type, attachments, set, onRemoveAttachment, changeFieldContent}) => {
+const FlexibleApprovalAttachment = ({type, attachments, set, onRemoveAttachment, onEditAttachment, changeFieldContent}) => {
     // eslint-disable-next-line no-unused-vars
     const [selectedDynamicForm, setSelectedDynamicForm] = useState()
     const dynamicForms = useStoreState(_ => _.forms)
@@ -106,6 +106,7 @@ const FlexibleApprovalAttachment = ({type, attachments, set, onRemoveAttachment,
                     attachments={attachments} 
                     onRemoveAttachment={onRemoveAttachment}
                     changeFieldContent={changeFieldContent}
+                    onEditAttachment={onEditAttachment}
                 />
             }
         </Container>

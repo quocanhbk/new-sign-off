@@ -5,9 +5,31 @@ import { UserDisplayCardInfo } from 'components/SideBar';
 import { UserDisplayCard } from 'components/SideBar';
 import React from 'react'
 import styled from "styled-components";
+import { getFader } from 'utils/color';
 import FlowSection from './FlowSection';
 
 const Container = styled.div`
+    display:flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1rem;
+    gap: 1rem;
+    height: 100%;
+    overflow: auto;
+
+    ::-webkit-scrollbar {
+        width: 0.5rem;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: ${props => getFader(props.theme.color.fill.secondary, 0.5)};
+        border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: ${props => props.theme.color.fill.secondary};
+    }
     & table {
         border-collapse: collapse;
     }
@@ -43,9 +65,9 @@ const ApprovalFlow = ({submitter, advisors, approvers, observators}) => {
               done={true}
             />
             {advisors && advisors.length > 0 && (
-              <FlowSection headline="Advisor" data={advisors} type="advisor" />
+              <FlowSection headline="Advisor" data={advisors} type="advisor" done={advisors.every(advisor => advisor.decision === 'Approved')} />
             )}
-            <FlowSection headline="Approver" data={approvers} type="approver" />
+            <FlowSection headline="Approver" data={approvers} type="approver" done={approvers.every(approver => approver.decision === 'Approved')} />
           </tbody>
         </table>
         <Divider />
@@ -54,9 +76,7 @@ const ApprovalFlow = ({submitter, advisors, approvers, observators}) => {
           {observators.map((obs) => (
             <UserDisplayCard key={obs.email}>
               <Avatar
-                src={
-                  baseURL + '/api/v1/avatar/' + obs.fullname + '/48x48'
-                }
+                src={`${baseURL}/api/v1/avatar/${obs.email}`}
               />
               <UserDisplayCardInfo>
                 <h3>{obs.fullname}</h3>

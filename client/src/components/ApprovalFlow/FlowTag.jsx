@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import styled, { css } from "styled-components";
-import { BsFillCircleFill } from "react-icons/bs";
+import { BsCheck, BsFillCircleFill, BsX } from "react-icons/bs";
 import {getFader} from 'utils/color'
+import baseURL from "api/baseURL";
 
 const Container = styled.td`
     padding: 0.5rem;
@@ -39,7 +40,7 @@ const CheckContainer = styled.div`
     place-items: center;
 `
 const CheckWrapper = styled.div`
-    //border: 2px solid ${props => props.theme.color.fill.primary};
+    border: 2px solid ${props => props.theme.color.fill.primary};
     color: ${props => props.theme.color.fill.primary};
     display: grid;
     place-items: center;
@@ -54,7 +55,7 @@ const Vertical = styled.div`
     left: 50%;
     top: 0;
     width: 2px;
-    height: ${props => props.last ? "50%" : "900%"};
+    height: ${props => props.last ? "50%" : "150%"};
     transform: translate(-50%, 0%);
     background: ${props => props.theme.color.fill.primary};
 `
@@ -77,14 +78,14 @@ const FlowTag = ({data, last}) => {
             <Side>
                 <CheckContainer>
                     <CheckWrapper>
-                        <BsFillCircleFill size="0.8rem"/>
+                        {data.decision === 'Approved' ? <BsCheck size="0.8rem" /> : data.decision === 'Rejected' ? <BsX size="0.8rem" /> : <BsFillCircleFill size="0.8rem"/>}
                     </CheckWrapper>
                 </CheckContainer>
                 <Vertical last={last}/>
             </Side>
             <Container>
                 <Body status={data.decision}>
-                    <img src={"/api/v1/avatar/" + data.email}/>
+                    <img src={`${baseURL}/api/v1/avatar/${data.email}`}/>
                     <Text>
                         <p className="flow-tag-name">{data.email}</p>
                         <p className="flow-tag-email">{data.email}</p>

@@ -69,8 +69,8 @@ const ApprovalInfo = ({request}) => {
       </SectionContainer>
       <SectionContainer headline="Creator">
         <LineContainer>
-          <InfoLine headline={'Name'} content={request.submitter.fullname} />
-          <InfoLine headline={'Job title'} content={request.submitter.email} />
+          <InfoLine headline={'Name'} content={request.submitter[0].fullname} />
+          <InfoLine headline={'Job title'} content={request.submitter[0].email} />
           <InfoLine
             headline={'Created'}
             content={format(request.createdAt, 'yyyy-MM-dd hh:mm')}
