@@ -5,7 +5,7 @@ import {getUsersApi} from 'api/user'
 import { getForms } from './api/form'
 
 const store = createStore({
-    theme: localStorage.getItem('ttgTheme') === "true",
+    theme: localStorage.getItem('ttgTheme') ? localStorage.getItem('ttgTheme') === "true" : true,
     setTheme: action((state) => {
         state.theme = !state.theme
         localStorage.setItem('ttgTheme', state.theme)

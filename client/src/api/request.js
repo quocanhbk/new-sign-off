@@ -5,6 +5,7 @@ import getConfig from './getConfig';
 export const getRequests = async (callback = (v) => {v}) => {
 	const config = await getConfig()
 	let {data} = await axios.get('/api/v1/requests', config)
+	console.log(data)
 	callback(100)
 	return data.map(request => ({
 		id: request.approval_request_id,
@@ -13,7 +14,7 @@ export const getRequests = async (callback = (v) => {v}) => {
 		status: request.status,
 		priority: request.priority,
 		deadline: request.deadline,
-		author: request.author
+		author: {id: request.author.user_id, email: request.author.email, name: request.author.full_name}
 	}))
 }
 export const getRequestDetail = async (id) => {
@@ -23,7 +24,6 @@ export const getRequestDetail = async (id) => {
 	return {
 		id: data.approval_request_id,
 		title: data.title,
-		author: data.author,
 		createdAt: new Date(data.created_at),
 		deadline: new Date(data.deadline),
 		description: data.description,
@@ -31,10 +31,58 @@ export const getRequestDetail = async (id) => {
 		relatedProjects: data.related_projects,
 		status: data.status,
 		type: data.type,
-		attachments: data.attachments,
-		approvers: data.approvers,
-		observators: data.observators,
+		submitter: [{
+			id: 0,
+			order: 0,
+			decision: "Approved",
+			userId: data.author.user_id
+		}],
+		advisors: data.approvers.filter(a => a.type === "advisors").map(a => ({
+			id: a.approver_id,
+			order: a.order,
+			decision: a.decision,
+			userId: a.user_info.user_id
+		})),
+		approvers: data.approvers.filter(a => a.type === "approver").map(a => ({
+			id: a.approver_id,
+			order: a.order,
+			decision: a.decision,
+			userId: a.user_info.user_id
+		})),
+		observators: data.observators.map(o => o.user_id),
 		logs: data.logs,
+		currentApprover: data.current_approver,
+		procedureId: data.fk_procedure_id,
+		opinions: data.opinions,
+		updatedAt: new Date(data.updated_at),
+		approvalAttachments: data.attachments.filter(a => !a.reference).map(a => ({
+			id: a.attachment_id,
+			name: a.name,
+			checklistItemId: a.fk_checklist_item_id,
+			fileId: a.fk_file_id,
+			fields: a.fields.map(field => ({
+				id: field.field_id,
+				name: field.field,
+				content: field.value,
+				position: {X: field.x_position, Y: field.y_position},
+				size: {width: field.width, height: field.height},
+				required: field.required
+			}))
+		})),
+		referenceAttachments: data.attachments.filter(a => a.reference).map(a => ({
+			id: a.attachment_id,
+			name: a.name,
+			checklistItemId: a.fk_checklist_item_id,
+			fileId: a.fk_file_id,
+			fields: a.fields.map(field => ({
+				id: field.field_id,
+				name: field.field,
+				content: field.value,
+				position: {X: field.x_position, Y: field.y_position},
+				size: {width: field.width, height: field.height},
+				required: field.required
+			}))
+		}))
 	}
 }
 export const postRequest = async (input, callback = (v) => {v}) => {
@@ -75,6 +123,7 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 	let {data: {approval_request_id: id}} = await axios.post('/api/v1/requests', sendData, config)
 	console.log("POST request successfully!")
 	// 2. POST attachments
+	console.log("Attachment", approvalAttachments.concat(referenceAttachments))
 	await Promise.all(approvalAttachments.concat(referenceAttachments).map(async (attachment) => {
 		if (!attachment.fileId) {
 			const data = new FormData()
@@ -85,11 +134,11 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 		// POST attachment
 		let attachmentBody = {
 			name: attachment.name,
-			checklistItemid: attachment.checklistItemId,
+			checklistItemId: attachment.checklistItemId,
 			reference: attachment.reference,
 			fileId: attachment.fileId,
 		}
-		if (!attachmentBody.checklistItemid) delete attachmentBody.checklistItemid
+		if (!attachmentBody.checklistItemId) delete attachmentBody.checklistItemId
 		let {data: {attachment_id: attachmentId}} = await axios.post("/api/v1/requests/" + id + "/attachments", attachmentBody, config)
 
 		// POST field

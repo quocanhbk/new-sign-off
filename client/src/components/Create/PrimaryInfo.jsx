@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef, memo } from 'react';
+import React, {memo } from 'react';
 import styled from 'styled-components'
 import useFocus from '../../hooks/useFocus';
 import ControlledCombox from '../ControlledCombox'
 import Calendar from '../TeamsCalendar'
 import FormControl from '../FormControl';
-import {approvalTypeList, priorityList, projectList} from './localData'
+import {approvalTypeList, priorityList, projectList} from 'constant'
 const Container = styled.div`
     display: flex;
     flex-direction: column;

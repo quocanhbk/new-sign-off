@@ -8,7 +8,6 @@ import ApprovalInfo from "./ApprovalInfo";
 import styled from "styled-components";
 import {getRequestDetail} from 'api/request'
 import ApprovalFlow from "components/ApprovalFlow";
-//import { useGetRequestById } from "../../../api/request";
 
 const Container = styled.div`
 	height: 100%;
@@ -24,6 +23,7 @@ const  DisplayContent = ({id}) => {
 		const fetchData = async () => {
 			let res = await getRequestDetail(id);
 			setRequest(res)
+      console.log(res);
 		}
 		fetchData()
 	},[id]);
@@ -43,9 +43,9 @@ const  DisplayContent = ({id}) => {
               </TabPane>
               <TabPane name="Approval Flow" key={2} value={2}>
                 <ApprovalFlow 
-									submitter={[request.author]}
-									advisors={request.approvers.filter(approver => approver.type === 'advisor')}
-									approvers={request.approvers.filter(approver => approver.type === 'approver')}
+									submitter={request.createdBy}
+									advisors={request.advisors}
+									approvers={request.approvers}
 									observators={request.observators}
 								/>
               </TabPane>

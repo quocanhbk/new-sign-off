@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import {getFader} from '../../../utils/color'
 import EventComments from './EventComments';
-import TableApproval from './TableApproval';
 import SectionContainer from '../../SectionContainer';
 
 const ContentWrapper = styled.div`
@@ -30,13 +29,13 @@ const ContentWrapper = styled.div`
     }
 `
 
-function Content({request}) {
+const Content = ({request}) => {
     const [logs, setLogs] = useState('');
     useEffect(() => {
         setLogs(request.logs);
     }, [request])
     return (
-        <ContentWrapper className="abc">
+        <ContentWrapper>
             <SectionContainer headline="1. Related Project">
                 {request.title}
             </SectionContainer>
@@ -44,12 +43,12 @@ function Content({request}) {
                 <div dangerouslySetInnerHTML={{__html: request.description}}></div>
             </SectionContainer>
             <SectionContainer headline="3. Approval File">
-                <TableApproval dataList={request.attachments}/>
+                {/* <TableApproval dataList={request.approvalAttachments}/> */}
             </SectionContainer>
             <SectionContainer headline="4. Reference File">
-                <TableApproval dataList={request.attachments}/>
+                {/* <TableApproval dataList={request.referenceAttachments}/> */}
             </SectionContainer>
-            <SectionContainer headline="5. Event & Comments">
+            <SectionContainer headline={"5. Event & Comments"}>
                 <EventComments logs={logs} setLogs={setLogs} requestId={request.id} />
             </SectionContainer>
         </ContentWrapper>

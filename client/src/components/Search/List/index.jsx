@@ -88,7 +88,7 @@ function List() {
                         status={task.status}
                         type={task.type}
                         deadline={task.deadline}
-                        createdBy={task.author.full_name}
+                        createdBy={task.author.name}
                         page={"search"}
                     />
                 )))}
