@@ -118,6 +118,7 @@ const DocContent = ({file, addingTag, fieldData, handleClickDoc, numPage, setNum
                     className="react-document" 
                     onLoadSuccess={(numPage) => {setNumPage(numPage._pdfInfo.numPages)}}
                     loading={<LoadingFile/>}
+                    onLoadError={(err) => console.log(err)}
                 >
                     {renderPage()}
                 </Document>
