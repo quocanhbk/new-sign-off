@@ -16,7 +16,17 @@ export const getProcedures = async (callback = (v) => {v}) => {
         createdBy: d.created_by
     }))
 }
+export const getProcedureChecklist = async (id, callback = (v) => {v}) => {
+    const config = await getConfig()
+    const {data} = await axios.get('/api/v1/procedures/' + id, config)
+    callback(100)
+    let checklist = data.checklist.map(item => ({
+        id: item.checklist_item_id,
+        name: item.name
+    }))
+    return checklist
 
+}
 export const getProcedureDetail = async (id, getFile = false, callback = (v) => {v}) => {
     const config = await getConfig()
     const {data} = await axios.get('/api/v1/procedures/' + id, config)

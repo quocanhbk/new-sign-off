@@ -36,6 +36,7 @@ const  DisplayContent = ({id}) => {
               title={request.title}
               status={request.status}
               type={request.type}
+              updatedAt={request.updatedAt}
             />
             <Tab fullHeight className="tab-container">
               <TabPane name="Content" key={1} value={1}>

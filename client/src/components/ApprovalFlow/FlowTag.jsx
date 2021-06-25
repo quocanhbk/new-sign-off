@@ -15,13 +15,6 @@ const TagWrapper = styled.div`
     //border: 1px solid ${props => props.theme.color.border.primary};
     border-radius: 0.5rem;
     overflow: hidden;
-    /* border: 1px solid ${props => 
-        props.status === "Approved" ? props.theme.color.fill.success : 
-        props.status === "Rejected" ? props.theme.color.fill.danger : 
-        (props.status === "Pending" && props.isCurrent) ? props.theme.color.fill.warning : 
-        props.status === "Pending" ? props.theme.color.fill.primary : 
-        props.theme.color.border.primary
-    }; */
     background: ${props => 
         getFader(
             props.status === "Approved" ? props.theme.color.fill.success : 
@@ -47,8 +40,7 @@ const CheckContainer = styled.div`
     place-items: center;
 `
 const CheckWrapper = styled.div`
-    //border: 2px solid ${props => props.theme.color.fill.primary};
-    color: ${props => props.theme.color.fill.primary};
+    color: ${props => props.theme.color.fill.secondary};
     display: grid;
     place-items: center;
     border-radius: 99px;
@@ -64,7 +56,7 @@ const Vertical = styled.div`
     width: 2px;
     height: ${props => props.last ? "50%" : "150%"};
     transform: translate(-50%, 0%);
-    background: ${props => props.theme.color.fill.primary};
+    background: ${props => props.theme.color.fill.secondary};
 `
 const Text = styled.div`
     display: flex;
@@ -132,17 +124,19 @@ const FlowTag = ({data, last, isCurrent}) => {
                             <p className="flow-tag-name">{data.fullname}</p>
                             <p className="flow-tag-email">{data.email}</p>
                         </Text>
-                        {data.decision === "Pending" && isCurrent && 
-                            <Button 
-                                variant="outline" 
-                                normalBorder 
-                                padding="0.2rem" 
-                                radius="99px" 
-                                color="warning"
-                                onClick={() => notify(data.userId)}
-                            >
-                                <BsBellFill/>
-                            </Button>
+                        {data.decision === "Pending" && isCurrent &&
+                            <div style={{marginLeft: "auto"}}>
+                                <Button 
+                                    variant="ghost" 
+                                    normalBorder 
+                                    padding="0.2rem" 
+                                    radius="99px" 
+                                    color="warning"
+                                    onClick={() => notify(data.userId)}
+                                >
+                                    <BsBellFill/>
+                                </Button>
+                            </div>
                         }
                     </Body>
                 </TagWrapper> 

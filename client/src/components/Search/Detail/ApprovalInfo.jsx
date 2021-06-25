@@ -5,7 +5,7 @@ import { getFader } from "../../../utils/color";
 import styled from "styled-components";
 import SectionContainer from '../../SectionContainer'
 import InfoLine from "./InfoLine";
-
+import {projectList} from 'constant'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -47,7 +47,7 @@ const ApprovalInfo = ({request}) => {
           />
           <InfoLine
             headline={'Related project'}
-            content={request.relatedProjects.join(', ')}
+            content={request.relatedProjects.map(i => projectList.find(p => p.id === i).text).join(', ')}
           />
           <InfoLine
             headline={'Number of approval file'}
@@ -70,7 +70,7 @@ const ApprovalInfo = ({request}) => {
       <SectionContainer headline="Creator">
         <LineContainer>
           <InfoLine headline={'Name'} content={request.submitter[0].fullname} />
-          <InfoLine headline={'Job title'} content={request.submitter[0].email} />
+          <InfoLine headline={'Email'} content={request.submitter[0].email} />
           <InfoLine
             headline={'Created'}
             content={format(request.createdAt, 'yyyy-MM-dd hh:mm')}

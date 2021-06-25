@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import ControlledCombox from 'components/ControlledCombox'
 import FormControl from 'components/FormControl'
 import { useStoreState } from 'easy-peasy';
+import baseURL from 'api/baseURL';
 
 const Container = styled.div`
     display: flex;
@@ -23,7 +24,7 @@ const TagContainer = styled.div`
 const Tag = ({email, name}) => {
     return (
         <TagContainer>
-            <img src={"/api/v1/avatar/" + email} alt="" loading="lazy"/>
+            <img src={baseURL + "/api/v1/avatar/" + email} alt="" loading="lazy"/>
             {name}
         </TagContainer>
     )

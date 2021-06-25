@@ -41,7 +41,7 @@ const CheckItemName = styled.div`
 	}
 `
 
-const AttachmentCheckList = ({checklist, attachments, onRemoveAttachment, onEditAttachment, changeFieldContent, setAddingAttachment}) => {
+const AttachmentCheckList = ({checklist, attachments, onRemoveAttachment, onEditAttachment, changeFieldContent, setAddingAttachment, readOnly}) => {
 
 	return (
 		<TableWrapper>
@@ -61,9 +61,11 @@ const AttachmentCheckList = ({checklist, attachments, onRemoveAttachment, onEdit
 									</CheckItemName>
 								</td>
 								<td width="10%">
-									<IconContainer color="info" onClick={() => setAddingAttachment(checkItem.id)}>
-										<BsPlus size="1.2rem"/>
-									</IconContainer>
+									{!readOnly && 
+										<IconContainer color="info" onClick={() => setAddingAttachment(checkItem.id)}>
+											<BsPlus size="1.2rem"/>
+										</IconContainer>
+									}
 								</td>
 							</CheckItemRow>
 							<tr>
@@ -74,6 +76,7 @@ const AttachmentCheckList = ({checklist, attachments, onRemoveAttachment, onEdit
 										onEditAttachment={onEditAttachment}
 										noHeader
 										changeFieldContent={changeFieldContent}
+										readOnly={readOnly}
 									/>
 								</td>
 							</tr>

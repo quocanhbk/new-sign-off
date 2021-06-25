@@ -119,11 +119,9 @@ const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeField
                         <tr key={field.id}>
                           <td className="field-name">{field.name + ':'}</td>
                           <td>
-                            {readOnly ? (
-                              <div>{field.content}</div>
-                            ) : (
                               <FormField
                                 value={field.content}
+                                readOnly={readOnly}
                                 onChange={(e) =>
                                   changeFieldContent(
                                     attachment.id,
@@ -133,7 +131,6 @@ const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeField
                                 }
                                 spellCheck="false"
                               />
-                            )}
                           </td>
                         </tr>
                       ))

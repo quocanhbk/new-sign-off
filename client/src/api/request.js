@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import axios from 'axios'
 import getConfig from './getConfig';
+import { getProcedureChecklist } from './procedure';
 
 export const getRequests = async (callback = (v) => {v}) => {
 	const config = await getConfig()
@@ -20,6 +21,7 @@ export const getRequests = async (callback = (v) => {v}) => {
 export const getRequestDetail = async (id) => {
 	const config = await getConfig()
 	let {data} = await axios.get('/api/v1/requests/' + id, config);
+	let checklist = await getProcedureChecklist(data.fk_procedure_id)
 	console.log(data);
 	return {
 		id: data.approval_request_id,
@@ -63,6 +65,7 @@ export const getRequestDetail = async (id) => {
 		logs: data.logs,
 		currentApprover: data.current_approver,
 		procedureId: data.fk_procedure_id,
+		checklist: checklist,
 		opinions: data.opinions,
 		updatedAt: new Date(data.updated_at),
 		approvalAttachments: data.attachments.filter(a => !a.reference).map(a => ({

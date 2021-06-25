@@ -36,6 +36,16 @@ const Container = styled.button`
         &:active {
             background: ${props => getFader(props.theme.color.border.primary, 1)}
         }
+    ` : props.variant === "ghost" ? css`
+        background: transparent;
+        color: ${props => props.color ? props.theme.color.fill[props.color] : "inherit"};
+        
+        &:hover {
+            background: ${props => getFader(props.theme.color.border.primary, 0.5)}
+        }
+        &:active {
+            background: ${props => getFader(props.theme.color.border.primary, 1)}
+        }
     ` : css`
         background: ${props => getFader(props.theme.color.border.primary, 0.5)};
         color: ${props => props.theme.color.text[props.color]};
