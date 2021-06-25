@@ -1,28 +1,35 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import styled, { css } from "styled-components";
-import { BsCheck, BsFillCircleFill, BsX } from "react-icons/bs";
+import styled, {  } from "styled-components";
+import { BsBellFill, BsCheck, BsEyeFill, BsFillCircleFill, BsPlayFill, BsThreeDots, BsX } from "react-icons/bs";
 import {getFader} from 'utils/color'
 import baseURL from "api/baseURL";
-
+import Button from 'components/Button'
 const Container = styled.td`
     padding: 0.5rem;
 `
-const Body = styled.div`
+const TagWrapper = styled.div`
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 1rem;
-    border: 1px solid ${props => props.theme.color.border.primary};
-    
+    gap: 0.5rem;
+    //border: 1px solid ${props => props.theme.color.border.primary};
     border-radius: 0.5rem;
-    
-    ${props => props.approving && css`
-        border: 1px solid ${props => 
-            props.theme.color.fill[props.status === "Done" ? "success" : props.status === "Rejected" ? "danger" : "warning"]};
-        background: ${props => 
-            getFader(props.theme.color.fill[props.status === "Done" ? "success" : props.status === "Rejected" ? "danger" : "warning"], 0.1)};
-    `}
+    overflow: hidden;
+    /* border: 1px solid ${props => 
+        props.status === "Approved" ? props.theme.color.fill.success : 
+        props.status === "Rejected" ? props.theme.color.fill.danger : 
+        (props.status === "Pending" && props.isCurrent) ? props.theme.color.fill.warning : 
+        props.status === "Pending" ? props.theme.color.fill.primary : 
+        props.theme.color.border.primary
+    }; */
+    background: ${props => 
+        getFader(
+            props.status === "Approved" ? props.theme.color.fill.success : 
+            props.status === "Rejected" ? props.theme.color.fill.danger : 
+            (props.status === "Pending" && props.isCurrent) ? props.theme.color.fill.warning : 
+            props.status === "Pending" ? props.theme.color.fill.primary : 
+            props.theme.color.fill.secondary
+        , 0.1)};
     
     & img {
         height: 2rem;
@@ -40,7 +47,7 @@ const CheckContainer = styled.div`
     place-items: center;
 `
 const CheckWrapper = styled.div`
-    border: 2px solid ${props => props.theme.color.fill.primary};
+    //border: 2px solid ${props => props.theme.color.fill.primary};
     color: ${props => props.theme.color.fill.primary};
     display: grid;
     place-items: center;
@@ -72,25 +79,73 @@ const Text = styled.div`
         color: ${props => props.theme.color.text.secondary};
     }
 `
-const FlowTag = ({data, last}) => {
+const Status = styled.div`
+    align-self: stretch;
+    padding: 0.5rem;
+    display: grid;
+    place-items: center;
+    color: ${props => props.theme.color.background.primary};
+    background: ${props => 
+        props.status === "Approved" ? props.theme.color.fill.success : 
+        props.status === "Rejected" ? props.theme.color.fill.danger : 
+        (props.status === "Pending" && props.isCurrent) ? props.theme.color.fill.warning : 
+        props.status === "Pending" ? props.theme.color.fill.primary : 
+        props.theme.color.fill.secondary
+    };
+`
+const Body = styled.div`
+    display: flex;
+    padding: 0.5rem 1rem 0.5rem 0.5rem;
+    gap: 1rem;
+    align-items: center;
+`
+
+// decision : "Approved" | "Rejected" | "Pending"
+const FlowTag = ({data, last, isCurrent}) => {
+    const notify = (userId) => {
+        alert(userId)
+    }
     return (
         <tr>
             <Side>
                 <CheckContainer>
                     <CheckWrapper>
-                        {data.decision === 'Approved' ? <BsCheck size="0.8rem" /> : data.decision === 'Rejected' ? <BsX size="0.8rem" /> : <BsFillCircleFill size="0.8rem"/>}
+                        <BsFillCircleFill size="12px"/>
                     </CheckWrapper>
                 </CheckContainer>
                 <Vertical last={last}/>
             </Side>
             <Container>
-                <Body status={data.decision}>
-                    <img src={`${baseURL}/api/v1/avatar/${data.email}`}/>
-                    <Text>
-                        <p className="flow-tag-name">{data.email}</p>
-                        <p className="flow-tag-email">{data.email}</p>
-                    </Text>
-                </Body> 
+                <TagWrapper status={data.decision} isCurrent={isCurrent}>
+                    <Status status={data.decision} isCurrent={isCurrent}>
+                        {
+                            data.decision === "Approved" ? <BsCheck/> : 
+                            data.decision === "Rejected" ? <BsX/> : 
+                            (data.decision === "Pending" && isCurrent) ? <BsPlayFill/> : 
+                            data.decision === "Pending" ? <BsThreeDots/> : 
+                            <BsEyeFill/>
+                        }
+                    </Status>
+                    <Body>
+                        <img src={`${baseURL}/api/v1/avatar/${data.email}`}/>
+                        <Text>
+                            <p className="flow-tag-name">{data.fullname}</p>
+                            <p className="flow-tag-email">{data.email}</p>
+                        </Text>
+                        {data.decision === "Pending" && isCurrent && 
+                            <Button 
+                                variant="outline" 
+                                normalBorder 
+                                padding="0.2rem" 
+                                radius="99px" 
+                                color="warning"
+                                onClick={() => notify(data.userId)}
+                            >
+                                <BsBellFill/>
+                            </Button>
+                        }
+                    </Body>
+                </TagWrapper> 
             </Container>
         </tr>
     )

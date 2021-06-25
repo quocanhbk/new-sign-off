@@ -47,6 +47,7 @@ const  DisplayContent = ({id}) => {
 									advisors={request.advisors}
 									approvers={request.approvers}
 									observators={request.observators}
+                  currentApprover={request.currentApprover}
 								/>
               </TabPane>
               <TabPane name="Info" key={3} value={3}>

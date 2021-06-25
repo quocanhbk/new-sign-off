@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import baseURL from 'api/baseURL';
 import Avatar from 'components/Avatar';
@@ -11,6 +12,7 @@ import FlowSection from './FlowSection';
 const Container = styled.div`
     display:flex;
     flex-direction: column;
+    align-items: center;
     flex: 1;
     padding: 1rem;
     gap: 1rem;
@@ -46,46 +48,49 @@ const ObservatorsWrapper = styled.div`
 `
 
 const Divider = styled.div`
-    height: 2px;
-    width: 96%;
+    height: 1px;
+    width: 50%;
     margin-top: 2rem;
     margin-left: auto;
     margin-right: auto;
-    background-color: ${props => props.theme.color.fill.primary};
+    background-color: ${props => props.theme.color.border.primary};
 `;
-const ApprovalFlow = ({submitter, advisors, approvers, observators}) => {
+const ApprovalFlow = ({submitter, advisors, approvers, observators, currentApprover}) => {
     return (
-      <Container>
-        <table>
-          <tbody>
-            <FlowSection
-              headline="Submitter"
-              data={submitter}
-              type="submitter"
-              done={true}
-            />
-            {advisors && advisors.length > 0 && (
-              <FlowSection headline="Advisor" data={advisors} type="advisor" done={advisors.every(advisor => advisor.decision === 'Approved')} />
-            )}
-            <FlowSection headline="Approver" data={approvers} type="approver" done={approvers.every(approver => approver.decision === 'Approved')} />
-          </tbody>
-        </table>
-        <Divider />
-        <Headline>Observators</Headline>
-        <ObservatorsWrapper>
-          {observators.map((obs) => (
-            <UserDisplayCard key={obs.email}>
-              <Avatar
-                src={`${baseURL}/api/v1/avatar/${obs.email}`}
-              />
-              <UserDisplayCardInfo>
-                <h3>{obs.fullname}</h3>
-                <p>{obs.email}</p>
-              </UserDisplayCardInfo>
-            </UserDisplayCard>
-          ))}
-        </ObservatorsWrapper>
-      </Container>
+		<Container>
+			<table>
+				<tbody>
+					<FlowSection
+						headline="Submitter"
+						data={submitter}
+						type="submitter"
+						done={true}
+					/>
+					{advisors && advisors.length > 0 && (
+						<FlowSection 
+							headline="Advisors" 
+							data={advisors} 
+							type="advisor" 
+							done={advisors.every(advisor => advisor.decision === 'Approved')} 
+							currentApprover={currentApprover}
+						/>
+					)}
+					<FlowSection
+						headline="Approvers" 
+						data={approvers} 
+						type="approver" 
+						done={approvers.every(approver => approver.decision === 'Approved')}
+						currentApprover={currentApprover}
+					/>
+					{observators.length > 0 && 
+					<FlowSection
+						headline="Observators"
+						data={observators}
+						type="observator"
+					/>}
+				</tbody>
+			</table>
+		</Container>
     );
 }
 

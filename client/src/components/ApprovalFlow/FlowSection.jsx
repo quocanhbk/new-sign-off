@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, {Fragment} from 'react'
 import { BsCheck, BsFillCircleFill } from 'react-icons/bs'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import FlowTag from './FlowTag'
 
 const Headline = styled.td`
@@ -10,6 +10,9 @@ const Headline = styled.td`
     font-weight: 600;
     color: ${props => props.theme.color.fill.primary};
     //border: 1px solid black;
+`
+const Row = styled.tr`
+    border-top: 2px solid ${props => props.theme.color.border.primary};
 `
 const CheckWrapper = styled.div`
     border: 2px solid ${props => props.theme.color.fill.primary};
@@ -26,7 +29,7 @@ const Vertical = styled.div`
     content: '';
     position: absolute;
     left: 50%;
-    top: ${props => props.type === "submitter" ? "50%" : "-2px"};
+    top: ${props => props.type === "submitter" ||  props.type === "observator" ? "50%" : "-2px"};
     width: 2px;
     height: 150%;
     transform: translate(-50%, 0%);
@@ -42,15 +45,21 @@ const CheckContainer = styled.div`
     display: grid;
     place-items: center;
 `
-const FlowSection = ({headline, data, type, done}) => {
+const FlowSection = ({headline, data, type, done, currentApprover}) => {
     return (
         <Fragment>
+            {type === "observator" && 
+                <>
+                <tr><td style={{height: "1rem"}}></td></tr>
+                <Row><td colSpan={2} style={{height: "1rem"}}></td></Row>
+                </>
+            }
             <tr>
                 <Side>
                     <CheckContainer>
                         <CheckWrapper>
                             {
-                                done ? <BsCheck size="0.8rem" /> : <BsFillCircleFill size="0.8rem"/>
+                                done ? <BsCheck size="12px" /> : <BsFillCircleFill size="12px"/>
                             }
                         </CheckWrapper>
                     </CheckContainer>
@@ -59,7 +68,12 @@ const FlowSection = ({headline, data, type, done}) => {
                 <Headline>{headline}</Headline>
             </tr>
             {data.map((d,idx) => 
-                <FlowTag key={d.email} data={d} last={type === 'approver' && idx === (data.length -1)}/> 
+                <FlowTag 
+                    key={d.email} 
+                    data={d}
+                    isCurrent={(type === "approver" || type === "advisor") && currentApprover.includes(d.userId)}
+                    last={(type === 'approver' || type === "observator") && idx === (data.length -1)}
+                /> 
             )}
         </Fragment>
        

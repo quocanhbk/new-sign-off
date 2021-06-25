@@ -60,7 +60,7 @@ const Bar = styled.div`
     //box-shadow: 0 0 1px ${props => props.open ? "4px" : "0px"} ${props => getFader(props.theme.color.fill.primary, 0.15)};
     border-radius: 5px;
     transition: border 0.15s linear;
-    height: 2rem;
+    min-height: 2rem;
 
     ${props => props.disabled && css`
         background: ${props => props.disabled ? getFader(props.theme.color.border.primary, 0.2) : "transparent"};

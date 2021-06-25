@@ -5,6 +5,7 @@ import {getFader} from '../../../utils/color'
 import EventComments from './EventComments';
 import SectionContainer from '../../SectionContainer';
 import AttachmentTable from 'components/Create/AttachmentTable';
+import NoFile from './NoFile'
 
 const ContentWrapper = styled.div`
     display:flex;
@@ -44,10 +45,16 @@ const Content = ({request}) => {
                 <div dangerouslySetInnerHTML={{__html: request.description}}></div>
             </SectionContainer>
             <SectionContainer headline="3. Approval File">
-                <AttachmentTable attachments={request.approvalAttachments} readOnly={true} />
+                {request.approvalAttachments.length > 0 ?
+                    <AttachmentTable attachments={request.approvalAttachments} readOnly={true} /> :
+                    <NoFile/>
+                }
             </SectionContainer>
             <SectionContainer headline="4. Reference File">
-                <AttachmentTable attachments={request.referenceAttachments} readOnly={true}/>
+                {request.referenceAttachments.length > 0 ?
+                    <AttachmentTable attachments={request.referenceAttachments} readOnly={true}/> :
+                    <NoFile/>
+                }
             </SectionContainer>
             <SectionContainer headline={"5. Event & Comments"}>
                 <EventComments logs={logs} setLogs={setLogs} requestId={request.id} />
