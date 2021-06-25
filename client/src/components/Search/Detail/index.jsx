@@ -1,13 +1,15 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import Tab from "../../Tab";
-import TabPane from "../../TabPane";
+import Tab from "components/Tab";
+import TabPane from "components/TabPane";
 import Content from "./Content";
 import Header from "./Header";
 import ApprovalInfo from "./ApprovalInfo";
 import styled from "styled-components";
 import {getRequestDetail} from 'api/request'
 import ApprovalFlow from "components/ApprovalFlow";
+import useCustomLoader from "hooks/useCustomLoader";
+import Placeholder from "components/Placeholder";
 
 const Container = styled.div`
 	height: 100%;
@@ -18,19 +20,19 @@ const Container = styled.div`
 const  DisplayContent = ({id}) => {
 
 	const [request, setRequest] = useState(null)
-
+  const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
 	useEffect(() => {
 		const fetchData = async () => {
-			let res = await getRequestDetail(id);
+      reset()
+			let res = await getRequestDetail(id, (p) => setPercent(p)).catch(() => setNotFound(true));
 			setRequest(res)
-      console.log(res);
 		}
 		fetchData()
 	},[id]);
 
     return (
       <Container className="container">
-        {request ? (
+        {render(request && (
           <>
             <Header
               title={request.title}
@@ -56,7 +58,7 @@ const  DisplayContent = ({id}) => {
               </TabPane>
             </Tab>
           </>
-        ) : null}
+        ))}
       </Container>
     );
 }

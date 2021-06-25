@@ -167,7 +167,8 @@ const useDocument = () => {
 
     const submitRequest = async () => {
         // No need to check for error anymore
-        console.log("Submitting...")
+        console.log("Reset")
+        reset()
         const input = {
             title, 
             description, 
@@ -182,9 +183,8 @@ const useDocument = () => {
             referenceAttachments,
             procedure
         }
-        let id = await postRequest(input)
-        //setPath("/search/" + id)
-        //setPath("/search/")
+        let id = await postRequest(input, (p) => setPercent(p))
+        setTimeout(() => setPath("/search/" + id), 400)
     }
     const updateAttachment = (attachmentType, attachmentId, name, fields) => {
         if (attachmentType === "approval") {

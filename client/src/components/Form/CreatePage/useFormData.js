@@ -5,7 +5,6 @@ import { useStoreActions } from "easy-peasy"
 import {useEffect, useState} from "react"
 import {v4 as uuid} from 'uuid'
 import {getFormDetail, postForm, updateForm} from "api/form"
-import useLoading from "hooks/useLoading"
 import useCustomLoader from "hooks/useCustomLoader"
 import Placeholder from "components/Placeholder"
 
@@ -23,7 +22,6 @@ const useFormData = (id = null) => {
     const [file, setFile] = useState(initData.file)
     const [fieldData, setFieldData] = useState(initData.fields)
     const [addingTag, setAddingTag] = useState(null)
-    //const {loading, percent, setPercent, setLoading, reset} = useLoading(!!id)
     const {render, reset, setNotFound, setPercent} = useCustomLoader(!!id, <Placeholder type="NOT_FOUND"/>, true)
     useEffect(() => {
         if (id) {

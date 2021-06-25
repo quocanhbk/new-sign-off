@@ -8,12 +8,9 @@ import ListToolbar from './ListToolbar';
 import {getFader} from 'utils/color'
 import { navigate, useLocation } from '@reach/router';
 import {BsFileEarmarkPlus} from 'react-icons/bs'
-import ProgressLoader from 'components/ProgressLoader'
-import { getForms } from '../../../api/form'
+import { getForms } from 'api/form'
 import Button from 'components/Button';
 import { useStoreState } from 'easy-peasy';
-import useLoading from 'hooks/useLoading';
-import useLoader from 'hooks/useLoader'
 import Placeholder from 'components/Placeholder';
 import useCustomLoader from 'hooks/useCustomLoader';
 

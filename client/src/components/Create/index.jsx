@@ -147,73 +147,72 @@ const Create = () => {
 					}
 				</AbsoluteModal>
 				{render(
-				<Container className="Container">
-				{/* SECTION PRIMARY INFO */}
-				<SectionContainer headline="Primary Information" haveBorder>
-					<PrimaryInfo
-						error={error}
-						title={title}
-						type={type}
-						priority={priority}
-						deadline={deadline}
-						relatedProjects={relatedProjects}
-						set={set}
-						procedureList={procedureList}
-						procedure={procedure}
-					/>
-				</SectionContainer>
-
-				{/* SECTION PARTICIPANTS */}
-				<SectionContainer headline="Participants" haveBorder>
-					<Participants
-						advisors={advisors}
-						approvers={approvers}
-						observators={observators}
-						set={set}
-					/>
-				</SectionContainer>
-				
-				{/* SECTION APPROVAL DOCUMENT */}
-				<SectionContainer headline="Approval Attachment" haveBorder>
-					{type === "Procedure" ? 
-						<AttachmentCheckList 
-							checklist={checklist} 
-							attachments={approvalAttachments}
-							onRemoveAttachment={id => removeAttachment("approval", id)}
-							onEditAttachment={id => setEditingAttachment({type: "approval", id})}
-							setAddingAttachment={setAddingAttachment}
-							changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("approvalAttachments", attachmentId, fieldId, content)}
-						/> : 
-						<FlexibleApprovalAttachment 
-							type="approvalAttachments"
-							attachments={approvalAttachments}
+					<Container className="Container">
+					{/* SECTION PRIMARY INFO */}
+					<SectionContainer headline="Primary Information" haveBorder>
+						<PrimaryInfo
+							error={error}
+							title={title}
+							type={type}
+							priority={priority}
+							deadline={deadline}
+							relatedProjects={relatedProjects}
 							set={set}
-							onRemoveAttachment={id => removeAttachment("approval", id)}
-							onEditAttachment={id => setEditingAttachment({type: "approval", id})}
-							changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("approvalAttachments", attachmentId, fieldId, content)}
+							procedureList={procedureList}
+							procedure={procedure}
 						/>
-					}
-				</SectionContainer>
-				
-				{/* SECTION REFERENCE DOCUMENT */}
-				<SectionContainer headline="Reference Attachment" haveBorder>
-					<FlexibleApprovalAttachment
-						type="referenceAttachments"
-						attachments={referenceAttachments} 
-						set={set} 
-						onRemoveAttachment={id => removeAttachment("reference", id)}
-						onEditAttachment={id => setEditingAttachment({type: "reference", id})}
-						changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("referenceAttachments", attachmentId, fieldId, content)}
-					/>
-				</SectionContainer>
-				
-				{/* SECTION DESCRIPTION */}
-				<SectionContainer headline="Description" haveBorder>
-					<DescriptionEditor description={description} set={set}/>
-				</SectionContainer>
-				</Container>
-				)}
+					</SectionContainer>
 
+					{/* SECTION PARTICIPANTS */}
+					<SectionContainer headline="Participants" haveBorder>
+						<Participants
+							advisors={advisors}
+							approvers={approvers}
+							observators={observators}
+							set={set}
+						/>
+					</SectionContainer>
+					
+					{/* SECTION APPROVAL DOCUMENT */}
+					<SectionContainer headline="Approval Attachment" haveBorder>
+						{type === "Procedure" ? 
+							<AttachmentCheckList 
+								checklist={checklist} 
+								attachments={approvalAttachments}
+								onRemoveAttachment={id => removeAttachment("approval", id)}
+								onEditAttachment={id => setEditingAttachment({type: "approval", id})}
+								setAddingAttachment={setAddingAttachment}
+								changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("approvalAttachments", attachmentId, fieldId, content)}
+							/> : 
+							<FlexibleApprovalAttachment 
+								type="approvalAttachments"
+								attachments={approvalAttachments}
+								set={set}
+								onRemoveAttachment={id => removeAttachment("approval", id)}
+								onEditAttachment={id => setEditingAttachment({type: "approval", id})}
+								changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("approvalAttachments", attachmentId, fieldId, content)}
+							/>
+						}
+					</SectionContainer>
+					
+					{/* SECTION REFERENCE DOCUMENT */}
+					<SectionContainer headline="Reference Attachment" haveBorder>
+						<FlexibleApprovalAttachment
+							type="referenceAttachments"
+							attachments={referenceAttachments} 
+							set={set} 
+							onRemoveAttachment={id => removeAttachment("reference", id)}
+							onEditAttachment={id => setEditingAttachment({type: "reference", id})}
+							changeFieldContent={(attachmentId, fieldId, content) => changeFieldContent("referenceAttachments", attachmentId, fieldId, content)}
+						/>
+					</SectionContainer>
+					
+					{/* SECTION DESCRIPTION */}
+					<SectionContainer headline="Description" haveBorder>
+						<DescriptionEditor description={description} set={set}/>
+					</SectionContainer>
+					</Container>
+				)}
 
 			</ContainerItems>
 			<Snackbar visible={errorNotify} onClose={() => setErrorNotify(false)} timeOut={2000}>

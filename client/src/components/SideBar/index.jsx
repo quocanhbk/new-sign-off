@@ -1,10 +1,10 @@
-import React, {  } from 'react';
+import React from 'react';
 import styled, {css} from 'styled-components';
 import { BsThreeDotsVertical} from 'react-icons/bs';
-import Avatar from '../Avatar';
-import ThemeToggle from '../ThemeToggle'
-import pageList from '../../pageList'
-import { getFader } from '../../utils/color';
+import Avatar from 'components/Avatar';
+import ThemeToggle from 'components/ThemeToggle'
+import pageList from 'pageList'
+import { getFader } from 'utils/color';
 import {useStoreActions, useStoreState} from 'easy-peasy'
 import { useMsal } from '@azure/msal-react';
 import baseURL from 'api/baseURL';

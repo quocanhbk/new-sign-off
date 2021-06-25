@@ -1,7 +1,7 @@
 import { Router } from '@reach/router'
+import Placeholder from 'components/Placeholder'
 import React from 'react'
 import styled from 'styled-components'
-import NoSelectionIndicator from '../Search/Detail/NoSelectionIndicator'
 import Detail from './Detail'
 import List from './List'
 
@@ -30,7 +30,7 @@ const Sign = () => {
             <DetailWrapper>
                 <Router className="sign-router">
                     <Detail path="/:id"/>
-                    <NoSelectionIndicator path="/"/>
+                    <Placeholder type="REQUEST_NOT_FOUND" default/>
                 </Router>
             </DetailWrapper>
         </StyleContainer>

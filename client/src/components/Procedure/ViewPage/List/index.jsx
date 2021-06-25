@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
@@ -9,9 +8,9 @@ import { navigate, useLocation } from '@reach/router';
 import Button from 'components/Button'
 import { BsFileEarmarkPlus } from 'react-icons/bs';
 import { useStoreState } from 'easy-peasy';
-import useLoader from 'hooks/useLoader'
-import {deleteProcedure, getProcedures} from 'api/procedure'
+import { getProcedures} from 'api/procedure'
 import Placeholder from 'components/Placeholder';
+import useCustomLoader from 'hooks/useCustomLoader';
 
 const StyleListWrapper =styled.div`
     flex: 5;
@@ -61,18 +60,8 @@ function List() {
     const [searchText, setSearchText] = useState("")
     const location = useLocation().pathname.split("/")
     const users = useStoreState(s => s.users)
-    const renderList = () => procedures.filter(procedure => procedure.title.toLowerCase().includes(searchText.toLowerCase())).map(procedure => 
-        <Cardv2 
-            key={procedure.id} 
-            title={procedure.title}
-            isActive={procedure.isActive}
-            createdBy={users.find(u => u.id === procedure.createdBy)}
-            onClick={() => handle(procedure.id)}
-            active={procedure.id == location[location.length - 1]}
-        />
-    )
-    const {LoadingComponent, setPercent, setNotFound} = useLoader(true, renderList(), <Placeholder type="NOT_FOUND" />)
-
+    const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
+    
     useEffect(() => {
         const fetchData = async () => {
             const data = await getProcedures((v) => setPercent(v)).catch(() => {setNotFound(true)})
@@ -100,7 +89,18 @@ function List() {
                 </Button>
             </AddNewContainer>
             <CardList>
-                {LoadingComponent}
+                {render(
+                    procedures.filter(procedure => procedure.title.toLowerCase().includes(searchText.toLowerCase())).map(procedure => 
+                        <Cardv2 
+                            key={procedure.id} 
+                            title={procedure.title}
+                            isActive={procedure.isActive}
+                            createdBy={users.find(u => u.id === procedure.createdBy)}
+                            onClick={() => handle(procedure.id)}
+                            active={procedure.id == location[location.length - 1]}
+                        />
+                    )
+                )}
             </CardList>
         </StyleListWrapper>
     );

@@ -65,7 +65,7 @@ const SubmitPopup = ({closeSubmit, submitRequest, title}) => {
             </Text>
             <ButtonContainer>
                 <button className="request-cancel" onClick={closeSubmit}>Cancel</button>
-                <button className="request-confirm" onClick={submitRequest}>Confirm</button>
+                <button className="request-confirm" onClick={() => {closeSubmit();submitRequest()}}>Confirm</button>
             </ButtonContainer>
         </Container>
     )

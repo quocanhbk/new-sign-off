@@ -10,8 +10,6 @@ import {BsChevronLeft} from 'react-icons/bs'
 import { navigate } from '@reach/router';
 import {ButtonContainer, Container, Wrapper, StyleTitle, Toolbar, ToolbarContainer, ToolbarElement, NoField, FormNameInput} from './IndexStyledComponents'
 import useFormData from './useFormData';
-import ProgressLoader from 'components/ProgressLoader'
-import Placeholder from 'components/Placeholder'
 
 
 const CreatePage = ({id}) => {

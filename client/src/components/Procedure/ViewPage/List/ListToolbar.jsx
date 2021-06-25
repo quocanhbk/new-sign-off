@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import styled from "styled-components";
-import Searchbar from "../../../Searchbar";
+import Searchbar from "components/Searchbar";
 
 const StyleToolbar = styled.div`
   display: flex;

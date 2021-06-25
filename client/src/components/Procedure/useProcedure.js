@@ -4,7 +4,6 @@ import {v4} from 'uuid'
 import { getProcedureDetail, postProcedure, updateProcedure } from 'api/procedure'
 import {getFormDetail} from 'api/form'
 import {navigate} from '@reach/router'
-//import useLoading from 'hooks/useLoading'
 import useCustomLoader from 'hooks/useCustomLoader'
 import Placeholder from 'components/Placeholder'
 
@@ -47,7 +46,6 @@ const errorReducer = (state, action) => {
 const useProcedure = (id) => {
     const [{title, description, advisors, approvers, observators, tags, isActive, checklist}, dispatch] = useReducer(reducer, initState)
     const [error, dispatchError] = useReducer(errorReducer, initError)
-    //const {loading, percent, setPercent, setLoading, reset} = useLoading(!!id)
     const {reset, render, setNotFound, setPercent} = useCustomLoader(!!id, <Placeholder type="NOT_FOUND"/>)
 
     useEffect(() => {

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { getFader } from "../../../utils/color";
+import { getFader } from "utils/color";
 import { BiCheck } from "react-icons/all";
 import FlowTag from "./FlowTag";
 import data from './sampleData'

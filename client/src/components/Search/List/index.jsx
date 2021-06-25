@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import RequestCard from './RequestCard';
 import ListToolbar from './ListToolbar';
-import {getFader} from '../../../utils/color';
+import {getFader} from 'utils/color';
 import { getRequests } from 'api/request';
 import useCustomLoader from 'hooks/useCustomLoader';
 import Placeholder from 'components/Placeholder';
+
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};

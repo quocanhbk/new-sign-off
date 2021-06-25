@@ -4,7 +4,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import {BiDislike, BiLike, BsChevronRight, BsClock, GiPauseButton} from 'react-icons/all'
-import {getFader} from '../../../utils/color'
+import {getFader} from 'utils/color'
 import { navigate } from '@reach/router';
 
 const Container = styled.div`

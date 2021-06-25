@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components'
 import {IoMdSend} from 'react-icons/all'
 import CardEvents from './CardEvents';
-import { getFader } from '../../../utils/color';
+import { getFader } from 'utils/color';
 import format from 'date-fns/format'
 import getConfig from 'api/getConfig';
 import axios from 'axios';

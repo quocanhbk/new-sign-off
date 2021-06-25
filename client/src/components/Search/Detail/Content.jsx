@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
-import {getFader} from '../../../utils/color'
+import {getFader} from 'utils/color'
 import EventComments from './EventComments';
-import SectionContainer from '../../SectionContainer';
+import SectionContainer from 'components/SectionContainer';
 import AttachmentTable from 'components/Create/AttachmentTable';
 import NoFile from './NoFile'
 import AttachmentCheckList from 'components/Create/AttachmentChecklist';

@@ -18,11 +18,16 @@ export const getRequests = async (callback = (v) => {v}) => {
 		author: {id: request.author.user_id, email: request.author.email, name: request.author.full_name}
 	}))
 }
-export const getRequestDetail = async (id) => {
+export const getRequestDetail = async (id, callback = (v) => {v}) => {
 	const config = await getConfig()
+	callback(33)
 	let {data} = await axios.get('/api/v1/requests/' + id, config);
-	let checklist = await getProcedureChecklist(data.fk_procedure_id)
-	console.log(data);
+	let checklist = null
+	if (data.type === "Procedure") {
+		checklist = await getProcedureChecklist(data.fk_procedure_id)
+		callback(66)
+	}
+	callback(100)
 	return {
 		id: data.approval_request_id,
 		title: data.title,

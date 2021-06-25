@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { deleteProcedure, getProcedureDetail, toggleActive } from "api/procedure";
-import useLoader from "hooks/useLoader";
 import ContentHeader from "./ContentHeader";
 import SectionContainer from 'components/SectionContainer'
 import FormControl from "components/FormControl";
@@ -13,7 +12,8 @@ import Snackbar from "components/Snackbar";
 import Placeholder from "components/Placeholder";
 import { BsFillExclamationTriangleFill } from "react-icons/bs";
 import Checklist from './Checklist'
-
+import baseURL from "api/baseURL";
+import useCustomLoader from "hooks/useCustomLoader";
 const Container = styled.div`
 	position: relative;
 	height: 100%;
@@ -54,7 +54,7 @@ const Notify = styled.div`
 const Tag = ({email, name}) => {
     return (
         <TagContainer>
-            <img src={"/api/v1/avatar/" + email} alt="" loading="lazy"/>
+            <img src={baseURL + "/api/v1/avatar/" + email} alt="" loading="lazy"/>
             {name}
         </TagContainer>
     )
@@ -78,63 +78,9 @@ const Detail = ({id}) => {
 	const onEditClick = () => {
 		navigate('/procedure/create/' + id)
 	}
-	const render = () => 
-		procedure &&
-		<>
-			<ContentHeader 
-				title={procedure.title} 
-				isActive={procedure.isActive} 
-				onDeleteClick={onDeleteClick} 
-				onEditClick={onEditClick}
-				onToggleActive={onToggleActive}
-			/>
-			<Body>
-				<SectionContainer headline={"Description"}>
-					{procedure.description}
-				</SectionContainer>
-				<SectionContainer headline="Participants">
-					<ParticipantsContainer>
-					<FormControl headline={"Advisor List"} readOnly>
-						<ControlledCombox
-							multiple
-							selection={users}
-							value={users.filter(u => procedure.advisors.includes(u.id))}
-							displayField={"display"}
-							readOnly
-						/>
-					</FormControl>
-					<FormControl headline={"Approver List"} readOnly>
-						<ControlledCombox
-							multiple
-							selection={users}
-							value={users.filter(u => procedure.approvers.includes(u.id))}
-							displayField={"display"}
-							readOnly
-						/>
-					</FormControl>
-					<FormControl headline={"Observator List"} readOnly>
-						<ControlledCombox
-							multiple
-							selection={users}
-							value={users.filter(u => procedure.observators.includes(u.id))}
-							displayField={"display"}
-							readOnly
-						/>
-					</FormControl>
-				</ParticipantsContainer>
-				</SectionContainer>
-				<SectionContainer headline="Checklist">
-					<Checklist checklist={procedure.checklist} readOnly={true}/>
-				</SectionContainer>
-			</Body>
-			<Snackbar visible={notify} onClose={() => setNotify(false)} timeOut={2000}>
-				<Notify>
-					<BsFillExclamationTriangleFill size="1.2rem"/>
-					<p>Procedure is currently in use!</p>
-				</Notify>
-			</Snackbar>
-		</>
-	const {LoadingComponent, setPercent, setNotFound, reset} = useLoader(true, render(), <Placeholder type="NOT_FOUND" />)
+
+	//const {LoadingComponent, setPercent, setNotFound, reset} = useLoader(true, render(), <Placeholder type="NOT_FOUND" />)
+	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
 	useEffect(() => {
 		const fetchForm = async () => {
 			setProcedures(null)
@@ -148,7 +94,63 @@ const Detail = ({id}) => {
 
 	return (
 		<Container>
-			{LoadingComponent}
+			{render(
+				procedure &&
+				<>
+					<ContentHeader 
+						title={procedure.title} 
+						isActive={procedure.isActive} 
+						onDeleteClick={onDeleteClick} 
+						onEditClick={onEditClick}
+						onToggleActive={onToggleActive}
+					/>
+					<Body>
+						<SectionContainer headline={"Description"}>
+							{procedure.description}
+						</SectionContainer>
+						<SectionContainer headline="Participants">
+							<ParticipantsContainer>
+							<FormControl headline={"Advisor List"} readOnly>
+								<ControlledCombox
+									multiple
+									selection={users}
+									value={users.filter(u => procedure.advisors.includes(u.id))}
+									displayField={"display"}
+									readOnly
+								/>
+							</FormControl>
+							<FormControl headline={"Approver List"} readOnly>
+								<ControlledCombox
+									multiple
+									selection={users}
+									value={users.filter(u => procedure.approvers.includes(u.id))}
+									displayField={"display"}
+									readOnly
+								/>
+							</FormControl>
+							<FormControl headline={"Observator List"} readOnly>
+								<ControlledCombox
+									multiple
+									selection={users}
+									value={users.filter(u => procedure.observators.includes(u.id))}
+									displayField={"display"}
+									readOnly
+								/>
+							</FormControl>
+						</ParticipantsContainer>
+						</SectionContainer>
+						<SectionContainer headline="Checklist">
+							<Checklist checklist={procedure.checklist} readOnly={true}/>
+						</SectionContainer>
+					</Body>
+					<Snackbar visible={notify} onClose={() => setNotify(false)} timeOut={2000}>
+						<Notify>
+							<BsFillExclamationTriangleFill size="1.2rem"/>
+							<p>Procedure is currently in use!</p>
+						</Notify>
+					</Snackbar>
+				</>
+			)}
 		</Container>
 	);
 };

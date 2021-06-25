@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import format from 'date-fns/format';
-import { getFader } from "../../../utils/color";
+import { getFader } from "utils/color";
 import styled from "styled-components";
-import SectionContainer from '../../SectionContainer'
+import SectionContainer from 'components/SectionContainer'
 import InfoLine from "./InfoLine";
 import {projectList} from 'constant'
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;

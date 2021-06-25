@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import styled from "styled-components";
-import { getFader } from "../../../utils/color";
+import { getFader } from "utils/color";
 import {format} from 'date-fns'
 const ContentInfo = styled.div`
   display: flex;

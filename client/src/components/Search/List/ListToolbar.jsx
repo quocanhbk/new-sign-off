@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Searchbar from "../../Searchbar";
+import Searchbar from "components/Searchbar";
 import { BsFunnel } from "react-icons/bs";
-import useClickOutside from "../../../hooks/useClickOutside";
+import useClickOutside from "hooks/useClickOutside";
 
 const StyleToolbar = styled.div`
   display: flex;

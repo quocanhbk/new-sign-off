@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Detail from './Detail'
 import List from './List'
 import {Router} from '@reach/router'
-import NoSelectionIndicator from './Detail/NoSelectionIndicator'
+import Placeholder from 'components/Placeholder'
 
 const StyleContainer = styled.div`
     display:flex;
@@ -32,7 +32,7 @@ const Search = () => {
             <DetailWrapper>
                 <Router className="search-router">
                     <Detail path="/:id"/>
-                    <NoSelectionIndicator path="/"/>
+                    <Placeholder type="REQUEST_NOT_SELECTED" default/>
                 </Router>
             </DetailWrapper>
         </StyleContainer>
