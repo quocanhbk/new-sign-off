@@ -8,7 +8,7 @@ import theme from './utils/theme';
 import {StoreProvider, useStoreState} from 'easy-peasy'
 import store from './store'
 import { pdfjs } from 'react-pdf';
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;;
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const StyledApp = styled.div`
   background: ${(props) => props.theme.color.background.primary};
