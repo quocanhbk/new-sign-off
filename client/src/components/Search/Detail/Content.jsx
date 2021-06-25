@@ -48,7 +48,7 @@ const Content = ({request}) => {
             <SectionContainer headline="3. Approval File">
                 {request.approvalAttachments.length > 0 ?
                     (request.type === "Procedure" ? 
-                        <AttachmentCheckList attachments={request.approvalAttachments} readOnly={true}/> :
+                        <AttachmentCheckList attachments={request.approvalAttachments} checklist={request.checklist} readOnly={true}/> :
                         <AttachmentTable attachments={request.approvalAttachments} readOnly={true} />
                     ) :
                     <NoFile/>

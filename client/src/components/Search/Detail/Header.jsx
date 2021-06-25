@@ -2,7 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 import { getFader } from "../../../utils/color";
-
+import {format} from 'date-fns'
 const ContentInfo = styled.div`
   display: flex;
   padding: 0.5rem 1rem;
@@ -52,11 +52,11 @@ const ApproveStatus = styled.div`
               : props.status === "Pending" ? props.theme.color.fill.warning 
               : props.theme.color.fill.danger};
 `
-const Header = ({title, status, type}) => {
+const Header = ({title, status, type, updatedAt}) => {
 	return (
 		<ContentInfo>
 		<ContentTitle>
-			<p className="content-modified">Last modified at 05:35 pm 04/05/2021</p>
+			<p className="content-modified">{format(updatedAt, "'Last updated at '  p MMM do yyyy")}</p>
 			<p className="content-title">{title}
 			</p>
 		</ContentTitle>

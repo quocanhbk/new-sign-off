@@ -64,14 +64,12 @@ const ApprovalFlow = ({submitter, advisors, approvers, observators, currentAppro
 						headline="Submitter"
 						data={submitter}
 						type="submitter"
-						done={true}
 					/>
 					{advisors && advisors.length > 0 && (
 						<FlowSection 
 							headline="Advisors" 
 							data={advisors} 
 							type="advisor" 
-							done={advisors.every(advisor => advisor.decision === 'Approved')} 
 							currentApprover={currentApprover}
 						/>
 					)}
@@ -79,7 +77,6 @@ const ApprovalFlow = ({submitter, advisors, approvers, observators, currentAppro
 						headline="Approvers" 
 						data={approvers} 
 						type="approver" 
-						done={approvers.every(approver => approver.decision === 'Approved')}
 						currentApprover={currentApprover}
 					/>
 					{observators.length > 0 && 

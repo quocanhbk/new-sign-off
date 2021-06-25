@@ -7,16 +7,17 @@ import FlowTag from './FlowTag'
 
 const Headline = styled.td`
     padding: 0.5rem;
-    font-weight: 600;
-    color: ${props => props.theme.color.fill.primary};
+    font-weight: 500;
+    color: ${props => props.theme.color.fill.secondary};
+    font-size: 1.12rem;
     //border: 1px solid black;
 `
 const Row = styled.tr`
     border-top: 2px solid ${props => props.theme.color.border.primary};
 `
 const CheckWrapper = styled.div`
-    border: 2px solid ${props => props.theme.color.fill.primary};
-    color: ${props => props.theme.color.fill.primary};
+    border: 2px solid ${props => props.theme.color.fill.secondary};
+    color: ${props => props.theme.color.fill.secondary};
     display: grid;
     place-items: center;
     padding: 2px;
@@ -33,7 +34,7 @@ const Vertical = styled.div`
     width: 2px;
     height: 150%;
     transform: translate(-50%, 0%);
-    background: ${props => props.theme.color.fill.primary};
+    background: ${props => props.theme.color.fill.secondary};
 `
 const Side = styled.td`
     //border: 1px solid red;
@@ -45,7 +46,7 @@ const CheckContainer = styled.div`
     display: grid;
     place-items: center;
 `
-const FlowSection = ({headline, data, type, done, currentApprover}) => {
+const FlowSection = ({headline, data, type, currentApprover}) => {
     return (
         <Fragment>
             {type === "observator" && 
@@ -58,9 +59,7 @@ const FlowSection = ({headline, data, type, done, currentApprover}) => {
                 <Side>
                     <CheckContainer>
                         <CheckWrapper>
-                            {
-                                done ? <BsCheck size="12px" /> : <BsFillCircleFill size="12px"/>
-                            }
+                            <BsFillCircleFill size="12px"/>
                         </CheckWrapper>
                     </CheckContainer>
                     <Vertical type={type}/>
