@@ -6,6 +6,7 @@ import EventComments from './EventComments';
 import SectionContainer from '../../SectionContainer';
 import AttachmentTable from 'components/Create/AttachmentTable';
 import NoFile from './NoFile'
+import AttachmentCheckList from 'components/Create/AttachmentChecklist';
 
 const ContentWrapper = styled.div`
     display:flex;
@@ -46,7 +47,10 @@ const Content = ({request}) => {
             </SectionContainer>
             <SectionContainer headline="3. Approval File">
                 {request.approvalAttachments.length > 0 ?
-                    <AttachmentTable attachments={request.approvalAttachments} readOnly={true} /> :
+                    (request.type === "Procedure" ? 
+                        <AttachmentCheckList attachments={request.approvalAttachments} readOnly={true}/> :
+                        <AttachmentTable attachments={request.approvalAttachments} readOnly={true} />
+                    ) :
                     <NoFile/>
                 }
             </SectionContainer>
