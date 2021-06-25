@@ -8,7 +8,7 @@ import {getFader} from 'utils/color';
 import { getRequests } from 'api/request';
 import useCustomLoader from 'hooks/useCustomLoader';
 import Placeholder from 'components/Placeholder';
-
+import { useLocation } from '@reach/router';
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -59,17 +59,17 @@ const CardList = styled.div`
 
 function List() {
     const [requests, setRequests] = useState([])
-
-    const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-    
+    const location = useLocation().pathname.split("/")
+    const {render, setNotFound, setPercent, reset} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
+    const [query, setQuery] = useState("")
     useEffect(() => {
         const fetchRequests = async () => {
-            let requestsData = await getRequests((p) => setPercent(p)).catch(() => setNotFound(true))
+            let requestsData = await getRequests(query, (p) => setPercent(p)).catch(() => setNotFound(true))
             setRequests(requestsData)
             console.log(requestsData);
         }
         fetchRequests()
-    }, [])
+    }, [query])
 
     const comparePriority = ( a, b ) => {
         if ( a.priority > b.priority ){
@@ -82,7 +82,7 @@ function List() {
     }
     return (
         <StyleListWrapper>
-            <ListToolbar/>
+            <ListToolbar setQuery={setQuery}/>
             <TagBar>
                 <p>Filter: </p>
                 <TagContainer>
@@ -101,6 +101,7 @@ function List() {
                         deadline={task.deadline}
                         createdBy={task.author.name}
                         page={"search"}
+                        active={task.id == location[location.length - 1]}
                     />
                 )))}
             </CardList>

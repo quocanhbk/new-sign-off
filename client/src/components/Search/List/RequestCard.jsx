@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 // Request Card, used to display in Search and Sign Page
 import React from 'react';
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import {BiDislike, BiLike, BsChevronRight, BsClock, BsExclamation, GiPauseButton} from 'react-icons/all'
 import {getFader} from 'utils/color'
 import { navigate } from '@reach/router';
@@ -12,6 +12,14 @@ const Container = styled.div`
     border-radius: 0.5rem;
     display: flex;
     box-shadow: ${props => props.theme.shadow};
+
+    ${props => props.active && css`
+        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
+        color: ${props => props.theme.color.fill.primary};
+        &:hover {
+            background: ${props => props.theme.color.border.primary};
+        }
+    `}
 `
 const DivInfo = styled.div`
     flex: 1;
@@ -26,7 +34,7 @@ const Title = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    font-weight: 600;
+    font-weight: 500;
     color: ${props => props.theme.color.fill.primary};
 `
 const Line = styled.div`
@@ -101,7 +109,7 @@ const formatDate = (dateString) => {
     return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
 }
 
-const Card = ({id, title, type, createdBy, status, deadline, page, priority}) => {
+const Card = ({id, title, type, createdBy, status, deadline, page, priority, active}) => {
 
     const renderIcon = (status) => {
         switch(status) {
@@ -117,7 +125,7 @@ const Card = ({id, title, type, createdBy, status, deadline, page, priority}) =>
     }
 
     return (
-        <Container>
+        <Container active={active}>
             <DivInfo>
                 <Title>{title}</Title>
                 <Line>

@@ -7,6 +7,7 @@
     "@azure/msal-react": "^1.0.0",
     "@ckeditor/ckeditor5-build-classic": "^27.1.0",
     "@ckeditor/ckeditor5-react": "^3.0.2",
+    "@pdf-lib/fontkit": "^1.1.1",
     "@reach/router": "^1.3.4",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",

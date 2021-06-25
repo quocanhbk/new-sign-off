@@ -78,15 +78,21 @@ const AttachmentRow = styled.tr`
   border-bottom: 1px solid ${props => props.theme.color.border.primary};
 `
 const AttachmentName = styled.span`
-	user-select: none;
+	pointer-events: none;
 	${props => props.readOnly && css`
 		border-bottom: 1px solid ${props => props.theme.color.fill.primary};
+		color: ${props => props.theme.color.fill.primary};
 		cursor: pointer;
-		user-select: auto;
+		pointer-events: auto;
+
+		&:hover {
+			border-bottom: 1px solid ${props => props.theme.color.text.link};
+			color: ${props => props.theme.color.text.link};
+		}
 	`}
 `
 const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeFieldContent, readOnly, onEditAttachment}) => {
-	
+
 	const handleDownload = (attachmentId) => {
 		const attachment = attachments.find(_ => _.id === attachmentId)
         downloadForm(attachment.name, attachment.fileId, attachment.fields)

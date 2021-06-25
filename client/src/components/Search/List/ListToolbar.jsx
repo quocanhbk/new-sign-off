@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Searchbar from "components/Searchbar";
 import { BsFunnel } from "react-icons/bs";
@@ -40,28 +41,35 @@ const PopupWrapper = styled.div`
   border-radius: 1rem;
 `;
 
-function ListToolbar() {
-  const [filterPopup, setFilterPopup] = useState(false);
-  const ref1 = useClickOutside(() => {
-    setFilterPopup(false);
-  });
+function ListToolbar({setQuery}) {
+	const [filterPopup, setFilterPopup] = useState(false);
+	const [searchText, setSearchText] = useState("");
 
-  const handlePopup = (e, type) => {
-    e.preventDefault();
-    if (type === "filter") {
-      setFilterPopup(!filterPopup);
-    }
-  };
+	useEffect(() => {
+		const timeOutId = setTimeout(() => setQuery(searchText), 250);
+		return () => clearTimeout(timeOutId);
+	}, [searchText]);
 
-  return (
-    <StyleToolbar>
-      <Searchbar />
-      <IconWrapper ref={ref1}>
-        <BsFunnel size="20px" onClick={(e) => handlePopup(e, "filter")} />
-        {filterPopup && <PopupWrapper>Filter</PopupWrapper>}
-      </IconWrapper>
-    </StyleToolbar>
-  );
+	const ref1 = useClickOutside(() => {
+		setFilterPopup(false);
+	});
+
+	const handlePopup = (e, type) => {
+		e.preventDefault();
+		if (type === "filter") {
+		setFilterPopup(!filterPopup);
+		}
+	};
+
+	return (
+		<StyleToolbar>
+			<Searchbar search={searchText} setSearch={setSearchText} />
+			<IconWrapper ref={ref1}>
+				<BsFunnel size="20px" onClick={(e) => handlePopup(e, "filter")} />
+				{filterPopup && <PopupWrapper>Filter</PopupWrapper>}
+			</IconWrapper>
+		</StyleToolbar>
+	);
 }
 
 export default ListToolbar;

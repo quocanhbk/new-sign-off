@@ -5,10 +5,10 @@ import { getProcedureChecklist } from './procedure';
 import { msalInstance } from 'index';
 
 
-export const getRequests = async (callback = (v) => {v}) => {
+export const getRequests = async (title = "", callback = (v) => {v}) => {
 
 	const config = await getConfig()
-	let {data} = await axios.get('/api/v1/requests', config)
+	let {data} = await axios.get(`/api/v1/requests?title=${title}`, config)
 	callback(100)
 	return data.map(request => ({
 		id: request.approval_request_id,
@@ -22,7 +22,6 @@ export const getRequests = async (callback = (v) => {v}) => {
 }
 export const getRequestDetail = async (id, callback = (v) => {v}) => {
 	const config = await getConfig()
-	callback(33)
 	let {data} = await axios.get('/api/v1/requests/' + id, config);
 	let checklist = null
 	if (data.type === "Procedure") {

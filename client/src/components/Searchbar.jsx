@@ -51,7 +51,13 @@ const Searchbar = ({search, setSearch}) => {
     }
     return (
         <StyledSearchbar>
-            <StyledInput value={search} onChange={handleChange} type="text" placeholder="Search for something..."/>
+            <StyledInput 
+                value={search} 
+                onChange={handleChange} 
+                type="text" 
+                placeholder="Search for something..."
+                spellCheck="false"
+            />
             <Icon/>
         </StyledSearchbar>
 
