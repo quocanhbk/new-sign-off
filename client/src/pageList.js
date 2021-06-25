@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import {BsHouse, BsSearch, BsFileEarmarkPlus, BsPencilSquare, BsFileEarmarkCheck, BsFileText, BsGear} from 'react-icons/bs'
-import HomePage from './components/NewHome'
+import HomePage from './components/Home'
 import CreatePage from './components/Create'
 import SearchPage from './components/Search'
 import SignPage from './components/Sign'
