@@ -55,6 +55,7 @@ export const getFormDetail = async (id, callback = (v) => {v}, getFile = true) =
 }
 
 export const deleteForm = async (id) => {
+    // did i forget to delete file as well
     const config = await getConfig()
     let res = await axios.delete('/api/v1/forms/' + id, config)
     if (res.status === 404) {

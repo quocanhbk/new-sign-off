@@ -1,9 +1,4 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import baseURL from 'api/baseURL';
-import Avatar from 'components/Avatar';
-import { UserDisplayCardInfo } from 'components/SideBar';
-import { UserDisplayCard } from 'components/SideBar';
 import React from 'react'
 import styled from "styled-components";
 import { getFader } from 'utils/color';
@@ -37,24 +32,6 @@ const Container = styled.div`
     }
 `
 
-const Headline = styled.div`
-    padding: 0.5rem;
-    font-weight: 600;
-    color: ${props => props.theme.color.fill.primary};
-    //border: 1px solid black;
-`;
-
-const ObservatorsWrapper = styled.div`
-`
-
-const Divider = styled.div`
-    height: 1px;
-    width: 50%;
-    margin-top: 2rem;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: ${props => props.theme.color.border.primary};
-`;
 const ApprovalFlow = ({submitter, advisors, approvers, observators, currentApprover}) => {
     return (
 		<Container>

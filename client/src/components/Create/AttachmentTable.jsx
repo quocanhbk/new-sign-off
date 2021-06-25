@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from "react";
 import styled, { css } from "styled-components";
 import { getFader } from "../../utils/color";
 import Table from "../Table";
 import {BsTrash, BsThreeDotsVertical} from 'react-icons/bs'
+import { downloadForm } from "api/file";
 
 const TableWrapper = styled.div`
     border: 1px solid ${(props) => props.theme.color.border.primary};
@@ -75,94 +77,108 @@ const Icon = styled.div`
 const AttachmentRow = styled.tr`
   border-bottom: 1px solid ${props => props.theme.color.border.primary};
 `
-
+const AttachmentName = styled.span`
+	user-select: none;
+	${props => props.readOnly && css`
+		border-bottom: 1px solid ${props => props.theme.color.fill.primary};
+		cursor: pointer;
+		user-select: auto;
+	`}
+`
 const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeFieldContent, readOnly, onEditAttachment}) => {
+	
+	const handleDownload = (attachmentId) => {
+		const attachment = attachments.find(_ => _.id === attachmentId)
+        downloadForm(attachment.name, attachment.fileId, attachment.fields)
+	}
 	return (
-    <TableWrapper noHeader={noHeader}>
-      <Table>
-        {!noHeader && (
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell
-                className="header-cell"
-                textAlign="left"
-                width="35%"
-              >
-                File Name
-              </Table.HeaderCell>
-              <Table.HeaderCell className="header-cell" textAlign="center">
-                Data Field
-              </Table.HeaderCell>
-              {!readOnly && (
-                <Table.HeaderCell
-                  className="header-cell"
-                  textAlign="center"
-                  width="10%"
-                >
-                  Action
-                </Table.HeaderCell>
-              )}
-            </Table.Row>
-          </Table.Header>
-        )}
-        <Table.Body>
-          {attachments.map((attachment) => (
-            <AttachmentRow key={attachment.id}>
-              <Table.Cell textAlign="left" width="35%">
-                {attachment.name}
-              </Table.Cell>
-              <Table.Cell textAlign="left">
-                <TableField>
-                  <tbody>
-                    {attachment.fields.length > 0 ? (
-                      attachment.fields.map((field) => (
-                        <tr key={field.id}>
-                          <td className="field-name">{field.name + ':'}</td>
-                          <td>
-                              <FormField
-                                value={field.content}
-                                readOnly={readOnly}
-                                onChange={(e) =>
-                                  changeFieldContent(
-                                    attachment.id,
-                                    field.id,
-                                    e.target.value
-                                  )
-                                }
-                                spellCheck="false"
-                              />
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td className="attachment-no-field" colSpan={3}>
-                          No fields
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </TableField>
-              </Table.Cell>
-              {!readOnly && (
-                <Table.Cell textAlign="center" width="10%">
-                  <IconContainer>
-                    <Icon
-                      className="trash"
-                      onClick={() => onRemoveAttachment(attachment.id)}
-                    >
-                      <BsTrash />
-                    </Icon>
-                    <Icon onClick={() => onEditAttachment(attachment.id)}><BsThreeDotsVertical/></Icon>
-                  </IconContainer>
-                </Table.Cell>
-              )}
-            </AttachmentRow>
-          ))}
-        </Table.Body>
-      </Table>
-    </TableWrapper>
-  );
+		<TableWrapper noHeader={noHeader}>
+			<Table>
+				{!noHeader && (
+				<Table.Header>
+					<Table.Row>
+						<Table.HeaderCell
+							className="header-cell"
+							textAlign="left"
+							width="35%"
+						>
+							File Name
+						</Table.HeaderCell>
+						<Table.HeaderCell className="header-cell" textAlign="center">
+							Data Field
+						</Table.HeaderCell>
+						{!readOnly && (
+							<Table.HeaderCell
+							className="header-cell"
+							textAlign="center"
+							width="10%"
+							>
+							Action
+							</Table.HeaderCell>
+						)}
+					</Table.Row>
+				</Table.Header>
+			)}
+				<Table.Body>
+				{attachments.map((attachment) => (
+					<AttachmentRow key={attachment.id}>
+					<Table.Cell textAlign="left" width="35%">
+						<AttachmentName readOnly={readOnly} onClick={() => handleDownload(attachment.id)}>
+							{attachment.name}
+						</AttachmentName>
+					</Table.Cell>
+					<Table.Cell textAlign="left">
+						<TableField>
+						<tbody>
+							{attachment.fields.length > 0 ? (
+							attachment.fields.map((field) => (
+								<tr key={field.id}>
+								<td className="field-name">{field.name + ':'}</td>
+								<td>
+									<FormField
+										value={field.content}
+										readOnly={readOnly}
+										onChange={(e) =>
+										changeFieldContent(
+											attachment.id,
+											field.id,
+											e.target.value
+										)
+										}
+										spellCheck="false"
+									/>
+								</td>
+								</tr>
+							))
+							) : (
+							<tr>
+								<td className="attachment-no-field" colSpan={3}>
+								No fields
+								</td>
+							</tr>
+							)}
+						</tbody>
+						</TableField>
+					</Table.Cell>
+					{!readOnly && (
+						<Table.Cell textAlign="center" width="10%">
+						<IconContainer>
+							<Icon
+							className="trash"
+							onClick={() => onRemoveAttachment(attachment.id)}
+							>
+							<BsTrash />
+							</Icon>
+							<Icon onClick={() => onEditAttachment(attachment.id)}><BsThreeDotsVertical/></Icon>
+						</IconContainer>
+						</Table.Cell>
+					)}
+					</AttachmentRow>
+				))}
+				</Table.Body>
+			</Table>
+		</TableWrapper>
+	);
 }
 
 export default AttachmentTable;

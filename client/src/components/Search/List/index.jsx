@@ -66,11 +66,20 @@ function List() {
         const fetchRequests = async () => {
             let requestsData = await getRequests((p) => setPercent(p)).catch(() => setNotFound(true))
             setRequests(requestsData)
+            console.log(requestsData);
         }
         fetchRequests()
     }, [])
 
-
+    const comparePriority = ( a, b ) => {
+        if ( a.priority > b.priority ){
+          return -1;
+        }
+        if ( a.priority < b.priority ){
+          return 1;
+        }
+        return 0;
+    }
     return (
         <StyleListWrapper>
             <ListToolbar/>
@@ -81,12 +90,13 @@ function List() {
                 </TagContainer>
             </TagBar>
             <CardList>
-                {render(requests.map((task) => (
+                {render(requests.sort((a, b) => comparePriority(a, b)).map((task) => (
                     <RequestCard
                         key={task.id}
                         id={task.id}
                         title={task.title}
                         status={task.status}
+                        priority={task.priority}
                         type={task.type}
                         deadline={task.deadline}
                         createdBy={task.author.name}

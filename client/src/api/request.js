@@ -1,12 +1,14 @@
-/* eslint-disable no-unused-vars */
 import axios from 'axios'
+import { v4 } from 'uuid';
 import getConfig from './getConfig';
 import { getProcedureChecklist } from './procedure';
+import { msalInstance } from 'index';
+
 
 export const getRequests = async (callback = (v) => {v}) => {
+
 	const config = await getConfig()
 	let {data} = await axios.get('/api/v1/requests', config)
-	console.log(data)
 	callback(100)
 	return data.map(request => ({
 		id: request.approval_request_id,
@@ -67,7 +69,17 @@ export const getRequestDetail = async (id, callback = (v) => {v}) => {
 			fullname: o.fullname,
 			email: o.email
 		})),
-		logs: data.logs,
+		logs: data.logs.map(log => ({
+			id: log.log_id,
+			type: log.type,
+			description: log.description,
+			createdAt: log.created_at,
+			author: {
+				id: log.author.user_id,
+				email: log.author.email,
+				name: log.author.last_name + " " + log.author.middle_name + " " + log.author.first_name
+			} 
+		})),
 		currentApprover: data.current_approver,
 		procedureId: data.fk_procedure_id,
 		checklist: checklist,
@@ -135,13 +147,9 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 	}
 	if (!sendData.procedureId) delete sendData.procedureId
 
-	console.log("Send data", sendData)
-
 	// 1. POST request data to get Request ID
 	let {data: {approval_request_id: id}} = await axios.post('/api/v1/requests', sendData, config)
-	console.log("POST request successfully!")
 	// 2. POST attachments
-	console.log("Attachment", approvalAttachments.concat(referenceAttachments))
 	await Promise.all(approvalAttachments.concat(referenceAttachments).map(async (attachment) => {
 		if (!attachment.fileId) {
 			const data = new FormData()
@@ -171,10 +179,28 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 			required: field.required
 		}))
 		await axios.post("/api/v1/requests/attachments/" + attachmentId + "/fields", {fields}, config)
-	}));
-
-
+	}))
 	callback(100)
-	console.log("SUCCESSFULLY!, Request ID:", id)
 	return id
 }
+export const postComment = async (id, comment) => {
+	let account = msalInstance.getAllAccounts()[0]
+	const name = account.name.split("-")[account.name.split("-").length - 1]
+	const email = account.username
+    const config = await getConfig();
+    const data = {
+      comment,
+    };
+    axios.post(`/api/v1/requests/${id}/comment/`, data, config);
+	return {
+		id: v4().slice(0, 8),
+		type: "Comment",
+		description: comment,
+		createdAt: new Date(),
+		author: {
+			id: null,
+			email: email,
+			name: name
+		} 
+	}
+  };

@@ -33,10 +33,11 @@ const ContentWrapper = styled.div`
 `
 
 const Content = ({request}) => {
-    const [logs, setLogs] = useState('');
+    const [logs, setLogs] = useState([]);
     useEffect(() => {
         setLogs(request.logs);
     }, [request])
+    
     return (
         <ContentWrapper>
             <SectionContainer headline="1. Related Project">

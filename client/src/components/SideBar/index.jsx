@@ -120,7 +120,6 @@ const SideBar = () => {
   const { instance, accounts } = useMsal();
   const name = accounts[0].name.split("-")[accounts[0].name.split("-").length - 1]
 
-
   return (
     <SidebarContainer>
       <Header>
@@ -147,7 +146,7 @@ const SideBar = () => {
         <div className="toggleContainer">
           <ThemeToggle value={theme} onSelect={() => setTheme()}/>
         </div>
-        <p>Version: v0.05</p>
+        <p>Version: v0.07</p>
       </Footer>
     </SidebarContainer>
   );

@@ -4,6 +4,7 @@ import {useEffect, useReducer } from 'react'
 import { getProcedureDetail } from 'api/procedure'
 import { v4 } from 'uuid'
 import { postRequest } from 'api/request'
+import {downloadForm} from 'api/file'
 import { useStoreActions } from 'easy-peasy'
 import useCustomLoader from 'hooks/useCustomLoader'
 import Placeholder from 'components/Placeholder'
@@ -115,7 +116,7 @@ const useDocument = () => {
         dispatch({type: "SET", payload: {field: field, value: value}})
         if (error[field] !== "") setError(field, "")
     }
-    
+
     const changeFieldContent = (attachmentType, attachmentId, fieldId, content) => {
         let attachments = [...(attachmentType === "approvalAttachments" ? approvalAttachments : referenceAttachments)]
         let attachmentIndex = attachments.map(_ => _.id).indexOf(attachmentId)
@@ -209,7 +210,7 @@ const useDocument = () => {
         procedure, checklist,
         set,
         //Helper function
-        removeAttachment, submitRequest, isSubmittable, changeFieldContent,
+        removeAttachment, submitRequest, isSubmittable, changeFieldContent, 
         //Error
         error, setError, render, updateAttachment
 

@@ -90,6 +90,7 @@ const Body = styled.div`
     padding: 0.5rem 1rem 0.5rem 0.5rem;
     gap: 1rem;
     align-items: center;
+    flex: 1;
 `
 
 // decision : "Approved" | "Rejected" | "Pending"

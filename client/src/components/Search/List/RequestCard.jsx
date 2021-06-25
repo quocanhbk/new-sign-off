@@ -3,7 +3,7 @@
 // Request Card, used to display in Search and Sign Page
 import React from 'react';
 import styled from 'styled-components'
-import {BiDislike, BiLike, BsChevronRight, BsClock, GiPauseButton} from 'react-icons/all'
+import {BiDislike, BiLike, BsChevronRight, BsClock, BsExclamation, GiPauseButton} from 'react-icons/all'
 import {getFader} from 'utils/color'
 import { navigate } from '@reach/router';
 
@@ -79,6 +79,15 @@ const RequestType = styled.span`
     padding: 0.2rem 0.4rem;
     border-radius: 0.2rem;
 `
+const UrgentTag = styled.span`
+    background: ${(props) => props.theme.color.fill.danger};
+    color: ${props => props.theme.color.background.primary};
+    text-align: center;
+    padding: 0.2rem 0.4rem 0.2rem 0;
+    border-radius: 0.2rem;
+    display: inline-flex;
+    align-items: center;
+`
 const ButtonContainer = styled.div`
     display: flex;
     align-items: center;
@@ -92,7 +101,7 @@ const formatDate = (dateString) => {
     return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
 }
 
-const Card = ({id, title, type, createdBy, status, deadline, page}) => {
+const Card = ({id, title, type, createdBy, status, deadline, page, priority}) => {
 
     const renderIcon = (status) => {
         switch(status) {
@@ -126,6 +135,7 @@ const Card = ({id, title, type, createdBy, status, deadline, page}) => {
                         {status}
                     </ApproveStatus>
                     <RequestType>{type}</RequestType>
+                    {priority === "Urgent" && <UrgentTag><BsExclamation size="1rem"/>Urgent</UrgentTag>}
                 </Line>
             </DivInfo>
             <ButtonContainer>

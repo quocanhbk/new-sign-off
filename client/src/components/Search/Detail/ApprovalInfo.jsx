@@ -44,7 +44,7 @@ const ApprovalInfo = ({request}) => {
           <InfoLine headline={'Priority'} content={request.priority} />
           <InfoLine
             headline={'Deadline'}
-            content={format(request.deadline, 'yyyy-MM-dd hh:mm')}
+            content={format(request.deadline, 'HH:mm dd/MM/yyyy')}
           />
           <InfoLine
             headline={'Related project'}
@@ -74,7 +74,7 @@ const ApprovalInfo = ({request}) => {
           <InfoLine headline={'Email'} content={request.submitter[0].email} />
           <InfoLine
             headline={'Created'}
-            content={format(request.createdAt, 'yyyy-MM-dd hh:mm')}
+            content={format(request.createdAt, 'HH:mm dd/MM/yyyy')}
           />
         </LineContainer>
       </SectionContainer>
@@ -84,10 +84,10 @@ const ApprovalInfo = ({request}) => {
             .filter((log) => log.type !== 'Comment')
             .map((log) => (
               <InfoLine
-                key={log.log_id}
-                headline={`${log.author.first_name} ${
+                key={log.id}
+                headline={`${log.author.name} ${
                   log.description
-                } at ${format(new Date(log.created_at), 'yyyy-MM-dd hh:mm')}`}
+                } at ${format(new Date(log.createdAt), 'HH:mm dd/MM/yyyy')}`}
               />
             ))}
         </LineContainer>

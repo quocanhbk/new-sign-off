@@ -5,8 +5,7 @@ import {IoMdSend} from 'react-icons/all'
 import CardEvents from './CardEvents';
 import { getFader } from 'utils/color';
 import format from 'date-fns/format'
-import getConfig from 'api/getConfig';
-import axios from 'axios';
+import { postComment } from 'api/request';
 
 const StyleWrapper = styled.div`
     display: flex;
@@ -28,7 +27,7 @@ const Input = styled.input`
         border-color: ${props => props.theme.color.fill.primary};
     }
 `
-const Form = styled.div`
+const Form = styled.form`
     display:flex;
     align-items: center;
     width: 100%;
@@ -59,14 +58,6 @@ const TableEvents = styled.div`
 function EventComents({ requestId, logs, setLogs }) {
   const [comment, setComment] = useState('');
 
-  const postComment = async (id, comment) => {
-    const config = await getConfig();
-    const data = {
-      comment,
-    };
-    const res = await axios.post(`/api/v1/requests/${id}/comment/`, data, config);
-    return res.data;
-  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newComment = await postComment(requestId, comment);
@@ -75,13 +66,13 @@ function EventComents({ requestId, logs, setLogs }) {
   };
   return (
     <StyleWrapper>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Input
           placeholder="Write comment here ..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
-        <button onClick={handleSubmit}>
+        <button>
           <IoMdSend size="1.2rem" />
         </button>
       </Form>
@@ -89,10 +80,10 @@ function EventComents({ requestId, logs, setLogs }) {
         {logs &&
           logs.map((log) => (
             <CardEvents
-              key={log.log_id}
+              key={log.id}
               description={log.description}
-              created_at={format(new Date(log.created_at), 'yyyy-MM-dd hh:mm')}
-              created_by={log.author}
+              createdAt={format(new Date(log.createdAt), 'HH:mm dd/MM/yyyy')}
+              createdBy={log.author}
             />
           ))}
       </TableEvents>

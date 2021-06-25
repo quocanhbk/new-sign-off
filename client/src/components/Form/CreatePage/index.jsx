@@ -2,7 +2,6 @@
 /* eslint-disable no-unreachable */
 /* eslint-disable no-unused-vars */
 import React, {useState} from 'react'
-import {PDFDocument, StandardFonts, rgb} from 'pdf-lib'
 import Button from 'components/Button'
 import FieldContentInput from './FieldContentInput'
 import DocDisplay from './DocDisplay'
