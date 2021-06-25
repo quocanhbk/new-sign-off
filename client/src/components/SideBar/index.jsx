@@ -147,7 +147,7 @@ const SideBar = () => {
         <div className="toggleContainer">
           <ThemeToggle value={theme} onSelect={() => setTheme()}/>
         </div>
-        <p>Version: v0.03</p>
+        <p>Version: v0.05</p>
       </Footer>
     </SidebarContainer>
   );
