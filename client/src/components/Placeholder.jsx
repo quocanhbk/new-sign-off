@@ -16,6 +16,7 @@ const Container = styled.div`
     gap: 0.5rem;
     color: ${props => props.theme.color.fill[props.color]};
     background: ${props => props.theme.color.background.primary};
+    
     & svg {
         margin-bottom: 0.5rem;
     }

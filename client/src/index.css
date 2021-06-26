@@ -5,13 +5,22 @@
   box-sizing: border-box;
   transition: background 0.15s ease-in-out;
 }
-button {
-  font-family: inherit;
-}
 @font-face {
   font-family: Campton;
   src: url('./asset/Campton/CamptonBold.otf');
 }
+@font-face {
+  font-family: CamptonSemiBold;
+  src: url('./asset/Campton/CamptonSemiBold.otf');
+}
+@font-face {
+  font-family: CamptonBook;
+  src: url('./asset/Campton/CamptonBook.otf');
+}
+button {
+  font-family: inherit;
+}
+
 html {
   font-size: 15px;
 }

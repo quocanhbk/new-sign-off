@@ -5,10 +5,27 @@ import { getProcedureChecklist } from './procedure';
 import { msalInstance } from 'index';
 
 
-export const getRequests = async (title = "", callback = (v) => {v}) => {
+export const getRequests = async (query = {}, callback = (v) => {v}) => {
+
+	let queryString = Object.entries(query).map(([key, value]) => `${key}=${value}`).join("&")
 
 	const config = await getConfig()
-	let {data} = await axios.get(`/api/v1/requests?title=${title}`, config)
+	let {data} = await axios.get(`/api/v1/requests?${queryString}`, config)
+	callback(100)
+	return data.map(request => ({
+		id: request.approval_request_id,
+		type: request.type,
+		title: request.title,
+		status: request.status,
+		priority: request.priority,
+		deadline: request.deadline,
+		author: {id: request.author.user_id, email: request.author.email, name: request.author.full_name}
+	}))
+}
+export const getSignRequests = async (title = "", callback = (v) => {v}) => {
+
+	const config = await getConfig()
+	let {data} = await axios.get(`/api/v1/requests?title=${title}&start=0&end=3`, config)
 	callback(100)
 	return data.map(request => ({
 		id: request.approval_request_id,

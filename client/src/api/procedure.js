@@ -70,7 +70,6 @@ export const getProcedureDetail = async (id, getFile = false, callback = (v) => 
     returnData.checklist = checklistData
     return returnData
 }
-
 export const postProcedure = async (data, callback = (v) => {v}) => {
     const config = await getConfig()
     let {title, description, advisors, approvers, observators, checklist, isActive, tags} = data
@@ -87,7 +86,6 @@ export const postProcedure = async (data, callback = (v) => {v}) => {
     callback(100)
     return
 }
-
 export const updateProcedure = async (id, data, callback = (v) => {v}) => {
     const config = await getConfig()
     let {title, description, isActive, advisors, approvers, observators, checklist, tags} = data
@@ -104,7 +102,6 @@ export const updateProcedure = async (id, data, callback = (v) => {v}) => {
     callback(100)
     return newId
 }
-
 export const deleteProcedure = async (id, callback = (v) => {v}) => {
     const config = await getConfig()
     let res = await axios.delete('/api/v1/procedures/' + id, config)
@@ -117,7 +114,6 @@ export const deleteProcedure = async (id, callback = (v) => {v}) => {
     }
     else return "delete-wrong"
 }
-
 export const toggleActive = async (id, data, callback = v => {v}) => {
     const config = await getConfig()
     let {title, description, isActive, advisors, approvers, observators, tags} = data

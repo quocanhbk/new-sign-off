@@ -12,6 +12,12 @@ const Container = styled.div`
     height: 100%;
     //background: ${props => props.theme.color.background.primary};
     background: ${props => "linear-gradient(135deg, " + getFader(props.theme.color.background.primary, 0.5) + ", " + props.theme.color.fill.primary + ")"};
+    background: ${props => "linear-gradient(to right," + 
+            getFader(props.theme.color.background.primary, 1) + "," + 
+            getFader(props.theme.color.background.primary, 0.9) + "," +
+            getFader(props.theme.color.background.primary, 1) + 
+            ")"}, url("/main.png");
+    background-size: contain;
 `
 const AuthContainer = styled.div`
     

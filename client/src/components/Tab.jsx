@@ -37,7 +37,7 @@ const ButtonTab = styled.button`
     outline: none;
     padding: 1rem;
     font-size:1rem;
-    font-weight: ${props => props.active ? 700 : 500};
+    font-weight: ${props => props.active ? 600 : 500};
     color: ${props => props.active ? props.theme.color.fill.primary : props.theme.color.fill.secondary};
     transition: all 0.25s ease-in-out;
     background-color: ${props => props.active ? props.theme.color.background.secondary : props.theme.color.background.primary};
