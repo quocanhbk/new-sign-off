@@ -27,42 +27,36 @@ const SectionName = styled.p`
 `
 const DashboardBody = () => {
     const [requests, setRequests] = useState([])
-    const [recently, setRecently] = useState([])
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
         const fetchRequest = async () => {
-            let data = await getRequests({start: 0, end: 2})
+            let data = await getRequests("start=0&end=2&sign=true")
             setRequests(data)
-            let recently = await getRequests({status: "Pending", start: 0, end: 2})
-            setRecently(recently)
+            setLoading(false)
         }
         fetchRequest()
     }, [])
     return (
         <Container>
-            <Section>
-                <SectionName>You have documents to sign</SectionName>
-                <ul>
-                    {requests.map(req =>
-                        <RequestTag 
-                            key={req.id} id={req.id} 
-                            name={req.author.name} email={req.author.email}
-                            title={req.title}
-                        />
-                    )}
-                </ul>
-            </Section>
-            <Section>
-                <SectionName color="success">Recently approved documents</SectionName>
-                <ul>
-                    {recently.map(req =>
-                        <RequestTag 
-                            key={req.id} id={req.id} 
-                            name={req.author.name} email={req.author.email}
-                            title={req.title}
-                        />
-                    )}
-                </ul>
-            </Section>
+            {requests.length > 0 ? 
+                <Section>
+                    <SectionName>You have documents to sign</SectionName>
+                    <ul>
+                        {requests.map(req =>
+                            <RequestTag 
+                                key={req.id} id={req.id} 
+                                name={req.author.name} email={req.author.email}
+                                title={req.title}
+                            />
+                        )}
+                    </ul>
+                </Section> : 
+                loading === false ?
+                <Section>
+                    <SectionName color="success">All documents are signed !</SectionName>
+                </Section> :
+                null
+            }
         </Container>
     )
 }

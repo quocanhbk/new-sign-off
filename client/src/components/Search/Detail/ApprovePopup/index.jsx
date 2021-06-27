@@ -1,11 +1,14 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import {BsChevronUp, BsChevronDown} from "react-icons/bs"
-import { getFader } from "../../../utils/color";
-import useClickOutside from "../../../hooks/useClickOutside";
+import { getFader } from "utils/color";
+import useClickOutside from "hooks/useClickOutside";
 import ApprovalOpinionCard from './ApprovalOpinionCard'
-
+import Button from 'components/Button'
+import {approveRequest} from 'api/request'
 const Container = styled.div`
     position: relative;
     width: calc(100% - 2rem);
@@ -62,27 +65,17 @@ const Opinion = styled.textarea`
     &:focus {
         border: 1px solid ${props => props.theme.color.fill.primary};
     }
+    ${props => props.error && css`
+        ::placeholder {
+            color: ${props => props.theme.color.fill.danger};
+        }
+    `}
 `
 const ButtonGroup = styled.div`
     display: flex;
     gap: 0.5rem;
 `
-const Button = styled.button`
-    border: none;
-    cursor: pointer;
-    background: ${props => props.theme.color.fill[props.color || "primary"]};
-    color: ${props => props.theme.color.background.primary};
-    font-weight: 500;
-    padding: 0.5em 1em;
 
-    &:hover {
-        background: ${props => getFader(props.theme.color.fill[props.color || "primary"], 0.8)};
-    }
-
-    &:active {
-        background: ${props => getFader(props.theme.color.fill[props.color || "primary"], 0.5)};
-    }
-`
 const OpinionContainer = styled.div`
     overflow: overlay;
     ::-webkit-scrollbar {
@@ -104,9 +97,26 @@ const ButtonContainer = styled.div`
     flex-direction: column;
     gap: 0.5rem;
 `
-const ApproveWindow = () => {
+const ApprovePopup = ({id}) => {
     const [expand, setExpand] = useState(false)
+    const [comment, setComment] = useState("Đồng ý")
+    const [error, setError] = useState(false)
     let ref = useClickOutside(() => setExpand(false))
+    const approve = (decision, type) => {
+        if (comment === "") {
+            setError(true)
+            return
+        }
+        else {
+            // TODO
+            console.log(decision, type);
+            //approveRequest(id, {decision, comment})
+        }
+    }
+    const handleInputChange = (e) => {
+        if (error) setError(false)
+        setComment(e.target.value)
+    }
     return (
         <Container expand={expand} ref={ref}>
             <Block className="block">
@@ -116,13 +126,19 @@ const ApproveWindow = () => {
                 </Header>
                 <Body className="body">
                     <ApproveBlock>
-                        <Opinion placeholder="Write your approval opinion..."/>
+                        <Opinion 
+                            error={error}
+                            placeholder="Write your approval opinion..."
+                            spellCheck="false"
+                            value={comment}
+                            onChange={handleInputChange}
+                        />
                         <ButtonGroup>
                             <ButtonContainer>
-                                <Button color="success">Approve</Button>
-                                <Button color="warning">Approve With Opinion</Button>
+                                <Button color="success" onClick={() => approve("Approved", "no-opinion")}>Approve</Button>
+                                <Button color="warning" onClick={() => approve("Approved", "with-opinion")}>Approve With Opinion</Button>
                             </ButtonContainer>
-                            <Button color="danger">Reject</Button>
+                            <Button color="danger" onClick={() => approve("Rejected", "no-opinion")}>Reject</Button>
                         </ButtonGroup>
                     </ApproveBlock>
                     <OpinionContainer>
@@ -135,4 +151,4 @@ const ApproveWindow = () => {
     )
 }
 
-export default ApproveWindow
+export default ApprovePopup

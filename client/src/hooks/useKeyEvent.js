@@ -2,18 +2,14 @@
 
 const useKeyEvent = (key = "Escape", func = () => console.log("Key pressed...!")) => {
     useEffect(() => {
-        document.addEventListener("keydown", (e) => {
+        let keydownEvent = document.addEventListener("keydown", (e) => {
             if (e.key === key) {
                 func()
             }
         })
 
         return(() => {
-            document.removeEventListener("keydown", (e) => {
-                if (e.key === key) {
-                    func()
-                }
-            })
+            document.removeEventListener("keydown", keydownEvent)
         })
     }, [func, key])
 }

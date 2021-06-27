@@ -9,6 +9,8 @@ import { getRequests } from 'api/request';
 import useCustomLoader from 'hooks/useCustomLoader';
 import Placeholder from 'components/Placeholder';
 import { useLocation } from '@reach/router';
+import useQuery from './useQuery'
+
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -56,20 +58,26 @@ const CardList = styled.div`
     
     gap: 0.5rem;
 `
-
-function List() {
+const FilterTag = styled.span`
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.2rem;
+    background: ${props => getFader(props.theme.color.border.primary, 0.9)};
+    cursor: pointer;
+    font-size: 0.8rem;
+`
+// I use the same component for Search and Sign, mode = "search" | "sign"
+function List({mode}) {
     const [requests, setRequests] = useState([])
     const location = useLocation().pathname.split("/")
-    const {render, setNotFound, setPercent, reset} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-    const [query, setQuery] = useState("")
+    const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
+    const {queryString, set, queryTags, onChangeTitleSearch} = useQuery()
     useEffect(() => {
         const fetchRequests = async () => {
-            let requestsData = await getRequests(query, (p) => setPercent(p)).catch(() => setNotFound(true))
+            let requestsData = await getRequests(queryString + (mode === "sign" ? "&sign=true" : ""), (p) => setPercent(p)).catch(() => setNotFound(true))
             setRequests(requestsData)
-            console.log(requestsData);
         }
         fetchRequests()
-    }, [query])
+    }, [queryString])
 
     const comparePriority = ( a, b ) => {
         if ( a.priority > b.priority ){
@@ -82,26 +90,21 @@ function List() {
     }
     return (
         <StyleListWrapper>
-            <ListToolbar setQuery={setQuery}/>
+            <ListToolbar setQueryTitle={(v) => onChangeTitleSearch(v)}/>
             <TagBar>
                 <p>Filter: </p>
                 <TagContainer>
-                Dữ liệu ảo
+                    {queryTags.map(tag => <FilterTag onClick={tag.onClick} key={tag.key}>{tag.text}</FilterTag>)}
                 </TagContainer>
             </TagBar>
             <CardList>
                 {render(requests.sort((a, b) => comparePriority(a, b)).map((task) => (
                     <RequestCard
                         key={task.id}
-                        id={task.id}
-                        title={task.title}
-                        status={task.status}
-                        priority={task.priority}
-                        type={task.type}
-                        deadline={task.deadline}
-                        createdBy={task.author.name}
-                        page={"search"}
+                        data={task}
+                        page={mode}
                         active={task.id == location[location.length - 1]}
+                        set={set}
                     />
                 )))}
             </CardList>

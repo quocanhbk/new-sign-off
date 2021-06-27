@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import styled from 'styled-components'
@@ -24,19 +25,23 @@ const DetailWrapper = styled.div`
         height: 100%;
     }
 `;
-const Search = () => {
+const Search = ({mode}) => {
 
     return (
         <StyleContainer>
-            <List/>
+            <List mode={mode}/>
             <DetailWrapper>
                 <Router className="search-router">
-                    <Detail path="/:id"/>
+                    <Detail path="/:id" mode={mode}/>
                     <Placeholder type="REQUEST_NOT_SELECTED" default/>
                 </Router>
             </DetailWrapper>
         </StyleContainer>
     )
+}
+
+Search.defaultProps = {
+    mode: "search"
 }
 
 export default Search

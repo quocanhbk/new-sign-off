@@ -10,11 +10,13 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     & .dashboard-time {
-        font-size: 2rem;
+        font-size: 3rem;
         letter-spacing: 1px;
         font-weight: 600;
         color: ${props => props.theme.color.fill.primary};
+        transition: all 0.4s ease-in-out;
     }
+    transition: all 0.25 ease-in-out;
 `
 
 const DateBoard = () => {

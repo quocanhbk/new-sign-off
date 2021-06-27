@@ -41,12 +41,12 @@ const PopupWrapper = styled.div`
   border-radius: 1rem;
 `;
 
-function ListToolbar({setQuery}) {
+function ListToolbar({setQueryTitle}) {
 	const [filterPopup, setFilterPopup] = useState(false);
 	const [searchText, setSearchText] = useState("");
 
 	useEffect(() => {
-		const timeOutId = setTimeout(() => setQuery(searchText), 250);
+		const timeOutId = setTimeout(() => setQueryTitle(searchText), 250);
 		return () => clearTimeout(timeOutId);
 	}, [searchText]);
 

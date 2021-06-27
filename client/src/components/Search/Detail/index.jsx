@@ -10,6 +10,7 @@ import {getRequestDetail} from 'api/request'
 import ApprovalFlow from "components/ApprovalFlow";
 import useCustomLoader from "hooks/useCustomLoader";
 import Placeholder from "components/Placeholder";
+import ApprovePopup from './ApprovePopup'
 
 const Container = styled.div`
 	height: 100%;
@@ -17,49 +18,51 @@ const Container = styled.div`
 	flex-direction: column;
 `
 
-const  DisplayContent = ({id}) => {
+const  DisplayContent = ({id, mode}) => {
 
 	const [request, setRequest] = useState(null)
-  const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
+	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
 	useEffect(() => {
 		const fetchData = async () => {
-      reset()
+			reset()
 			let res = await getRequestDetail(id, (p) => setPercent(p)).catch(() => setNotFound(true));
 			setRequest(res)
+			console.log(res);
 		}
 		fetchData()
 	},[id]);
 
     return (
-      <Container className="container">
-        {render(request && (
-          <>
-            <Header
-              title={request.title}
-              status={request.status}
-              type={request.type}
-              updatedAt={request.updatedAt}
-            />
-            <Tab fullHeight className="tab-container">
-              <TabPane name="Content" key={1} value={1}>
-                <Content request={request} />
-              </TabPane>
-              <TabPane name="Approval Flow" key={2} value={2}>
-                <ApprovalFlow 
-									submitter={request.submitter}
-									advisors={request.advisors}
-									approvers={request.approvers}
-									observators={request.observators}
-                  currentApprover={request.currentApprover}
-								/>
-              </TabPane>
-              <TabPane name="Info" key={3} value={3}>
-                <ApprovalInfo request={request}/>
-              </TabPane>
-            </Tab>
-          </>
-        ))}
-      </Container>
+		<Container className="container">
+			{render(request && (
+				<>
+					<Header
+						title={request.title}
+						status={request.status}
+						type={request.type}
+						updatedAt={request.updatedAt}
+					/>
+					<Tab fullHeight className="tab-container">
+						<TabPane name="Content" key={1} value={1}>
+							<Content request={request} />
+						</TabPane>
+						<TabPane name="Approval Flow" key={2} value={2}>
+							<ApprovalFlow 
+								submitter={request.submitter}
+								advisors={request.advisors}
+								approvers={request.approvers}
+								observators={request.observators}
+								currentApprover={request.currentApprover}
+							/>
+						</TabPane>
+						<TabPane name="Info" key={3} value={3}>
+							<ApprovalInfo request={request}/>
+						</TabPane>
+					</Tab>
+					{mode === "sign" && <ApprovePopup id={id}/>}
+				</>
+			))}
+		</Container>
     );
 }
 

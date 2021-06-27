@@ -56,7 +56,7 @@ const Header = ({title, status, type, updatedAt}) => {
 	return (
 		<ContentInfo>
 		<ContentTitle>
-			<p className="content-modified">{format(updatedAt, "'Last updated at '  p MMM do yyyy")}</p>
+			<p className="content-modified">{format(updatedAt, "'Last updated at ' HH:mm dd/MM/yyyy")}</p>
 			<p className="content-title">{title}
 			</p>
 		</ContentTitle>

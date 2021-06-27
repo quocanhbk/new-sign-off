@@ -2,7 +2,7 @@ import React from 'react';
 import styled, {css} from 'styled-components';
 import { BsPower} from 'react-icons/bs';
 import Avatar from 'components/Avatar';
-import ThemeToggle from 'components/ThemeToggle'
+import ThemeToggle from './ThemeToggle'
 import pageList from 'pageList'
 import { getFader } from 'utils/color';
 import {useStoreActions, useStoreState} from 'easy-peasy'
@@ -27,7 +27,8 @@ const SidebarContainer = styled.div`
 `;
 
 const Logo = styled.img`
-  	height: 64px;
+  	height: 4rem;
+	/* background: red; */
 `;
 
 export const UserDisplayCard = styled.div`

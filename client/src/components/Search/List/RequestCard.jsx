@@ -109,8 +109,8 @@ const formatDate = (dateString) => {
     return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
 }
 
-const Card = ({id, title, type, createdBy, status, deadline, page, priority, active}) => {
-
+const Card = ({page, active, data, set}) => {
+    const {id, title, status, priority, type, deadline, author} = data
     const renderIcon = (status) => {
         switch(status) {
             case "Approved":
@@ -129,7 +129,7 @@ const Card = ({id, title, type, createdBy, status, deadline, page, priority, act
             <DivInfo>
                 <Title>{title}</Title>
                 <Line>
-                    <span>Created: {createdBy}</span>
+                    <span onClick={() => set("createdBy", author.id, author.name)}>Created: {author.name}</span>
                     {status === "Pending" && 
                         <>
                             <span>|</span>
@@ -138,11 +138,11 @@ const Card = ({id, title, type, createdBy, status, deadline, page, priority, act
                     }
                 </Line>
                 <Line>
-                    <ApproveStatus status={status}>
+                    <ApproveStatus status={status} onClick={() => set("status", status)}>
                         {renderIcon(status)}
                         {status}
                     </ApproveStatus>
-                    <RequestType>{type}</RequestType>
+                    <RequestType onClick={() => set("type", type)}>{type}</RequestType>
                     {priority === "Urgent" && <UrgentTag><BsExclamation size="1rem"/>Urgent</UrgentTag>}
                 </Line>
             </DivInfo>

@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import styled from 'styled-components'
-
+import Button from 'components/Button'
 const StyleButton = styled.div`
 	display: flex;
 	gap: 1rem;
 	align-items: center;
-	& button {
+	/* & button {
 		padding: 0.2rem 1rem;
 		cursor: pointer;
 		border-radius: 0.2rem;
@@ -25,7 +25,7 @@ const StyleButton = styled.div`
 	& .btn-preview {
 		background: ${(props) => props.theme.color.fill.success};
 		color: ${(props) => props.theme.color.background.primary};
-	}
+	} */
 `;
 const StyleTitle = styled.div`
 	display: flex;
@@ -43,9 +43,9 @@ const Header = ({openSubmit}) => {
 		<StyleTitle>
 			<Title>CREATE A NEW APPROVAL DOCUMENT</Title>
 			<StyleButton>
-				<button onClick={() => {}} className="btn-stored">Load from stored</button>
-				<button onClick={() => {}} className="btn-draft">Save Draft</button>
-				<button onClick={openSubmit} className="btn-preview">Submit</button>
+				<Button onClick={() => {}} className="btn-stored">Load from stored</Button>
+				<Button color="secondary" normalBorder onClick={() => {}} className="btn-draft">Save Draft</Button>
+				<Button color="success" onClick={openSubmit} className="btn-preview">Submit</Button>
 			</StyleButton>
 		</StyleTitle>
     )

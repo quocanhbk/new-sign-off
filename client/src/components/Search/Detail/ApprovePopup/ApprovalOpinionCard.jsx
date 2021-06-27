@@ -3,8 +3,8 @@
 import React from 'react';
 import { BsCheckCircle } from 'react-icons/bs';
 import styled from 'styled-components'
-import { getFader } from '../../../utils/color';
-import Avatar from '../../Avatar';
+import { getFader } from 'utils/color';
+import Avatar from 'components/Avatar';
 
 const Main = styled.div`
     display:flex;

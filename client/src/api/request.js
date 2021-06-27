@@ -5,9 +5,7 @@ import { getProcedureChecklist } from './procedure';
 import { msalInstance } from 'index';
 
 
-export const getRequests = async (query = {}, callback = (v) => {v}) => {
-
-	let queryString = Object.entries(query).map(([key, value]) => `${key}=${value}`).join("&")
+export const getRequests = async (queryString, callback = (v) => {v}) => {
 
 	const config = await getConfig()
 	let {data} = await axios.get(`/api/v1/requests?${queryString}`, config)
@@ -22,24 +20,11 @@ export const getRequests = async (query = {}, callback = (v) => {v}) => {
 		author: {id: request.author.user_id, email: request.author.email, name: request.author.full_name}
 	}))
 }
-export const getSignRequests = async (title = "", callback = (v) => {v}) => {
 
-	const config = await getConfig()
-	let {data} = await axios.get(`/api/v1/requests?title=${title}&start=0&end=3`, config)
-	callback(100)
-	return data.map(request => ({
-		id: request.approval_request_id,
-		type: request.type,
-		title: request.title,
-		status: request.status,
-		priority: request.priority,
-		deadline: request.deadline,
-		author: {id: request.author.user_id, email: request.author.email, name: request.author.full_name}
-	}))
-}
 export const getRequestDetail = async (id, callback = (v) => {v}) => {
 	const config = await getConfig()
 	let {data} = await axios.get('/api/v1/requests/' + id, config);
+	callback(33)
 	let checklist = null
 	if (data.type === "Procedure") {
 		checklist = await getProcedureChecklist(data.fk_procedure_id)
@@ -131,6 +116,7 @@ export const getRequestDetail = async (id, callback = (v) => {v}) => {
 		}))
 	}
 }
+
 export const postRequest = async (input, callback = (v) => {v}) => {
 	// REMEMBER to post all the file without the fileId first
 	const config = await getConfig()
@@ -199,8 +185,9 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 	callback(100)
 	return id
 }
+
 export const postComment = async (id, comment) => {
-	let account = msalInstance.getAllAccounts()[0]
+	const account = msalInstance.getAllAccounts()[0]
 	const name = account.name.split("-")[account.name.split("-").length - 1]
 	const email = account.username
     const config = await getConfig();
@@ -219,4 +206,17 @@ export const postComment = async (id, comment) => {
 			name: name
 		} 
 	}
-  };
+};
+
+export const approveRequest = async (id, input, callback = (v) => {v}) => {
+	const config = await getConfig()
+	// decision = "Approved" | "Rejected"
+	// approvalType = ""
+	const {decision, comment} = input
+	const res = await axios.post("/api/v1/requests/" + id + "/approval", {
+		decision, 
+		comment
+	}, config)
+	console.log(res)
+	callback(100)
+}

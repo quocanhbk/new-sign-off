@@ -9,6 +9,7 @@ const Container = styled.button`
     cursor: pointer;
     border: none;
     font-size: ${props => props.fontSize};
+    font-weight: ${props => props.weight};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -66,7 +67,7 @@ const Container = styled.button`
 
 `
 
-const Button = ({onClick, children, padding, radius, fullWidth, color, variant, gap, normalBorder, fontSize}) => {
+const Button = ({onClick, children, padding, radius, fullWidth, color, variant, gap, normalBorder, fontSize, weight}) => {
     return (
         <Container 
             onClick={onClick} 
@@ -78,6 +79,7 @@ const Button = ({onClick, children, padding, radius, fullWidth, color, variant, 
             gap={gap}
             normalBorder={normalBorder}
             fontSize={fontSize}
+            weight={weight}
         >
             {children}
         </Container>
@@ -91,7 +93,8 @@ Button.defaultProps = {
     color: "primary",
     variant: "contained",
     gap: "1rem",
-    fontSize: "1rem"
+    fontSize: "1rem",
+    weight: "400"
 }
 
 export default Button
