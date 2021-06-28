@@ -73,8 +73,9 @@ function List({mode}) {
     const {queryString, set, queryTags, onChangeTitleSearch} = useQuery()
     useEffect(() => {
         const fetchRequests = async () => {
-            let requestsData = await getRequests(queryString + (mode === "sign" ? "&sign=true" : ""), (p) => setPercent(p)).catch(() => setNotFound(true))
-            setRequests(requestsData)
+            getRequests(queryString + (mode === "sign" ? "&sign=true" : ""), (p) => setPercent(p))
+                .then(data => setRequests(data))
+                .catch(() => setNotFound(true))
         }
         fetchRequests()
     }, [queryString])

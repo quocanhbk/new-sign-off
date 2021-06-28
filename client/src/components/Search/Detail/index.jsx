@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Tab from "components/Tab";
 import TabPane from "components/TabPane";
 import Content from "./Content";
@@ -16,6 +16,7 @@ import AbsoluteModal from 'components/AbsoluteModal'
 import ConfirmPopup from './ConfirmPopup'
 import {approveRequest} from 'api/request'
 import { navigate } from "@reach/router";
+import { set } from "date-fns/esm";
 
 const Container = styled.div`
 	height: 100%;
@@ -29,15 +30,25 @@ const  DisplayContent = ({id, mode}) => {
 	const [opinionId, setOpinionId] = useState(null)
 	const [comment, setComment] = useState("")
 	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-	console.log(request);
+
 	useEffect(() => {
+		let mounted = true
 		const fetchData = async () => {
 			reset()
-			let res = await getRequestDetail(id, (p) => setPercent(p)).catch(() => setNotFound(true));
-			setRequest(res)
-			console.log(res);
+			getRequestDetail(id, (p) => {if (mounted) setPercent(p)})
+				.then(data => {
+					if (mounted) {
+						setRequest(data)
+						console.log(data);
+					}
+				})
+				.catch(() => {
+					if (mounted)
+						setNotFound(true)
+				});
 		}
 		fetchData()
+		return (() => {mounted = false})
 	},[id]);
 
 	const handleConfirm = async () => {

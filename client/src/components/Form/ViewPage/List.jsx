@@ -64,8 +64,9 @@ function List() {
     const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
     useEffect(() => {
         const fetchData = async () => {
-            const forms = await getForms((v) => setPercent(v)).catch(() => setNotFound(true))
-            setForms(forms)
+            getForms((v) => setPercent(v))
+                .then(forms => setForms(forms))
+                .catch(() => setNotFound(true))
         }
         fetchData()
     }, [])

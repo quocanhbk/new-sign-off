@@ -64,8 +64,9 @@ function List() {
     
     useEffect(() => {
         const fetchData = async () => {
-            const data = await getProcedures((v) => setPercent(v)).catch(() => {setNotFound(true)})
-            setProcedures(data)
+            getProcedures((v) => setPercent(v))
+                .then(data => setProcedures(data))
+                .catch(() => {setNotFound(true)})
         }
         fetchData()
     }, [])

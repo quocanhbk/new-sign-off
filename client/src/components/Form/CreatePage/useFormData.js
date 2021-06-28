@@ -26,13 +26,14 @@ const useFormData = (id = null) => {
     useEffect(() => {
         if (id) {
             const fetchDetail = async () => {
-                const formDetail = await getFormDetail(id, (v) => setPercent(v)).catch(err => {setNotFound(true);return;})
-                setPercent(100)
-                if (formDetail) {
-                    setFormName(formDetail.name)
-                    setFile(formDetail.file)
-                    setFieldData(formDetail.fields)
-                }
+                getFormDetail(id, (v) => setPercent(v))
+                    .then(formDetail => {
+                        setPercent(100)
+                        setFormName(formDetail.name)
+                        setFile(formDetail.file)
+                        setFieldData(formDetail.fields)
+                    })    
+                    .catch(() => setNotFound(true))
             }
             fetchDetail()
         }

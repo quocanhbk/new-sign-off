@@ -51,11 +51,12 @@ const useProcedure = (id) => {
     useEffect(() => {
         if (id) {
             const fetchDetail = async () => {
-                const procedure = await getProcedureDetail(id, false, (v) => setPercent(v)).catch(() => {setNotFound(false);return;})
-                setPercent(100)
-                if (procedure) {
+                getProcedureDetail(id, false, (v) => setPercent(v))
+                .then(procedure => {
+                    setPercent(100)
                     dispatch({type: "INIT", payload: procedure})
-                }
+                })
+                .catch(() => setNotFound(false))
             }
             fetchDetail()
         }

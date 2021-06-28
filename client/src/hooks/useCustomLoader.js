@@ -37,6 +37,7 @@ const useCustomLoader = (load = true, placeholder = null, mask = false) => {
 
     useEffect(() => {
         if (percent === 100 && loading) setTimeout(() => set("loading", false), 400)
+        return () => clearTimeout(() => set("loading", false), 400)
     }, [percent])
 
     const render = (body) => {
