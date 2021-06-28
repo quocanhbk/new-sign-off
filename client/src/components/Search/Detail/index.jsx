@@ -57,7 +57,6 @@ const  DisplayContent = ({id, mode}) => {
     return (
 		<Container className="container">
 			{render(request && (
-				(mode === "sign" && request.currentApprover.includes(currentUserId)) || mode === "search"?
 				<>
 					<Header
 						title={request.title}
@@ -102,7 +101,7 @@ const  DisplayContent = ({id, mode}) => {
 							setComment={setComment}
 						/>
 					</AbsoluteModal>
-				</> : <Redirect from={`/${mode}/${id}`} to={`/newhome`} noThrow/>
+				</>
 			))}
 		</Container>
     );
