@@ -84,7 +84,13 @@ export const getRequestDetail = async (id, callback = (v) => {v}) => {
 		currentApprover: data.current_approver,
 		procedureId: data.fk_procedure_id,
 		checklist: checklist,
-		opinions: data.opinions,
+		opinions: data.opinions.map(o => ({
+			id: o.request_opinion_id,
+			comment: o.opinion,
+			isFinal: o.is_final,
+			createdBy: o.made_by,
+			inAgreement: o.in_agreement
+		})),
 		updatedAt: new Date(data.updated_at),
 		approvalAttachments: data.attachments.filter(a => !a.reference).map(a => ({
 			id: a.attachment_id,
@@ -208,14 +214,31 @@ export const postComment = async (id, comment) => {
 	}
 };
 
-export const approveRequest = async (id, input, callback = (v) => {v}) => {
+export const approveRequest = async (id, {code, comment, opinionId}, callback = (v) => {v}) => {
 	const config = await getConfig()
-	// decision = "Approved" | "Rejected"
-	// approvalType = ""
-	const {decision, comment} = input
-	const res = await axios.post("/api/v1/requests/" + id + "/approval", {
+	let query = ""
+	let decision = ""
+	switch (code) {
+		case "APPROVE":
+			decision = "Approved"
+			break
+		case "APPROVE_WITH_OPINION":
+			decision = "Approved"
+			query = "approvalType=with-opinion"
+			break
+		case "APPROVE_WITH_EXISTING_OPINION":
+			decision = "Approved"
+			query = "approvalType=with-existing-opinion"
+			break
+		case "REJECT":
+			decision = "Rejected"
+			break
+	}
+	console.log(decision, query)
+	const res = await axios.post("/api/v1/requests/" + id + "/approval?" + query, {
 		decision, 
-		comment
+		opinion: comment,
+		opinionId
 	}, config)
 	console.log(res)
 	callback(100)

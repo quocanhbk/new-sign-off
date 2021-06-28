@@ -14,6 +14,8 @@ export const downloadForm = async (name, fileId, fields) => {
     const file = await getFile(fileId)
     const existingPdf = await axios.get(file, {responseType: 'arraybuffer'})
     const pdfDoc = await PDFDocument.load(existingPdf.data)
+
+    // use this font so it can print Vietnamese characters correctly
     const fontBytes = await axios.get("https://fonts.cdnfonts.com/s/12165/Roboto-Regular.woff", {responseType: 'arraybuffer'})
 
     pdfDoc.registerFontkit(fontkit)
@@ -31,7 +33,7 @@ export const downloadForm = async (name, fileId, fields) => {
             y: height - relativeY * height * pages.length / 100 -10,
             font: customFont,
             size: 12,
-            color: rgb(0,0,0)
+            color: rgb(0,0,125)
         })
     });
 

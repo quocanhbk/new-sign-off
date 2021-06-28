@@ -67,9 +67,10 @@ const Container = styled.button`
 
 `
 
-const Button = ({onClick, children, padding, radius, fullWidth, color, variant, gap, normalBorder, fontSize, weight}) => {
+const Button = ({className, onClick, children, padding, radius, fullWidth, color, variant, gap, normalBorder, fontSize, weight}) => {
     return (
         <Container 
+            className={className}
             onClick={onClick} 
             padding={padding}
             radius={radius}

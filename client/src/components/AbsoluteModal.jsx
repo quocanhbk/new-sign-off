@@ -76,7 +76,6 @@ const StyledTitle = styled.div`
 `;
 const StyledBody = styled.div`
     height: 100%;
-
 `;
 const Modal = (props) => {
     const [open, setOpen] = useState(props.visible)

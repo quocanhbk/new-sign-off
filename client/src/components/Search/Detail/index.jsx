@@ -10,7 +10,10 @@ import {getRequestDetail} from 'api/request'
 import ApprovalFlow from "components/ApprovalFlow";
 import useCustomLoader from "hooks/useCustomLoader";
 import Placeholder from "components/Placeholder";
-import ApprovePopup from './ApprovePopup'
+import ApproveWindow from './ApproveWindow'
+import AbsoluteModal from 'components/AbsoluteModal'
+import ConfirmPopup from './ConfirmPopup'
+import {approveRequest} from 'api/request'
 
 const Container = styled.div`
 	height: 100%;
@@ -21,6 +24,9 @@ const Container = styled.div`
 const  DisplayContent = ({id, mode}) => {
 
 	const [request, setRequest] = useState(null)
+	const [confirmPopup, setConfirmPopup] = useState("")
+	const [opinionId, setOpinionId] = useState(null)
+	const [comment, setComment] = useState("")
 	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
 	useEffect(() => {
 		const fetchData = async () => {
@@ -31,6 +37,13 @@ const  DisplayContent = ({id, mode}) => {
 		}
 		fetchData()
 	},[id]);
+
+	const handleConfirm = async () => {
+		await approveRequest(id, {code: confirmPopup, comment, opinionId})
+	}
+	const handleCancel = async () => {
+		setConfirmPopup("")
+	}
 
     return (
 		<Container className="container">
@@ -59,7 +72,26 @@ const  DisplayContent = ({id, mode}) => {
 							<ApprovalInfo request={request}/>
 						</TabPane>
 					</Tab>
-					{mode === "sign" && <ApprovePopup id={id}/>}
+					{mode === "sign" && 
+						<ApproveWindow 
+							opinions={request.opinions} 
+							setConfirmPopup={setConfirmPopup}
+							setOpinionId={setOpinionId}
+						/>
+					}
+					<AbsoluteModal 
+						visible={confirmPopup !== ""} 
+						onClickOutside={() => setConfirmPopup("")} 
+						width="50%"
+					>
+						<ConfirmPopup 
+							decision={confirmPopup}
+							onConfirmClick={handleConfirm}
+							onCancelClick={handleCancel}
+							comment={comment}
+							setComment={setComment}
+						/>
+					</AbsoluteModal>
 				</>
 			))}
 		</Container>
