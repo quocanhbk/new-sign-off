@@ -30,10 +30,7 @@ const  DisplayContent = ({id, mode}) => {
 	const [confirmPopup, setConfirmPopup] = useState("")
 	const [opinionId, setOpinionId] = useState(null)
 	const [comment, setComment] = useState("")
-	const users = useStoreState(s => s.users)
 	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-	const { accounts } = useMsal();
-	const currentUserId = users.find(u => u.email === accounts[0].username).id
 	console.log(request);
 	useEffect(() => {
 		const fetchData = async () => {
