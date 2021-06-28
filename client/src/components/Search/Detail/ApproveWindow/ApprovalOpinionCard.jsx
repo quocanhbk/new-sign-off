@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { getFader } from 'utils/color';
 import Avatar from 'components/Avatar';
 import {useStoreState} from 'easy-peasy'
+import {getAvatar} from 'api/user'
 const Main = styled.div`
     display:flex;
     padding: 1rem 0;
@@ -84,30 +85,29 @@ const Button = styled.button`
 
 function ApprovalOpinionCard({opinion, onApproveClick}) {
     let users = useStoreState(s => s.users)
-    // opinion = {id, comment, isFinal, createdBy, inAgreement}
+    let curUser = users.find(_ => _.id === opinion.createdBy)
     return (
         <Main>
             <DivAvatar>
-                <Avatar width="2rem" height="2rem" src={`/avatar.png`} />
+                <Avatar width="2rem" height="2rem" src={getAvatar(curUser.email)} />
             </DivAvatar>
             <DivInfo>
                 <span className="create-event">
-                    <p className="create-by-event">{users.find(_ => _.id === opinion.createdBy).name}</p>
+                    <p className="create-by-event">{curUser.name}</p>
                 </span>
                 <p className="title-event">
                     {opinion.comment}
                 </p>
                 <Sub>
-                    <Line>
-                        <BsCheckCircle className="icon"/>
-                        <Avatar width="1.2rem" height="1.2rem" src={`/avatar.png`} />
-                        <p><span className="name">Nguyen Van Gau</span> approved with this opinion</p>
-                    </Line>
-                    <Line>
-                        <BsCheckCircle className="icon"/>
-                        <Avatar width="1.2rem" height="1.2rem" src={`/avatar.png`} />
-                        <p><span className="name">Tran Le Roi</span> approved with this opinion</p>
-                    </Line>
+                    {
+                        opinion.inAgreement.map(userId =>
+                            <Line key={userId}>
+                                <BsCheckCircle className="icon"/>
+                                <Avatar width="1.2rem" height="1.2rem" src={getAvatar(users.find(u => u.id === userId).email)} />
+                                <p><span className="name">{users.find(u => u.id === userId).name}</span> approved with this opinion</p>
+                            </Line>
+                        )
+                    }
                 </Sub>
             </DivInfo>
             <Button onClick={() => onApproveClick(opinion.id)}>Approve With This Opinion</Button>

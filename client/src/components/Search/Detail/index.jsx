@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { useMsal } from "@azure/msal-react";
 import Tab from "components/Tab";
 import TabPane from "components/TabPane";
 import Content from "./Content";
@@ -16,8 +15,7 @@ import ApproveWindow from './ApproveWindow'
 import AbsoluteModal from 'components/AbsoluteModal'
 import ConfirmPopup from './ConfirmPopup'
 import {approveRequest} from 'api/request'
-import { useStoreState } from "easy-peasy";
-import { navigate, Redirect } from "@reach/router";
+import { navigate } from "@reach/router";
 
 const Container = styled.div`
 	height: 100%;
