@@ -136,7 +136,7 @@ const ApprovePopup = ({id}) => {
                         <ButtonGroup>
                             <ButtonContainer>
                                 <Button color="success" onClick={() => approve("Approved", "no-opinion")}>Approve</Button>
-                                <Button color="warning" onClick={() => approve("Approved", "with-opinion")}>Approve With Opinion</Button>
+                                <Button color="warning" onClick={() => approve("Approved", "with-opinion")}>Approve With New Opinion</Button>
                             </ButtonContainer>
                             <Button color="danger" onClick={() => approve("Rejected", "no-opinion")}>Reject</Button>
                         </ButtonGroup>

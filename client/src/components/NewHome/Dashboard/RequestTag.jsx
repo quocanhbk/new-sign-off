@@ -48,7 +48,7 @@ const RequestTag = ({title, name, email, id}) => {
     const setPath = useStoreActions(action => action.setPath)
 
     return (
-        <Container onClick={() => setPath("/search/" + id)}>
+        <Container onClick={() => setPath("/sign/" + id)}>
             <Title>{title}</Title>
             <UserTag>
                 <img src={getAvatar(email)} alt={email}/>
