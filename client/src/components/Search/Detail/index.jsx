@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
+import { useMsal } from "@azure/msal-react";
 import Tab from "components/Tab";
 import TabPane from "components/TabPane";
 import Content from "./Content";
@@ -14,6 +16,8 @@ import ApproveWindow from './ApproveWindow'
 import AbsoluteModal from 'components/AbsoluteModal'
 import ConfirmPopup from './ConfirmPopup'
 import {approveRequest} from 'api/request'
+import { useStoreState } from "easy-peasy";
+import { navigate, Redirect } from "@reach/router";
 
 const Container = styled.div`
 	height: 100%;
@@ -22,12 +26,15 @@ const Container = styled.div`
 `
 
 const  DisplayContent = ({id, mode}) => {
-
 	const [request, setRequest] = useState(null)
 	const [confirmPopup, setConfirmPopup] = useState("")
 	const [opinionId, setOpinionId] = useState(null)
 	const [comment, setComment] = useState("")
+	const users = useStoreState(s => s.users)
 	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
+	const { accounts } = useMsal();
+	const currentUserId = users.find(u => u.email === accounts[0].username).id
+	console.log(request);
 	useEffect(() => {
 		const fetchData = async () => {
 			reset()
@@ -39,7 +46,9 @@ const  DisplayContent = ({id, mode}) => {
 	},[id]);
 
 	const handleConfirm = async () => {
-		await approveRequest(id, {code: confirmPopup, comment, opinionId})
+		reset()
+		await approveRequest(id, {code: confirmPopup, comment, opinionId}, (p) => setPercent(p))
+		setTimeout(() => navigate(`/search/${id}`), 400)
 	}
 	const handleCancel = async () => {
 		setConfirmPopup("")
@@ -48,6 +57,7 @@ const  DisplayContent = ({id, mode}) => {
     return (
 		<Container className="container">
 			{render(request && (
+				(mode === "sign" && request.currentApprover.includes(currentUserId)) || mode === "search"?
 				<>
 					<Header
 						title={request.title}
@@ -92,7 +102,7 @@ const  DisplayContent = ({id, mode}) => {
 							setComment={setComment}
 						/>
 					</AbsoluteModal>
-				</>
+				</> : <Redirect from={`/${mode}/${id}`} to={`/newhome`} noThrow/>
 			))}
 		</Container>
     );
