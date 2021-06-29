@@ -38,13 +38,13 @@ const Title = styled.h3`
 	padding: 1rem 0;
 	font-weight: 500;
 `
-const Header = ({openSubmit}) => {
+const Header = ({openSubmit, openDraft}) => {
     return (
 		<StyleTitle>
 			<Title>CREATE A NEW APPROVAL DOCUMENT</Title>
 			<StyleButton>
 				<Button onClick={() => {}} className="btn-stored">Load from stored</Button>
-				<Button color="secondary" normalBorder onClick={() => {}} className="btn-draft">Save Draft</Button>
+				<Button color="secondary" onClick={openDraft} normalBorder className="btn-draft">Save Draft</Button>
 				<Button color="success" onClick={openSubmit} className="btn-preview">Submit</Button>
 			</StyleButton>
 		</StyleTitle>

@@ -82,9 +82,9 @@ const Create = () => {
         removeAttachment, submitRequest, error, isSubmittable, changeFieldContent, render
 	} = useDocument()
 
-	const popupSubmit = () => {
+	const popupSubmit = (type) => {
 		if (!isSubmittable()) setErrorNotify(true)
-		else setModal("preview")
+		else setModal(type)
 	}
 
 	const renderModal = () => {
@@ -93,11 +93,8 @@ const Create = () => {
 			<Modal height="80%" width="80%" visible={modal === "store"} onClickOutside = {() => setModal("")} title="Loading document">
 				Store
 			</Modal>
-			<Modal height="80%" width="80%" visible={modal === "draft"} onClickOutside = {() => setModal("")} title="Loading document">
-				Draft
-			</Modal>
-			<Modal visible={modal === "preview"} onClickOutside = {() => setModal("")}>
-				<SubmitPopup closeSubmit={() => setModal("")} submitRequest={submitRequest} title={title}/>
+			<Modal visible={modal === "submit" || modal === "draft"} onClickOutside = {() => setModal("")}>
+				<SubmitPopup type={modal} closeSubmit={() => setModal("")} submitRequest={() => submitRequest(modal)} title={title}/>
 			</Modal>
 			</>
 		)
@@ -114,7 +111,10 @@ const Create = () => {
 	return (
 		<StyleContainer>
 			{renderModal()}
-			<Header openSubmit={popupSubmit}/>
+			<Header 
+				openSubmit={() => popupSubmit("submit")}
+				openDraft={() => popupSubmit("draft")}
+			/>
 			
 			<ContainerItems className="ContainerItems">
 				<AbsoluteModal 

@@ -53,19 +53,19 @@ const Text = styled.div`
         font-weight: 600;
     }
 `
-const SubmitPopup = ({closeSubmit, submitRequest, title}) => {
+const SubmitPopup = ({closeSubmit, submitRequest, title, type}) => {
     return (
         <Container>
             <ImgContainer>
                 <img src="/submit.svg" alt=""/>
             </ImgContainer>
             <Text>
-                <p className="request-sub">Are you sure to submit?</p>
+                <p className="request-sub">Are you sure to {type === "submit" ? "submit" : "save as Draft"}?</p>
                 <p className="request-title">{title}</p>
             </Text>
             <ButtonContainer>
-                <button className="request-cancel" onClick={closeSubmit}>Cancel</button>
                 <button className="request-confirm" onClick={() => {closeSubmit();submitRequest()}}>Confirm</button>
+                <button className="request-cancel" onClick={closeSubmit}>Cancel</button>
             </ButtonContainer>
         </Container>
     )

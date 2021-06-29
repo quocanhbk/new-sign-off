@@ -45,11 +45,13 @@ const ContentProperties = styled.div`
 const ApproveStatus = styled.div`
   border-bottom: 2px solid ${(props) => props.status === "Approved" ? props.theme.color.fill.success 
               : props.status === "Stopped" ? props.theme.color.fill.info 
-              : props.status === "Pending" ? props.theme.color.fill.warning 
+              : props.status === "Pending" ? props.theme.color.fill.warning
+              : props.status === "Draft" ? props.theme.color.fill.secondary
               : props.theme.color.fill.danger};
   color: ${(props) => props.status === "Approved" ? props.theme.color.fill.success 
               : props.status === "Stopped" ? props.theme.color.fill.info 
               : props.status === "Pending" ? props.theme.color.fill.warning 
+              : props.status === "Draft" ? props.theme.color.fill.secondary
               : props.theme.color.fill.danger};
 `
 const Header = ({title, status, type, updatedAt}) => {

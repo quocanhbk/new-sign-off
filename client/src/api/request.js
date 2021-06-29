@@ -156,7 +156,7 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 		procedureId
 	}
 	if (!sendData.procedureId) delete sendData.procedureId
-	if (!sendData.status !== "Draft") delete sendData.status
+	if (sendData.status !== "Draft") delete sendData.status
 
 	// 1. POST request data to get Request ID
 	let {data: {approval_request_id: id}} = await axios.post('/api/v1/requests', sendData, config)

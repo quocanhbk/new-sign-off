@@ -172,7 +172,7 @@ const useDocument = () => {
         return submittable
     }
 
-    const submitRequest = async () => {
+    const submitRequest = async (requestStatus) => {
         // No need to check for error anymore
         console.log("Reset")
         reset()
@@ -188,7 +188,8 @@ const useDocument = () => {
             observators,
             approvalAttachments,
             referenceAttachments,
-            procedure
+            procedure,
+            status: requestStatus === "draft" ? "Draft" : null
         }
         let id = await postRequest(input, (p) => setPercent(p))
         setTimeout(() => setPath("/search/" + id), 400)
