@@ -70,7 +70,7 @@ function List({mode}) {
     const [requests, setRequests] = useState([])
     const location = useLocation().pathname.split("/")
     const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-    const {queryString, set, queryTags, onChangeTitleSearch} = useQuery()
+    const {query, queryString, set, queryTags, onChangeTitleSearch} = useQuery()
     useEffect(() => {
         const fetchRequests = async () => {
             getRequests(queryString + (mode === "sign" ? "&sign=true" : ""), (p) => setPercent(p))
@@ -93,7 +93,8 @@ function List({mode}) {
         <StyleListWrapper>
             <ListToolbar 
                 setQueryTitle={(v) => onChangeTitleSearch(v)}
-                statusSelection={[...new Set(requests.map(r => r.status))]}
+                query={query}
+                set={set}
             />
             <TagBar>
                 <p>Filter: </p>

@@ -127,7 +127,7 @@ const Selection = styled.div`
 const StyledItem = styled.div`
     display: flex;
     align-items: center;
-    pointer-events: ${props => props.multiple || props.removable ? 'unset' : 'none'};
+    pointer-events:  ${props => props.multiple || props.removable ? 'initial' : 'none'};
     background: ${props => props.multiple ? props.theme.color.border.primary : 'transparent'};
     color: ${props => props.theme.color.text.primary};
     animation: ${opa} 0.15s linear 0s 1 normal forwards;
@@ -191,7 +191,6 @@ function ControlledCombox({selection, value, onSelect, multiple, searchable, dis
     const [seachText, setSeachText] = useState("")
     const [removingItem, setRemovingItem] = useState("")
     const refSearchBar = useRef(null)  
-    
     const addItem = (item) => {
         if (multiple) {
             if (value.map( item => item.id).includes(item.id) ) { removeItem(item.id) }
@@ -235,15 +234,15 @@ function ControlledCombox({selection, value, onSelect, multiple, searchable, dis
             value.map(item => 
                 <StyledItem multiple={multiple} removable={removable} key={item.id} className={removingItem === item.id ? "item-out" : ""}>
                     {item[displayField]}
-                    {(!readOnly && !disabled) && <XContainer onClick={() => removeItem(item.id)}>
+                    {(!readOnly && !disabled) && <XContainer onClick={(e) => {e.stopPropagation();removeItem(item.id)}}>
                         <IconX/>
                     </XContainer>}
                 </StyledItem>
             ) : 
             (value &&
-                <StyledItem multiple={multiple} key={value.id} className={removingItem === value.id ? "item-out" : ""}>
+                <StyledItem multiple={multiple} removable={removable} key={value.id} className={removingItem === value.id ? "item-out" : ""}>
                     {value[displayField]}
-                    {(!readOnly && !disabled) && <XContainer onClick={() => removeItem(value.id)}>
+                    {(!readOnly && !disabled) && <XContainer onClick={(e) => {e.stopPropagation();removeItem(value.id)}}>
                         <IconX/>
                     </XContainer>}
                 </StyledItem>     

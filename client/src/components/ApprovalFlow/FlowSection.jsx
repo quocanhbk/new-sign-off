@@ -68,7 +68,7 @@ const FlowSection = ({headline, data, type, currentApprover, remindApprover}) =>
             </tr>
             {data.map((d,idx) => 
                 <FlowTag 
-                    key={d.id} 
+                    key={type === "observator" ? d.email : d.id} 
                     data={d}
                     isCurrent={(type === "approver" || type === "advisor") && currentApprover.includes(d.userId)}
                     last={(type === 'approver' || type === "observator") && idx === (data.length -1)}

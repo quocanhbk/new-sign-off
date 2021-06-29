@@ -21,9 +21,9 @@ export const getRequests = async (queryString, callback = (v) => {v}) => {
 	}))
 }
 
-export const getRequestDetail = async (id, callback = (v) => {v}) => {
+export const getRequestDetail = async (id, sign = false, callback = (v) => {v}) => {
 	const config = await getConfig()
-	let {data} = await axios.get('/api/v1/requests/' + id, config);
+	let {data} = await axios.get(`/api/v1/requests/${id}?${sign ? "sign=true" : ""}`, config);
 	callback(33)
 	let checklist = null
 	if (data.type === "Procedure") {

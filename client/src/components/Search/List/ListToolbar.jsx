@@ -34,12 +34,14 @@ const PopupWrapper = styled.div`
 	right: 0;
 	top: 120%;
 	z-index: 22;
-	border: 1px solid ${(props) => props.theme.color.border.primary};
+	border: 2px solid ${(props) => props.theme.color.border.primary};
 	background: ${(props) => props.theme.color.background.primary};
-	border-radius: 1rem;
+	border-radius: 0.5rem;
+	box-shadow: ${props => props.theme.shadow};
+
 `;
 
-function ListToolbar({setQueryTitle, statusSelection}) {
+function ListToolbar({setQueryTitle, query, set}) {
 	const [filterPopup, setFilterPopup] = useState(false);
 	const [searchText, setSearchText] = useState("");
 
@@ -67,7 +69,8 @@ function ListToolbar({setQueryTitle, statusSelection}) {
 				{filterPopup && 
 					<PopupWrapper>
 						<FilterPopup
-							statusSelection={statusSelection}
+							query={query}
+							set={set}
 						/>
 					</PopupWrapper>
 				}

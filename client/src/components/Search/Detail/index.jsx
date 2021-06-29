@@ -29,11 +29,13 @@ const  DisplayContent = ({id, mode}) => {
 	const [comment, setComment] = useState("")
 	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
 
+	// to prevent setting state to Unmounted component, we use the "mounted" variable
+	// "mounted" will be false once component unmount, and that will prevent any set state statement from happenning
 	useEffect(() => {
 		let mounted = true
 		const fetchData = async () => {
 			reset()
-			getRequestDetail(id, (p) => {if (mounted) setPercent(p)})
+			getRequestDetail(id, mode === "sign", (p) => {if (mounted) setPercent(p)})
 				.then(data => {
 					if (mounted) {
 						setRequest(data)
@@ -41,8 +43,7 @@ const  DisplayContent = ({id, mode}) => {
 					}
 				})
 				.catch(() => {
-					if (mounted)
-						setNotFound(true)
+					if (mounted) setNotFound(true)
 				});
 		}
 		fetchData()

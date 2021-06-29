@@ -5,7 +5,8 @@ const initState = {
     priority: {value: null, text: ""},
     status: {value: null, text: ""},
     createdBy: {value: null, text: ""},
-    project: {value: null, text: ""}
+    project: {value: null, text: ""},
+    type: {value: null, text: ""}
 }
 const reducer = (state, action) => {
     switch (action.type) {
@@ -35,6 +36,7 @@ const useQuery = () => {
     }
 
     return {
+        query,
         queryString: Object.entries(query).filter(([, s]) => s.value !== null).map(([key, s]) => `${key}=${s.value}`).join("&"), 
         set, 
         reset,
