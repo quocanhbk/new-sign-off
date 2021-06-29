@@ -127,7 +127,7 @@ const Selection = styled.div`
 const StyledItem = styled.div`
     display: flex;
     align-items: center;
-    pointer-events: ${props => props.multiple ? 'unset' : 'none'};
+    pointer-events: ${props => props.multiple || props.removable ? 'unset' : 'none'};
     background: ${props => props.multiple ? props.theme.color.border.primary : 'transparent'};
     color: ${props => props.theme.color.text.primary};
     animation: ${opa} 0.15s linear 0s 1 normal forwards;
@@ -185,7 +185,7 @@ const SelectionContainer = styled.div`
         }
     }
 `
-function ControlledCombox({selection, value, onSelect, multiple, searchable, displayField, keyField, readOnly, disabled}) {
+function ControlledCombox({selection, value, onSelect, multiple, searchable, displayField, keyField, readOnly, disabled, removable}) {
     const [isOpen, setIsOpen] = useState(false);
     const comboxRef = useClickOutside(() => setIsOpen(false))
     const [seachText, setSeachText] = useState("")
@@ -233,7 +233,7 @@ function ControlledCombox({selection, value, onSelect, multiple, searchable, dis
     const renderItems = () => {
         return multiple ?
             value.map(item => 
-                <StyledItem multiple={multiple} key={item.id} className={removingItem === item.id ? "item-out" : ""}>
+                <StyledItem multiple={multiple} removable={removable} key={item.id} className={removingItem === item.id ? "item-out" : ""}>
                     {item[displayField]}
                     {(!readOnly && !disabled) && <XContainer onClick={() => removeItem(item.id)}>
                         <IconX/>

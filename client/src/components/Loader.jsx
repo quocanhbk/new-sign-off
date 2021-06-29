@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
 import styled, { css, keyframes } from 'styled-components'
@@ -25,10 +26,12 @@ const Container = styled.div`
     background: ${props => props.theme.color.background.primary};
 `
 const Logo = styled.div`
-    width: 8rem;
-    height: 8rem;
+    width: 4rem;
+    height: 4rem;
     padding: 1em;
     position: relative;
+    display: flex;
+    justify-content: center;
     ${props => props.isOut && css`
         animation: ${fadeOut} 0.2s ease-in 0s 1 forwards normal;
     `}
@@ -40,6 +43,7 @@ const spin = keyframes`
 const Spinner = styled.div`
     position: absolute;
     border-top: 2px solid ${props => props.theme.color.fill.primary};
+    border-bottom: 2px solid ${props => props.theme.color.fill.primary};
     width: 100%;
     height: 100%;
     top: 0;

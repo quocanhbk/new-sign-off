@@ -29,7 +29,7 @@ const Tag = ({email, name}) => {
         </TagContainer>
     )
 }
-const Participants = ({advisors, approvers, observators, set}) => {
+const Participants = ({advisors, approvers, observators, set, error}) => {
     
     const users = useStoreState(s => s.users).map(s => ({...s, display: <Tag email={s.email} name={s.name}/>}))
 
@@ -50,7 +50,10 @@ const Participants = ({advisors, approvers, observators, set}) => {
             <FormControl 
                 headline={"Approver List"} 
                 required 
-                errorText={approvers.some(v => advisors.concat(observators).includes(v)) && "Duplicate"}
+                errorText={
+                    (approvers.some(v => advisors.concat(observators).includes(v)) && "Duplicate") ||
+                    error.approvers
+                }
             >
                 <ControlledCombox
                     multiple searchable

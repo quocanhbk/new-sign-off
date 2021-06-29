@@ -42,6 +42,7 @@ const initError = {
     deadline: "",
     relatedProjects: "",
     procedure: "",
+    approvers: ""
 }
 
 const errorReducer = (state, action) => {
@@ -133,6 +134,7 @@ const useDocument = () => {
 
     const isSubmittable = () => {
         let submittable = true
+        // catch title error
         if (title === "") {
             setError("title", "Document title is required")
             submittable = false
@@ -154,6 +156,11 @@ const useDocument = () => {
         // catch procedure error
         if (type === "Procedure" && !procedure) {
             setError("procedure", "Procedure is required")
+            submittable = false
+        }
+        // catch approver error
+        if (approvers.length === 0) {
+            setError("approvers", "At least 1 approver must be selected")
             submittable = false
         }
         if (

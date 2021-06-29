@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Searchbar from "components/Searchbar";
 import { BsFunnel } from "react-icons/bs";
 import useClickOutside from "hooks/useClickOutside";
-
+import FilterPopup from './FilterPopup'
 const StyleToolbar = styled.div`
   display: flex;
   gap: 0.5rem;
@@ -19,9 +19,9 @@ const IconWrapper = styled.button`
   padding: 0.5rem;
   border-radius: 99px;
   border: 1px solid ${props => props.theme.color.border.primary};
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   cursor: pointer;
   position: relative;
 
@@ -30,18 +30,16 @@ const IconWrapper = styled.button`
   }
 `;
 const PopupWrapper = styled.div`
-  position: absolute;
-  width: 160px;
-  height: 160px;
-  right: 0;
-  top: 120%;
-  z-index: 99;
-  border: 1px solid ${(props) => props.theme.color.border.primary};
-  background: ${(props) => props.theme.color.background.primary};
-  border-radius: 1rem;
+	position: absolute;
+	right: 0;
+	top: 120%;
+	z-index: 22;
+	border: 1px solid ${(props) => props.theme.color.border.primary};
+	background: ${(props) => props.theme.color.background.primary};
+	border-radius: 1rem;
 `;
 
-function ListToolbar({setQueryTitle}) {
+function ListToolbar({setQueryTitle, statusSelection}) {
 	const [filterPopup, setFilterPopup] = useState(false);
 	const [searchText, setSearchText] = useState("");
 
@@ -66,7 +64,13 @@ function ListToolbar({setQueryTitle}) {
 			<Searchbar search={searchText} setSearch={setSearchText} />
 			<IconWrapper ref={ref1}>
 				<BsFunnel size="20px" onClick={(e) => handlePopup(e, "filter")} />
-				{filterPopup && <PopupWrapper>Filter</PopupWrapper>}
+				{filterPopup && 
+					<PopupWrapper>
+						<FilterPopup
+							statusSelection={statusSelection}
+						/>
+					</PopupWrapper>
+				}
 			</IconWrapper>
 		</StyleToolbar>
 	);

@@ -1,22 +1,20 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef, useState } from "react";
+import { navigate } from "@reach/router";
+import { approveRequest, getRequestDetail, remindApprove } from 'api/request';
+import AbsoluteModal from 'components/AbsoluteModal';
+import ApprovalFlow from "components/ApprovalFlow";
+import Placeholder from "components/Placeholder";
 import Tab from "components/Tab";
 import TabPane from "components/TabPane";
+import useCustomLoader from "hooks/useCustomLoader";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import ApprovalInfo from "./ApprovalInfo";
+import ApproveWindow from './ApproveWindow';
+import ConfirmPopup from './ConfirmPopup';
 import Content from "./Content";
 import Header from "./Header";
-import ApprovalInfo from "./ApprovalInfo";
-import styled from "styled-components";
-import {getRequestDetail} from 'api/request'
-import ApprovalFlow from "components/ApprovalFlow";
-import useCustomLoader from "hooks/useCustomLoader";
-import Placeholder from "components/Placeholder";
-import ApproveWindow from './ApproveWindow'
-import AbsoluteModal from 'components/AbsoluteModal'
-import ConfirmPopup from './ConfirmPopup'
-import {approveRequest} from 'api/request'
-import { navigate } from "@reach/router";
-import { set } from "date-fns/esm";
 
 const Container = styled.div`
 	height: 100%;
@@ -59,7 +57,9 @@ const  DisplayContent = ({id, mode}) => {
 	const handleCancel = async () => {
 		setConfirmPopup("")
 	}
-
+	const remindApprover = async (userId) => {
+		await remindApprove(id, userId)
+	}
     return (
 		<Container className="container">
 			{render(request && (
@@ -76,6 +76,7 @@ const  DisplayContent = ({id, mode}) => {
 						</TabPane>
 						<TabPane name="Approval Flow" key={2} value={2}>
 							<ApprovalFlow 
+								remindApprover={remindApprover}
 								submitter={request.submitter}
 								advisors={request.advisors}
 								approvers={request.approvers}

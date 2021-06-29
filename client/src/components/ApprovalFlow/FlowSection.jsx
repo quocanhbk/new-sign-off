@@ -46,7 +46,7 @@ const CheckContainer = styled.div`
     display: grid;
     place-items: center;
 `
-const FlowSection = ({headline, data, type, currentApprover}) => {
+const FlowSection = ({headline, data, type, currentApprover, remindApprover}) => {
     return (
         <Fragment>
             {type === "observator" && 
@@ -68,10 +68,11 @@ const FlowSection = ({headline, data, type, currentApprover}) => {
             </tr>
             {data.map((d,idx) => 
                 <FlowTag 
-                    key={d.email} 
+                    key={d.id} 
                     data={d}
                     isCurrent={(type === "approver" || type === "advisor") && currentApprover.includes(d.userId)}
                     last={(type === 'approver' || type === "observator") && idx === (data.length -1)}
+                    remindApprover={remindApprover}
                 /> 
             )}
         </Fragment>

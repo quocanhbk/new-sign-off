@@ -65,9 +65,14 @@ const Container = styled.button`
         border-color: ${props => props.theme.color.border.primary};
     `}
 
+    ${props => props.disabled && css`
+        color: ${props => props.theme.color.text.disabled};
+        pointer-events: none;
+    `}
+
 `
 
-const Button = ({className, onClick, children, padding, radius, fullWidth, color, variant, gap, normalBorder, fontSize, weight}) => {
+const Button = ({className, onClick, children, padding, radius, fullWidth, color, variant, gap, normalBorder, fontSize, weight, disabled}) => {
     return (
         <Container 
             className={className}
@@ -81,6 +86,7 @@ const Button = ({className, onClick, children, padding, radius, fullWidth, color
             normalBorder={normalBorder}
             fontSize={fontSize}
             weight={weight}
+            disabled={disabled}
         >
             {children}
         </Container>

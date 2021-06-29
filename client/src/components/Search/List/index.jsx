@@ -21,10 +21,10 @@ const StyleListWrapper =styled.div`
     padding: 0 0.5rem;
 `
 const TagBar = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  height: 2.5rem;
-  align-items: center;
+    display: flex;
+    gap: 0.5rem;
+    height: 2.5rem;
+    align-items: center;
 `;
 const TagContainer = styled.div`
   display: flex;
@@ -91,7 +91,10 @@ function List({mode}) {
     }
     return (
         <StyleListWrapper>
-            <ListToolbar setQueryTitle={(v) => onChangeTitleSearch(v)}/>
+            <ListToolbar 
+                setQueryTitle={(v) => onChangeTitleSearch(v)}
+                statusSelection={[...new Set(requests.map(r => r.status))]}
+            />
             <TagBar>
                 <p>Filter: </p>
                 <TagContainer>

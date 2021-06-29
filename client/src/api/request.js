@@ -132,6 +132,7 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 		priority, 
 		type, 
 		deadline,
+		status,
 		relatedProjects, 
 		advisors, 
 		approvers, 
@@ -147,6 +148,7 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 		priority,
 		type,
 		deadline: (new Date(deadline)).toLocaleDateString('en-CA'),
+		status,
 		relatedProjects,
 		advisors,
 		approvers,
@@ -154,6 +156,7 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 		procedureId
 	}
 	if (!sendData.procedureId) delete sendData.procedureId
+	if (!sendData.status !== "Draft") delete sendData.status
 
 	// 1. POST request data to get Request ID
 	let {data: {approval_request_id: id}} = await axios.post('/api/v1/requests', sendData, config)
@@ -242,4 +245,9 @@ export const approveRequest = async (id, {code, comment, opinionId}, callback = 
 	}, config)
 	console.log(res)
 	callback(100)
+}
+
+export const remindApprove = async (id, userId) => {
+	let config = await getConfig()
+	await axios.post(`/api/v1/requests/${id}/remind`, {userId}, config)
 }

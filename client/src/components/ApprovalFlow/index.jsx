@@ -32,7 +32,7 @@ const Container = styled.div`
     }
 `
 
-const ApprovalFlow = ({submitter, advisors, approvers, observators, currentApprover}) => {
+const ApprovalFlow = ({submitter, advisors, approvers, observators, currentApprover, remindApprover}) => {
     return (
 		<Container>
 			<table>
@@ -48,6 +48,7 @@ const ApprovalFlow = ({submitter, advisors, approvers, observators, currentAppro
 							data={advisors} 
 							type="advisor" 
 							currentApprover={currentApprover}
+							remindApprover={remindApprover}
 						/>
 					)}
 					<FlowSection
@@ -55,6 +56,7 @@ const ApprovalFlow = ({submitter, advisors, approvers, observators, currentAppro
 						data={approvers} 
 						type="approver" 
 						currentApprover={currentApprover}
+						remindApprover={remindApprover}
 					/>
 					{observators.length > 0 && 
 					<FlowSection

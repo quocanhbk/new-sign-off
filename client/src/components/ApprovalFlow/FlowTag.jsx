@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
-import React from "react";
-import styled, {  } from "styled-components";
-import { BsBellFill, BsCheck, BsEyeFill, BsFillCircleFill, BsPlayFill, BsThreeDots, BsX } from "react-icons/bs";
-import {getFader} from 'utils/color'
 import baseURL from "api/baseURL";
-import Button from 'components/Button'
+import Button from 'components/Button';
+import React, { useState } from "react";
+import { BsBellFill, BsCheck, BsEyeFill, BsFillCircleFill, BsPlayFill, BsThreeDots, BsX } from "react-icons/bs";
+import styled from "styled-components";
+import { getFader } from 'utils/color';
+
 const Container = styled.td`
     padding: 0.5rem;
 `
@@ -91,13 +92,17 @@ const Body = styled.div`
     gap: 1rem;
     align-items: center;
     flex: 1;
+
+    & .remind-button {
+        &:hover {
+            background: ${props => getFader(props.theme.color.fill.primary, 0.2)};
+        }
+    }
 `
 
 // decision : "Approved" | "Rejected" | "Pending"
-const FlowTag = ({data, last, isCurrent}) => {
-    const notify = (userId) => {
-        alert(userId)
-    }
+const FlowTag = ({data, last, isCurrent, remindApprover}) => {
+    const [reminded, setReminded] = useState(false)
     return (
         <tr>
             <Side>
@@ -133,7 +138,9 @@ const FlowTag = ({data, last, isCurrent}) => {
                                     padding="0.2rem" 
                                     radius="99px" 
                                     color="warning"
-                                    onClick={() => notify(data.userId)}
+                                    onClick={() => {remindApprover(data.userId); setReminded(true)}}
+                                    disabled={reminded}
+                                    className={"remind-button"}
                                 >
                                     <BsBellFill/>
                                 </Button>

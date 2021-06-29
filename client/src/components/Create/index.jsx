@@ -170,6 +170,7 @@ const Create = () => {
 							approvers={approvers}
 							observators={observators}
 							set={set}
+							error={error}
 						/>
 					</SectionContainer>
 					
