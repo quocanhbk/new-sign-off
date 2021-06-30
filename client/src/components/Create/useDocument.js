@@ -3,10 +3,11 @@ import React from 'react'
 import {useEffect, useReducer } from 'react'
 import { getProcedureDetail } from 'api/procedure'
 import { v4 } from 'uuid'
-import { postRequest } from 'api/request'
-import { useStoreActions } from 'easy-peasy'
+import { getRequestDetail, postRequest } from 'api/request'
+import { useStoreActions, useStoreState } from 'easy-peasy'
 import useCustomLoader from 'hooks/useCustomLoader'
 import Placeholder from 'components/Placeholder'
+import { deleteFile, getFile } from 'api/file'
 
 const initState = {
     title: "",
@@ -32,6 +33,8 @@ const reducer = (state, action) => {
             }
         case 'RESET':
             return initState
+        case 'INIT':
+            return action.payload
         default:
             return state
     }
@@ -54,7 +57,7 @@ const errorReducer = (state, action) => {
             }
     }
 }
-const useDocument = () => {
+const useDocument = (id, mode) => {
     const [{
         title, description, type, priority, 
         deadline, relatedProjects, 
@@ -62,8 +65,8 @@ const useDocument = () => {
         approvalAttachments, referenceAttachments, procedure, checklist
     }, dispatch] = useReducer(reducer, initState)
     const setPath = useStoreActions(action => action.setPath)
-    const {render, reset, setPercent} = useCustomLoader(false, <Placeholder type="NOT_FOUND"/>)
-
+    const {render, reset, setPercent, setNotFound} = useCustomLoader(false, <Placeholder type="NOT_FOUND"/>)
+    const forms = useStoreState(s => s.forms)
     // fetch procedure detail after user select procedure from combo box
     useEffect(() => {
         
@@ -92,7 +95,7 @@ const useDocument = () => {
         set("advisors", [])
         set("approvers", [])
         set("observators", [])
-        if (procedure)
+        if (procedure && !id)
             fetchProcedure()
     }, [procedure])
 
@@ -101,14 +104,85 @@ const useDocument = () => {
             set("procedure", null)
     }, [type])
 
+    useEffect(() => {
+        const fetchData = async () => {
+            reset()
+            let data = await getRequestDetail(id, false, (p) => setPercent(p))
+            //useTimeout to avoid setting state to unmounted component
+            //still looking for a "cleaner" solution
+            setTimeout(() => {
+                if (
+                    (mode === "draft" && data.status !== "Draft") || 
+                    (mode === "revise" && data.status !== "Revising")
+                ) setNotFound(true)
+                else init(data)
+            }, 250)
+        }
+        if (id) fetchData()
+        else dispatch({type: "RESET"})
+    }, [id])
+
     const [error, dispatchError] = useReducer(errorReducer, initError)
 
-    const removeAttachment = (type = "approval", id) => {
-        if (type === "approval")
-            set("approvalAttachments", approvalAttachments.filter(attachment => attachment.id !== id))
-        else if (type === "reference")
-            set("referenceAttachments", referenceAttachments.filter(attachment => attachment.id !== id))
+    const init = async (data) => {
+        let initData = {
+            title: data.title,
+            description: data.description,
+            type: data.type,
+            priority: data.priority,
+            deadline: (new Date(data.deadline)).toDateString(),
+            relatedProjects: data.relatedProjects,
+            advisors: data.advisors.map(a => a.userId),
+            approvers: data.approvers.map(a => a.userId),
+            observators: data.observators.map(a => a.userId),
+            approvalAttachments: data.approvalAttachments.map(attachment => ({
+                id: attachment.id,
+                name: attachment.name,
+                checklistItemId: attachment.checklistItemId,
+                reference: true,
+                fileId: attachment.fileId,
+                file: null,
+                fields: attachment.fields
+            })),
+            referenceAttachments: data.referenceAttachments.map(attachment => ({
+                id: attachment.id,
+                name: attachment.name,
+                checklistItemId: attachment.checklistItemId,
+                reference: true,
+                fileId: attachment.fileId,
+                file: null,
+                fields: attachment.fields
+            })),
+            procedure: data.procedureId,
+            checklist: data.checklist
+        }
+        await (await Promise.all(data.approvalAttachments.map(_ => _.fileId))).map(async (fileId) => {
+            let file = await getFile(fileId)
+            initData.approvalAttachments.find(a => a.fileId === fileId).file = file
+        })
+        await (await Promise.all(data.referenceAttachments.map(_ => _.fileId))).map(async (fileId) => {
+            let file = await getFile(fileId)
+            initData.referenceAttachments.find(a => a.fileId === fileId).file = file
+        })
+        dispatch({type: "INIT", payload: initData})
+    }
 
+    const removeAttachment = (type = "approval", attachmentId) => {
+        // when in draft mode, when user delete attachment, we should check to delete the file too
+        if (type === "approval") {
+            let deletingAttachment = approvalAttachments.find(a => a.id === attachmentId)
+            set("approvalAttachments", approvalAttachments.filter(attachment => attachment.id !== attachmentId))
+            if (!forms.map(form => form.id).includes(deletingAttachment.fileId)) {
+                deleteFile(deletingAttachment.fileId)
+            }
+        }
+        else if (type === "reference") {
+            let deletingAttachment = referenceAttachments.find(a => a.id === attachmentId)
+            set("referenceAttachments", referenceAttachments.filter(attachment => attachment.id !== attachmentId))
+            if (!forms.map(form => form.id).includes(deletingAttachment.fileId)) {
+                deleteFile(deletingAttachment.fileId)
+            }
+        }
     }
     const setError = (field, value) => dispatchError({type: "SET", payload: {field, value}})
 
@@ -189,11 +263,12 @@ const useDocument = () => {
             approvalAttachments,
             referenceAttachments,
             procedure,
-            status: requestStatus === "draft" ? "Draft" : null
+            status: requestStatus
         }
         let id = await postRequest(input, (p) => setPercent(p))
         setTimeout(() => setPath("/search/" + id), 400)
     }
+
     const updateAttachment = (attachmentType, attachmentId, name, fields) => {
         if (attachmentType === "approval") {
             let newAttachments = [...approvalAttachments]
@@ -209,6 +284,7 @@ const useDocument = () => {
             set("referenceAttachments", newAttachments)
         }
     }
+
     return {
         title, description, type,
         priority, deadline, relatedProjects,

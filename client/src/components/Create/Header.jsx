@@ -6,30 +6,12 @@ const StyleButton = styled.div`
 	display: flex;
 	gap: 1rem;
 	align-items: center;
-	/* & button {
-		padding: 0.2rem 1rem;
-		cursor: pointer;
-		border-radius: 0.2rem;
-		font-size: 1rem;
-		border: 1px solid transparent;
-	}
-	& .btn-stored {
-		background: ${(props) => props.theme.color.fill.primary};
-		color: ${(props) => props.theme.color.background.primary};
-	}
-	& .btn-draft {
-		background: transparent;
-		color: ${(props) => props.theme.color.fill.primary};
-		border-color: ${props => props.theme.color.border.primary};
-	}
-	& .btn-preview {
-		background: ${(props) => props.theme.color.fill.success};
-		color: ${(props) => props.theme.color.background.primary};
-	} */
-`;
+`
+
 const StyleTitle = styled.div`
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	border-bottom: 1px solid ${props => props.theme.color.border.primary};
 	padding: 0 1rem;
 `;
@@ -38,14 +20,21 @@ const Title = styled.h3`
 	padding: 1rem 0;
 	font-weight: 500;
 `
-const Header = ({openSubmit, openDraft}) => {
+const Header = ({mode, openSubmit, openDraft}) => {
     return (
 		<StyleTitle>
-			<Title>CREATE A NEW APPROVAL DOCUMENT</Title>
+			<Title>
+				{
+					mode === "create" ? "CREATE A NEW APPROVAL DOCUMENT" : 
+					mode === "draft" ? "EDIT DRAFT DOCUMENT" :
+					"EDIT REVISING DOCUMENT"
+				}
+			</Title>
 			<StyleButton>
-				<Button onClick={() => {}} className="btn-stored">Load from stored</Button>
-				<Button color="secondary" onClick={openDraft} normalBorder className="btn-draft">Save Draft</Button>
-				<Button color="success" onClick={openSubmit} className="btn-preview">Submit</Button>
+				{/* <Button padding="0.4rem 0.8rem" color="secondary" onClick={() => {}}>Load Draft</Button> */}
+				<Button padding="0.4rem 0.8rem" color="success" onClick={openDraft} variant="outline">Save Draft</Button>
+				{/* <VerticalLine/> */}
+				<Button padding="0.4rem 0.8rem" color="success" onClick={openSubmit}>Submit</Button>
 			</StyleButton>
 		</StyleTitle>
     )

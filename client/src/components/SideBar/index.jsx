@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import styled, {css} from 'styled-components';
-import { BsPower} from 'react-icons/bs';
+import { BsPower, BsThreeDotsVertical} from 'react-icons/bs';
 import Avatar from 'components/Avatar';
 import ThemeToggle from './ThemeToggle'
 import pageList from 'pageList'
@@ -8,6 +8,7 @@ import { getFader } from 'utils/color';
 import {useStoreActions, useStoreState} from 'easy-peasy'
 import { useMsal } from '@azure/msal-react';
 import baseURL from 'api/baseURL';
+import useClickOutside from 'hooks/useClickOutside';
 
 const SidebarContainer = styled.div`
 	background-color: ${props => props.theme.color.background.secondary};
@@ -39,6 +40,7 @@ export const UserDisplayCard = styled.div`
 	border: 1px solid ${props => props.theme.color.border.primary};
 	border-radius: 1rem;
 	color: ${props => props.theme.color.fill.primary};
+	position: relative;
 	& h3 {
 		font-size: 1rem;
 		color: ${props => props.theme.color.text.primary};
@@ -62,8 +64,6 @@ export const UserDisplayCardInfo = styled.div`
 	justify-content: center;
 	margin-left: 1rem;
 	gap: 0.1rem;
-
-	
 `;
 
 const NavItem = styled.div`
@@ -128,36 +128,67 @@ const Footer = styled.div`
 		justify-content: center;
 	}
 `
+const OptionPopup = styled.div`
+	position: absolute;
+	padding: 0.5rem;
+	border: 1px solid ${props => props.theme.color.border.primary};
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	right: 0;
+	top: 50%;
+	transform: translate(0, 50%);
+	cursor: pointer;
+	background: ${props => props.theme.color.background.primary};
+	border-radius: 0.5rem;
+
+`
+const ThreeDotWrapper = styled.div`
+	cursor: pointer;
+	user-select: none;
+`
 const SideBar = () => {
 	const theme = useStoreState(_ => _.theme)
 	const setTheme = useStoreActions(_ => _.setTheme)
 	const setPath = useStoreActions(_ => _.setPath)
 	const path = useStoreState(_ => _.path)
+	const [popup, setPopup] = useState(false)
 	const { instance, accounts } = useMsal();
 	const name = accounts[0].name.split("-")[accounts[0].name.split("-").length - 1]
-
+	const threeDotRef = useRef()
+	const optionRef = useClickOutside(() => setPopup(false), threeDotRef.current)
 	return (
 		<SidebarContainer>
 			<Header>
 				<Logo src={theme ? '/iconNoTextDark.svg' : '/iconNoTextLight.svg'} />
 				<h1>TTG Approval Online</h1>
 			</Header>
+
 			<UserDisplayCard>
 				<Avatar src={baseURL + "/api/v1/avatar/" + accounts[0].username + "/96x96"} />
 				<UserDisplayCardInfo>
 					<h3>{name}</h3>
 					<p>{accounts[0].username}</p>
 				</UserDisplayCardInfo>
-				<BsPower className="user-logout" size="20px" onClick={() => instance.logoutRedirect()}/>
+				{/* <BsPower className="user-logout" size="20px" onClick={() => instance.logoutRedirect()}/> */}
+				<ThreeDotWrapper ref={threeDotRef} onClick={() => setPopup(!popup)}>
+					<BsThreeDotsVertical size="20px" />
+				</ThreeDotWrapper>
+				{popup && 
+				<OptionPopup className="user-logout" ref={optionRef} onClick={() => instance.logoutRedirect()}>
+					<BsPower size="1.2rem"/> Log out
+				</OptionPopup>}
 			</UserDisplayCard>
+
 			<NavList>
-				{pageList.map(item => 
+				{pageList.filter(p => !p.notVisible).map(item => 
 					<NavItem key={item.text} onClick={() =>{setPath(item.link)}} active={item.link === path}>
 						{item.icon}
 						<p>{item.text}</p>
 					</NavItem>  
 				)}
 			</NavList>
+
 			<Footer>
 				<div className="toggleContainer">
 					<ThemeToggle value={theme} onSelect={() => setTheme()}/>

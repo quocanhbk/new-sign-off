@@ -26,8 +26,8 @@ const Container = styled.div`
     background: ${props => props.theme.color.background.primary};
 `
 const Logo = styled.div`
-    width: 4rem;
-    height: 4rem;
+    width: 6rem;
+    height: 6rem;
     padding: 1em;
     position: relative;
     display: flex;

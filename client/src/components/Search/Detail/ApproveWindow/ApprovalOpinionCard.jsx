@@ -103,8 +103,8 @@ function ApprovalOpinionCard({opinion, onApproveClick}) {
                         opinion.inAgreement.map(userId =>
                             <Line key={userId}>
                                 <BsCheckCircle className="icon"/>
-                                <Avatar width="1.2rem" height="1.2rem" src={getAvatar(users.find(u => u.id === userId).email)} />
-                                <p><span className="name">{users.find(u => u.id === userId).name}</span> approved with this opinion</p>
+                                <Avatar width="1.2rem" height="1.2rem" src={getAvatar(users.find(u => u.id === userId).email, "48x48")} />
+                                <p><span className="name">{users.find(u => u.id === userId).name}</span> approved this opinion</p>
                             </Line>
                         )
                     }

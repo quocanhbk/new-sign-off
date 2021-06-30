@@ -48,3 +48,8 @@ export const downloadForm = async (name, fileId, fields) => {
     link.download=`${name}.pdf`
     link.click()
 }
+
+export const deleteFile = async (fileId) => {
+    const config = await getConfig()
+    axios.delete("/api/v1/files/" + fileId, config)
+}

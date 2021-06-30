@@ -35,10 +35,10 @@ const TagContainer = styled.div`
 const CardList = styled.div`
     width: 100%;
     flex: 1;
-    
     overflow: auto;
     position: relative;
-    
+    padding-right: 0.5rem;
+
     ::-webkit-scrollbar {
     width: 0.5rem;
     }

@@ -66,6 +66,7 @@ const  DisplayContent = ({id, mode}) => {
 			{render(request && (
 				<>
 					<Header
+						id={id}
 						title={request.title}
 						status={request.status}
 						type={request.type}

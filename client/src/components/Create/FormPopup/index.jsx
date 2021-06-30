@@ -21,7 +21,7 @@ const FormPopup = ({attachment, onUpdateAttachment}) => {
 
         saveForm
     } = useFormData(attachment, onUpdateAttachment)
-    
+    console.log("Attachment", attachment);
     const [numPage, setNumPage] = useState()
 
     //#region download

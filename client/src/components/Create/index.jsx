@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
@@ -65,7 +66,7 @@ const Container = styled.div`
 		background: ${(props) => props.theme.color.fill.secondary};
 	}
 `
-const Create = () => {
+const Create = ({id, mode}) => {
 	const [modal, setModal] = useState()
 	const [errorNotify, setErrorNotify] = useState(false)
 	const [procedureList, setProcedureList] = useState([])
@@ -80,7 +81,7 @@ const Create = () => {
         set, updateAttachment,
         //Helper function
         removeAttachment, submitRequest, error, isSubmittable, changeFieldContent, render
-	} = useDocument()
+	} = useDocument(id, mode)
 
 	const popupSubmit = (type) => {
 		if (!isSubmittable()) setErrorNotify(true)
@@ -90,10 +91,7 @@ const Create = () => {
 	const renderModal = () => {
 		return (
 			<>
-			<Modal height="80%" width="80%" visible={modal === "store"} onClickOutside = {() => setModal("")} title="Loading document">
-				Store
-			</Modal>
-			<Modal visible={modal === "submit" || modal === "draft"} onClickOutside = {() => setModal("")}>
+			<Modal visible={modal === "Pending" || modal === "Draft"} onClickOutside = {() => setModal("")}>
 				<SubmitPopup type={modal} closeSubmit={() => setModal("")} submitRequest={() => submitRequest(modal)} title={title}/>
 			</Modal>
 			</>
@@ -112,8 +110,10 @@ const Create = () => {
 		<StyleContainer>
 			{renderModal()}
 			<Header 
-				openSubmit={() => popupSubmit("submit")}
-				openDraft={() => popupSubmit("draft")}
+				openSubmit={() => popupSubmit("Pending")}
+				openDraft={() => popupSubmit("Draft")}
+				mode={mode}
+
 			/>
 			
 			<ContainerItems className="ContainerItems">

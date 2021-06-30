@@ -14,7 +14,7 @@ const Container = styled.button`
     align-items: center;
     justify-content: center;
     gap: ${props => props.gap};
-
+    pointer-events: ${props => props.readOnly ? "none" : "all"};
     ${props => props.variant === "contained" ? css`
         background: ${props => props.theme.color.fill[props.color]};
         border: 1px solid ${props => props.theme.color.fill[props.color]};
@@ -72,7 +72,7 @@ const Container = styled.button`
 
 `
 
-const Button = ({className, onClick, children, padding, radius, fullWidth, color, variant, gap, normalBorder, fontSize, weight, disabled}) => {
+const Button = ({className, onClick, children, padding, radius, fullWidth, color, variant, gap, normalBorder, fontSize, weight, disabled, readOnly}) => {
     return (
         <Container 
             className={className}
@@ -87,6 +87,7 @@ const Button = ({className, onClick, children, padding, radius, fullWidth, color
             fontSize={fontSize}
             weight={weight}
             disabled={disabled}
+            readOnly={readOnly}
         >
             {children}
         </Container>
@@ -101,7 +102,8 @@ Button.defaultProps = {
     variant: "contained",
     gap: "1rem",
     fontSize: "1rem",
-    weight: "400"
+    weight: "400",
+    readOnly: false
 }
 
 export default Button

@@ -3,10 +3,10 @@
 // Request Card, used to display in Search and Sign Page
 import React from 'react';
 import styled, { css } from 'styled-components'
-import {BiDislike, BiLike, BsChevronRight, BsClock, BsExclamation, GiPauseButton} from 'react-icons/all'
+import {BiDislike, BiLike, BsChevronRight, BsClock, BsDot, BsStarFill, GiPauseButton} from 'react-icons/all'
 import {getFader} from 'utils/color'
 import { navigate } from '@reach/router';
-
+import Button from 'components/Button'
 const Container = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
     border-radius: 0.5rem;
@@ -39,71 +39,23 @@ const Title = styled.div`
 `
 const Line = styled.div`
     display: flex;
-    gap: 0.5rem;
+    gap: ${props => props.gap || "0.5rem"};
+    align-items: center;
     color: ${props => props.theme.color.text.secondary};
     & span {
         font-size: 0.8rem;
         cursor: pointer;
     }
-`
-const StyleButton = styled.button`
-    cursor: pointer;
-    color: ${props => props.theme.color.text.secondary};
-    background: transparent;
-    border: none;
-    padding: 0.5rem;
-    border-radius: 99px;
-    display: grid;
-    place-items: center;
-    border: 1px solid transparent;
-    &:hover {
-        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
-    }
-    &:active {
-        background: ${props => props.theme.color.border.primary};
-    }
-    &:focus {
-        border-color: ${props => props.theme.color.border.primary};
-    }
-`
-const ApproveStatus = styled.span`
-    background: ${(props) => 
-        props.status === "Approved" ? props.theme.color.fill.success : 
-        props.status === "Rejected" ? props.theme.color.fill.danger : 
-        props.status === "Pending" ? props.theme.color.fill.warning : 
-        props.theme.color.fill.secondary};
-    color: ${(props) => props.theme.color.background.primary};
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
-    
-`
-const RequestType = styled.span`
-    background: ${(props) => props.theme.color.border.primary};
-    color: ${props => props.theme.color.text.primary};
-    text-align: center;
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.2rem;
-`
-const UrgentTag = styled.span`
-    background: ${(props) => props.theme.color.fill.danger};
-    color: ${props => props.theme.color.background.primary};
-    text-align: center;
-    padding: 0.2rem 0.4rem 0.2rem 0;
-    border-radius: 0.2rem;
-    display: inline-flex;
-    align-items: center;
+    ${props => props.last && css`
+        padding-top: 0.2rem;
+    `}
 `
 const ButtonContainer = styled.div`
     display: flex;
     align-items: center;
     padding: 0.5rem;
 `
-const Deadline = styled.span`
-    color: ${props => props.theme.color.text[props.overdue ? "danger" : "inherit"]};
-`
+
 const formatDate = (dateString) => {
     let date = new Date(dateString)
     return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
@@ -111,7 +63,23 @@ const formatDate = (dateString) => {
 
 const Card = ({page, active, data, set}) => {
     const {id, title, status, priority, type, deadline, author} = data
-    const renderIcon = (status) => {
+    const genColor = () => {
+		switch (status) {
+			case "Approved":
+				return "success"
+			case "Rejected":
+				return "danger"
+			case "Draft":
+				return "secondary"
+			case "Pending":
+				return "warning"
+			case "Revising":
+				return "info"
+			default:
+				return "primary"
+		}
+	}
+	const renderIcon = () => {
         switch(status) {
             case "Approved":
                 return <BiLike/>
@@ -123,31 +91,34 @@ const Card = ({page, active, data, set}) => {
                 return <GiPauseButton/>
         }
     }
-
+    const overdue = (new Date(deadline)).getTime() < (new Date()).getTime()
     return (
         <Container active={active}>
             <DivInfo>
                 <Title>{title}</Title>
-                <Line>
+                <Line gap="0.2rem">
                     <span onClick={() => set("createdBy", author.id, author.name)}>Created: {author.name}</span>
                     {status === "Pending" && 
                         <>
-                            <span>|</span>
-                            <Deadline overdue={(new Date(deadline)).getTime() < (new Date()).getTime()}>Deadline: {formatDate(deadline)}</Deadline>
+                            <BsDot size="0.8rem"/>
+                            <span>Deadline: {formatDate(deadline)}</span>
                         </>
                     }
                 </Line>
-                <Line>
-                    <ApproveStatus status={status} onClick={() => set("status", status)}>
-                        {renderIcon(status)}
-                        {status}
-                    </ApproveStatus>
-                    <RequestType onClick={() => set("type", type)}>{type}</RequestType>
-                    {priority === "Urgent" && <UrgentTag><BsExclamation size="1rem"/>Urgent</UrgentTag>}
+                <Line last>
+                    <Button gap="0.2rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("status", status)}>{renderIcon()}{status}</Button>
+                    <Button gap="0.2rem" variant={"abc"} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("type", type)}>{type}</Button>
+                    {priority === "Urgent" && 
+                        <Button gap="0.2rem" color="info" padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("priority", priority)}>
+                            <BsStarFill/>Urgent
+                        </Button>
+                    }
+                    {overdue && 
+                        <Button variant="outline" readOnly color="danger" padding="0.2rem 0.4rem" fontSize="0.8rem">Overdue</Button>}
                 </Line>
             </DivInfo>
             <ButtonContainer>
-                <StyleButton onClick={() => navigate(`/${page}/${id}`)}><BsChevronRight size="1.2rem"/></StyleButton>
+                <Button padding="0.5rem" radius="99px" variant="ghost" onClick={() => navigate(`/${page}/${id}`)}><BsChevronRight size="1.2rem"/></Button>
             </ButtonContainer>
             
         </Container>
