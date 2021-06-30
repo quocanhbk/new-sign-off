@@ -41,7 +41,7 @@ const Content = ({request}) => {
     return (
         <ContentWrapper>
             <SectionContainer headline="1. Related Project">
-                {request.title}
+                {request.relatedProjects.join(', ')}
             </SectionContainer>
             <SectionContainer headline="2. Description">
                 <div dangerouslySetInnerHTML={{__html: request.description}}></div>
