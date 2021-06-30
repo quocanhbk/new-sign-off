@@ -171,6 +171,7 @@ const Create = ({id, mode}) => {
 							observators={observators}
 							set={set}
 							error={error}
+							mode={mode}
 						/>
 					</SectionContainer>
 					

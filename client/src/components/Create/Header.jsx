@@ -31,9 +31,9 @@ const Header = ({mode, openSubmit, openDraft}) => {
 				}
 			</Title>
 			<StyleButton>
-				{/* <Button padding="0.4rem 0.8rem" color="secondary" onClick={() => {}}>Load Draft</Button> */}
-				<Button padding="0.4rem 0.8rem" color="success" onClick={openDraft} variant="outline">Save Draft</Button>
-				{/* <VerticalLine/> */}
+				{mode !== "revise" && 
+					<Button padding="0.4rem 0.8rem" color="success" onClick={openDraft} variant="outline">Save Draft</Button>
+				}
 				<Button padding="0.4rem 0.8rem" color="success" onClick={openSubmit}>Submit</Button>
 			</StyleButton>
 		</StyleTitle>

@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import getConfig from './getConfig';
 import { getProcedureChecklist } from './procedure';
 import { msalInstance } from 'index';
+import { removeUndefinedProps } from 'utils/utils';
 
 
 export const getRequests = async (queryString, callback = (v) => {v}) => {
@@ -194,6 +195,36 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 	return id
 }
 
+export const patchRequest = async (id, input, callback = (v) => {v}) => {
+	const {
+		title,
+		description,
+		type,
+		deadline,
+		status,
+		relatedProjects,
+		advisors,
+		approvers,
+		observators,
+		procedureId,
+	} = input;
+	const config = await getConfig();
+	const data = removeUndefinedProps({
+		title,
+		description,
+		type,
+		deadline: (new Date(deadline)).toLocaleDateString('en-CA'),
+		status,
+		relatedProjects,
+		advisors,
+		approvers,
+		observators,
+		procedureId,
+	});
+	await axios.patch(`/api/v1/requests/${id}`, data, config);
+	callback(100)
+}
+
 export const postComment = async (id, comment) => {
 	const account = msalInstance.getAllAccounts()[0]
 	const name = account.name.split("-")[account.name.split("-").length - 1]
@@ -251,3 +282,7 @@ export const remindApprove = async (id, userId) => {
 	await axios.post(`/api/v1/requests/${id}/remind`, {userId}, config)
 }
 
+export const deleteAttachment = async (requestId, attachmentId) => {
+	const config = await getConfig();
+	await axios.delete(`/api/v1/requests/${requestId}/attachments/${attachmentId}`, config);
+}

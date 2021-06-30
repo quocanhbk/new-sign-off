@@ -29,10 +29,10 @@ const Tag = ({email, name}) => {
         </TagContainer>
     )
 }
-const Participants = ({advisors, approvers, observators, set, error}) => {
+const Participants = ({advisors, approvers, observators, set, error, mode}) => {
     
     const users = useStoreState(s => s.users).map(s => ({...s, display: <Tag email={s.email} name={s.name}/>}))
-
+    const readOnly = mode === "revise"
     return (
         <Container>
             <FormControl 
@@ -45,6 +45,7 @@ const Participants = ({advisors, approvers, observators, set, error}) => {
                     value={users.filter(u => advisors.includes(u.id))}
                     onSelect={newValue => set("advisors", newValue.map(_ => _.id))}
                     displayField={"display"}
+                    readOnly={readOnly}
                 />
             </FormControl>
             <FormControl 
@@ -61,6 +62,7 @@ const Participants = ({advisors, approvers, observators, set, error}) => {
                     value={users.filter(u => approvers.includes(u.id))}
                     onSelect={newValue => set("approvers", newValue.map(_ => _.id))}
                     displayField={"display"}
+                    readOnly={readOnly}
                 />
             </FormControl>
             <FormControl 
@@ -73,6 +75,7 @@ const Participants = ({advisors, approvers, observators, set, error}) => {
                     value={users.filter(u => observators.includes(u.id))}
                     onSelect={newValue => set("observators", newValue.map(_ => _.id))}
                     displayField={"display"}
+                    readOnly={readOnly}
                 />
             </FormControl>
         </Container>

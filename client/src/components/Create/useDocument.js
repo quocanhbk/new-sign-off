@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import React, { useState } from 'react'
 import {useEffect, useReducer } from 'react'
 import { getProcedureDetail } from 'api/procedure'
 import { v4 } from 'uuid'
-import { getRequestDetail, postRequest } from 'api/request'
+import { deleteAttachment, getRequestDetail, patchRequest, postRequest } from 'api/request'
 import { useStoreActions, useStoreState } from 'easy-peasy'
 import useCustomLoader from 'hooks/useCustomLoader'
 import Placeholder from 'components/Placeholder'
@@ -64,6 +64,7 @@ const useDocument = (id, mode) => {
         advisors, approvers, observators, 
         approvalAttachments, referenceAttachments, procedure, checklist
     }, dispatch] = useReducer(reducer, initState)
+    const [originAttachmentIds, setOriginAttachmentIds] = useState([])
     const setPath = useStoreActions(action => action.setPath)
     const {render, reset, setPercent, setNotFound} = useCustomLoader(false, <Placeholder type="NOT_FOUND"/>)
     const forms = useStoreState(s => s.forms)
@@ -115,7 +116,10 @@ const useDocument = (id, mode) => {
                     (mode === "draft" && data.status !== "Draft") || 
                     (mode === "revise" && data.status !== "Revising")
                 ) setNotFound(true)
-                else init(data)
+                else {
+                    setOriginAttachmentIds(data.approvalAttachments.concat(data.referenceAttachments).map(a => a.id))
+                    init(data)
+                }
             }, 250)
         }
         if (id) fetchData()
@@ -170,18 +174,10 @@ const useDocument = (id, mode) => {
     const removeAttachment = (type = "approval", attachmentId) => {
         // when in draft mode, when user delete attachment, we should check to delete the file too
         if (type === "approval") {
-            let deletingAttachment = approvalAttachments.find(a => a.id === attachmentId)
             set("approvalAttachments", approvalAttachments.filter(attachment => attachment.id !== attachmentId))
-            if (!forms.map(form => form.id).includes(deletingAttachment.fileId)) {
-                deleteFile(deletingAttachment.fileId)
-            }
         }
         else if (type === "reference") {
-            let deletingAttachment = referenceAttachments.find(a => a.id === attachmentId)
             set("referenceAttachments", referenceAttachments.filter(attachment => attachment.id !== attachmentId))
-            if (!forms.map(form => form.id).includes(deletingAttachment.fileId)) {
-                deleteFile(deletingAttachment.fileId)
-            }
         }
     }
     const setError = (field, value) => dispatchError({type: "SET", payload: {field, value}})
@@ -265,8 +261,19 @@ const useDocument = (id, mode) => {
             procedure,
             status: requestStatus
         }
-        let id = await postRequest(input, (p) => setPercent(p))
-        setTimeout(() => setPath("/search/" + id), 400)
+        let requestId = id
+        if (mode === "create")
+        requestId = await postRequest(input, (p) => setPercent(p))
+        else {
+            // delete attachment first
+            let deletedAttachmentIds = originAttachmentIds.filter(a => !approvalAttachments.concat(referenceAttachments).map(_ => _.id).includes(a))
+            console.log(deletedAttachmentIds)
+            await Promise.all(deletedAttachmentIds.map(async (attachment) => {
+                await deleteAttachment(requestId, attachment)
+            }))
+            await patchRequest(id, input, (p) => setPercent(p))
+        }
+        setTimeout(() => setPath("/search/" + requestId), 400)
     }
 
     const updateAttachment = (attachmentType, attachmentId, name, fields) => {
