@@ -94,14 +94,12 @@ const Modal = (props) => {
 
     }, [props.visible])
     useEffect(() => {
-        document.addEventListener("keydown", (e) => {
+        let escape = document.addEventListener("keydown", (e) => {
             if (e.key === "Escape")  {onClickOutside() }
         })
 
         return(() => {
-            document.removeEventListener("keydown", (e) => {
-                if (e.key === "Escape") { onClickOutside() }
-            })
+            document.removeEventListener("keydown", escape)
         })
       }, [onClickOutside])
     return (

@@ -45,13 +45,18 @@ const Body = styled.div`
 `
 const ApproveBlock = styled.div`
     display: flex;
-    gap: 1rem;
+
+    gap: 0.5rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
 
     & .approve-button {
-        flex: 1;
-        border-radius: 99px;
+        //flex: 1;
+        border-radius: 0.2rem;
+        flex-grow: 1;
+    }
+    & .flex-2 {
+        //flex: 2;
     }
 `
 const OpinionContainer = styled.div`
@@ -84,9 +89,9 @@ const ApproveWindow = ({opinions, setConfirmPopup, setOpinionId}) => {
                 </Header>
                 <Body className="body">
                     <ApproveBlock>
-                        <Button className="approve-button" color="success" onClick={() => approve("APPROVE")}>Approve</Button>
-                        <Button className="approve-button" color="warning" onClick={() => approve("APPROVE_WITH_OPINION")}>Approve With New Opinion</Button>
-                        <Button className="approve-button" color="danger"  onClick={() => approve("REJECT")}>Reject</Button>
+                        <Button padding="0.5rem" className="approve-button" color="success" onClick={() => approve("APPROVE")}>Approve</Button>
+                        <Button padding="0.5rem" className="approve-button flex-2" color="warning" onClick={() => approve("APPROVE_WITH_OPINION")}>Approve With New Opinion</Button>
+                        <Button padding="0.5rem" className="approve-button" color="danger"  onClick={() => approve("REJECT")}>Reject</Button>
                     </ApproveBlock>
                     <OpinionContainer>
                         {opinions.map(o =>

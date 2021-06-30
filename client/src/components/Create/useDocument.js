@@ -69,14 +69,16 @@ const useDocument = (id, mode) => {
     const {render, reset, setPercent, setNotFound} = useCustomLoader(false, <Placeholder type="NOT_FOUND"/>)
     const forms = useStoreState(s => s.forms)
     // fetch procedure detail after user select procedure from combo box
-    useEffect(() => {
-        
+
+    useEffect(() => {    
         const fetchProcedure = async () => {
             reset()
             let data = await getProcedureDetail(procedure, true, (p) => setPercent(p))
-            set("advisors", data.advisors)
-            set("approvers", data.approvers)
-            set("observators", data.observators)
+            if (mode !== "revise") {
+                set("advisors", data.advisors)
+                set("approvers", data.approvers)
+                set("observators", data.observators)
+            }
 
             set("checklist", data.checklist.map(c => ({id: c.id, name: c.name})))
             let arr = data.checklist.reduce((pre, cur) => {
@@ -93,10 +95,12 @@ const useDocument = (id, mode) => {
             }, [])
             set("approvalAttachments", arr)
         }
-        set("advisors", [])
-        set("approvers", [])
-        set("observators", [])
-        if (procedure && !id)
+        if (mode !== "revise") {
+            set("advisors", [])
+            set("approvers", [])
+            set("observators", [])
+        }
+        if (procedure)
             fetchProcedure()
     }, [procedure])
 
