@@ -7,7 +7,7 @@ import { deleteAttachment, getRequestDetail, patchRequest, postRequest } from 'a
 import { useStoreActions, useStoreState } from 'easy-peasy'
 import useCustomLoader from 'hooks/useCustomLoader'
 import Placeholder from 'components/Placeholder'
-import { deleteFile, getFile } from 'api/file'
+import { getFile } from 'api/file'
 
 const initState = {
     title: "",
@@ -271,7 +271,9 @@ const useDocument = (id, mode) => {
             await Promise.all(deletedAttachmentIds.map(async (attachment) => {
                 await deleteAttachment(requestId, attachment)
             }))
-            await patchRequest(id, input, (p) => setPercent(p))
+            let newAttachments = approvalAttachments.concat(referenceAttachments).filter(attachment => !originAttachmentIds.includes(attachment.id))
+
+            await patchRequest(id, input, newAttachments, (p) => setPercent(p))
         }
         setTimeout(() => setPath("/search/" + requestId), 400)
     }
@@ -303,8 +305,6 @@ const useDocument = (id, mode) => {
         removeAttachment, submitRequest, isSubmittable, changeFieldContent, 
         //Error
         error, setError, render, updateAttachment
-
-
     }
 }
 

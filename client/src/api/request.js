@@ -195,7 +195,7 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 	return id
 }
 
-export const patchRequest = async (id, input, callback = (v) => {v}) => {
+export const patchRequest = async (id, input, newAttachments, callback = (v) => {v}) => {
 	const {
 		title,
 		description,
@@ -222,6 +222,39 @@ export const patchRequest = async (id, input, callback = (v) => {v}) => {
 		procedureId,
 	});
 	await axios.patch(`/api/v1/requests/${id}`, data, config);
+	callback(50)
+
+	// post all the new attachments
+	await Promise.all(newAttachments.map(async (attachment) => {
+		if (!attachment.fileId) {
+			const data = new FormData()
+			data.append('file', attachment.file, attachment.file.name)
+			const {data: {file_id}} = await axios.post('/api/v1/files', data, config)
+			attachment.fileId = file_id
+		}
+		// POST attachment
+		let attachmentBody = {
+			name: attachment.name,
+			checklistItemId: attachment.checklistItemId,
+			reference: attachment.reference,
+			fileId: attachment.fileId,
+		}
+		if (!attachmentBody.checklistItemId) delete attachmentBody.checklistItemId
+		let {data: {attachment_id: attachmentId}} = await axios.post("/api/v1/requests/" + id + "/attachments", attachmentBody, config)
+
+		// POST field
+		let fields = attachment.fields.map((field) => ({
+			field: field.name,
+			type: "FIELD",
+			value: field.content,
+			x: field.position.X,
+			y: field.position.Y,
+			width: field.size.width,
+			height: field.size.height,
+			required: field.required
+		}))
+		await axios.post("/api/v1/requests/attachments/" + attachmentId + "/fields", {fields}, config)
+	}))
 	callback(100)
 }
 
