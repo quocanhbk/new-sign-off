@@ -55,7 +55,10 @@ const Content = ({request}) => {
                 </ProjectContainer>
             </SectionContainer>
             <SectionContainer headline="2. Description">
-                {!request.description ? <Nothing type="DESCRIPTION"/> : <div dangerouslySetInnerHTML={{__html: request.description}}></div>}
+                {request.description ? 
+                    <div dangerouslySetInnerHTML={{__html: request.description}}></div> :
+                    <Nothing type="DESCRIPTION"/>
+                }
             </SectionContainer>
             <SectionContainer headline="3. Approval File">
                 {request.approvalAttachments.length > 0 ?
