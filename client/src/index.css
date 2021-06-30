@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
 * {
   margin: 0;
   padding: 0;
@@ -18,7 +19,8 @@
   src: url('./asset/Campton/CamptonBook.otf');
 }
 button {
-  font-family: inherit;
+  font-family: 'Segoe UI';
+  font-weight: 500;
 }
 
 html {

@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import styled from "styled-components";
-import Button from 'components/Button'
+import FadeButton from 'components/FadeButton'
+import FillButton from 'components/FillButton'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -41,8 +42,8 @@ const SubmitPopup = ({closeSubmit, submitRequest, title, type}) => {
                 <p className="request-title">{title}</p>
             </Text>
             <ButtonContainer>
-                <Button padding="0.5rem 2rem" color="secondary" onClick={() => {closeSubmit();submitRequest()}}>Confirm</Button>
-                <Button padding="0.5rem 2rem" color="secondary" variant="outline" onClick={closeSubmit}>Cancel</Button>
+                <FillButton color="primary" padding="0.5rem 2rem" onClick={() => {closeSubmit();submitRequest()}}>Confirm</FillButton>
+                <FadeButton color="primary" padding="0.5rem 2rem" variant="outline" onClick={closeSubmit}>Cancel</FadeButton>
             </ButtonContainer>
         </Container>
     )

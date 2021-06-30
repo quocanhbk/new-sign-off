@@ -84,7 +84,7 @@ export const postProcedure = async (data, callback = (v) => {v}) => {
         }))
     }, config)
     callback(100)
-    return
+    return id
 }
 export const updateProcedure = async (id, data, callback = (v) => {v}) => {
     const config = await getConfig()
