@@ -195,7 +195,8 @@ export const postRequest = async (input, callback = (v) => {v}) => {
 	return id
 }
 
-export const patchRequest = async (id, input, newAttachments, callback = (v) => {v}) => {
+export const patchRequest = async (id, input, newAttachments, deletedAttachmentIds, callback = (v) => {v}) => {
+	
 	const {
 		title,
 		description,
@@ -222,8 +223,13 @@ export const patchRequest = async (id, input, newAttachments, callback = (v) => 
 		procedureId,
 	});
 	await axios.patch(`/api/v1/requests/${id}`, data, config);
-	callback(50)
+	callback(33)
 
+	// delete old attachment
+	await Promise.all(deletedAttachmentIds.map(async (attachment) => {
+		await deleteAttachment(id, attachment)
+	}))
+	callback(66)
 	// post all the new attachments
 	await Promise.all(newAttachments.map(async (attachment) => {
 		if (!attachment.fileId) {

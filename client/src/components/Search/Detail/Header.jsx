@@ -81,13 +81,17 @@ const Header = ({id, title, status, type, updatedAt}) => {
 				<p className="content-modified">{format(updatedAt, "'Last updated at ' HH:mm dd/MM/yyyy")}</p>
 				<p className="content-title">{title}</p>
 				<TitleContainer>
-					<Button readOnly gap="0.2rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem">{renderIcon()}Pending</Button>
+					<Button readOnly gap="0.4rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem">{renderIcon()}{status}</Button>
 					<Button readOnly gap="0.2rem" variant={"abc"} padding="0.2rem 0.4rem" fontSize="0.8rem">{type}</Button>
 				</TitleContainer>
 			</Left>
 			{status === "Draft" && 
 			<Right>
 				<Button color="info" onClick={() => navigate("/draft/" + id)}>Edit</Button>
+			</Right>}
+			{status === "Revising" && 
+			<Right>
+				<Button color="info" onClick={() => navigate("/revise/" + id)}>Edit</Button>
 			</Right>}
 		</ContentInfo>
 	);

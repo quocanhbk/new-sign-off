@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import {useEffect, useReducer } from 'react'
 import { getProcedureDetail } from 'api/procedure'
 import { v4 } from 'uuid'
-import { deleteAttachment, getRequestDetail, patchRequest, postRequest } from 'api/request'
+import { getRequestDetail, patchRequest, postRequest } from 'api/request'
 import { useStoreActions, useStoreState } from 'easy-peasy'
 import useCustomLoader from 'hooks/useCustomLoader'
 import Placeholder from 'components/Placeholder'
@@ -267,13 +267,8 @@ const useDocument = (id, mode) => {
         else {
             // delete attachment first
             let deletedAttachmentIds = originAttachmentIds.filter(a => !approvalAttachments.concat(referenceAttachments).map(_ => _.id).includes(a))
-            console.log(deletedAttachmentIds)
-            await Promise.all(deletedAttachmentIds.map(async (attachment) => {
-                await deleteAttachment(requestId, attachment)
-            }))
             let newAttachments = approvalAttachments.concat(referenceAttachments).filter(attachment => !originAttachmentIds.includes(attachment.id))
-
-            await patchRequest(id, input, newAttachments, (p) => setPercent(p))
+            await patchRequest(id, input, newAttachments, deletedAttachmentIds, (p) => setPercent(p))
         }
         setTimeout(() => setPath("/search/" + requestId), 400)
     }
