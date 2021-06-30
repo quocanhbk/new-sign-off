@@ -5,9 +5,10 @@ import {getFader} from 'utils/color'
 import EventComments from './EventComments';
 import SectionContainer from 'components/SectionContainer';
 import AttachmentTable from 'components/Create/AttachmentTable';
-import NoFile from './NoFile'
+import Nothing from './Nothing'
 import AttachmentCheckList from 'components/Create/AttachmentChecklist';
-
+import Button from 'components/Button';
+import {projectList} from 'constant'
 const ContentWrapper = styled.div`
     display:flex;
     flex-direction: column;
@@ -31,7 +32,11 @@ const ContentWrapper = styled.div`
         background: ${props => props.theme.color.fill.secondary};
     }
 `
-
+const ProjectContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+`
 const Content = ({request}) => {
     const [logs, setLogs] = useState([]);
     useEffect(() => {
@@ -41,10 +46,16 @@ const Content = ({request}) => {
     return (
         <ContentWrapper>
             <SectionContainer headline="1. Related Project">
-                {request.relatedProjects.join(', ')}
+                <ProjectContainer>
+                    {request.relatedProjects.map(project =>
+                        <Button readOnly padding="0.2rem 0.4rem" key={project} variant="abc">
+                                {projectList.find(p => p.id === project).text}
+                        </Button>    
+                    )}
+                </ProjectContainer>
             </SectionContainer>
             <SectionContainer headline="2. Description">
-                <div dangerouslySetInnerHTML={{__html: request.description}}></div>
+                {!request.description ? <Nothing type="DESCRIPTION"/> : <div dangerouslySetInnerHTML={{__html: request.description}}></div>}
             </SectionContainer>
             <SectionContainer headline="3. Approval File">
                 {request.approvalAttachments.length > 0 ?
@@ -52,13 +63,13 @@ const Content = ({request}) => {
                         <AttachmentCheckList attachments={request.approvalAttachments} checklist={request.checklist} readOnly={true}/> :
                         <AttachmentTable attachments={request.approvalAttachments} readOnly={true} />
                     ) :
-                    <NoFile/>
+                    <Nothing type="FILE"/>
                 }
             </SectionContainer>
             <SectionContainer headline="4. Reference File">
                 {request.referenceAttachments.length > 0 ?
                     <AttachmentTable attachments={request.referenceAttachments} readOnly={true}/> :
-                    <NoFile/>
+                    <Nothing type="FILE"/>
                 }
             </SectionContainer>
             <SectionContainer headline={"5. Event & Comments"}>

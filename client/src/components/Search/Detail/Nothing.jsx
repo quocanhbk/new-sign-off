@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react'
 import styled from 'styled-components'
 
@@ -11,12 +12,12 @@ const Container = styled.div`
     user-select: none;
 `
 
-const NoFile = () => {
+const Nothing = ({type}) => {
     return (
         <Container>
-            No File
+            {type === "FILE" ? "No File" : type === "DESCRIPTION" ? "No Description" : "Nothing"}
         </Container>
     )
 }
 
-export default NoFile
+export default Nothing
