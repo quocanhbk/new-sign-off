@@ -71,6 +71,7 @@ function EventComents({ requestId, logs, setLogs }) {
           placeholder="Write comment here ..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          required={true}
         />
         <button>
           <IoMdSend size="1.2rem" />
