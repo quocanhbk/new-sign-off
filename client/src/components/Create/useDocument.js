@@ -15,7 +15,7 @@ const initState = {
     type: "Flexible",
     priority: "Normal",
     deadline: null,
-    relatedProjects: ["MAB"],
+    relatedProjects: ["TTG"],
     advisors: [],
     approvers: [],
     observators: [],

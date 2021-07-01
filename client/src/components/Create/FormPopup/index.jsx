@@ -3,7 +3,8 @@
 /* eslint-disable no-unused-vars */
 import React, {useState} from 'react'
 import {PDFDocument, StandardFonts, rgb} from 'pdf-lib'
-import Button from 'components/Button'
+// import Button from 'components/Button'
+import Button from 'components/Base/Button'
 import FieldContentInput from './FieldContentInput'
 import DocDisplay from './DocDisplay'
 import {ButtonContainer, Container, Wrapper, Toolbar, ToolbarContainer, ToolbarElement, NoField, FormNameInput} from './IndexStyledComponents'
@@ -85,7 +86,7 @@ const FormPopup = ({attachment, onUpdateAttachment}) => {
                     </ToolbarElement>
                     <ButtonContainer>
                         {/* <Button onClick={downloadForm}>Download Form</Button> */}
-                        <Button onClick={saveForm}>Save Form</Button>
+                        <Button type="fill" onClick={saveForm}>Save Form</Button>
                     </ButtonContainer>
                 </Toolbar>
                 <DocDisplay 

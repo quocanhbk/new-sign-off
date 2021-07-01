@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from 'styled-components'
-import {getFader} from '../../../../utils/color'
+import {getFader} from 'utils/color'
 
 const LabelToggle = styled.label`
     position: relative;

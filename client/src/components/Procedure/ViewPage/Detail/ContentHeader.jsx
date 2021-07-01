@@ -2,8 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import styled from "styled-components";
-import Button from 'components/Button'
-import FadeButton from 'components/FadeButton'
+import Button from 'components/Base/Button'
 import Toggle from './Toggle';
 import { getFader } from 'utils/color';
 const Container = styled.div`
@@ -49,8 +48,8 @@ const ContentHeader = ({title, isActive, onDeleteClick, onEditClick, onToggleAct
                 <ToggleContainer isActive={isActive}>
                     <Toggle value={isActive} onSelect={(v) => onToggleActive(v)}>{isActive ? "Active" : "Unactive"}</Toggle>
                 </ToggleContainer>
-                <FadeButton color="danger" onClick={() => onDeleteClick()}>Delete</FadeButton>
-                <FadeButton color="info" onClick={onEditClick}>Edit</FadeButton>
+                <Button color="danger" onClick={() => onDeleteClick()}>Delete</Button>
+                <Button color="info" onClick={onEditClick}>Edit</Button>
             </ButtonContainer>
         </Container>
     )

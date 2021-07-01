@@ -7,7 +7,7 @@ import SectionContainer from 'components/SectionContainer';
 import AttachmentTable from 'components/Create/AttachmentTable';
 import Nothing from './Nothing'
 import AttachmentCheckList from 'components/Create/AttachmentChecklist';
-import Button from 'components/Button';
+import Button from 'components/Base/Button';
 import {projectList} from 'constant'
 const ContentWrapper = styled.div`
     display:flex;
@@ -48,7 +48,7 @@ const Content = ({request}) => {
             <SectionContainer headline="1. Related Project">
                 <ProjectContainer>
                     {request.relatedProjects.map(project =>
-                        <Button readOnly padding="0.2rem 0.4rem" key={project} variant="abc">
+                        <Button readOnly padding="0.2rem 0.4rem" key={project}>
                                 {projectList.find(p => p.id === project).text}
                         </Button>    
                     )}

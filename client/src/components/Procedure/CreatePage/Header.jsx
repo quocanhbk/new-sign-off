@@ -3,7 +3,7 @@ import { navigate } from '@reach/router';
 import React, {  } from 'react'
 import styled from 'styled-components'
 import { BsChevronLeft } from 'react-icons/bs';
-import FadeButton from 'components/FadeButton'
+import Button from 'components/Base/Button'
 
 const StyleTitle = styled.div`
 	display: flex;
@@ -28,7 +28,7 @@ const Header = ({onSubmit, id}) => {
             </div>
             <h3>{id ? "EDIT PROCEDURE" : "CREATE PROCEDURE"}</h3>
 			<ButtonContainer>
-				<FadeButton color="success" padding="0.4rem 1rem" onClick={onSubmit}>Submit</FadeButton>
+				<Button type="fill" color="success" padding="0.4rem 1rem" onClick={onSubmit}>Submit</Button>
 			</ButtonContainer>
 		
 		</StyleTitle>

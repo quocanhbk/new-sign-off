@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { navigate } from "@reach/router";
 import { approveRequest, getRequestDetail, remindApprove } from 'api/request';
 import AbsoluteModal from 'components/AbsoluteModal';
 import ApprovalFlow from "components/ApprovalFlow";

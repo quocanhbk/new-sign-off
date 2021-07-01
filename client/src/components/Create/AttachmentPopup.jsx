@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import FormControl from 'components/FormControl'
 import FileUpload from './FileUpload'
-import Button from 'components/Button'
+import Button from 'components/Base/Button'
 import ControlledCombox from 'components/ControlledCombox'
 import {useStoreState} from 'easy-peasy'
 import {v4 as uuid} from 'uuid'
@@ -102,8 +102,7 @@ const AttachmentPopup = ({set, attachments, checkItemId, closePopup, checklist})
                         />
                     </FormControl>
                     <Button 
-                        color="success"
-                        variant="outline"
+                        color="info"
                         padding="0.4rem"
                         onClick={() => selectForm()}
                     >Apply</Button>

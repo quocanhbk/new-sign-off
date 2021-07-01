@@ -2,8 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import styled from "styled-components";
-import Button from 'components/Button';
-import FadeButton from 'components/FadeButton'
+import Button from 'components/Base/Button'
 
 const Container = styled.div`
     display: flex;
@@ -28,8 +27,8 @@ const ContentHeader = ({title, onDeleteClick, onEditClick}) => {
         <Container>
             <h3>{title}</h3>
             <ButtonContainer>
-                <FadeButton color="danger" onClick={() => onDeleteClick()}>Delete</FadeButton>
-                <FadeButton color="info" onClick={onEditClick}>Edit</FadeButton>
+                <Button color="danger" onClick={() => onDeleteClick()}>Delete</Button>
+                <Button color="info" onClick={onEditClick}>Edit</Button>
             </ButtonContainer>
         </Container>
     )

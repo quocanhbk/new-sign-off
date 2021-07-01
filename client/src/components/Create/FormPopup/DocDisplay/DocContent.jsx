@@ -5,7 +5,6 @@ import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import FieldTag from '../FieldTag'
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
-import UploadButton from './UploadButton'
 import LoadingFile from '../LoadingFile';
 
 

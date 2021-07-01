@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import styled from 'styled-components'
-import FillButton from 'components/FillButton'
-import FadeButton from 'components/FadeButton'
+import Button from 'components/Base/Button'
 const StyleButton = styled.div`
 	display: flex;
 	gap: 1rem;
@@ -33,9 +32,9 @@ const Header = ({mode, openSubmit, openDraft}) => {
 			</Title>
 			<StyleButton>
 				{mode !== "revise" && 
-					<FadeButton color="success" onClick={openDraft} variant="outline">Save Draft</FadeButton>
+					<Button padding="0.5rem 1.5rem" color="success" onClick={openDraft} variant="outline">Save Draft</Button>
 				}
-				<FillButton color="success" onClick={openSubmit}>Submit</FillButton>
+				<Button padding="0.5rem 1.5rem" type="fill" color="success" onClick={openSubmit}>Submit</Button>
 			</StyleButton>
 		</StyleTitle>
     )

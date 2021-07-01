@@ -9,7 +9,7 @@ import {getFader} from 'utils/color'
 import { navigate, useLocation } from '@reach/router';
 import {BsFileEarmarkPlus} from 'react-icons/bs'
 import { getForms } from 'api/form'
-import Button from 'components/Button';
+import Button from 'components/Base/Button'
 import { useStoreState } from 'easy-peasy';
 import Placeholder from 'components/Placeholder';
 import useCustomLoader from 'hooks/useCustomLoader';
@@ -84,7 +84,6 @@ function List() {
                     onClick={() => navigate('/form/create')} 
                     padding="0.2rem 0.4rem" 
                     gap="0.4rem"
-                    variant="border"
                 >
                     <BsFileEarmarkPlus size="1rem"/> Add
                 </Button>
