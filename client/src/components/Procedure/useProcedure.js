@@ -91,8 +91,8 @@ const useProcedure = (id) => {
             setTimeout(() => navigate('/procedure/view/' + newId), 250)
         }
         else {
-            await postProcedure({title, description, advisors, approvers, observators, tags, isActive, checklist}, (p) => setPercent(p))
-            setTimeout(() => navigate('/procedure/view/' + id), 250)      
+            let procedureId = await postProcedure({title, description, advisors, approvers, observators, tags, isActive, checklist}, (p) => setPercent(p))
+            setTimeout(() => navigate('/procedure/view/' + procedureId), 250)      
         }  
     }
 

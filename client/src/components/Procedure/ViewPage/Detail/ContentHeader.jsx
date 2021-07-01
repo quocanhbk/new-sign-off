@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import styled from "styled-components";
-import Button from 'components/Button'
+import Button from 'components/Base/Button'
 import Toggle from './Toggle';
 import { getFader } from 'utils/color';
 const Container = styled.div`
@@ -33,10 +33,11 @@ const ToggleContainer = styled.div`
     display: grid;
     place-items: center;
     padding: 0 0.5rem;
-    border: 1px solid ${props => props.theme.color.border.primary};
-    background: ${props => getFader(props.theme.color.border.primary, 0.5)};
+    /* border: 1px solid ${props => props.theme.color.border.primary}; */
+    background: ${props => getFader(props.theme.color.text[props.isActive ? "success" : "danger"], 0.1)};
     border-radius: 0.2rem;
     color: ${props => props.theme.color.text[props.isActive ? "success" : "danger"]};
+    font-weight: 600;
 `
 const ContentHeader = ({title, isActive, onDeleteClick, onEditClick, onToggleActive}) => {
 
@@ -45,7 +46,7 @@ const ContentHeader = ({title, isActive, onDeleteClick, onEditClick, onToggleAct
             <h3>{title}</h3>
             <ButtonContainer>
                 <ToggleContainer isActive={isActive}>
-                    <Toggle value={isActive} onSelect={(v) => onToggleActive(v)}>Active</Toggle>
+                    <Toggle value={isActive} onSelect={(v) => onToggleActive(v)}>{isActive ? "Active" : "Unactive"}</Toggle>
                 </ToggleContainer>
                 <Button color="danger" onClick={() => onDeleteClick()}>Delete</Button>
                 <Button color="info" onClick={onEditClick}>Edit</Button>

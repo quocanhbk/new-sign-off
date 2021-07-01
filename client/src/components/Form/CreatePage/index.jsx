@@ -2,13 +2,13 @@
 /* eslint-disable no-unreachable */
 /* eslint-disable no-unused-vars */
 import React, {useState} from 'react'
-import Button from 'components/Button'
 import FieldContentInput from './FieldContentInput'
 import DocDisplay from './DocDisplay'
 import {BsChevronLeft} from 'react-icons/bs'
 import { navigate } from '@reach/router';
 import {ButtonContainer, Container, Wrapper, StyleTitle, Toolbar, ToolbarContainer, ToolbarElement, NoField, FormNameInput} from './IndexStyledComponents'
 import useFormData from './useFormData';
+import Button from 'components/Base/Button'
 
 
 const CreatePage = ({id}) => {
@@ -93,8 +93,7 @@ const CreatePage = ({id}) => {
                                 </ToolbarContainer>
                             </ToolbarElement>
                             <ButtonContainer>
-                                {/* <Button onClick={downloadForm}>Download Form</Button> */}
-                                <Button onClick={saveForm}>Save Form</Button>
+                                <Button type="fill" color="success" onClick={saveForm}>Save Form</Button>
                             </ButtonContainer>
                         </Toolbar>
                     )

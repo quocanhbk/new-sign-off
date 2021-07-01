@@ -2,7 +2,7 @@
 import React from 'react'
 import styled from "styled-components";
 import FormControl from 'components/FormControl'
-import Button from 'components/Button'
+import Button from 'components/Base/Button'
 import useFocus from 'hooks/useFocus'
 const Container = styled.div`
     background: ${props => props.theme.color.background.primary};
@@ -74,8 +74,8 @@ const ConfirmPopup = ({onCancelClick, onConfirmClick, decision, comment, setComm
                     <TextArea className="approve-comment" ref={inputRef} value={comment} onChange={e => setComment(e.target.value)}/>
                 </FormControl>
                 <BtnContainer>
-                    <Button className="confirm-button" onClick={onConfirmClick} color="secondary">Confirm</Button>
-                    <Button variant="outline" className="confirm-button" onClick={onCancelClick} color="secondary">Cancel</Button>
+                    <Button className="confirm-button" onClick={onConfirmClick} color="primary" type="fill">Confirm</Button>
+                    <Button variant="outline" className="confirm-button" onClick={onCancelClick} color="primary">Cancel</Button>
                 </BtnContainer>
             </Body>
         </Container>

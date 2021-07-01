@@ -12,7 +12,7 @@ import SectionContainer from "components/SectionContainer";
 import useProcedure from "../useProcedure";
 import AttachmentChecklist from "./AttachmentChecklist";
 import { BsPlus, BsFillExclamationTriangleFill } from "react-icons/bs";
-import Button from "components/Button";
+import Button from "components/Base/Button"
 
 const StyleContainer = styled.div`
 	flex: 10;
@@ -114,7 +114,7 @@ const Detail = ({id}) => {
 							<SectionContainer headline="Attachment Checklist" haveBorder>
 								<AttachmentChecklist checklist={checklist} util={checklistUtil}/>
 								<AddCheckListWrapper>
-									<Button onClick={() => checklistUtil.addCheckItem()} variant="outline" normalBorder radius="0.2rem">
+									<Button color="info" onClick={() => checklistUtil.addCheckItem()}>
 										<BsPlus size="1.2rem"/> Add Check Item
 									</Button>
 								</AddCheckListWrapper>

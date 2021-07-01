@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import baseURL from "api/baseURL";
-import Button from 'components/Button';
+import Button from 'components/Base/Button';
 import React, { useState } from "react";
 import { BsBellFill, BsCheck, BsEyeFill, BsFillCircleFill, BsPlayFill, BsThreeDots, BsX } from "react-icons/bs";
 import styled from "styled-components";
@@ -133,8 +133,7 @@ const FlowTag = ({data, last, isCurrent, remindApprover}) => {
                         {data.decision === "Pending" && isCurrent &&
                             <div style={{marginLeft: "auto"}}>
                                 <Button 
-                                    variant="ghost" 
-                                    normalBorder 
+                                    type="ghost" 
                                     padding="0.2rem" 
                                     radius="99px" 
                                     color="warning"

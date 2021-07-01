@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { navigate } from "@reach/router";
 import { approveRequest, getRequestDetail, remindApprove } from 'api/request';
 import AbsoluteModal from 'components/AbsoluteModal';
 import ApprovalFlow from "components/ApprovalFlow";
 import Placeholder from "components/Placeholder";
 import Tab from "components/Tab";
 import TabPane from "components/TabPane";
+import { useStoreActions } from "easy-peasy";
 import useCustomLoader from "hooks/useCustomLoader";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -27,6 +27,7 @@ const  DisplayContent = ({id, mode}) => {
 	const [confirmPopup, setConfirmPopup] = useState("")
 	const [opinionId, setOpinionId] = useState(null)
 	const [comment, setComment] = useState("")
+	const setPath = useStoreActions(s => s.setPath)
 	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
 
 	// to prevent setting state to Unmounted component, we use the "mounted" variable
@@ -53,7 +54,7 @@ const  DisplayContent = ({id, mode}) => {
 	const handleConfirm = async () => {
 		reset()
 		await approveRequest(id, {code: confirmPopup, comment, opinionId}, (p) => setPercent(p))
-		setTimeout(() => navigate(`/search/${id}`), 400)
+		setTimeout(() => setPath(`/search/${id}`), 400)
 	}
 	const handleCancel = async () => {
 		setConfirmPopup("")

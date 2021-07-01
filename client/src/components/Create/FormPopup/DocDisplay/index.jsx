@@ -5,7 +5,7 @@ import IconWrapper from '../IconWrapper';
 import DocContent from './DocContent'
 import {BsCardText} from 'react-icons/bs'
 import styled from 'styled-components';
-import { getFader } from '../../../../utils/color';
+import { getFader } from 'utils/color';
 
 const MainContainer = styled.div`
     flex: 5;

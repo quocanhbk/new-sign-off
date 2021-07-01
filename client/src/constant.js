@@ -7,6 +7,7 @@ export const approvalTypeList = [
     {id: "Procedure", text: "Procedure"}
 ]
 export const projectList = [
+    {id: "TTG", text: "TTG - Tap Doan Trung Thuy"},
     {id: "M01", text: "M01 - Lincoln"},
     {id: "V01", text: "V01 - Eden"},
     {id: "M04", text: "M04 - Luminaire"},

@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import styled from "styled-components";
-import Button from 'components/Button';
+import Button from 'components/Base/Button'
 
 const Container = styled.div`
     display: flex;
@@ -20,22 +20,6 @@ const Container = styled.div`
 const ButtonContainer = styled.div`
     display: flex;
     gap: 1rem;
-
-    & button {
-        border: none;
-        border-radius: 0.2rem;
-        padding: 0.5rem 1rem;
-        outline: none;
-        font-size: 1rem;
-        color: ${props => props.theme.color.background.primary};
-        cursor: pointer;
-    }
-    & .form-delete {
-        background: ${props => props.theme.color.fill.danger};
-    }
-    & .form-edit {
-        background: ${props => props.theme.color.fill.info};
-    }
 `
 const ContentHeader = ({title, onDeleteClick, onEditClick}) => {
 

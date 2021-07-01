@@ -5,7 +5,7 @@ import Cardv2 from './Cardv2';
 import ListToolbar from './ListToolbar';
 import {getFader} from 'utils/color'
 import { navigate, useLocation } from '@reach/router';
-import Button from 'components/Button'
+import Button from 'components/Base/Button'
 import { BsFileEarmarkPlus } from 'react-icons/bs';
 import { useStoreState } from 'easy-peasy';
 import { getProcedures} from 'api/procedure'
@@ -84,7 +84,6 @@ function List() {
                     onClick={() => navigate('/procedure/create')} 
                     padding="0.2rem 0.4rem" 
                     gap="0.4rem"
-                    variant="border"
                 >
                     <BsFileEarmarkPlus size="1rem"/> Add
                 </Button>

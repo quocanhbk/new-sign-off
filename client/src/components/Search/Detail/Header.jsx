@@ -3,7 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 import {format} from 'date-fns'
-import Button from "components/Button";
+import Button from "components/Base/Button";
 import { BiDislike, BiLike } from "react-icons/bi";
 import { BsClock } from "react-icons/bs";
 import { GiPauseButton } from "react-icons/gi";
@@ -81,8 +81,8 @@ const Header = ({id, title, status, type, updatedAt}) => {
 				<p className="content-modified">{format(updatedAt, "'Last updated at ' HH:mm dd/MM/yyyy")}</p>
 				<p className="content-title">{title}</p>
 				<TitleContainer>
-					<Button readOnly gap="0.4rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem">{renderIcon()}{status}</Button>
-					<Button readOnly gap="0.2rem" variant={"abc"} padding="0.2rem 0.4rem" fontSize="0.8rem">{type}</Button>
+					<Button readOnly gap="0.4rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem" type="fill" weight="400">{renderIcon()}{status}</Button>
+					<Button readOnly gap="0.2rem" variant={"abc"} padding="0.2rem 0.4rem" fontSize="0.8rem" weight="400">{type}</Button>
 				</TitleContainer>
 			</Left>
 			{status === "Draft" && 

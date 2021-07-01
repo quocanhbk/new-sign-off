@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components'
 import {BiDislike, BiLike, BsChevronRight, BsClock, BsDot, BsStarFill, GiPauseButton} from 'react-icons/all'
 import {getFader} from 'utils/color'
 import { navigate } from '@reach/router';
-import Button from 'components/Button'
+import Button from 'components/Base/Button'
 const Container = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
     border-radius: 0.5rem;
@@ -106,19 +106,19 @@ const Card = ({page, active, data, set}) => {
                     }
                 </Line>
                 <Line last>
-                    <Button gap="0.2rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("status", status)}>{renderIcon()}{status}</Button>
-                    <Button gap="0.2rem" variant={"abc"} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("type", type)}>{type}</Button>
+                    <Button type="fill" weight="400" gap="0.2rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("status", status)}>{renderIcon()}{status}</Button>
+                    <Button weight="400" gap="0.2rem" variant={"abc"} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("type", type)}>{type}</Button>
                     {priority === "Urgent" && 
-                        <Button gap="0.2rem" color="info" padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("priority", priority)}>
+                        <Button weight="400" type="fill" gap="0.2rem" color="info" padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("priority", priority)}>
                             <BsStarFill/>Urgent
                         </Button>
                     }
                     {overdue && 
-                        <Button variant="outline" readOnly color="danger" padding="0.2rem 0.4rem" fontSize="0.8rem">Overdue</Button>}
+                        <Button weight="400" readOnly color="danger" padding="0.2rem 0.4rem" fontSize="0.8rem">Overdue</Button>}
                 </Line>
             </DivInfo>
             <ButtonContainer>
-                <Button padding="0.5rem" radius="99px" variant="ghost" onClick={() => navigate(`/${page}/${id}`)}><BsChevronRight size="1.2rem"/></Button>
+                <Button padding="0.5rem" radius="99px" type="ghost" onClick={() => navigate(`/${page}/${id}`)}><BsChevronRight size="1.2rem"/></Button>
             </ButtonContainer>
             
         </Container>

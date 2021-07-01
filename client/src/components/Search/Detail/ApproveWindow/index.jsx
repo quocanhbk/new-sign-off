@@ -6,7 +6,7 @@ import styled from "styled-components";
 import {BsChevronUp, BsChevronDown} from "react-icons/bs"
 import { getFader } from "utils/color";
 import ApprovalOpinionCard from './ApprovalOpinionCard'
-import Button from 'components/Button'
+import Button from 'components/Base/Button'
 const Container = styled.div`
     position: relative;
     width: calc(100% - 2rem);
@@ -84,7 +84,7 @@ const ApproveWindow = ({opinions, setConfirmPopup, setOpinionId}) => {
         <Container expand={expand}>
             <Block className="block">
                 <Header onClick={() => setExpand(!expand)}>
-                    <p>Approve</p>
+                    <p>Approve Window</p>
                     {expand ? <BsChevronDown size="1.2rem"/> : <BsChevronUp size="1.2rem"/>}
                 </Header>
                 <Body className="body">

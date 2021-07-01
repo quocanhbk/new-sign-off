@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import styled, { css } from "styled-components";
-import { getFader } from "../../utils/color";
+import { getFader } from "utils/color";
 import Table from "../Table";
 import {BsTrash, BsThreeDotsVertical} from 'react-icons/bs'
 import { downloadForm } from "api/file";

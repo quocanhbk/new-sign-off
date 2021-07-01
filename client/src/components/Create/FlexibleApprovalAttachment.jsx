@@ -8,8 +8,8 @@ import FormControl from '../FormControl'
 import {v4 as uuid} from 'uuid'
 import ControlledCombox from '../ControlledCombox';
 import { useStoreState } from 'easy-peasy';
-import { getFormDetail } from '../../api/form';
-import Button from 'components/Button'
+import { getFormDetail } from 'api/form';
+import Button from 'components/Base/Button'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -93,11 +93,11 @@ const FlexibleApprovalAttachment = ({type, attachments, set, onRemoveAttachment,
                         />
                     </FormControl>
                     <Button 
-                        color="success"
-                        variant="outline"
+                        color="info"
                         padding="0.4rem"
                         onClick={() => selectDynamicForm()}
                     >Apply</Button>
+                    
                 </Col>
             </Wrapper>
             {
