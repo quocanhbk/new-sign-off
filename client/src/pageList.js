@@ -19,7 +19,7 @@ const pageList = [
     // {icon: <BsFileEarmarkCheck size="24px"/>, text: "Verify Document", path: "/verify", link: "/verify", comp: <VerifyPage/>},
     {icon: <BsFileText size="24px"/>, text: "Manage Form", path: "/form/*", link: "/form", comp: <Form/>},
     {icon: <BsGear size="24px"/>, text: "Manage Procedure", path: "/procedure/*", link: "/procedure", comp: <Procedure/>},
-    {icon: <BsEggFill size="24px"/>, text: "React Playground", path: "/playground/*", link: "/playground", comp: <Playground/>},
+    // {icon: <BsEggFill size="24px"/>, text: "React Playground", path: "/playground/*", link: "/playground", comp: <Playground/>},
 
 ]
 
