@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components'
 import RequestCard from './RequestCard';
 import ListToolbar from './ListToolbar';
@@ -69,28 +69,44 @@ function List({mode}) {
     const [hasMore, setHasMore] = useState(true)
     const location = useLocation().pathname.split("/")
     const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-    const {range, query, queryString, set, queryTags, onChangeTitleSearch, setRange} = useQuery()
+    const {query, queryString, set, queryTags, onChangeTitleSearch} = useQuery()
+    const range = useRef(0)
+    const [loading, setLoading] = useState("")
+
     useEffect(() => {
-        loadMore()
+        setLoading("NEW")
     }, [queryString])
 
-    const loadMore = async () => {
-        const fetchRequests = async () => {
-            console.log("Range", range)
-            getRequests(queryString + `&start=${range}&end=${range + 15}${mode === "sign" ? "sign=true" : ""}`)
-                .then(data => {
-                    console.log([...requests, ...data])
-                    if (data.length < 15) setHasMore(false)
-                    setRequests([...requests, ...data])
-                    setRange(range + 15)
-
-                })
-                .catch(() => setNotFound(true))
+    useEffect(() => {
+        if (loading === "NEW") {
+            setHasMore(true)
+            range.current = 0
+            loadMore()
+            range.current += 15
+            setLoading("")
         }
-        fetchRequests()
+        else if (loading === "APPEND") {
+            loadMore(true)
+            range.current += 15
+            setLoading("")
+        }
+    }, [loading])
+
+    const loadMore = async (isAppend = false) => {
+        console.log("Range", range)
+        getRequests(
+            queryString + `&start=${range.current}&end=${range.current + 15}${mode === "sign" ? "sign=true" : ""}`,
+            p => setPercent(p)
+            )
+            .then(data => {
+                if (data.length < 15) setHasMore(false)
+                if (isAppend) setRequests([...requests, ...data])
+                else setRequests(data)
+            })
+            .catch(() => setNotFound(true))
     }
 
-    const comparePriority = ( a, b ) => {
+    const comparePriority = (a, b) => {
         if ( a.priority > b.priority ){
           return -1;
         }
@@ -116,19 +132,18 @@ function List({mode}) {
                 <InfiniteScroll
                     dataLength={requests.length }
                     className="request-scroller"
-                    next={loadMore}
+                    next={() => setLoading("APPEND")}
                     hasMore={hasMore}
                     scrollableTarget="scrollableDiv"
-
                 >
-                    {requests.sort((a, b) => comparePriority(a, b)).map((task) => (
+                    {render(requests.sort((a, b) => comparePriority(a, b)).map((task) => (
                     <RequestCard
                         key={task.id}
                         data={task}
                         page={mode}
                         active={task.id == location[location.length - 1]}
                         set={set}
-                    />))}
+                    />)))}
                 </InfiniteScroll>
             </CardList>
         </StyleListWrapper>
