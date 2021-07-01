@@ -5,7 +5,6 @@ import { getProcedureChecklist } from './procedure';
 import { msalInstance } from 'index';
 import { removeUndefinedProps } from 'utils/utils';
 
-
 export const getRequests = async (queryString, callback = (v) => {v}) => {
 
 	const config = await getConfig()
@@ -124,7 +123,26 @@ export const getRequestDetail = async (id, sign = false, callback = (v) => {v}) 
 		}))
 	}
 }
-
+export const burstRequest = async () => {
+	let arr = Array(50).fill("")
+	let config = await getConfig()
+	await Promise.all(arr.map(async () => {
+		await axios.post('/api/v1/requests', {
+			title: v4(),
+			type: "Flexible",
+			description: "",
+			priority: "Normal",
+			deadline: "08/01/2021",
+			status: "Pending",
+			relatedProjects: ["TTG"],
+			advisors: [],
+			approvers: ["296ff6ee-5c88-48a1-9f93-b83b8f41cb37"],
+			observators: [],
+			approvalAttachments: [],
+			referenceAttachments: []
+		}, config)
+	}))
+}
 export const postRequest = async (input, callback = (v) => {v}) => {
 	// REMEMBER to post all the file without the fileId first
 	const config = await getConfig()

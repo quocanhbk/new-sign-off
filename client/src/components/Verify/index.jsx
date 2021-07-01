@@ -1,3 +1,4 @@
+import { burstRequest } from 'api/request'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -8,7 +9,7 @@ const Container = styled.div`
 const Playground = () => {
     return (
         <Container>
-            Nice
+            <button onClick={() => burstRequest()}>Play</button>
         </Container>
     )
 }

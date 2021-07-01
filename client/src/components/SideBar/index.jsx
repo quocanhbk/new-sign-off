@@ -173,7 +173,7 @@ const SideBar = () => {
 			</Header>
 
 			<UserDisplayCard>
-				<Avatar src={photo} loading="lazy"/>
+				<Avatar src={photo} />
 				<UserDisplayCardInfo>
 					<h3>{name}</h3>
 					<p>{accounts[0].username}</p>

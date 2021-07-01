@@ -57,6 +57,8 @@ const StyledContainer = styled.div`
     transition: all 500ms linear;
     height: ${props => props.height || "auto"};
     width: ${props => props.width || "auto"};
+    max-width: 1280px;
+    max-height: 720px;
     overflow: ${props => props.overflow ? props.overflow : "visible"};
     animation: ${opa} 0.25s ease-out 0s 1 forwards normal;
     z-index: 999;

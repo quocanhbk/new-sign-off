@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components'
 import RequestCard from './RequestCard';
 import ListToolbar from './ListToolbar';
@@ -10,7 +10,7 @@ import useCustomLoader from 'hooks/useCustomLoader';
 import Placeholder from 'components/Placeholder';
 import { useLocation } from '@reach/router';
 import useQuery from './useQuery'
-
+import InfiniteScroll from 'react-infinite-scroll-component';
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -37,7 +37,6 @@ const CardList = styled.div`
     flex: 1;
     overflow: auto;
     position: relative;
-    padding-right: 0.5rem;
 
     ::-webkit-scrollbar {
     width: 0.5rem;
@@ -55,7 +54,6 @@ const CardList = styled.div`
 
     display:flex;
     flex-direction: column;
-    
     gap: 0.5rem;
 `
 const FilterTag = styled.span`
@@ -68,19 +66,47 @@ const FilterTag = styled.span`
 // I use the same component for Search and Sign, mode = "search" | "sign"
 function List({mode}) {
     const [requests, setRequests] = useState([])
+    const [hasMore, setHasMore] = useState(true)
     const location = useLocation().pathname.split("/")
     const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
     const {query, queryString, set, queryTags, onChangeTitleSearch} = useQuery()
+    const range = useRef(0)
+    const [loading, setLoading] = useState("")
+
     useEffect(() => {
-        const fetchRequests = async () => {
-            getRequests(queryString + (mode === "sign" ? "&sign=true" : ""), (p) => setPercent(p))
-                .then(data => setRequests(data))
-                .catch(() => setNotFound(true))
-        }
-        fetchRequests()
+        setLoading("NEW")
     }, [queryString])
 
-    const comparePriority = ( a, b ) => {
+    useEffect(() => {
+        if (loading === "NEW") {
+            setHasMore(true)
+            range.current = 0
+            loadMore()
+            range.current += 15
+            setLoading("")
+        }
+        else if (loading === "APPEND") {
+            loadMore(true)
+            range.current += 15
+            setLoading("")
+        }
+    }, [loading])
+
+    const loadMore = async (isAppend = false) => {
+        console.log("Range", range)
+        getRequests(
+            queryString + `&start=${range.current}&end=${range.current + 15}${mode === "sign" ? "&sign=true" : ""}`,
+            p => setPercent(p)
+            )
+            .then(data => {
+                if (data.length < 15) setHasMore(false)
+                if (isAppend) setRequests([...requests, ...data])
+                else setRequests(data)
+            })
+            .catch(() => setNotFound(true))
+    }
+
+    const comparePriority = (a, b) => {
         if ( a.priority > b.priority ){
           return -1;
         }
@@ -102,16 +128,23 @@ function List({mode}) {
                     {queryTags.map(tag => <FilterTag onClick={tag.onClick} key={tag.key}>{tag.text}</FilterTag>)}
                 </TagContainer>
             </TagBar>
-            <CardList>
-                {render(requests.sort((a, b) => comparePriority(a, b)).map((task) => (
+            <CardList id="scrollableDiv">
+                <InfiniteScroll
+                    dataLength={requests.length }
+                    className="request-scroller"
+                    next={() => setLoading("APPEND")}
+                    hasMore={hasMore}
+                    scrollableTarget="scrollableDiv"
+                >
+                    {render(requests.sort((a, b) => comparePriority(a, b)).map((task) => (
                     <RequestCard
                         key={task.id}
                         data={task}
                         page={mode}
                         active={task.id == location[location.length - 1]}
                         set={set}
-                    />
-                )))}
+                    />)))}
+                </InfiniteScroll>
             </CardList>
         </StyleListWrapper>
     );

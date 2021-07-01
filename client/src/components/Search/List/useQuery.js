@@ -24,7 +24,6 @@ const reducer = (state, action) => {
 const useQuery = () => {
 
     const [query, dispatch] = useReducer(reducer, initState)
-
     const set = (field, value, text = "") => {
         dispatch({type: "SET", field, value, text: text === "" ? value : text})
     }
