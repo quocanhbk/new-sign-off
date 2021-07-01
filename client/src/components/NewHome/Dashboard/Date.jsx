@@ -22,9 +22,12 @@ const Container = styled.div`
 const DateBoard = () => {
     const [time, setTime] = useState(format((new Date()), "HH:mm"))
     useEffect(() => {
-        setTimeout(() => {
+        let timeout = setTimeout(() => {
             setTime(format((new Date()), "HH:mm"))
         }, 60000)
+        return (() => {
+            clearTimeout(timeout)
+        })
     })
 
     return (

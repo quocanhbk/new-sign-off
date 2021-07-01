@@ -48,7 +48,7 @@ const Content = ({request}) => {
             <SectionContainer headline="1. Related Project">
                 <ProjectContainer>
                     {request.relatedProjects.map(project =>
-                        <Button readOnly padding="0.2rem 0.4rem" key={project}>
+                        <Button readOnly padding="0.2rem 0.4rem" key={project} weight="400">
                                 {projectList.find(p => p.id === project).text}
                         </Button>    
                     )}

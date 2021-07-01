@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useRef, useState } from 'react';
 import styled, {css} from 'styled-components';
 import { BsPower, BsThreeDotsVertical} from 'react-icons/bs';
 import Avatar from 'components/Avatar';
@@ -7,9 +8,8 @@ import pageList from 'pageList'
 import { getFader } from 'utils/color';
 import {useStoreActions, useStoreState} from 'easy-peasy'
 import { useMsal } from '@azure/msal-react';
-import baseURL from 'api/baseURL';
 import useClickOutside from 'hooks/useClickOutside';
-
+import { getAsyncAvatar, getAvatar } from 'api/user';
 const SidebarContainer = styled.div`
 	background-color: ${props => props.theme.color.background.secondary};
 	padding-top: 0.5rem;
@@ -157,6 +157,14 @@ const SideBar = () => {
 	const name = accounts[0].name.split("-")[accounts[0].name.split("-").length - 1]
 	const threeDotRef = useRef()
 	const optionRef = useClickOutside(() => setPopup(false), threeDotRef.current)
+	const [photo, setPhoto] = useState('/avatar.png')
+	useEffect(() => {
+		const fetchPhoto = async () => {
+			let newPhoto = await getAsyncAvatar(accounts[0].username)
+			setPhoto(newPhoto)
+		}
+		fetchPhoto()
+	}, [])
 	return (
 		<SidebarContainer>
 			<Header>
@@ -165,7 +173,7 @@ const SideBar = () => {
 			</Header>
 
 			<UserDisplayCard>
-				<Avatar src={baseURL + "/api/v1/avatar/" + accounts[0].username + "/96x96"} />
+				<Avatar src={photo} />
 				<UserDisplayCardInfo>
 					<h3>{name}</h3>
 					<p>{accounts[0].username}</p>
