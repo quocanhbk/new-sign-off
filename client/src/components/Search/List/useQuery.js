@@ -1,4 +1,4 @@
-import {useReducer} from 'react'
+import {useEffect, useReducer, useState} from 'react'
 
 const initState = {
     title: {value: ""},
@@ -24,7 +24,7 @@ const reducer = (state, action) => {
 const useQuery = () => {
 
     const [query, dispatch] = useReducer(reducer, initState)
-
+    const [range, setRange] = useState(0)
     const set = (field, value, text = "") => {
         dispatch({type: "SET", field, value, text: text === "" ? value : text})
     }
@@ -34,6 +34,10 @@ const useQuery = () => {
     const onChangeTitleSearch = (v) => {
         set("title", v, v)
     }
+
+    useEffect(() => {
+        setRange(0)
+    }, [query])
 
     return {
         query,
@@ -45,7 +49,9 @@ const useQuery = () => {
             key: key,
             text: `${s.text}`,
             onClick: () => set(key, null, "")
-        }))
+        })),
+        range,
+        setRange
     }
 }
 

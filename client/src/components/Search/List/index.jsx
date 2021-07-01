@@ -10,7 +10,7 @@ import useCustomLoader from 'hooks/useCustomLoader';
 import Placeholder from 'components/Placeholder';
 import { useLocation } from '@reach/router';
 import useQuery from './useQuery'
-
+import InfiniteScroll from 'react-infinite-scroll-component';
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -37,7 +37,6 @@ const CardList = styled.div`
     flex: 1;
     overflow: auto;
     position: relative;
-    padding-right: 0.5rem;
 
     ::-webkit-scrollbar {
     width: 0.5rem;
@@ -55,7 +54,6 @@ const CardList = styled.div`
 
     display:flex;
     flex-direction: column;
-    
     gap: 0.5rem;
 `
 const FilterTag = styled.span`
@@ -68,17 +66,29 @@ const FilterTag = styled.span`
 // I use the same component for Search and Sign, mode = "search" | "sign"
 function List({mode}) {
     const [requests, setRequests] = useState([])
+    const [hasMore, setHasMore] = useState(true)
     const location = useLocation().pathname.split("/")
     const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-    const {query, queryString, set, queryTags, onChangeTitleSearch} = useQuery()
+    const {range, query, queryString, set, queryTags, onChangeTitleSearch, setRange} = useQuery()
     useEffect(() => {
+        loadMore()
+    }, [queryString])
+
+    const loadMore = async () => {
         const fetchRequests = async () => {
-            getRequests(queryString + (mode === "sign" ? "&sign=true" : ""), (p) => setPercent(p))
-                .then(data => setRequests(data))
+            console.log("Range", range)
+            getRequests(queryString + `&start=${range}&end=${range + 15}${mode === "sign" ? "sign=true" : ""}`)
+                .then(data => {
+                    console.log([...requests, ...data])
+                    if (data.length < 15) setHasMore(false)
+                    setRequests([...requests, ...data])
+                    setRange(range + 15)
+
+                })
                 .catch(() => setNotFound(true))
         }
         fetchRequests()
-    }, [queryString])
+    }
 
     const comparePriority = ( a, b ) => {
         if ( a.priority > b.priority ){
@@ -102,16 +112,24 @@ function List({mode}) {
                     {queryTags.map(tag => <FilterTag onClick={tag.onClick} key={tag.key}>{tag.text}</FilterTag>)}
                 </TagContainer>
             </TagBar>
-            <CardList>
-                {render(requests.sort((a, b) => comparePriority(a, b)).map((task) => (
+            <CardList id="scrollableDiv">
+                <InfiniteScroll
+                    dataLength={requests.length }
+                    className="request-scroller"
+                    next={loadMore}
+                    hasMore={hasMore}
+                    scrollableTarget="scrollableDiv"
+
+                >
+                    {requests.sort((a, b) => comparePriority(a, b)).map((task) => (
                     <RequestCard
                         key={task.id}
                         data={task}
                         page={mode}
                         active={task.id == location[location.length - 1]}
                         set={set}
-                    />
-                )))}
+                    />))}
+                </InfiniteScroll>
             </CardList>
         </StyleListWrapper>
     );

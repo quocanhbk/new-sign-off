@@ -12,7 +12,7 @@ const Container = styled.div`
     border-radius: 0.5rem;
     display: flex;
     box-shadow: ${props => props.theme.shadow};
-
+    margin-bottom: 0.5rem;
     ${props => props.active && css`
         background: ${props => getFader(props.theme.color.border.primary, 0.5)};
         color: ${props => props.theme.color.fill.primary};
