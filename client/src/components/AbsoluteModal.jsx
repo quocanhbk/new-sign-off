@@ -57,8 +57,8 @@ const StyledContainer = styled.div`
     transition: all 500ms linear;
     height: ${props => props.height || "auto"};
     width: ${props => props.width || "auto"};
-    max-width: 1280px;
-    max-height: 720px;
+    max-width: ${props => props.maxWidth || "1280px"};
+    max-height: ${props => props.maxHeight || "720px"};
     overflow: ${props => props.overflow ? props.overflow : "visible"};
     animation: ${opa} 0.25s ease-out 0s 1 forwards normal;
     z-index: 999;
@@ -106,7 +106,7 @@ const Modal = (props) => {
       }, [onClickOutside])
     return (
         <StyledModal visible={open} ani={runAni} fixed={fixed}>
-            <StyledContainer ani={runAni} height={props.height} width={props.width} overflow={overflow}>
+            <StyledContainer ani={runAni} height={props.height} width={props.width} overflow={overflow} maxWidth={props.maxWidth} maxHeight={props.maxHeight}>
                 {props.title && 
                     <StyledTitle>
                         <h4>{props.title}</h4>
