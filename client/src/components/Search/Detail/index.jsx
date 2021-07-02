@@ -29,7 +29,7 @@ const  DisplayContent = ({id, mode}) => {
 	const [comment, setComment] = useState("")
 	const setPath = useStoreActions(s => s.setPath)
 	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-
+	const [logs, setLogs] = useState([]);
 	// to prevent setting state to Unmounted component, we use the "mounted" variable
 	// "mounted" will be false once component unmount, and that will prevent any set state statement from happenning
 	useEffect(() => {
@@ -40,7 +40,7 @@ const  DisplayContent = ({id, mode}) => {
 				.then(data => {
 					if (mounted) {
 						setRequest(data)
-						console.log(data);
+						setLogs(data.logs)
 					}
 				})
 				.catch(() => {
@@ -75,7 +75,7 @@ const  DisplayContent = ({id, mode}) => {
 					/>
 					<Tab fullHeight className="tab-container">
 						<TabPane name="Content" key={1} value={1}>
-							<Content request={request} />
+							<Content request={request} logs={logs} setLogs={setLogs}/>
 						</TabPane>
 						<TabPane name="Approval Flow" key={2} value={2}>
 							<ApprovalFlow 
