@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components'
 import {getFader} from 'utils/color'
 import EventComments from './EventComments';
@@ -37,11 +37,7 @@ const ProjectContainer = styled.div`
     align-items: center;
     gap: 0.5rem;
 `
-const Content = ({request}) => {
-    const [logs, setLogs] = useState([]);
-    useEffect(() => {
-        setLogs(request.logs);
-    }, [request])
+const Content = ({request, logs, setLogs}) => {
     
     return (
         <ContentWrapper>
