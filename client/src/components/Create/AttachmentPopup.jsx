@@ -17,9 +17,10 @@ const Col = styled.div`
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    //border: 1px solid ${props => props.theme.color.fill.primary};
+    border: 1px solid ${props => props.theme.color.border.primary};
     box-shadow: ${props => props.theme.shadow};
     border-radius: 0.5rem;
+    background: ${props => props.theme.color.background.primary};
 `
 const Wrapper = styled.div`
     display:flex;
