@@ -4,6 +4,7 @@ import getConfig from './getConfig';
 import { getProcedureChecklist } from './procedure';
 import { msalInstance } from 'index';
 import { removeUndefinedProps } from 'utils/utils';
+import { getFile } from './file';
 
 export const getRequests = async (queryString, callback = (v) => {v}) => {
 
@@ -24,15 +25,14 @@ export const getRequests = async (queryString, callback = (v) => {v}) => {
 export const getRequestDetail = async (id, sign = false, callback = (v) => {v}) => {
 	const config = await getConfig()
 	let {data} = await axios.get(`/api/v1/requests/${id}?${sign ? "sign=true" : ""}`, config);
-	console.log(data)
-	callback(33)
+	callback(25)
 	let checklist = []
 	if (data.type === "Procedure") {
 		checklist = await getProcedureChecklist(data.fk_procedure_id)
-		callback(66)
+		callback(50)
 	}
-	callback(100)
-	return {
+
+	let returnData = {
 		id: data.approval_request_id,
 		title: data.title,
 		createdAt: new Date(data.created_at),
@@ -122,6 +122,18 @@ export const getRequestDetail = async (id, sign = false, callback = (v) => {v}) 
 			}))
 		}))
 	}
+	await Promise.all(returnData.approvalAttachments.map(async attachment => {
+		let file = await getFile(attachment.fileId)
+		attachment.file = file
+	}))
+	callback(75)
+	await Promise.all(returnData.referenceAttachments.map(async attachment => {
+		let file = await getFile(attachment.fileId)
+		attachment.file = file
+	}))
+	callback(100)
+
+	return returnData
 }
 export const burstRequest = async () => {
 	let arr = Array(50).fill("")
@@ -324,13 +336,11 @@ export const approveRequest = async (id, {code, comment, opinionId}, callback = 
 			decision = "Rejected"
 			break
 	}
-	console.log(decision, query)
-	const res = await axios.post("/api/v1/requests/" + id + "/approval?" + query, {
+	await axios.post("/api/v1/requests/" + id + "/approval?" + query, {
 		decision, 
 		opinion: comment,
 		opinionId
 	}, config)
-	console.log(res)
 	callback(100)
 }
 

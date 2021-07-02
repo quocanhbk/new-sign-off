@@ -15,6 +15,7 @@ import ApproveWindow from './ApproveWindow';
 import ConfirmPopup from './ConfirmPopup';
 import Content from "./Content";
 import Header from "./Header";
+import FormPopup from './FormPopup'
 
 const Container = styled.div`
 	height: 100%;
@@ -30,12 +31,14 @@ const  DisplayContent = ({id, mode}) => {
 	const setPath = useStoreActions(s => s.setPath)
 	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
 	const [logs, setLogs] = useState([]);
+	const [editingAttachment, setEditingAttachment] = useState(null)
 	// to prevent setting state to Unmounted component, we use the "mounted" variable
 	// "mounted" will be false once component unmount, and that will prevent any set state statement from happenning
 	useEffect(() => {
 		let mounted = true
-		const fetchData = async () => {
+		const fetchData = () => {
 			reset()
+			setRequest(null)
 			getRequestDetail(id, mode === "sign", (p) => {if (mounted) setPercent(p)})
 				.then(data => {
 					if (mounted) {
@@ -56,7 +59,7 @@ const  DisplayContent = ({id, mode}) => {
 		await approveRequest(id, {code: confirmPopup, comment, opinionId}, (p) => setPercent(p))
 		setTimeout(() => setPath(`/search/${id}`), 400)
 	}
-	const handleCancel = async () => {
+	const handleCancel = () => {
 		setConfirmPopup("")
 	}
 	const remindApprover = async (userId) => {
@@ -64,6 +67,19 @@ const  DisplayContent = ({id, mode}) => {
 	}
     return (
 		<Container className="container">
+			<AbsoluteModal 
+				visible={editingAttachment !== null} 
+				onClickOutside={() => setEditingAttachment(null)}
+				fixed overflow="overlay" height="80%" width="70%"
+				maxWidth="880px"
+			>
+				{editingAttachment && 
+					<FormPopup
+						attachment={(editingAttachment.type === "approval" ? request.approvalAttachments : request.referenceAttachments)
+							.find(_ => _.id === editingAttachment.id)}
+					/>
+				}
+			</AbsoluteModal>
 			{render(request && (
 				<>
 					<Header
@@ -75,7 +91,7 @@ const  DisplayContent = ({id, mode}) => {
 					/>
 					<Tab fullHeight className="tab-container">
 						<TabPane name="Content" key={1} value={1}>
-							<Content request={request} logs={logs} setLogs={setLogs}/>
+							<Content request={request} logs={logs} setLogs={setLogs} setEditingAttachment={setEditingAttachment}/>
 						</TabPane>
 						<TabPane name="Approval Flow" key={2} value={2}>
 							<ApprovalFlow 

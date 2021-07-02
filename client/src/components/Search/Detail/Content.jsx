@@ -37,7 +37,7 @@ const ProjectContainer = styled.div`
     align-items: center;
     gap: 0.5rem;
 `
-const Content = ({request, logs, setLogs}) => {
+const Content = ({request, logs, setLogs, setEditingAttachment}) => {
     
     return (
         <ContentWrapper>
@@ -59,15 +59,28 @@ const Content = ({request, logs, setLogs}) => {
             <SectionContainer headline="3. Approval File">
                 {request.approvalAttachments.length > 0 ?
                     (request.type === "Procedure" ? 
-                        <AttachmentCheckList attachments={request.approvalAttachments} checklist={request.checklist} readOnly={true}/> :
-                        <AttachmentTable attachments={request.approvalAttachments} readOnly={true} />
+                        <AttachmentCheckList 
+                            attachments={request.approvalAttachments} 
+                            checklist={request.checklist}
+                            readOnly={true}
+                            onEditAttachment={attachmentId => setEditingAttachment({type: "approval", id: attachmentId})}
+                        /> :
+                        <AttachmentTable 
+                            attachments={request.approvalAttachments} 
+                            readOnly={true} 
+                            onEditAttachment={attachmentId => setEditingAttachment({type: "approval", id: attachmentId})}
+                        />
                     ) :
                     <Nothing type="FILE"/>
                 }
             </SectionContainer>
             <SectionContainer headline="4. Reference File">
                 {request.referenceAttachments.length > 0 ?
-                    <AttachmentTable attachments={request.referenceAttachments} readOnly={true}/> :
+                    <AttachmentTable 
+                        attachments={request.referenceAttachments} 
+                        readOnly={true}
+                        onEditAttachment={attachmentId => setEditingAttachment({type: "reference", id: attachmentId})}
+                    /> :
                     <Nothing type="FILE"/>
                 }
             </SectionContainer>
