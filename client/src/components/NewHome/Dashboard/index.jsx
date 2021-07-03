@@ -8,6 +8,8 @@ const Container = styled.div`
     align-items: center;
     flex-direction: column;
     gap: 3rem;
+    height: 100%;
+    padding: 2rem 0;
 `
 
 const Dashboard = () => {

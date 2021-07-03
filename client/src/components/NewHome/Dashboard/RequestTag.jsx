@@ -7,16 +7,16 @@ import styled from "styled-components"
 import {getFader} from "utils/color"
 const Container = styled.li`
     list-style: none;
-    padding: 0.5rem 0.5rem;
+    padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     cursor: pointer;
     user-select: none;
-    background: ${props => getFader(props.theme.color.border.primary, 0.2)};
+    background: ${props => getFader(props.theme.color.border.primary, 0.5)};
     &:hover {
-        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
+        background: ${props => getFader(props.theme.color.border.primary, 0.8)};
     }
     &:active {
-        background: ${props => getFader(props.theme.color.border.primary, 0.8)};
+        background: ${props => getFader(props.theme.color.border.primary, 1)};
     }
 `
 const Title = styled.p`
@@ -27,6 +27,7 @@ const Title = styled.p`
     text-overflow: ellipsis;
     display: -webkit-box;
     color: ${props => props.theme.color.text.primary};
+    font-weight: 500;
 `
 
 const UserTag = styled.div`

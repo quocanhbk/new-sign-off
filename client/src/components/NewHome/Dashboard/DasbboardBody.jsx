@@ -4,7 +4,7 @@ import styled from "styled-components";
 import {getRequests} from 'api/request'
 import RequestTag from './RequestTag';
 const Container = styled.div`
-    width: 60%;
+    width: 80%;
     min-width: 240px;
     display: flex;
     flex-direction: column;

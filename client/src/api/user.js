@@ -13,7 +13,7 @@ export const getAvatar = (email, resolution = "64x64") => {
 export const getAsyncAvatar = async (email, resolution = "64x64") => {
     try {
         let res = await axios.get(`/api/v1/avatar/${email}/${resolution}`, {baseURL})
-        if (res.statusText === "OK")
+        if (res.status === 200)
             return `${baseURL}/api/v1/avatar/${email}/${resolution}`
         else return "/avatar.png"
     } catch (err) {

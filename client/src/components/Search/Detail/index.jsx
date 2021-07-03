@@ -22,7 +22,7 @@ const Container = styled.div`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	overflow: overlay;
+	overflow: hidden;
 `
 
 const  DisplayContent = ({id, mode}) => {
@@ -122,7 +122,7 @@ const  DisplayContent = ({id, mode}) => {
 					<AbsoluteModal 
 						visible={confirmPopup !== ""} 
 						onClickOutside={() => setConfirmPopup("")} 
-						width="70%"
+						width="80%"
 						maxWidth="360px"
 						// max-width="480px"
 					>

@@ -12,8 +12,6 @@ const Container = styled.div`
 const DivTab = styled.div`
     display:flex;
     position: relative;
-    align-items:center;
-    justify-content:center;
     & span {
         --abc: ${props => props.value - 1};
         position: absolute;
@@ -35,8 +33,8 @@ const ButtonTab = styled.button`
     cursor: pointer;
     width:100%;
     outline: none;
-    padding: 1rem;
-    font-size:1rem;
+    padding: 1rem 0.5rem;
+    font-size: calc(0.8rem + 0.25vw);
     font-weight: ${props => props.active ? 600 : 500};
     color: ${props => props.active ? props.theme.color.fill.primary : props.theme.color.fill.secondary};
     transition: all 0.25s ease-in-out;
@@ -68,7 +66,6 @@ const Tab = (props) => {
                 {props.children.map(tab => 
                     <ButtonTab active={tab.props.value === currentTab} onClick={() => selectTab(tab.props.value)} key={tab.props.value} disabled={tab.props.disabled}>
                         {tab.props.name}
-                        
                     </ButtonTab>
                 )}
                 <span></span>

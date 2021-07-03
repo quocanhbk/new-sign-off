@@ -3,7 +3,7 @@ import React from 'react'
 import styled from "styled-components";
 import FormControl from 'components/FormControl'
 import Button from 'components/Base/Button'
-import useFocus from 'hooks/useFocus'
+// import useFocus from 'hooks/useFocus'
 const Container = styled.div`
     background: ${props => props.theme.color.background.primary};
     overflow: hidden;
@@ -16,7 +16,7 @@ const Header = styled.header`
         props.decision === "REJECT" ? "danger" :
         "warning"
     ]};
-    padding: 1rem;
+    padding: 0.5rem 1rem;
     color: ${props => props.theme.color.background.primary};
     font-weight: 500;
 `
@@ -49,10 +49,10 @@ const BtnContainer = styled.div`
 `
 const ConfirmPopup = ({onCancelClick, onConfirmClick, decision, comment, setComment}) => {
 
-    const inputRef = useFocus()
+    // const inputRef = useFocus()
     const genHeadline = () => {
         return (
-            decision === "REJECT" ? "Are you sure to reject this request?" :
+            decision === "REJECT" ? "Are you sure to reject this request ?" :
             "Are you sure to approve this request?"
         )
 
@@ -71,7 +71,7 @@ const ConfirmPopup = ({onCancelClick, onConfirmClick, decision, comment, setComm
             }
             <Body>
                 <FormControl headline={genFormTitle()}>
-                    <TextArea className="approve-comment" ref={inputRef} value={comment} onChange={e => setComment(e.target.value)}/>
+                    <TextArea className="approve-comment" value={comment} onChange={e => setComment(e.target.value)}/>
                 </FormControl>
                 <BtnContainer>
                     <Button className="confirm-button" onClick={onConfirmClick} color="primary" type="fill">Confirm</Button>

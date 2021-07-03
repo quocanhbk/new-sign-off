@@ -30,7 +30,7 @@ const Wrapper = styled.div`
 `
 const Main = styled.div`
     flex: 1;
-    overflow: overlay;
+    overflow: hidden;
 `
 const MainPage = () => {
     const getUsers = useStoreActions(s => s.getUsers)
@@ -45,7 +45,7 @@ const MainPage = () => {
             {device === "PC" && <SideBar/>}
             <BodyContainer>
                 <Wrapper className="Wrrappper">
-                    <Main>
+                    <Main className="app-main-body">
                         <Router className="router">
                         {
                             pageList.map(page => {
