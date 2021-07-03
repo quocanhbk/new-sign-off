@@ -4,6 +4,7 @@ import * as msal from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
 import './index.css';
 import App from './App';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 export const msalInstance = new msal.PublicClientApplication({
   auth: {
     clientId: 'f8626081-3f81-4909-bcef-14f0a974f079',
@@ -22,3 +23,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+serviceWorkerRegistration.register()
