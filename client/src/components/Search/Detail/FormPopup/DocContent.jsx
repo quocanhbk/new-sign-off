@@ -47,7 +47,6 @@ const DocContent = ({attachment}) => {
                     key={tag.id} 
                     data={tag}
                     fontSize={docRef.current.getBoundingClientRect().width/60 + "px"}
-                    view
                 />
             )}
             <Document 

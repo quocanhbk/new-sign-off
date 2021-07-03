@@ -11,12 +11,12 @@ const Container = styled.div`
     position: relative;
     width: calc(100% - 2rem);
     transform: translateX(1rem);
-    z-index: 99;
-    max-height: ${props => props.expand ? "30rem" : "3rem"};
+    z-index: 33;
+    max-height: ${props => props.expand ? "25rem" : "3rem"};
     transition: max-height 0.25s ease-in-out;
 `
 const Block = styled.div`
-    height: 30rem;
+    height: 25rem;
     background: ${props => props.theme.color.background.primary};
     border: 1px solid ${props => props.theme.color.border.primary};
     box-shadow: ${props => props.theme.shadow};

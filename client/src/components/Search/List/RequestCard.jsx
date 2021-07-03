@@ -118,7 +118,7 @@ const Card = ({page, active, data, set}) => {
                 </Line>
             </DivInfo>
             <ButtonContainer>
-                <Button padding="0.5rem" radius="99px" type="ghost" onClick={() => navigate(`/${page}/${id}`)}><BsChevronRight size="1.2rem"/></Button>
+                <Button padding="0.5rem" radius="99px" type="ghost" onClick={() => {navigate(`/${page}/${id}`);}}><BsChevronRight size="1.2rem"/></Button>
             </ButtonContainer>
             
         </Container>

@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components'
 import { getFader } from 'utils/color'
 import Feature from './Feature'
 import Dashboard from './Dashboard'
+import useMediaQuery from 'hooks/useMediaQuery'
 const StyleContainer = styled.div`
     display:flex;
     width: 100%;
@@ -30,11 +31,16 @@ const Vertical = styled.div`
     background: ${props => props.theme.color.border.primary};
 `
 const Home = () => {
+    let device = useMediaQuery()
     return (
         <StyleContainer>
-           <Col right><Dashboard/></Col>
-           <Vertical/>
-           <Col><Feature/></Col>
+            <Col right><Dashboard/></Col>
+            {device === "PC" &&
+            <>
+                <Vertical/>
+                <Col><Feature/></Col>
+            </>
+           }
         </StyleContainer>
     )
 }

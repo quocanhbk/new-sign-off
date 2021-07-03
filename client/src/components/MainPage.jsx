@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import SideBar from './SideBar'
+import SideBar from './NavBar'
 import styled from 'styled-components';
 import pageList from '../pageList';
 import {Router} from '@reach/router'
 import { useStoreActions } from 'easy-peasy';
+import useMediaQuery from 'hooks/useMediaQuery';
+import BottomBar from 'components/NavBar/BottomBar'
 const PageContainer = styled.div`
     display: flex;
     height: 100%;
@@ -21,25 +23,39 @@ const BodyContainer = styled.div`
         height: 100%;
     }
 `
-
+const Wrapper = styled.div`
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+`
+const Main = styled.div`
+    flex: 1;
+    overflow: overlay;
+`
 const MainPage = () => {
     const getUsers = useStoreActions(s => s.getUsers)
     const getForms = useStoreActions(s => s.getForms)
     useEffect(() => {
         getUsers()
         getForms()
-    })
+    }, [])
+    let device = useMediaQuery()
     return (
         <PageContainer className="main">
-            <SideBar/>
+            {device === "PC" && <SideBar/>}
             <BodyContainer>
-                <Router className="router">
-                {
-                    pageList.map(page => {
-                        return React.cloneElement(page.comp, {key: page.text, path: page.path})
-                    })
-                }
-                </Router>
+                <Wrapper className="Wrrappper">
+                    <Main>
+                        <Router className="router">
+                        {
+                            pageList.map(page => {
+                                return React.cloneElement(page.comp, {key: page.text, path: page.path})
+                            })
+                        }
+                        </Router>
+                    </Main>
+                    {device === "PHONE" && <BottomBar/>}
+                </Wrapper>
             </BodyContainer>
         </PageContainer>
     )

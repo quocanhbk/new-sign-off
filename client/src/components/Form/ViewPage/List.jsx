@@ -13,6 +13,7 @@ import Button from 'components/Base/Button'
 import { useStoreState } from 'easy-peasy';
 import Placeholder from 'components/Placeholder';
 import useCustomLoader from 'hooks/useCustomLoader';
+import useForms from './useForms'
 
 const StyleListWrapper =styled.div`
     flex: 5;
@@ -57,19 +58,10 @@ const AddNewContainer = styled.div`
     justify-content: space-between;
 `
 function List() {
-    const [forms, setForms] = useState([])
     const [searchText, setSearchText] = useState("")
     const location = useLocation().pathname.split("/")
     const users = useStoreState(_ => _.users)
-    const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-    useEffect(() => {
-        const fetchData = async () => {
-            getForms((v) => setPercent(v))
-                .then(forms => setForms(forms))
-                .catch(() => setNotFound(true))
-        }
-        fetchData()
-    }, [])
+    let {data, render, isLoading} = useForms()
 
     const handle = (formId) => {
         navigate('/form/view/' + formId)
@@ -79,7 +71,7 @@ function List() {
         <StyleListWrapper>
             <ListToolbar search={searchText} setSearch={setSearchText}/>
             <AddNewContainer>
-                <p>Result: {forms.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())).length}</p>
+                <p>Result: {isLoading ? "..." : data.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())).length}</p>
                 <Button 
                     onClick={() => navigate('/form/create')} 
                     padding="0.2rem 0.4rem" 
@@ -90,7 +82,7 @@ function List() {
             </AddNewContainer>
             <CardList>
                 {render(
-                    forms.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())).map(form => 
+                    data && data.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())).map(form => 
                         <Card 
                             key={form.id} 
                             name={form.name}

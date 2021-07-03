@@ -6,6 +6,7 @@ import { getFader } from "utils/color";
 import Table from "../Table";
 import {BsTrash, BsThreeDotsVertical, BsDownload, BsEye} from 'react-icons/bs'
 import { downloadForm, downloadForm2 } from "api/file";
+import useMediaQuery from "hooks/useMediaQuery";
 
 const TableWrapper = styled.div`
     border: 1px solid ${(props) => props.theme.color.border.primary};
@@ -87,7 +88,7 @@ const AttachmentName = styled.span`
 	`}
 `
 const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeFieldContent, readOnly, onEditAttachment}) => {
-
+	let device = useMediaQuery()
 	const handleDownload = (attachmentId) => {
 		const attachment = attachments.find(_ => _.id === attachmentId)
 		if (attachment.file)
@@ -106,9 +107,11 @@ const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeField
 						<Table.HeaderCell className="header-cell" textAlign="center">
 							Data Field
 						</Table.HeaderCell>
-						<Table.HeaderCell className="header-cell" textAlign="center" width="10%">
-						Action
-						</Table.HeaderCell>
+						{device === "PC" &&
+							<Table.HeaderCell className="header-cell" textAlign="center" width="10%">
+								Action
+							</Table.HeaderCell>
+						}
 					</Table.Row>
 				</Table.Header>
 			)}
@@ -151,7 +154,7 @@ const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeField
 									<BsTrash />
 								</Icon>
 							</IconContainer>
-						</Table.Cell> :
+						</Table.Cell> : device === "PC" ?
 						<Table.Cell textAlign="center" width="10%">
 							<IconContainer>
 								<Icon color="primary" onClick={() => onEditAttachment(attachment.id)}>
@@ -161,7 +164,7 @@ const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeField
 									<BsDownload/>
 								</Icon>
 							</IconContainer>
-						</Table.Cell>
+						</Table.Cell> : null
 					}
 					</AttachmentRow>
 				))}

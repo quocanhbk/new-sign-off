@@ -67,7 +67,7 @@ export const downloadForm2 = async (name, file, fields) => {
             y: height - relativeY * height * pages.length / 100 -10,
             font: customFont,
             size: 12,
-            color: rgb(0,0,125)
+            color: rgb(0,0,0.5)
         })
     });
 

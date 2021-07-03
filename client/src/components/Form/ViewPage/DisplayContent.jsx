@@ -5,12 +5,11 @@ import styled from "styled-components";
 import FieldTag from "../FieldTag";
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import { getFader } from "utils/color";
-import { getFormDetail, deleteForm } from "api/form";
+import { deleteForm } from "api/form";
 import ContentHeader from "./ContentHeader";
 import { navigate } from "@reach/router";
-import Placeholder from "components/Placeholder";
-import useCustomLoader from "hooks/useCustomLoader";
-
+import useForm from './useForm'
+import LoadingFile from "../LoadingFile";
 const Container = styled.div`
 	position: relative;
 	height: 100%;
@@ -19,11 +18,13 @@ const Container = styled.div`
 `
 
 const DocWrapper = styled.div`
+	
     position: relative;
     flex: 1;
 	overflow: overlay;
     & .form-document {
         min-height: 100%;
+		position: relative;
     }
 	::-webkit-scrollbar {
         width: 0.5rem;
@@ -44,15 +45,17 @@ const DocDisplay = styled.div`
 `
 const DisplayContent = ({id}) => {
 	const [numPage, setNumPage] = useState(0)
-	const [form, setForm] = useState()
+	const [renderFields, setRenderFields] = useState(false)
+	// const [form, setForm] = useState()
 	let docRef = useRef()
-	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>, true)
-
+	const {form, render, setPercent} = useForm(id)
 	const onDeleteClick = async () => {
 		await deleteForm(id)
 		navigate('/form')
 	}
-
+	useEffect(() => {
+		return () => setRenderFields(false)
+	}, [id])
 	const editForm = () => {
 		navigate('/form/create/' + id)
 	}
@@ -65,11 +68,12 @@ const DisplayContent = ({id}) => {
 	}
 	const renderDoc = () => 
 		form &&
-		<>
+		<>	
 			<ContentHeader title={form.name} onDeleteClick={onDeleteClick} onEditClick={editForm}/>
 			<DocWrapper className="doc-display">
+				{!renderFields && <LoadingFile/>}
 				<DocDisplay>
-					{form && form.fields.map(field => 
+					{renderFields && form.fields.map(field => 
 						<FieldTag 
 							key={field.id} 
 							data={field}
@@ -80,7 +84,7 @@ const DisplayContent = ({id}) => {
 					<Document 
 						file={form && form.file}
 						className="form-document" 
-						onLoadSuccess={(numPage) => {setNumPage(numPage._pdfInfo.numPages); setPercent(100)}}
+						onLoadSuccess={(numPage) => {setNumPage(numPage._pdfInfo.numPages); setPercent(100); setRenderFields(true)}}
 						noData={""}
 						loading={""}
 					>
@@ -92,15 +96,15 @@ const DisplayContent = ({id}) => {
 	
 	//const {LoadingComponent, reset, setNotFound, setPercent} = useLoader(true, renderDoc(), <Placeholder type="NOT_FOUND"/>, true)
 
-	useEffect(() => {
-		const fetchForm = async () => {
-			setForm(null)
-			reset()
-			const formDetail = await getFormDetail(id, (v) => setPercent(v)).catch(_ => {setNotFound(true)})
-			setForm(formDetail)
-		}
-		fetchForm()
-	}, [id])
+	// useEffect(() => {
+	// 	const fetchForm = async () => {
+	// 		setForm(null)
+	// 		reset()
+	// 		const formDetail = await getFormDetail(id, (v) => setPercent(v)).catch(_ => {setNotFound(true)})
+	// 		setForm(formDetail)
+	// 	}
+	// 	fetchForm()
+	// }, [id])
 
 	return (
 		<Container ref={docRef} className="container">
