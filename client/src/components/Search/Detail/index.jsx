@@ -2,10 +2,10 @@
 /* eslint-disable react/prop-types */
 import { approveRequest, getRequestDetail, remindApprove } from 'api/request';
 import AbsoluteModal from 'components/AbsoluteModal';
-import ApprovalFlow from "components/ApprovalFlow";
+import ApprovalFlow from "./ApprovalFlow";
 import Placeholder from "components/Placeholder";
-import Tab from "components/Tab";
-import TabPane from "components/TabPane";
+import Tab from "./Tab";
+import TabPane from "./TabPane";
 import { useStoreActions } from "easy-peasy";
 import useCustomLoader from "hooks/useCustomLoader";
 import React, { useEffect, useState } from "react";
@@ -16,11 +16,13 @@ import ConfirmPopup from './ConfirmPopup';
 import Content from "./Content";
 import Header from "./Header";
 import FormPopup from './FormPopup'
+import useMediaQuery from 'hooks/useMediaQuery';
 
 const Container = styled.div`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	overflow: overlay;
 `
 
 const  DisplayContent = ({id, mode}) => {
@@ -32,6 +34,7 @@ const  DisplayContent = ({id, mode}) => {
 	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
 	const [logs, setLogs] = useState([]);
 	const [editingAttachment, setEditingAttachment] = useState(null)
+	const device = useMediaQuery()
 	// to prevent setting state to Unmounted component, we use the "mounted" variable
 	// "mounted" will be false once component unmount, and that will prevent any set state statement from happenning
 	useEffect(() => {
@@ -51,8 +54,9 @@ const  DisplayContent = ({id, mode}) => {
 				});
 		}
 		fetchData()
-		return (() => {mounted = false})
+		return (() => {mounted = false;console.log("nah")})
 	},[id]);
+
 
 	const handleConfirm = async () => {
 		reset()
@@ -70,7 +74,7 @@ const  DisplayContent = ({id, mode}) => {
 			<AbsoluteModal 
 				visible={editingAttachment !== null} 
 				onClickOutside={() => setEditingAttachment(null)}
-				fixed overflow="overlay" height="80%" width="70%"
+				fixed overflow="overlay" height={device === "PC" ? "80%" : "100%"} width={device === "PC" ? "70%" : "100%"}
 				maxWidth="880px"
 			>
 				{editingAttachment && 
@@ -88,6 +92,7 @@ const  DisplayContent = ({id, mode}) => {
 						status={request.status}
 						type={request.type}
 						updatedAt={request.updatedAt}
+						mode={mode}
 					/>
 					<Tab fullHeight className="tab-container">
 						<TabPane name="Content" key={1} value={1}>
@@ -117,7 +122,9 @@ const  DisplayContent = ({id, mode}) => {
 					<AbsoluteModal 
 						visible={confirmPopup !== ""} 
 						onClickOutside={() => setConfirmPopup("")} 
-						width="50%"
+						width="70%"
+						maxWidth="360px"
+						// max-width="480px"
 					>
 						<ConfirmPopup 
 							decision={confirmPopup}

@@ -48,7 +48,7 @@ const popOut = keyframes`
 const PopupWrapper = styled.div`
 	position: absolute;
 	right: 0;
-	top: 110%;
+	top: calc(100% + 8px);
 	width: 90%;
 	z-index: 22;
 	border: 2px solid ${(props) => props.theme.color.border.primary};

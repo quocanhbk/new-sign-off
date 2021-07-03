@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import PropTypes from "prop-types"
 import React, { useState, } from 'react';
-import { getFader } from '../utils/color';
+import { getFader } from 'utils/color';
 
 const Container = styled.div`
     flex: 1;

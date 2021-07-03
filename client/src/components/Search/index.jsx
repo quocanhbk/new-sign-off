@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Detail from './Detail'
 import List from './List'
 import {Router} from '@reach/router'
 import Placeholder from 'components/Placeholder'
+import useMediaQuery from 'hooks/useMediaQuery'
 
 const StyleContainer = styled.div`
     display:flex;
@@ -25,10 +26,14 @@ const DetailWrapper = styled.div`
         height: 100%;
     }
 `;
-const Search = ({mode}) => {
 
+
+const Search = ({mode}) => {
+    let device = useMediaQuery()
     return (
         <StyleContainer>
+            {device === "PC" ? 
+            <>
             <List mode={mode}/>
             <DetailWrapper>
                 <Router className="search-router">
@@ -36,6 +41,15 @@ const Search = ({mode}) => {
                     <Placeholder type="REQUEST_NOT_SELECTED" default/>
                 </Router>
             </DetailWrapper>
+            </> :
+            <DetailWrapper>
+                <Router className="search-router">
+                    <Detail path="/:id" mode={mode}/>
+                    <List mode={mode} default/>
+                </Router>
+            </DetailWrapper>
+            }
+
         </StyleContainer>
     )
 }

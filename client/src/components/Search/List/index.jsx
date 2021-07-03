@@ -92,8 +92,7 @@ function List({mode}) {
         }
     }, [loading])
 
-    const loadMore = async (isAppend = false) => {
-        console.log("Range", range)
+    const loadMore = (isAppend = false) => {
         getRequests(
             queryString + `&start=${range.current}&end=${range.current + 15}${mode === "sign" ? "&sign=true" : ""}`,
             p => setPercent(p)
