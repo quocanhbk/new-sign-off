@@ -9,18 +9,18 @@
     "description": "Approval Online, designed for TTG staffs",
     "icons": [
         {
-            "src": "favicon.ico",
+            "src": "icon/ttgIcon64.ico",
             "sizes": "64x64 32x32 24x24 16x16",
             "type": "image/x-icon"
         },
         {
-            "src": "logo192.png",
-            "type": "image/png",
-            "sizes": "192x192"
+            "src": "icon/ttgIcon256.ico",
+            "type": "image/x-icon",
+            "sizes": "256x256"
         },
         {
-            "src": "logo512.png",
-            "type": "image/png",
+            "src": "icon/ttgIcon512.ico",
+            "type": "image/x-icon",
             "sizes": "512x512"
         }
     ]

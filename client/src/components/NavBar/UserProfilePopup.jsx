@@ -21,6 +21,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    background: ${props => props.theme.color.background.primary};
 `
 const UserDisplayCardInfo = styled.div`
 	flex: 1 1 auto;

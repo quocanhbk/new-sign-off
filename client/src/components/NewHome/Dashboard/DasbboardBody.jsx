@@ -18,7 +18,7 @@ const Section = styled.div`
     }
 `
 const SectionName = styled.p`
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     margin-bottom: 1rem;
     text-align: center;
     color: ${props => props.theme.color.fill[props.color || "warning"]};
