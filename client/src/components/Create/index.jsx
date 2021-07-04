@@ -20,6 +20,8 @@ import AttachmentCheckList from "./AttachmentChecklist";
 import AttachmentPopup from './AttachmentPopup'
 import AbsoluteModal from 'components/AbsoluteModal'
 import FormPopup from "./FormPopup";
+import useMediaQuery from "hooks/useMediaQuery";
+import { Redirect } from "@reach/router";
 
 const StyleContainer = styled.div`
   display: flex;
@@ -72,7 +74,7 @@ const Create = ({id, mode}) => {
 	const [procedureList, setProcedureList] = useState([])
 	const [addingAttachment, setAddingAttachment] = useState(null)
 	const [editingAttachment, setEditingAttachment] = useState(null)
-
+	const device = useMediaQuery()
 	const {
 		title, description, type,
         priority, deadline, relatedProjects,
@@ -107,6 +109,7 @@ const Create = ({id, mode}) => {
 	}, [])
 
 	return (
+		device === "PC" ?
 		<StyleContainer>
 			{renderModal()}
 			<Header 
@@ -224,6 +227,7 @@ const Create = ({id, mode}) => {
                 </Notify>
             </Snackbar>
 		</StyleContainer>
+		: <Redirect to="/" noThrow/>
 	);
 };
 

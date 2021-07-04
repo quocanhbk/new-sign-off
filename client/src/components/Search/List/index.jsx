@@ -104,16 +104,6 @@ function List({mode}) {
             })
             .catch(() => setNotFound(true))
     }
-
-    const comparePriority = (a, b) => {
-        if ( a.priority > b.priority ){
-          return -1;
-        }
-        if ( a.priority < b.priority ){
-          return 1;
-        }
-        return 0;
-    }
     return (
         <StyleListWrapper>
             <ListToolbar 
@@ -135,7 +125,7 @@ function List({mode}) {
                     hasMore={hasMore}
                     scrollableTarget="scrollableDiv"
                 >
-                    {render(requests.sort((a, b) => comparePriority(a, b)).map((task) => (
+                    {render(requests.map((task) => (
                     <RequestCard
                         key={task.id}
                         data={task}

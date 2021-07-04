@@ -7,6 +7,7 @@
     "name": "Approval Online",
     "short_name": "Approval Online",
     "description": "Approval Online, designed for TTG staffs",
+    "orientation" : "portrait",
     "icons": [
         {
             "src": "icon/ttgIcon64.ico",

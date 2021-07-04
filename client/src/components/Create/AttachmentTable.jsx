@@ -91,8 +91,10 @@ const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeField
 	let device = useMediaQuery()
 	const handleDownload = (attachmentId) => {
 		const attachment = attachments.find(_ => _.id === attachmentId)
-		if (attachment.file)
+		if (attachment.file) {
 			downloadForm2(attachment.name, attachment.file, attachment.fields)
+			console.log("Downloading...")
+		}
         else downloadForm(attachment.name, attachment.fileId, attachment.fields)
 	}
 	return (

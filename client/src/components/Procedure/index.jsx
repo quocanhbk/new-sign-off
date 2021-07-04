@@ -1,5 +1,6 @@
 /* eslint-disable no-unreachable */
 import { Router, Redirect } from '@reach/router';
+import useMediaQuery from 'hooks/useMediaQuery';
 import React from 'react'
 import styled from "styled-components";
 import CreatePage from './CreatePage'
@@ -15,7 +16,9 @@ const Container = styled.div`
 `
 
 const Procedure = () => {
+    const device = useMediaQuery()
     return (
+        device === "PC" ?
         <Container>
             <Router className="router">
                 <CreatePage path="/create" />
@@ -23,7 +26,8 @@ const Procedure = () => {
                 <ViewPage path="/view/*" />
                 <Redirect from="/" to="/procedure/view" noThrow/>
             </Router>
-        </Container>
+        </Container> :
+        <Redirect to="/"/>
     )
 }
 

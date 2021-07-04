@@ -5,9 +5,8 @@ import { getProcedureChecklist } from './procedure';
 import { msalInstance } from 'index';
 import { removeUndefinedProps } from 'utils/utils';
 import { getFile } from './file';
-
+import faker from 'faker'
 export const getRequests = async (queryString, callback = (v) => {v}) => {
-
 	const config = await getConfig()
 	let {data} = await axios.get(`/api/v1/requests?${queryString}`, config)
 	callback(100)
@@ -140,7 +139,7 @@ export const burstRequest = async () => {
 	let config = await getConfig()
 	await Promise.all(arr.map(async () => {
 		await axios.post('/api/v1/requests', {
-			title: v4(),
+			title: faker.vehicle.vehicle(),
 			type: "Flexible",
 			description: "",
 			priority: "Normal",
@@ -155,6 +154,7 @@ export const burstRequest = async () => {
 		}, config)
 	}))
 }
+
 export const postRequest = async (input, callback = (v) => {v}) => {
 	// REMEMBER to post all the file without the fileId first
 	const config = await getConfig()

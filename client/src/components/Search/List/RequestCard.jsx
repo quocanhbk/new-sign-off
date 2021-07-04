@@ -1,12 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 // Request Card, used to display in Search and Sign Page
-import React from 'react';
+import React, {memo} from 'react';
 import styled, { css } from 'styled-components'
 import {BiDislike, BiLike, BsChevronRight, BsClock, BsDot, BsStarFill, GiPauseButton} from 'react-icons/all'
 import {getFader} from 'utils/color'
 import { navigate } from '@reach/router';
 import Button from 'components/Base/Button'
+
+
 const Container = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
     border-radius: 0.5rem;
@@ -63,6 +65,7 @@ const formatDate = (dateString) => {
 
 const Card = ({page, active, data, set}) => {
     const {id, title, status, priority, type, deadline, author} = data
+    console.log(title, "render")
     const genColor = () => {
 		switch (status) {
 			case "Approved":
@@ -125,4 +128,5 @@ const Card = ({page, active, data, set}) => {
     )
 }
 
-export default Card;
+// memo is a higher order component that help reduces render times
+export default memo(Card);
