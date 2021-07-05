@@ -45,6 +45,13 @@ const Notify = styled.div`
     align-items: center;
     gap: 0.5rem;
     border-radius: 0.5rem;
+
+	& div {
+		padding-left: 0.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
 `
 const Container = styled.div`
 	display: flex;
@@ -82,7 +89,7 @@ const Create = ({id, mode}) => {
         approvalAttachments, referenceAttachments, procedure, checklist,
         set, updateAttachment,
         //Helper function
-        removeAttachment, submitRequest, error, isSubmittable, changeFieldContent, render
+        removeAttachment, submitRequest, error, isSubmittable, changeFieldContent, render, createError, setCreateError
 	} = useDocument(id, mode)
 
 	const popupSubmit = (type) => {
@@ -224,6 +231,15 @@ const Create = ({id, mode}) => {
                 <Notify>
                     <BsFillExclamationTriangleFill size="1.2rem"/>
                     <p>Please fix all fields before submitting!</p>
+                </Notify>
+            </Snackbar>
+			<Snackbar visible={createError} onClose={() => setCreateError(false)} timeOut={3000}>
+                <Notify>
+                    <BsFillExclamationTriangleFill size="1.2rem"/>
+					<div>
+						<p>Something wrong happened!</p>
+						<p>Please check the internet connection and try again!</p>
+					</div>
                 </Notify>
             </Snackbar>
 		</StyleContainer>

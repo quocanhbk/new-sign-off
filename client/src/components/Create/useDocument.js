@@ -67,9 +67,8 @@ const useDocument = (id, mode) => {
     const [originAttachmentIds, setOriginAttachmentIds] = useState([])
     const setPath = useStoreActions(action => action.setPath)
     const {render, reset, setPercent, setNotFound} = useCustomLoader(false, <Placeholder type="NOT_FOUND"/>)
-    const forms = useStoreState(s => s.forms)
     // fetch procedure detail after user select procedure from combo box
-
+    const [createError, setCreateError] = useState(false)
     useEffect(() => {    
         const fetchProcedure = async () => {
             reset()
@@ -265,16 +264,19 @@ const useDocument = (id, mode) => {
             procedure,
             status: requestStatus
         }
-        let requestId = id
         if (mode === "create")
-        requestId = await postRequest(input, (p) => setPercent(p))
+            postRequest(input, setPercent)
+                .then(requestId => setTimeout(() => setPath("/search/" + requestId), 400))
+                .catch(() => {setPercent(100);setTimeout(() => setCreateError(true), 400)})
         else {
             // delete attachment first
             let deletedAttachmentIds = originAttachmentIds.filter(a => !approvalAttachments.concat(referenceAttachments).map(_ => _.id).includes(a))
             let newAttachments = approvalAttachments.concat(referenceAttachments).filter(attachment => !originAttachmentIds.includes(attachment.id))
-            await patchRequest(id, input, newAttachments, deletedAttachmentIds, (p) => setPercent(p))
+            patchRequest(id, input, newAttachments, deletedAttachmentIds, (p) => setPercent(p))
+                .then(() => setTimeout(() => setPath("/search/" + id), 400))
+                .catch(() => {setPercent(100);setTimeout(() => setCreateError(true), 400)})
         }
-        setTimeout(() => setPath("/search/" + requestId), 400)
+        // setTimeout(() => {if (!createError) setPath("/search/" + requestId)}, 400)
     }
 
     const updateAttachment = (attachmentType, attachmentId, name, fields) => {
@@ -303,7 +305,7 @@ const useDocument = (id, mode) => {
         //Helper function
         removeAttachment, submitRequest, isSubmittable, changeFieldContent, 
         //Error
-        error, setError, render, updateAttachment
+        error, setError, render, updateAttachment, createError, setCreateError
     }
 }
 

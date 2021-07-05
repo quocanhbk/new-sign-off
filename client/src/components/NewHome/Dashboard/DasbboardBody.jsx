@@ -30,7 +30,7 @@ const DashboardBody = () => {
     const [loading, setLoading] = useState(true)
     useEffect(() => {
         const fetchRequest = async () => {
-            let data = await getRequests("start=0&end=2&sign=true")
+            let data = await getRequests("start=0&end=5&sign=true")
             setRequests(data)
             setLoading(false)
         }

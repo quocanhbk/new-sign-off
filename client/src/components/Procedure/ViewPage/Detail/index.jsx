@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { deleteProcedure, getProcedureDetail, toggleActive } from "api/procedure";
+import { deleteProcedure } from "api/procedure";
 import ContentHeader from "./ContentHeader";
 import SectionContainer from 'components/SectionContainer'
 import FormControl from "components/FormControl";
@@ -9,11 +9,10 @@ import { useStoreState } from "easy-peasy";
 import ControlledCombox from "components/ControlledCombox";
 import { navigate } from "@reach/router";
 import Snackbar from "components/Snackbar";
-import Placeholder from "components/Placeholder";
 import { BsFillExclamationTriangleFill } from "react-icons/bs";
 import Checklist from './Checklist'
 import baseURL from "api/baseURL";
-import useCustomLoader from "hooks/useCustomLoader";
+import useProcedure from './useProcedure'
 const Container = styled.div`
 	position: relative;
 	height: 100%;
@@ -60,7 +59,6 @@ const Tag = ({email, name}) => {
     )
 }
 const Detail = ({id}) => {
-	const [procedure, setProcedures] = useState()
 	const [notify, setNotify] = useState(false)
 	const users = useStoreState(s => s.users).map(s => ({...s, display: <Tag email={s.email} name={s.name}/>}))
 	const onDeleteClick = async () => {
@@ -69,28 +67,12 @@ const Detail = ({id}) => {
 			navigate('/procedure')
 		else setNotify(true)
 	}
-	const onToggleActive = async (v) => {
-		reset()
-		setProcedures({...procedure, isActive: v})
-		await toggleActive(id, {...procedure, isActive: v}, (p) => setPercent(p))
-
-	}
+	
 	const onEditClick = () => {
 		navigate('/procedure/create/' + id)
 	}
 
-	//const {LoadingComponent, setPercent, setNotFound, reset} = useLoader(true, render(), <Placeholder type="NOT_FOUND" />)
-	const {render, reset, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-	useEffect(() => {
-		const fetchForm = async () => {
-			setProcedures(null)
-			setNotFound(false)
-			reset()
-			const proDetail = await getProcedureDetail(id, false, (v) => setPercent(v)).catch(() => {setNotFound(true)})
-			setProcedures(proDetail)
-		}
-		fetchForm()
-	}, [id])
+	const {data: procedure, render, onToggleActive} = useProcedure(id)
 
 	return (
 		<Container>

@@ -9,7 +9,7 @@ import Snackbar from "components/Snackbar";
 import PrimaryInfo from "./PrimaryInfo";
 import Header from "./Header";
 import SectionContainer from "components/SectionContainer";
-import useProcedure from "../useProcedure";
+import useCreateProcedure from "../useCreateProcedure";
 import AttachmentChecklist from "./AttachmentChecklist";
 import { BsPlus, BsFillExclamationTriangleFill } from "react-icons/bs";
 import Button from "components/Base/Button"
@@ -73,7 +73,7 @@ const Detail = ({id}) => {
 	const {
 		title, description, advisors, approvers, observators, checklist, checklistUtil, set,
 		error, isSubmittable, submitProcedure, render
-	} = useProcedure(id)
+	} = useCreateProcedure(id)
 
 	const [errorNotify, setErrorNotify] = useState(false)
 	

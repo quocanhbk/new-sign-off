@@ -37,7 +37,7 @@ const DivInfo = styled.div`
         line-height: 1.2;
     }
 `
-function CardEvents({createdAt, createdBy, description}) {
+function CardEvents({createdAt, createdBy, description, type}) {
     return (
         <CardWrapper>
             <DivAvatar>

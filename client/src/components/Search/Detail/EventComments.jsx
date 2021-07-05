@@ -56,6 +56,7 @@ const TableEvents = styled.div`
 `
 
 function EventComents({ requestId, logs, setLogs }) {
+  console.log("LOG", logs)
   const [comment, setComment] = useState('');
 
   const handleSubmit = async (e) => {
@@ -81,6 +82,7 @@ function EventComents({ requestId, logs, setLogs }) {
         {logs &&
           logs.map((log) => (
             <CardEvents
+              type={log.type}
               key={log.id}
               description={log.description}
               createdAt={format(new Date(log.createdAt), 'HH:mm dd/MM/yyyy')}

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components'
 import Cardv2 from './Cardv2';
 import ListToolbar from './ListToolbar';
@@ -8,10 +8,7 @@ import { navigate, useLocation } from '@reach/router';
 import Button from 'components/Base/Button'
 import { BsFileEarmarkPlus } from 'react-icons/bs';
 import { useStoreState } from 'easy-peasy';
-import { getProcedures} from 'api/procedure'
-import Placeholder from 'components/Placeholder';
-import useCustomLoader from 'hooks/useCustomLoader';
-
+import useProcedures from './useProcedures'
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -56,20 +53,12 @@ const CardList = styled.div`
 
 function List() {
 
-    const [procedures, setProcedures] = useState([])
+    // const [procedures, setProcedures] = useState([])
     const [searchText, setSearchText] = useState("")
     const location = useLocation().pathname.split("/")
     const users = useStoreState(s => s.users)
-    const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-    
-    useEffect(() => {
-        const fetchData = async () => {
-            getProcedures((v) => setPercent(v))
-                .then(data => setProcedures(data))
-                .catch(() => {setNotFound(true)})
-        }
-        fetchData()
-    }, [])
+    // const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
+    const {data: procedures, render} = useProcedures()
 
     const handle = (formId) => {
         navigate('/procedure/view/' + formId)
@@ -79,7 +68,7 @@ function List() {
         <StyleListWrapper>
             <ListToolbar search={searchText} setSearch={setSearchText}/>
             <AddNewContainer>
-                <p>Result: {procedures.filter(procedure => procedure.title.toLowerCase().includes(searchText.toLowerCase())).length}</p>
+                <p>Result: {procedures && procedures.filter(procedure => procedure.title.toLowerCase().includes(searchText.toLowerCase())).length}</p>
                 <Button 
                     onClick={() => navigate('/procedure/create')} 
                     padding="0.2rem 0.4rem" 
@@ -90,7 +79,7 @@ function List() {
             </AddNewContainer>
             <CardList>
                 {render(
-                    procedures.filter(procedure => procedure.title.toLowerCase().includes(searchText.toLowerCase())).map(procedure => 
+                    procedures && procedures.filter(procedure => procedure.title.toLowerCase().includes(searchText.toLowerCase())).map(procedure => 
                         <Cardv2 
                             key={procedure.id} 
                             title={procedure.title}

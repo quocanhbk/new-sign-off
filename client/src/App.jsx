@@ -21,7 +21,13 @@ const StyledApp = styled.div`
 	flex-direction: column;
 	align-items: center;
 `;
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			refetchOnWindowFocus: false
+		}
+	}
+})
 const Container = () => {
   const isDark = useStoreState(s => s.theme)
   

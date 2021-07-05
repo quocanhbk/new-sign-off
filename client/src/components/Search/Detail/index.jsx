@@ -6,7 +6,7 @@ import ApprovalFlow from "./ApprovalFlow";
 import Tab from "./Tab";
 import TabPane from "./TabPane";
 import { useStoreActions } from "easy-peasy";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ApprovalInfo from "./ApprovalInfo";
 import ApproveWindow from './ApproveWindow';
@@ -33,6 +33,11 @@ const  DisplayContent = ({id, mode}) => {
 	const setPath = useStoreActions(s => s.setPath)
 	const device = useMediaQuery()
 	const {data: request, render} = useRequest(id, mode)
+
+	useEffect(() => {
+		if (request)
+			setLogs(request.logs)
+	}, [request])
 
 	const handleConfirm = async () => {
 		// reset()

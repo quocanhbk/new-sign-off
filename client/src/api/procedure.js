@@ -114,10 +114,9 @@ export const deleteProcedure = async (id, callback = (v) => {v}) => {
     }
     else return "delete-wrong"
 }
-export const toggleActive = async (id, data, callback = v => {v}) => {
+export const toggleActive = async (id, isActive, callback = v => {v}) => {
     const config = await getConfig()
-    let {title, description, isActive, advisors, approvers, observators, tags} = data
-    let body = {title, description, isActive, advisors, approvers, observators, tags}
-    await axios.put('/api/v1/procedures/' + id, body, config)
+    console.log("TOGGLE", isActive)
+    await axios.post('/api/v1/procedures/' + id + '/status', {isActive}, config)
     callback(100)
 }

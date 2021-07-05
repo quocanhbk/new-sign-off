@@ -46,7 +46,7 @@ const ContentHeader = ({title, isActive, onDeleteClick, onEditClick, onToggleAct
             <h3>{title}</h3>
             <ButtonContainer>
                 <ToggleContainer isActive={isActive}>
-                    <Toggle value={isActive} onSelect={(v) => onToggleActive(v)}>{isActive ? "Active" : "Unactive"}</Toggle>
+                    <Toggle value={isActive} onSelect={(v) => onToggleActive(v)}>{isActive ? "Running" : "Stopped"}</Toggle>
                 </ToggleContainer>
                 <Button color="danger" onClick={() => onDeleteClick()}>Delete</Button>
                 <Button color="info" onClick={onEditClick}>Edit</Button>
