@@ -7,8 +7,6 @@ import ListToolbar from './ListToolbar';
 import {getFader} from 'utils/color';
 import { useLocation } from '@reach/router';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import useRequests from './useRequests'
-import NormalLoader from 'components/NormalLoader'
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -36,23 +34,27 @@ const CardList = styled.div`
     overflow: auto;
     position: relative;
 
-    ::-webkit-scrollbar {
-    width: 0.5rem;
+    & .infinite-scroll-component__outerdiv {
+        height: 100%;
+        display:flex;
+        flex-direction: column;
+        gap: 0.5rem;
     }
-    ::-webkit-scrollbar-track {
-    background: transparent;
+    & .request-scroller {
+        ::-webkit-scrollbar {
+        width: 0.5rem;
+        }
+        ::-webkit-scrollbar-track {
+        background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+        background: ${props => getFader(props.theme.color.fill.secondary, 0.5)};
+        border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+        background: ${props => props.theme.color.fill.secondary};
+        }
     }
-    ::-webkit-scrollbar-thumb {
-    background: ${props => getFader(props.theme.color.fill.secondary, 0.5)};
-    border-radius: 99px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-    background: ${props => props.theme.color.fill.secondary};
-    }
-
-    display:flex;
-    flex-direction: column;
-    gap: 0.5rem;
 `
 const FilterTag = styled.span`
     padding: 0.2rem 0.4rem;
@@ -62,9 +64,10 @@ const FilterTag = styled.span`
     font-size: 0.8rem;
 `
 // I use the same component for Search and Sign, mode = "search" | "sign"
-function List({mode, hook}) {
+function List({mode, hook, scroll, setScroll}) {
     const location = useLocation().pathname.split("/")
     const {onChangeTitleSearch, query, setQuery, queryTags, render, fetchNextPage, hasNextPage, data} = hook
+
     return (
         <StyleListWrapper>
             <ListToolbar 
@@ -85,7 +88,9 @@ function List({mode, hook}) {
                         className="request-scroller"
                         next={() => fetchNextPage()}
                         hasMore={hasNextPage}
-                        scrollableTarget="scrollableDiv"
+                        height="100%"
+                        initialScrollY={scroll || 0}
+                        onScroll={v => {if (setScroll) setScroll(v.target.scrollTop)}}
                     >
                         {data && data.pages.map((page, i) =>
                             <Fragment key={i}>

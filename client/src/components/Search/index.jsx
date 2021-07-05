@@ -32,7 +32,7 @@ const DetailWrapper = styled.div`
 const Search = ({mode}) => {
     let device = useMediaQuery()
     let hook = useRequests(mode)
-
+    const [scroll, setScroll] = useState(0)
     return (
         <StyleContainer>
             {device === "PC" ? 
@@ -48,7 +48,7 @@ const Search = ({mode}) => {
             <DetailWrapper>
                 <Router className="search-router">
                     <Detail path="/:id" mode={mode}/>
-                    <List mode={mode} hook={hook} default/>
+                    <List mode={mode} hook={hook} default scroll={scroll} setScroll={setScroll}/>
                 </Router>
             </DetailWrapper>
             }

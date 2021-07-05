@@ -1,18 +1,19 @@
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 
-const isBrowser = typeof window !== undefined
-
-// we track scroll on Y
-const getScrollPosition = (element) => {
-    if (!isBrowser) return 0;
-
-    const target = element.current
-    const position = target.getBoundingClientRect()
-
-    return position.top
-}
 
 const useScrollPosition = (element) => {
-    const position = useRef(getScrollPosition(element))
-    
+    const [scroll, setScroll] = useState(0)
+    useEffect(() => {
+        const updateScroll = () => {
+            setScroll(element.scrollTop)
+        }
+        element.addEventListener("scroll", updateScroll)
+
+        return (() => {
+            element.removeEventListener("scroll", updateScroll)
+        })
+    })
+    return scroll
 }
+
+export default useScrollPosition
