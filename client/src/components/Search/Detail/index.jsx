@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { approveRequest, remindApprove } from 'api/request';
+import { approveRequest, getLastSignRequest, remindApprove } from 'api/request';
 import AbsoluteModal from 'components/AbsoluteModal';
 import ApprovalFlow from "./ApprovalFlow";
 import Tab from "./Tab";
 import TabPane from "./TabPane";
 import { useStoreActions } from "easy-peasy";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import styled from "styled-components";
 import ApprovalInfo from "./ApprovalInfo";
 import ApproveWindow from './ApproveWindow';
@@ -16,6 +16,7 @@ import Header from "./Header";
 import FormPopup from './FormPopup'
 import useMediaQuery from 'hooks/useMediaQuery';
 import useRequest from './useRequest'
+import { useQueryClient } from 'react-query';
 
 const Container = styled.div`
 	height: 100%;
@@ -33,16 +34,20 @@ const  DisplayContent = ({id, mode}) => {
 	const setPath = useStoreActions(s => s.setPath)
 	const device = useMediaQuery()
 	const {data: request, render} = useRequest(id, mode)
-
+	const queryClient = useQueryClient()
 	useEffect(() => {
-		if (request)
-			setLogs(request.logs)
+		if (request) setLogs(request.logs)
 	}, [request])
 
 	const handleConfirm = async () => {
-		// reset()
+		// need to catch error
 		await approveRequest(id, {code: confirmPopup, comment, opinionId})
-		setTimeout(() => setPath(`/search/${id}`), 400)
+		getLastSignRequest().then(id => {
+			setConfirmPopup("")
+			if (id) setPath(`/sign/${id}`)
+			else setPath(`/sign`)
+			queryClient.fetchQuery('requests')
+		})
 	}
 	const handleCancel = () => {
 		setConfirmPopup("")
@@ -121,4 +126,4 @@ const  DisplayContent = ({id, mode}) => {
     );
 }
 
-export default DisplayContent;
+export default memo(DisplayContent);

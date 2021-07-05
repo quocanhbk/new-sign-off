@@ -62,10 +62,9 @@ const FilterTag = styled.span`
     font-size: 0.8rem;
 `
 // I use the same component for Search and Sign, mode = "search" | "sign"
-function List({mode}) {
+function List({mode, hook}) {
     const location = useLocation().pathname.split("/")
-    let {query, queryTags, onChangeTitleSearch, setQuery, data, hasNextPage, fetchNextPage, render} = useRequests(mode)
-
+    const {onChangeTitleSearch, query, setQuery, queryTags, render, fetchNextPage, hasNextPage, data} = hook
     return (
         <StyleListWrapper>
             <ListToolbar 

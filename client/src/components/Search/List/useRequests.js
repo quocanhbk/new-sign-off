@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 import React from 'react'
 import {useInfiniteQuery} from 'react-query'
@@ -19,7 +20,7 @@ const useRequests = (mode) => {
         return requests
     }
 
-    const {data, hasNextPage, fetchNextPage, refetch, isLoading} = useInfiniteQuery('getRequests', getRequestsWithRange, {
+    const {data, hasNextPage, fetchNextPage, refetch, isLoading} = useInfiniteQuery('requests', getRequestsWithRange, {
         // lastPage is the data that last fetched, if it < RANGE, means that we fetched all
         // return undefined on fetched all
         getNextPageParam: (lastPage, pages) => lastPage.length < RANGE ? undefined : lastPage.length * pages.length,
@@ -33,7 +34,7 @@ const useRequests = (mode) => {
     }, [queryString, mode])
     
     useEffect(() => {
-        if (isLoading) reset()
+        // if (isLoading) reset()
     }, [isLoading])
 
     return {

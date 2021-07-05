@@ -56,7 +56,6 @@ const TableEvents = styled.div`
 `
 
 function EventComents({ requestId, logs, setLogs }) {
-  console.log("LOG", logs)
   const [comment, setComment] = useState('');
 
   const handleSubmit = async (e) => {

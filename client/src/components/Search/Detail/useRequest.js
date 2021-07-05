@@ -10,7 +10,6 @@ const useRequest = (id, mode) => {
         onError: () => setNotFound(true),
         
     })
-    console.log(data)
     useEffect(() => {
         if (isLoading) reset()
     }, [isLoading])

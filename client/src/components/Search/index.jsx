@@ -7,6 +7,7 @@ import List from './List'
 import {Router} from '@reach/router'
 import Placeholder from 'components/Placeholder'
 import useMediaQuery from 'hooks/useMediaQuery'
+import useRequests from './List/useRequests'
 
 const StyleContainer = styled.div`
     display:flex;
@@ -30,11 +31,13 @@ const DetailWrapper = styled.div`
 
 const Search = ({mode}) => {
     let device = useMediaQuery()
+    let hook = useRequests(mode)
+
     return (
         <StyleContainer>
             {device === "PC" ? 
             <>
-            <List mode={mode}/>
+            <List mode={mode} hook={hook}/>
             <DetailWrapper>
                 <Router className="search-router">
                     <Detail path="/:id" mode={mode}/>
@@ -45,7 +48,7 @@ const Search = ({mode}) => {
             <DetailWrapper>
                 <Router className="search-router">
                     <Detail path="/:id" mode={mode}/>
-                    <List mode={mode} default/>
+                    <List mode={mode} hook={hook} default/>
                 </Router>
             </DetailWrapper>
             }

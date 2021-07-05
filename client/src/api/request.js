@@ -21,6 +21,16 @@ export const getRequests = async (queryString, callback = (v) => {v}) => {
 	}))
 }
 
+export const getLastSignRequest = async () => {
+	const config = await getConfig()
+	try {
+		let {data} = await axios.get("/api/v1/requests?sign=true&start=0&end=1", config)
+		return data[0] ? data[0].approval_request_id : null
+	} catch (error) {
+		return null
+	}
+}
+
 export const getRequestDetail = async (id, sign = false, callback = (v) => {v}) => {
 	const config = await getConfig()
 	let {data} = await axios.get(`/api/v1/requests/${id}?${sign ? "sign=true" : ""}`, config);
@@ -134,6 +144,7 @@ export const getRequestDetail = async (id, sign = false, callback = (v) => {v}) 
 
 	return returnData
 }
+
 export const burstRequest = async () => {
 	let arr = Array(50).fill("")
 	let config = await getConfig()
