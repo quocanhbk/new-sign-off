@@ -26,30 +26,25 @@ const reducer = (state, action) => {
     }
 }
 const useQuery = () => {
-
     const [query, dispatch] = useReducer(reducer, initState)
 
     // useCallback helps this function to re-initilize only when dispatch is changed (which not).
     // so this function will only initilized once, which helps reduce unnecessary renders
-    const set = useCallback((field, value, text = "") => {
+    const setQuery = useCallback((field, value, text = "") => {
         dispatch({type: "SET", field, value, text: text === "" ? value : text})
     }, [dispatch])
-    const reset = () => dispatch({type: "RESET"})
 
-    const onChangeTitleSearch = (v) => {
-        set("title", v, v)
-    }
+    const onChangeTitleSearch = (v) => setQuery("title", v, v)
 
     return {
         query,
         queryString: Object.entries(query).filter(([, s]) => s.value !== null).map(([key, s]) => `${key}=${s.value}`).join("&"), 
-        set, 
-        reset,
+        setQuery, 
         onChangeTitleSearch,
         queryTags: Object.entries(query).filter(([, s]) => !s.hidden && s.value !== null).map(([key, s]) => ({
             key: key,
             text: `${s.text}`,
-            onClick: () => set(key, null, "")
+            onClick: () => setQuery(key, null, "")
         }))
     }
 }

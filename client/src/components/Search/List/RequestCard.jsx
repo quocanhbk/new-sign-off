@@ -65,7 +65,6 @@ const formatDate = (dateString) => {
 
 const Card = ({page, active, data, set}) => {
     const {id, title, status, priority, type, deadline, author} = data
-    console.log(title, "render")
     const genColor = () => {
 		switch (status) {
 			case "Approved":

@@ -1,16 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components'
 import RequestCard from './RequestCard';
 import ListToolbar from './ListToolbar';
 import {getFader} from 'utils/color';
-import { getRequests } from 'api/request';
-import useCustomLoader from 'hooks/useCustomLoader';
-import Placeholder from 'components/Placeholder';
 import { useLocation } from '@reach/router';
-import useQuery from './useQuery'
 import InfiniteScroll from 'react-infinite-scroll-component';
+import useRequests from './useRequests'
+import NormalLoader from 'components/NormalLoader'
 const StyleListWrapper =styled.div`
     flex: 5;
     background-color: ${(props) => props.theme.color.background.primary};
@@ -65,51 +63,15 @@ const FilterTag = styled.span`
 `
 // I use the same component for Search and Sign, mode = "search" | "sign"
 function List({mode}) {
-    const [requests, setRequests] = useState([])
-    const [hasMore, setHasMore] = useState(true)
     const location = useLocation().pathname.split("/")
-    const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-    const {query, queryString, set, queryTags, onChangeTitleSearch} = useQuery()
-    const range = useRef(0)
-    const [loading, setLoading] = useState("")
+    let {query, queryTags, onChangeTitleSearch, setQuery, data, hasNextPage, fetchNextPage, render} = useRequests(mode)
 
-    useEffect(() => {
-        setLoading("NEW")
-    }, [queryString])
-
-    useEffect(() => {
-        if (loading === "NEW") {
-            setHasMore(true)
-            range.current = 0
-            loadMore()
-            range.current += 15
-            setLoading("")
-        }
-        else if (loading === "APPEND") {
-            loadMore(true)
-            range.current += 15
-            setLoading("")
-        }
-    }, [loading])
-
-    const loadMore = (isAppend = false) => {
-        getRequests(
-            queryString + `&start=${range.current}&end=${range.current + 15}${mode === "sign" ? "&sign=true" : ""}`,
-            p => setPercent(p)
-            )
-            .then(data => {
-                if (data.length < 15) setHasMore(false)
-                if (isAppend) setRequests([...requests, ...data])
-                else setRequests(data)
-            })
-            .catch(() => setNotFound(true))
-    }
     return (
         <StyleListWrapper>
             <ListToolbar 
                 setQueryTitle={(v) => onChangeTitleSearch(v)}
                 query={query}
-                set={set}
+                set={setQuery}
             />
             <TagBar>
                 <p>Filter: </p>
@@ -118,22 +80,29 @@ function List({mode}) {
                 </TagContainer>
             </TagBar>
             <CardList id="scrollableDiv">
-                <InfiniteScroll
-                    dataLength={requests.length }
-                    className="request-scroller"
-                    next={() => setLoading("APPEND")}
-                    hasMore={hasMore}
-                    scrollableTarget="scrollableDiv"
-                >
-                    {render(requests.map((task) => (
-                    <RequestCard
-                        key={task.id}
-                        data={task}
-                        page={mode}
-                        active={task.id == location[location.length - 1]}
-                        set={set}
-                    />)))}
-                </InfiniteScroll>
+                {render(
+                    <InfiniteScroll
+                        dataLength={data ? data.pages.reduce((init, cur) => init.concat(cur), []).length : 0}
+                        className="request-scroller"
+                        next={() => fetchNextPage()}
+                        hasMore={hasNextPage}
+                        scrollableTarget="scrollableDiv"
+                    >
+                        {data && data.pages.map((page, i) =>
+                            <Fragment key={i}>
+                                {page.map(task =>
+                                    <RequestCard
+                                        key={task.id}
+                                        data={task}
+                                        page={mode}
+                                        active={task.id == location[location.length - 1]}
+                                        set={setQuery}
+                                    />
+                                )}
+                            </Fragment>
+                        )}
+                    </InfiniteScroll>
+                )}
             </CardList>
         </StyleListWrapper>
     );

@@ -14,7 +14,6 @@ const store = createStore({
     path: "/" + location.pathname.split("/")[1],
     setPath: action((state, payload) => {
         state.path = "/" + payload.split("/")[1]
-        console.log("/" + payload.split("/")[1])
         navigate(payload)
     }),
 
