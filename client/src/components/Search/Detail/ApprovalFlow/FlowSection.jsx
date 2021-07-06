@@ -47,6 +47,7 @@ const CheckContainer = styled.div`
     place-items: center;
 `
 const FlowSection = ({headline, data, type, currentApprover, remindApprover}) => {
+    console.log(data)
     return (
         <Fragment>
             {type === "observator" && 
@@ -66,7 +67,7 @@ const FlowSection = ({headline, data, type, currentApprover, remindApprover}) =>
                 </Side>
                 <Headline>{headline}</Headline>
             </tr>
-            {data.map((d,idx) => 
+            {data.sort((first, second) => first.order - second.order).map((d,idx) => 
                 <FlowTag 
                     key={type === "observator" ? d.email : d.id} 
                     data={d}
