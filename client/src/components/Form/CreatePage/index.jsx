@@ -25,38 +25,6 @@ const CreatePage = ({id}) => {
     
     const [numPage, setNumPage] = useState()
 
-    //#region download
-        // const downloadForm = async () => {
-        //     let existingPdf = await file.arrayBuffer()
-        //     const pdfDoc = await PDFDocument.load(existingPdf)
-
-        //     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
-
-        //     const pages = pdfDoc.getPages()
-        //     const {width, height} = pages[0].getSize()
-
-        //     fieldData.forEach(field => {
-        //         let pctPage = 100 / pages.length
-        //         let pageOfField = Math.floor(field.position.Y / pctPage)
-        //         let relativeY = field.position.Y - pctPage*pageOfField
-                
-        //         pages[pageOfField].drawText(field.content, {
-        //             x: field.position.X * width / 100,
-        //             y: height - relativeY * height * pages.length / 100 -10,
-        //             font: helveticaFont,
-        //             size: 12,
-        //             color: rgb(0,0,0)
-        //         })
-        //     });
-        //     const pdfBytes = await pdfDoc.save()
-        //     let blob = new Blob([pdfBytes], {type: "application/pdf"})
-        //     let link = document.createElement('a');
-        //     link.href = window.URL.createObjectURL(blob)
-        //     link.download=`${formName}.pdf`
-        //     link.click()
-        // }
-    //#endregion
-    
     return (
         <Container>
             <StyleTitle>
