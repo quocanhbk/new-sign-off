@@ -29,6 +29,7 @@ const statusSelection = [
     {id: "Pending", text: "Pending"},
     {id: "Approved", text: "Approved"},
     {id: "Rejected", text: "Rejected"},
+    {id: "Revising", text: "Revising"},
 ]
 const sortSelection = [
     {id: "updated_at", text: "Updated Time"},

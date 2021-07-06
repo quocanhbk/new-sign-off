@@ -7,7 +7,7 @@ import Button from 'components/Base/Button'
 const Container = styled.div`
     background: ${props => props.theme.color.background.primary};
     overflow: hidden;
-    border-radius: 0.5rem;
+    border-radius: 0.2rem;
     box-shadow: ${props => props.theme.shadow};
 `
 const Header = styled.header`
@@ -16,7 +16,7 @@ const Header = styled.header`
         props.decision === "REJECT" ? "danger" :
         "warning"
     ]};
-    padding: 0.5rem 1rem;
+    padding: 0.8rem 1rem;
     color: ${props => props.theme.color.background.primary};
     font-weight: 500;
 `
@@ -71,7 +71,7 @@ const ConfirmPopup = ({onCancelClick, onConfirmClick, decision, comment, setComm
             }
             <Body>
                 <FormControl headline={genFormTitle()}>
-                    <TextArea className="approve-comment" value={comment} onChange={e => setComment(e.target.value)}/>
+                    <TextArea className="approve-comment" value={comment} onChange={e => setComment(e.target.value)} spellCheck={'false'}/>
                 </FormControl>
                 <BtnContainer>
                     <Button className="confirm-button" onClick={onConfirmClick} color="primary" type="fill">Confirm</Button>

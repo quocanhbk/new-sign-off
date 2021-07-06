@@ -4,10 +4,9 @@ import React from "react";
 import styled from "styled-components";
 import {format} from 'date-fns'
 import Button from "components/Base/Button";
-import { BiDislike, BiLike } from "react-icons/bi";
+import { BiDislike, BiLike, BiRevision } from "react-icons/bi";
 import { BsChevronLeft, BsClock } from "react-icons/bs";
 import { GiPauseButton } from "react-icons/gi";
-import { FaPen } from "react-icons/fa";
 import { navigate } from "@reach/router";
 import useMediaQuery from "hooks/useMediaQuery";
 const ContentInfo = styled.div`
@@ -30,7 +29,7 @@ const Left = styled.div`
 	display: flex;
 	gap: 0.5rem;
 	flex: 1;
-	padding: 0.5rem;
+	padding: 1rem 1rem 1rem 0.5rem;
 	& .search-header-title {
 		flex: 1;
 		display: flex;
@@ -74,7 +73,7 @@ const Header = ({id, title, status, type, updatedAt, mode}) => {
             case "Rejected":
                 return <BiDislike/>
             case "Revising":
-                return <FaPen/>
+                return <BiRevision/>
             default:
                 return <GiPauseButton/>
         }

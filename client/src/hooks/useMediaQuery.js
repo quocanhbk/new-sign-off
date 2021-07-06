@@ -13,7 +13,7 @@ const useMediaQuery = () => {
             window.removeEventListener('resize', updateWidth)
         })
     })
-    return width < 720 ? "PHONE" : "PC"
+    return width < 840 ? "PHONE" : "PC"
 
 }
 export default useMediaQuery

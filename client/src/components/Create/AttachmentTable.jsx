@@ -7,6 +7,7 @@ import Table from "../Table";
 import {BsTrash, BsThreeDotsVertical, BsDownload, BsEye} from 'react-icons/bs'
 import { downloadForm, downloadForm2 } from "api/file";
 import useMediaQuery from "hooks/useMediaQuery";
+import AttachmentTableMobile from './AttachmentTableMobile'
 
 const TableWrapper = styled.div`
     border: 1px solid ${(props) => props.theme.color.border.primary};
@@ -97,6 +98,7 @@ const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeField
 		}
         else downloadForm(attachment.name, attachment.fileId, attachment.fields)
 	}
+	if (device !== "PC") return <AttachmentTableMobile attachments={attachments}/> 
 	return (
 		<TableWrapper noHeader={noHeader}>
 			<Table>
@@ -109,11 +111,9 @@ const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeField
 						<Table.HeaderCell className="header-cell" textAlign="center">
 							Data Field
 						</Table.HeaderCell>
-						{device === "PC" &&
-							<Table.HeaderCell className="header-cell" textAlign="center" width="10%">
-								Action
-							</Table.HeaderCell>
-						}
+						<Table.HeaderCell className="header-cell" textAlign="center" width="10%">
+							Action
+						</Table.HeaderCell>
 					</Table.Row>
 				</Table.Header>
 			)}
@@ -156,7 +156,7 @@ const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeField
 									<BsTrash />
 								</Icon>
 							</IconContainer>
-						</Table.Cell> : device === "PC" ?
+						</Table.Cell> : 
 						<Table.Cell textAlign="center" width="10%">
 							<IconContainer>
 								<Icon color="primary" onClick={() => onEditAttachment(attachment.id)}>
@@ -166,7 +166,7 @@ const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeField
 									<BsDownload/>
 								</Icon>
 							</IconContainer>
-						</Table.Cell> : null
+						</Table.Cell>
 					}
 					</AttachmentRow>
 				))}

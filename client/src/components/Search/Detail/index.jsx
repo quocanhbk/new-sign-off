@@ -48,6 +48,7 @@ const  DisplayContent = ({id, mode}) => {
 			else setPath(`/sign`)
 			queryClient.fetchQuery('requests')
 		})
+		setComment("")
 	}
 	const handleCancel = () => {
 		setConfirmPopup("")

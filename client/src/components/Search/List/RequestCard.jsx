@@ -3,7 +3,7 @@
 // Request Card, used to display in Search and Sign Page
 import React, {memo} from 'react';
 import styled, { css } from 'styled-components'
-import {BiDislike, BiLike, BsChevronRight, BsClock, BsDot, BsStarFill, GiPauseButton} from 'react-icons/all'
+import {BiDislike, BiLike, BiRevision, BsChevronRight, BsClock, BsDot, BsStarFill, GiPauseButton} from 'react-icons/all'
 import {getFader} from 'utils/color'
 import { navigate } from '@reach/router';
 import Button from 'components/Base/Button'
@@ -89,6 +89,8 @@ const Card = ({page, active, data, set}) => {
                 return <BsClock/>
             case "Rejected":
                 return <BiDislike/>
+            case "Revising":
+                return <BiRevision/>
             default:
                 return <GiPauseButton/>
         }
@@ -100,7 +102,7 @@ const Card = ({page, active, data, set}) => {
                 <Title>{title}</Title>
                 <Line gap="0.2rem">
                     <span onClick={() => set("createdBy", author.id, author.name)}>Created: {author.name}</span>
-                    {status === "Pending" && 
+                    {(status === "Pending" || status === "Revising") && 
                         <>
                             <BsDot size="0.8rem"/>
                             <span>Deadline: {formatDate(deadline)}</span>
