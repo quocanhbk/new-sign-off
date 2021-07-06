@@ -13,7 +13,9 @@ const Container = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: ${props => props.gap};
+    & > * + * {
+		margin-left: ${props => props.gap};
+	}
     pointer-events: ${props => props.readOnly ? "none" : "all"};
 
     color: ${props => props.theme.color.fill[props.color]};

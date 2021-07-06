@@ -20,7 +20,9 @@ const Container = styled.div`
 `
 const ButtonContainer = styled.div`
     display: flex;
-    gap: 1rem;
+    & > * + * {
+		margin-left: 1rem;
+	}
 
     & .form-delete {
         background: ${props => props.theme.color.fill.danger};
@@ -30,8 +32,9 @@ const ButtonContainer = styled.div`
     }
 `
 const ToggleContainer = styled.div`
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 0 0.5rem;
     /* border: 1px solid ${props => props.theme.color.border.primary}; */
     background: ${props => getFader(props.theme.color.text[props.isActive ? "success" : "danger"], 0.1)};

@@ -6,8 +6,9 @@ import styled from "styled-components";
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
-    
+    & > * + * {
+		margin-top: 0.2rem;
+	}
     & label {
         font-style: italic;
         color: ${props => props.theme.color.text.secondary};
@@ -37,7 +38,9 @@ const ContentInput = styled.input`
 const NameContainer = styled.div`
     display: flex;
     align-items: center;
-    gap: 0.2rem;
+    & > * + * {
+		margin-left: 0.2rem;
+	}
 `
 const Icon = styled.div`
     display: flex;

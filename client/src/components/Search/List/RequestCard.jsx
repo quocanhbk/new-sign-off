@@ -28,7 +28,9 @@ const DivInfo = styled.div`
     padding: 0.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    & > * + * {
+		margin-top: 0.4rem;
+	}
 `
 const Title = styled.div`
     -webkit-line-clamp: 1;
@@ -41,7 +43,9 @@ const Title = styled.div`
 `
 const Line = styled.div`
     display: flex;
-    gap: ${props => props.gap || "0.5rem"};
+    & > * + * {
+		margin-left: ${props => props.gap || "0.5rem"};
+	}
     align-items: center;
     color: ${props => props.theme.color.text.secondary};
     & span {
@@ -110,11 +114,14 @@ const Card = ({page, active, data, set}) => {
                     }
                 </Line>
                 <Line last>
-                    <Button type="fill" weight="400" gap="0.2rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("status", status)}>{renderIcon()}{status}</Button>
+                    <Button type="fill" weight="400" gap="0.2rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("status", status)}>
+                        {renderIcon()}
+                        <p>{status}</p>
+                    </Button>
                     <Button weight="400" gap="0.2rem" variant={"abc"} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("type", type)}>{type}</Button>
                     {priority === "Urgent" && 
                         <Button weight="400" type="fill" gap="0.2rem" color="info" padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("priority", priority)}>
-                            <BsStarFill/>Urgent
+                            <BsStarFill/><p>Urgent</p>
                         </Button>
                     }
                     {overdue && 

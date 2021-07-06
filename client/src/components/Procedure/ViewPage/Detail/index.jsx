@@ -22,20 +22,26 @@ const Container = styled.div`
 const ParticipantsContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 0.5rem;
+	& > * + * {
+		margin-top: 0.5rem;
+	}
 `
 const Body = styled.div`
 	flex: 1;
 	padding: 1rem;
 	display: flex;
 	flex-direction: column;
-	gap: 1rem;
+	& > * + * {
+		margin-top: 1rem;
+	}
 `
 const TagContainer = styled.div`
     display: flex;
     height: 100%;
     align-items: center;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     & img {
         height: 1.2rem;
         border-radius: 99px;
@@ -47,14 +53,16 @@ const Notify = styled.div`
     color: ${props => props.theme.color.background.primary};
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     border-radius: 0.5rem;
 `
 const Tag = ({email, name}) => {
     return (
         <TagContainer>
             <img src={baseURL + "/api/v1/avatar/" + email} alt="" loading="lazy"/>
-            {name}
+            <p>{name}</p>
         </TagContainer>
     )
 }

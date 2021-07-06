@@ -5,7 +5,9 @@ import Searchbar from "components/Searchbar";
 
 const StyleToolbar = styled.div`
   display: flex;
-  gap: 0.5rem;
+  & > * + * {
+		margin-left: 0.5rem;
+	}
   align-items: center;
   padding: 1rem 0 0.5rem;
 `;

@@ -7,7 +7,9 @@ import baseURL from 'api/baseURL'
 const CardWrapper = styled.div`
     display:flex;
     padding: 0.5rem 0;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
 `
 const DivAvatar = styled.div`
     padding: 0;
@@ -15,11 +17,15 @@ const DivAvatar = styled.div`
 const DivInfo = styled.div`
     display:flex;
     flex-direction: column;
-    gap: 0.2rem;
+    & > * + * {
+		margin-top: 0.2rem;
+	}
     & .create-event{
         display:flex;
         align-items: center;
-        gap: 1rem;
+        & > * + * {
+            margin-left: 1rem;
+        }
 
         & .create-by-event{
             font-weight: 600;

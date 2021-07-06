@@ -10,7 +10,9 @@ import {getAvatar} from 'api/user'
 const Main = styled.div`
     display:flex;
     padding: 1rem 0;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
 `
 const DivAvatar = styled.div`
@@ -20,11 +22,15 @@ const DivInfo = styled.div`
     flex: 1;
     display:flex;
     flex-direction: column;
-    gap: 0.2rem;
+    & > * + * {
+		margin-top: 0.2rem;
+	}
     & .create-event{
         display:flex;
         align-items: center;
-        gap: 1rem;
+        & > * + * {
+            margin-left: 1rem;
+        }
 
         & .create-by-event{
             font-weight: 600;
@@ -46,12 +52,16 @@ const Sub = styled.div`
     display: flex;
     flex-direction: column;
     padding-top: 0.4rem;
-    gap: 0.4rem;
+    & > * + * {
+		margin-top: 0.4rem;
+	}
 
 `
 const Line = styled.div`
     display: flex;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     align-items: center;
     font-size: 0.9rem;
     font-style: italic;

@@ -18,14 +18,18 @@ const StyleListWrapper =styled.div`
 `
 const TagBar = styled.div`
     display: flex;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     height: 2.5rem;
     align-items: center;
 `;
 const TagContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  & > * + * {
+		margin-left: 0.5rem;
+	}
 `;
 
 const CardList = styled.div`
@@ -38,7 +42,9 @@ const CardList = styled.div`
         height: 100%;
         display:flex;
         flex-direction: column;
-        gap: 0.5rem;
+        & > * + * {
+            margin-top: 0.5rem;
+        }
     }
     & .request-scroller {
         ::-webkit-scrollbar {

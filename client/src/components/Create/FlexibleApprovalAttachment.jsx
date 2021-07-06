@@ -13,7 +13,9 @@ import Button from 'components/Base/Button'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    & > * + * {
+		margin-top: 1rem;
+	}
 `
 const Col = styled.div`
     flex: ${props => props.noSpan ? 0 : 1};
@@ -26,7 +28,9 @@ const Description = styled.label`
 `
 const Wrapper = styled.div`
     display:flex;
-    gap: 1rem;
+    & > * + * {
+		margin-left: 1rem;
+	}
 `
 const VerticalBar = styled.div`
     height: 100%;

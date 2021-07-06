@@ -13,7 +13,9 @@ const Container = styled.div`
   padding: 1rem;
   overflow: overlay;
   position: relative;
-  gap: 1rem;
+  & > * + * {
+		margin-top: 1rem;
+	}
   ::-webkit-scrollbar {
     width: 0.5rem;
   }
@@ -31,7 +33,9 @@ const Container = styled.div`
 const LineContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  & > * + * {
+		margin-top: 0.5rem;
+	}
 `
 
 const ApprovalInfo = ({request}) => {

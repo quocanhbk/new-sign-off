@@ -4,7 +4,9 @@ import styled from 'styled-components'
 import Button from 'components/Base/Button'
 const StyleButton = styled.div`
 	display: flex;
-	gap: 1rem;
+	& > * + * {
+		margin-left: 1rem;
+	}
 	align-items: center;
 `
 

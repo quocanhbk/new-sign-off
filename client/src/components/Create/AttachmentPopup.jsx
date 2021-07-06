@@ -24,7 +24,9 @@ const Container = styled.div`
 `
 const Wrapper = styled.div`
     display:flex;
-    gap: 1rem;
+    & > * + * {
+		margin-left: 1rem;
+	}
     background: ${props => props.theme.color.background.primary};
     padding: 1rem;
     border-radius: 0.5rem;
@@ -41,14 +43,18 @@ const Header = styled.div`
     & p {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        & > * + * {
+            margin-left: 0.5rem;
+        }
     }
     & span {
         font-weight: 600;
         color: ${props => props.theme.color.text.info};
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
+        & > * + * {
+            margin-left: 0.5rem;
+        }
     }
 `
 const AttachmentPopup = ({set, attachments, checkItemId, closePopup, checklist}) => {

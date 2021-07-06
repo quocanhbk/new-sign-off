@@ -9,12 +9,15 @@ import useClickOutside from 'hooks/useClickOutside'
 const NavList = styled.div`
     display: flex;
     justify-content: space-between;
-    gap: 0.5rem;
+    /* gap: 0.5rem; */
     z-index: 66;
     border-top: 1px solid ${props => props.theme.color.border.primary};
     background: ${props => props.theme.color.background.primary};
     padding: 0.5rem;
     position: relative;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
 `
 const NavItem = styled.div`
     flex: 1;

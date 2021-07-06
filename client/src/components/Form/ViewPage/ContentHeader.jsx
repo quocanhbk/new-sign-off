@@ -19,7 +19,9 @@ const Container = styled.div`
 `
 const ButtonContainer = styled.div`
     display: flex;
-    gap: 1rem;
+    & > * + * {
+		margin-left: 1rem;
+	}
 `
 const ContentHeader = ({title, onDeleteClick, onEditClick}) => {
 

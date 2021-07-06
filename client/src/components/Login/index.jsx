@@ -7,7 +7,10 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12rem;
+    /* gap: 12rem; */
+    & > * + * {
+		margin-top: 12rem;
+	}
     width: 100%;
     height: 100%;
     //background: ${props => props.theme.color.background.primary};

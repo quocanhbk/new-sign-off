@@ -8,13 +8,15 @@ const Container = styled.div`
     min-width: 240px;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
 `
 const Section = styled.div`
     & ul {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        /* gap: 0.5rem; */
+        & > * + * {
+		margin-top: 0.5rem;
+	}
     }
 `
 const SectionName = styled.p`

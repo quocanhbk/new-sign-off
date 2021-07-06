@@ -34,7 +34,9 @@ const CardList = styled.div`
     position: relative;
     display:flex;
     flex-direction: column;
-    gap: 0.5rem;
+    & > * + * {
+		margin-top: 0.5rem;
+	}
 
     ::-webkit-scrollbar {
     width: 0.5rem;
@@ -77,7 +79,8 @@ function List() {
                     padding="0.2rem 0.4rem" 
                     gap="0.4rem"
                 >
-                    <BsFileEarmarkPlus size="1rem"/> Add
+                    <BsFileEarmarkPlus size="1rem"/>
+                    <p>Add</p>
                 </Button>
             </AddNewContainer>
             <CardList>

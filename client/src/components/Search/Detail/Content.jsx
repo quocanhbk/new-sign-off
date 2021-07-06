@@ -14,7 +14,9 @@ const ContentWrapper = styled.div`
     flex-direction: column;
     flex: 1;
     padding: 1rem;
-    gap: 1rem;
+    & > * + * {
+		margin-top: 1rem;
+	}
     height: 100%;
     overflow: auto;
 
@@ -35,7 +37,9 @@ const ContentWrapper = styled.div`
 const ProjectContainer = styled.div`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
 `
 const Content = ({request, logs, setLogs, setEditingAttachment}) => {
     

@@ -12,7 +12,10 @@ const Container = styled.td`
 const TagWrapper = styled.div`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    /* gap: 0.5rem; */
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     //border: 1px solid ${props => props.theme.color.border.primary};
     border-radius: 0.5rem;
     overflow: hidden;
@@ -37,13 +40,15 @@ const Side = styled.td`
 `
 const CheckContainer = styled.div`
     padding: 0.5rem;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 const CheckWrapper = styled.div`
     color: ${props => props.theme.color.fill.secondary};
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 99px;
     position: relative;
     background: ${props => props.theme.color.background.primary};
@@ -75,8 +80,9 @@ const Text = styled.div`
 const Status = styled.div`
     align-self: stretch;
     padding: 0.5rem;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: ${props => props.theme.color.background.primary};
     background: ${props => 
         props.status === "Approved" ? props.theme.color.fill.success : 
@@ -89,7 +95,9 @@ const Status = styled.div`
 const Body = styled.div`
     display: flex;
     padding: 0.5rem 1rem 0.5rem 0.5rem;
-    gap: 1rem;
+    & > * + * {
+		margin-left: 1rem;
+	}
     align-items: center;
     flex: 1;
 
@@ -126,7 +134,7 @@ const FlowTag = ({data, last, isCurrent, remindApprover}) => {
                     </Status>
                     <Body>
                         <img src={`${baseURL}/api/v1/avatar/${data.email}`}/>
-                        <Text>
+                        <Text style={{marginRight: "1rem"}}>
                             <p className="flow-tag-name">{data.fullname}</p>
                             <p className="flow-tag-email">{data.email}</p>
                         </Text>

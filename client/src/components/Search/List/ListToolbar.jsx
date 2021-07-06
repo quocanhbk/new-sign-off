@@ -8,7 +8,9 @@ import FilterPopup from './FilterPopup'
 import { getFader } from "utils/color";
 const StyleToolbar = styled.div`
   display: flex;
-  gap: 0.5rem;
+  & > * + * {
+		margin-left: 0.5rem;
+	}
   align-items: center;
   padding: 1rem 0 0.5rem;
   position: relative;
@@ -23,8 +25,9 @@ const IconWrapper = styled.button`
 	border-radius: 99px;
 	border: 1px solid ${props => props.theme.color.border.primary};
 	cursor: pointer;
-	display: grid;
-	place-items: center;
+	display: flex;
+    align-items: center;
+    justify-content: center;
 
 	${props => props.active && css`
 		background: ${props => props.theme.color.fill.primary};

@@ -19,7 +19,9 @@ const Bar = styled.div`
 
     & div {
         display: flex;
-        gap: 0.5rem;
+        & > * + * {
+            margin-left: 0.5rem;
+        }
     }
 `
 const DocWrapper = styled.div`
@@ -47,7 +49,7 @@ const DocDisplay = ({file, initForm, addingTag, setAddingTag, fieldData, handleC
             {file && 
                 <Bar>
                     <IconWrapper onClick={() => setAddingTag(addingTag === null ? "field" : null)}>
-                        <BsCardText/> Add Field
+                        <BsCardText/><p>Add Field</p>
                     </IconWrapper>
                 </Bar>
             }

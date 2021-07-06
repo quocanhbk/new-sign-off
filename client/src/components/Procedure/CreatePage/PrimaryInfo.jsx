@@ -6,13 +6,17 @@ import FormControl from 'components/FormControl';
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    & > * + * {
+		margin-top: 0.5rem;
+	}
 `
 
 const Row = styled.div`
     display:flex;
     justify-content:space-between;
-    gap: 1rem;
+    & > * + * {
+		margin-left: 1rem;
+	}
 `
 
 const Input = styled.input`

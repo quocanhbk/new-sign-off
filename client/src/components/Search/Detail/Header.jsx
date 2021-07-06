@@ -27,14 +27,18 @@ const ContentInfo = styled.div`
 `;
 const Left = styled.div`
 	display: flex;
-	gap: 0.5rem;
 	flex: 1;
 	padding: 1rem 1rem 1rem 0.5rem;
 	& .search-header-title {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		& > * + * {
+			margin-top: 0.5rem;
+		}
+	}
+	& > * + * {
+		margin-left: 0.5rem;
 	}
 `
 const Right = styled.div`
@@ -43,8 +47,10 @@ const Right = styled.div`
 `
 const TitleContainer = styled.div`
 	display: flex;
-	gap: 1rem;
 	align-items: center;
+	& > * + * {
+		margin-left: 1rem;
+	}
 `
 const Header = ({id, title, status, type, updatedAt, mode}) => {
 	const genColor = () => {
@@ -89,7 +95,9 @@ const Header = ({id, title, status, type, updatedAt, mode}) => {
 					<p className="content-modified">{format(updatedAt, "'Last updated at ' HH:mm dd/MM/yyyy")}</p>
 					<p className="content-title">{title}</p>
 					<TitleContainer>
-						<Button readOnly gap="0.4rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem" type="fill" weight="400">{renderIcon()}{status}</Button>
+						<Button readOnly gap="0.4rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem" type="fill" weight="400">
+							{renderIcon()}<p>{status}</p>
+						</Button>
 						<Button readOnly gap="0.2rem" variant={"abc"} padding="0.2rem 0.4rem" fontSize="0.8rem" weight="400">{type}</Button>
 					</TitleContainer>
 				</div>

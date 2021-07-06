@@ -9,7 +9,9 @@ const StyleTitle = styled.div`
 	display: flex;
 	align-items: center;
 	border-bottom: 1px solid ${props => props.theme.color.border.primary};
-	gap: 0.5rem;
+	& > * + * {
+		margin-left: 0.5rem;
+	}
 	padding: 0 1rem;
 	& h3 {
 		color: ${(props) => props.theme.color.fill.primary};

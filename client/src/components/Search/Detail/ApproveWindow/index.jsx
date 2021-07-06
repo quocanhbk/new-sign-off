@@ -45,8 +45,9 @@ const Body = styled.div`
 `
 const ApproveBlock = styled.div`
     display: flex;
-
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     padding-bottom: 1rem;
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
 

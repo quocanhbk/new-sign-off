@@ -12,7 +12,10 @@ const features = [
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    /* gap: 2rem; */
+    & > * + * {
+		margin-top: 2rem;
+	}
 `
 const Title = styled.div`
     

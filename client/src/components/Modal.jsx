@@ -6,8 +6,9 @@ import {BsX} from 'react-icons/bs'
 import { getFader } from '../utils/color'
 
 const XContainer = styled.div`
-    display: grid;
-    place-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: ${props => props.theme.color.fill.danger};
     border-radius: 99px;
     transition: all 0.25s ease-in-out;

@@ -13,7 +13,9 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 0.5rem;
+    & > * + * {
+		margin-top: 0.5rem;
+	}
     color: ${props => props.theme.color.fill[props.color]};
     background: ${props => props.theme.color.background.primary};
     

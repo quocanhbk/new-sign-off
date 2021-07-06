@@ -15,7 +15,9 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 0.5rem;
+    & > * + * {
+		margin-top: 0.5rem;
+	}
     z-index: 255;
     background: ${props => getFader(props.theme.color.background.primary, 0.5)};
 `

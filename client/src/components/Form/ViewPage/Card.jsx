@@ -11,7 +11,9 @@ const CardWrapper = styled.div`
     //box-shadow: ${props => props.theme.shadow};
     display: flex;
     position: relative;
-    gap: 1rem;
+    & > * + * {
+		margin-left: 1rem;
+	}
     padding: 0.5rem 1rem;
     cursor: pointer;
     color: ${props => props.theme.color.text.primary};
@@ -31,14 +33,17 @@ const CardWrapper = styled.div`
     }
 `
 let IconWrapper = styled.div`
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 let InfoWrapper = styled.div`
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: 0.2rem;
+    & > * + * {
+		margin-top: 0.2rem;
+	}
 `
 let FormName = styled.div`
     -webkit-line-clamp: 1;

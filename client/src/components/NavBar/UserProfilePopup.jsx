@@ -20,8 +20,11 @@ const Container = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    /* gap: 1rem; */
     background: ${props => props.theme.color.background.primary};
+    & > * + * {
+		margin-top: 1rem;
+	}
 `
 const UserDisplayCardInfo = styled.div`
 	flex: 1 1 auto;
@@ -29,7 +32,10 @@ const UserDisplayCardInfo = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	margin-left: 1rem;
-	gap: 0.1rem;
+	/* gap: 0.1rem; */
+    & > * + * {
+		margin-top: 0.1rem;
+	}
     & h3 {
 		font-size: 1rem;
 		color: ${props => props.theme.color.text.primary};
@@ -47,15 +53,19 @@ const UserDisplayCard = styled.div`
 `
 const Item = styled.div`
     display: flex;
-    gap: 1rem;
+    /* gap: 1rem; */
     align-items: center;
+    & > * + * {
+		margin-left: 1rem;
+	}
 `
 const IconContainer = styled.div`
     margin-left: auto;
     padding: 0.5rem;
     border-radius: 99px;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 const UserProfilePopup = ({reff}) => {
     const theme = useStoreState(_ => _.theme)

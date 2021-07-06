@@ -34,7 +34,6 @@ const calendarData = {
 }
 const Container = styled.div`
     position: relative;
-    margin: ${props => props.demo ? "8px" : "0"};
     display: ${props => props.fullWidth ? "block" : "inline-block"};
     width: ${props => props.fullWidth ? "100%" : "auto"};
 `;
@@ -125,7 +124,9 @@ const StyledCalendarBar = styled.ul`
     display: flex;
     width: 100%;
     padding: 4px;
-    gap: 4px;
+    & > * + * {
+		margin-left: 4px;
+	}
     background: ${props => props.theme.color.background.primary};
     justify-content: center;
     flex-wrap: wrap;
@@ -137,7 +138,9 @@ const CalendarContent = styled.ul`
     width: 100%;
     background: ${props => props.theme.color.background.primary};
     flex-wrap: wrap;
-    gap: 4px;
+    & > * + * {
+		margin-left: 4px;
+	}
     padding: 4px;
     
 `

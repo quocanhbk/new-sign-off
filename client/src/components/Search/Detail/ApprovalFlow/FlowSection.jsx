@@ -18,8 +18,9 @@ const Row = styled.tr`
 const CheckWrapper = styled.div`
     border: 2px solid ${props => props.theme.color.fill.secondary};
     color: ${props => props.theme.color.fill.secondary};
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 2px;
     border-radius: 99px;
     position: relative;
@@ -43,8 +44,9 @@ const Side = styled.td`
 `
 const CheckContainer = styled.div`
     padding: 0.5rem;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 const FlowSection = ({headline, data, type, currentApprover, remindApprover}) => {
     console.log(data)

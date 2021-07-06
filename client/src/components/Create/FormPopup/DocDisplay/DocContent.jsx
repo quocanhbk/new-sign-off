@@ -7,7 +7,6 @@ import FieldTag from '../FieldTag'
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import LoadingFile from '../LoadingFile';
 
-
 const Container = styled.div`
     position: relative;
     min-height: 100%;
@@ -16,11 +15,6 @@ const Container = styled.div`
         min-height: 100%;
         width: 200px;
     }
-`
-const UploadContainer = styled.div`
-    min-height: 100%;
-    display: grid;
-    place-items: center;
 `
 const DocContent = ({file, addingTag, fieldData, handleClickDoc, numPage, setNumPage, moveField, resizeField}) => {
 

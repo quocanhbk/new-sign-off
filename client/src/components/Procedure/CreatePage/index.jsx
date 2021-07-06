@@ -25,7 +25,9 @@ const StyleContainer = styled.div`
 const ContainerItems = styled.div`
 	flex: 1;
 	display: flex;
-	gap: 1rem;
+	& > * + * {
+		margin-left: 1rem;
+	}
 	padding: 1rem;
 	overflow: auto;
 	position: relative;
@@ -47,7 +49,9 @@ const Column = styled.div`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	gap: 1rem;
+	& > * + * {
+		margin-top: 1rem;
+	}
 
 	${props => props.borderLeft && css`
 		border-left: 1px solid ${props => props.theme.color.border.primary};
@@ -60,7 +64,9 @@ const Notify = styled.div`
     color: ${props => props.theme.color.background.primary};
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     border-radius: 0.5rem;
 `
 const AddCheckListWrapper = styled.div`

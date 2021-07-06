@@ -19,17 +19,10 @@ const SidebarContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
-	/* background: ${props => "linear-gradient(to right," + 
-				getFader(props.theme.color.background.primary, 1) + "," + 
-				getFader(props.theme.color.background.primary, 0.8) + "," +
-				getFader(props.theme.color.background.primary, 1) + 
-				")"}, url("/main.png");
-	background-size: contain; */
 `;
 
 const Logo = styled.img`
   	height: 4rem;
-	/* background: red; */
 `;
 
 export const UserDisplayCard = styled.div`
@@ -63,7 +56,10 @@ export const UserDisplayCardInfo = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	margin-left: 1rem;
-	gap: 0.1rem;
+	/* gap: 0.1rem; */
+	& > * + * {
+		margin-top: 0.1rem;
+	}
 `;
 
 const NavItem = styled.div`
@@ -72,9 +68,12 @@ const NavItem = styled.div`
 	border-radius: 1rem;
 	display: flex;
 	align-items: center;
-	gap: 1rem;
+	/* gap: 1rem; */
 	cursor: pointer;
 	transition: background 0.15s ease-in;
+	& > * + * {
+		margin-left: 1rem;
+	}
 	&:hover{
 		background-color: ${props => getFader(props.theme.color.border.primary, 0.5)};
 	}
@@ -94,7 +93,10 @@ const NavList = styled.div`
 	flex-direction: column;
 	margin-top: 1rem;
 	color: ${props => props.theme.color.text.secondary};
-	gap: 0.5rem;
+	/* gap: 0.5rem; */
+	& > * + * {
+		margin-top: 0.5rem;
+	}
 `
 const Header = styled.div`
 	display: flex;
@@ -134,14 +136,16 @@ const OptionPopup = styled.div`
 	border: 1px solid ${props => props.theme.color.border.primary};
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
+	/* gap: 0.5rem; */
 	right: 0;
 	top: 50%;
 	transform: translate(0, 50%);
 	cursor: pointer;
 	background: ${props => props.theme.color.background.primary};
 	border-radius: 0.5rem;
-
+	& > * + * {
+		margin-left: 0.5rem;
+	}
 `
 const ThreeDotWrapper = styled.div`
 	cursor: pointer;

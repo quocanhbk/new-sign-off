@@ -64,8 +64,9 @@ const IconContainer = styled.div`
 const Icon = styled.div`
 	padding: 0.5rem;
 	border-radius: 99px;
-	display: grid;
-	place-items: center;
+	display: flex;
+    align-items: center;
+    justify-content: center;
 	color: ${props => props.theme.color.fill[props.color || "primary"]};
 	&:hover {
 		background: ${props => getFader(props.theme.color.fill[props.color || "primary"], 0.2)}

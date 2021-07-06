@@ -9,13 +9,17 @@ import baseURL from 'api/baseURL';
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    & > * + * {
+		margin-top: 0.5rem;
+	}
 `
 const TagContainer = styled.div`
     display: flex;
     height: 100%;
     align-items: center;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     & img {
         height: 1.2rem;
         border-radius: 99px;
@@ -25,7 +29,7 @@ const Tag = ({email, name}) => {
     return (
         <TagContainer>
             <img src={baseURL + "/api/v1/avatar/" + email} alt="" loading="lazy"/>
-            {name}
+            <p>{name}</p>
         </TagContainer>
     )
 }

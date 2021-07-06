@@ -9,7 +9,9 @@ import { getFader } from 'utils/color';
 const StyleWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    & > * + * {
+		margin-top: 1rem;
+	}
 
     & .ck-content {
         border: 1px solid ${props => props.theme.color.border.primary} !important;

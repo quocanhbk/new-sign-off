@@ -25,7 +25,9 @@ const DivInfo = styled.div`
     padding: 0.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    & > * + * {
+		margin-top: 0.4rem;
+	}
 `
 const Title = styled.div`
     -webkit-line-clamp: 1;
@@ -38,7 +40,9 @@ const Title = styled.div`
 `
 const Line = styled.div`
     display: flex;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     color: ${props => props.theme.color.text.secondary};
     & span {
         font-size: 0.8rem;
@@ -52,8 +56,9 @@ const StyleButton = styled.button`
     border: none;
     padding: 0.5rem;
     border-radius: 99px;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid transparent;
     &:hover {
         background: ${props => getFader(props.theme.color.border.primary, 0.5)};
@@ -72,7 +77,9 @@ const Status = styled.span`
     border-radius: 0.2rem;
     display: flex;
     align-items: center;
-    gap: 0.2rem;
+    & > * + * {
+		margin-left: 0.2rem;
+	}
     
 `
 const ButtonContainer = styled.div`
@@ -91,7 +98,7 @@ const Card = ({title, isActive, createdBy, active, onClick}) => {
                 <Line>
                     <Status running={isActive}>
                         {isActive ? <BsPlayFill/> : <BsStopFill/>}
-                        {isActive ? "Running" : "Stopped"}
+                        <p>{isActive ? "Running" : "Stopped"}</p>
                     </Status>
                 </Line>
             </DivInfo>

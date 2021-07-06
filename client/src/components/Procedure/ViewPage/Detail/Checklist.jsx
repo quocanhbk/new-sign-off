@@ -49,7 +49,9 @@ const IconContainer = styled.div`
 const NameContainer = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
+	& > * + * {
+		margin-left: 0.5rem;
+	}
 	padding-left: 0.5rem;
 `
 const CheckItemRow = styled.tr`

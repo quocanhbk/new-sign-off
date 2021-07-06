@@ -32,7 +32,10 @@ const Title = styled.p`
 
 const UserTag = styled.div`
     display: flex;
-    gap: 0.5rem;
+    /* gap: 0.5rem; */
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     align-items: center;
     & img {
         height: 1.2rem;

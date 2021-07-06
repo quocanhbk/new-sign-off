@@ -20,8 +20,9 @@ const Container = styled.div`
 `
 const UploadContainer = styled.div`
     min-height: 100%;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 const DocContent = ({file, addingTag, fieldData, handleClickDoc, numPage, setNumPage, moveField, resizeField, initForm}) => {
 

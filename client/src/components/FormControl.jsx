@@ -5,9 +5,11 @@ import styled, { css } from 'styled-components'
 
 const Container = styled.div`
     flex: 1;
-    display:flex;
+    display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    & > * + * {
+		margin-top: 0.25rem;
+	}
 `
 const Headline = styled.label`
     font-size: .9rem;
@@ -40,7 +42,7 @@ const Asterisk = styled.span`
 `
 const FormControl = ({headline, children, sub, required, noSpace, errorText, readOnly, disabled}) => {
     return (
-        <Container>
+        <Container className="form-control">
             <Headline disabled={disabled}>
                 {headline} 
                 {required && <Asterisk disabled={disabled}>*</Asterisk>}

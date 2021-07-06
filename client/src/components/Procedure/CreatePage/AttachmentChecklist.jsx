@@ -49,7 +49,9 @@ const IconContainer = styled.div`
 const NameContainer = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
+	& > * + * {
+		margin-left: 0.5rem;
+	}
 	padding-left: 0.5rem;
 `
 const CheckItemRow = styled.tr`
@@ -83,7 +85,9 @@ const ComboxWrapper = styled.div`
 	animation: ${stretchOut} 0.25s ease-in-out 0s 1 forwards normal;
 	display: flex;
 	flex-direction: column;
-	gap: 0.2rem;
+	& > * + * {
+		margin-top: 0.2rem;
+	}
 	& label {
 		font-size: 0.8rem;
 		display: block;
@@ -95,7 +99,9 @@ const Notify = styled.div`
     color: ${props => props.theme.color.background.primary};
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     border-radius: 0.5rem;
 `
 const AttachmentCheckList = ({checklist, util}) => {

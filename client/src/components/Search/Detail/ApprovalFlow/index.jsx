@@ -10,7 +10,9 @@ const Container = styled.div`
     align-items: center;
     flex: 1;
     padding: 1rem;
-    gap: 1rem;
+    & > * + * {
+		margin-top: 1rem;
+	}
     height: 100%;
     overflow: auto;
 

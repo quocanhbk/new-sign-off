@@ -9,6 +9,7 @@ const Container = styled.div`
     width: 100%;
     text-align: left;
     border-radius: 0.5rem 0.5rem 0 0;
+    padding-bottom: 0.5rem;
 `
 const Title = styled.p`
     background: ${props => props.theme.color.background.secondary};
@@ -22,7 +23,9 @@ const Body = styled.div`
     padding: 0.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    & > * + * {
+		margin-top: 1rem;
+	}
 `
 const statusSelection = [
     {id: "Draft", text: "Draft"},

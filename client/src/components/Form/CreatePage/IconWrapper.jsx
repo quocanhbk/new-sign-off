@@ -5,7 +5,9 @@ import { getFader } from 'utils/color';
 
 const Container = styled.div`
     display: flex;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     padding: 0.2rem 0.5rem;
     align-items: center;
     color: ${props => props.theme.color.text[props.color || "primary"] };

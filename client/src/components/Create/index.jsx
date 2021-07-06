@@ -43,20 +43,26 @@ const Notify = styled.div`
     color: ${props => props.theme.color.background.primary};
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     border-radius: 0.5rem;
 
 	& div {
 		padding-left: 0.5rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		& > * + * {
+			margin-top: 0.5rem;
+		}
 	}
 `
 const Container = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 1rem;
+	& > * + * {
+		margin-top: 1rem;
+	}
 	padding: 1rem;
 	overflow: auto;
 	position: relative;

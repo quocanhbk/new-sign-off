@@ -41,8 +41,9 @@ const TextArea = styled.textarea`
 const BtnContainer = styled.div`
     display: flex;
     justify-content: space-between;
-    gap: 2rem;
-
+    & > * + * {
+		margin-left: 2rem;
+	}
     & .confirm-button {
         flex: 1;
     }

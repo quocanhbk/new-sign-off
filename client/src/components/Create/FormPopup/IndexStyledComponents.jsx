@@ -23,12 +23,15 @@ export const StyleTitle = styled.h3`
     overflow: overlay;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    & > * + * {
+		margin-left: 0.5rem;
+	}
     font-weight: 500;
 
     & div {
-        display: grid;
-        place-items: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         padding: 0.5rem;
         border-radius: 99px;
         cursor: pointer;
@@ -45,7 +48,9 @@ export const Toolbar = styled.div`
     display: flex;
     flex-direction: column;
     height: 100%;
-    gap: 0.5rem;
+    & > * + * {
+		margin-top: 0.5rem;
+	}
     padding: 1rem;
     border-right: 1px solid ${props => props.theme.color.border.primary};
     overflow: overlay;
@@ -60,7 +65,9 @@ export const ToolbarContainer = styled.div`
     border-radius: 0.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    & > * + * {
+		margin-top: 1rem;
+	}
     overflow: overlay;
     ::-webkit-scrollbar {
         width: 0.5rem;
@@ -79,7 +86,9 @@ export const ToolbarContainer = styled.div`
 export const ToolbarElement = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    & > * + * {
+		margin-left: 0.2rem;
+	}
     ${props => props.fieldList && css`
         flex: 1;
         overflow: overlay;
@@ -102,5 +111,7 @@ export const ButtonContainer = styled.div`
     margin-top: auto;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    & > * + * {
+		margin-top: 0.5rem;
+	}
 `

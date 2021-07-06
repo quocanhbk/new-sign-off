@@ -33,7 +33,9 @@ const CheckItemRow = styled.tr`
 const CheckItemName = styled.div`
 	font-weight: 600;
 	padding: 0.5rem;
-	gap: 0.5rem;
+	& > * + * {
+		margin-left: 0.5rem;
+	}
 	display: flex;
 	align-items: center;
 	& p {

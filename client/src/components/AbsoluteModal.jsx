@@ -6,8 +6,9 @@ import {BsX} from 'react-icons/bs'
 import { getFader } from 'utils/color'
 
 const XContainer = styled.div`
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: ${props => props.theme.color.fill.danger};
     border-radius: 99px;
     transition: all 0.25s ease-in-out;
@@ -31,8 +32,9 @@ const StyledModal = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    display: ${props => props.visible ? "grid" : "none"};
-    place-items: center;
+    display: ${props => props.visible ? "flex" : "none"};
+    align-items: center;
+    justify-content: center;
     transition: opacity 200ms ease-in-out;
     opacity: ${props => props.ani ? 1: 0};
     z-index: 995;

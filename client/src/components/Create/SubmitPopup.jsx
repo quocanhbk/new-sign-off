@@ -5,18 +5,23 @@ import Button from 'components/Base/Button'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    & > * + * {
+		margin-top: 2rem;
+	}
     padding: 1rem;
     max-width: 30rem;
 `
 const ImgContainer = styled.div`
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 const ButtonContainer = styled.div`
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
+    & > * + * {
+		margin-left: 1rem;
+	}
 `
 const Text = styled.div`
     & p {

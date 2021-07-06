@@ -10,7 +10,9 @@ import { postComment } from 'api/request';
 const StyleWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    & > * + * {
+      margin-top: 0.5rem;
+    }
 `
 
 const Input = styled.input`
@@ -32,7 +34,9 @@ const Form = styled.form`
     align-items: center;
     width: 100%;
     padding: 0rem;
-    gap: 0.5rem;
+    & > * + * {
+      margin-left: 0.5rem;
+    }
 
     & button{
         display:flex;
@@ -52,7 +56,9 @@ const Form = styled.form`
 const TableEvents = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    & > * + * {
+      margin-top: 0.5rem;
+    }
 `
 
 function EventComents({ requestId, logs, setLogs }) {
