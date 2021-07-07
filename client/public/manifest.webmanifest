@@ -20,8 +20,13 @@
             "sizes": "256x256"
         },
         {
-            "src": "icon/ttgIcon192.png",
+            "src": "icon/ttgIcon512.ico",
             "type": "image/x-icon",
+            "sizes": "512x512"
+        },
+        {
+            "src": "icon/ttgIcon192.png",
+            "type": "image/png",
             "sizes": "192x192"
         }
     ]
