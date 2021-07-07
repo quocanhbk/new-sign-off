@@ -23,7 +23,7 @@ const StyledApp = styled.div`
 	flex-direction: column;
 	align-items: center;
 
-	& .router {
+	& .main-router {
 		height: 100%;
 		width: 100%;
 		display: flex;
@@ -49,7 +49,7 @@ const Container = () => {
 				<Login onLogin={() => instance.loginRedirect()}/>
             </UnauthenticatedTemplate>
             <AuthenticatedTemplate>
-				<Router className="router">
+				<Router className="main-router">
 					<MainPage path="/*"/>
 					<Verify path="/export"/>
 				</Router>
