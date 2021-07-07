@@ -119,3 +119,9 @@ export const toggleActive = async (id, isActive, callback = v => {v}) => {
     await axios.post('/api/v1/procedures/' + id + '/status', {isActive}, config)
     callback(100)
 }
+
+export const getCheckList = async (id) => {
+    const config = await getConfig();
+    const checklist = axios.get(`/api/v1/procedures/checklist/${id}`, config);
+    return checklist;
+}
