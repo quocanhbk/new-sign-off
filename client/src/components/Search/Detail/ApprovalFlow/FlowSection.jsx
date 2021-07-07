@@ -49,7 +49,6 @@ const CheckContainer = styled.div`
     justify-content: center;
 `
 const FlowSection = ({headline, data, type, currentApprover, remindApprover}) => {
-    console.log(data)
     return (
         <Fragment>
             {type === "observator" && 

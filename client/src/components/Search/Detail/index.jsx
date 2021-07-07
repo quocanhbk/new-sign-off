@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { approveRequest, getLastSignRequest, remindApprove } from 'api/request';
+import { approveRequest, cancelRequest, deleteRequest, getLastSignRequest, remindApprove } from 'api/request';
 import AbsoluteModal from 'components/AbsoluteModal';
 import ApprovalFlow from "./ApprovalFlow";
 import Tab from "./Tab";
@@ -18,6 +18,7 @@ import useMediaQuery from 'hooks/useMediaQuery';
 import useRequest from './useRequest'
 import { useQueryClient } from 'react-query';
 import CancelPopup from './CancelPopup'
+import { navigate } from '@reach/router';
 
 const Container = styled.div`
 	height: 100%;
@@ -55,11 +56,21 @@ const  DisplayContent = ({id, mode}) => {
 			if (id) setPath(`/sign/${id}`)
 			else setPath(`/sign`)
 			queryClient.fetchQuery('requests')
+			
 		})
-		setComment("")
 	}
 	const handleConfirmCancel = async () => {
-		
+		await cancelRequest(id, reason)
+		setReason("")
+		queryClient.fetchQuery('requests')
+		queryClient.fetchQuery(["request", id])
+		setComment("")
+		setCancelPopup(false)
+	}
+	const onDeleteDraft = async () => {
+		await deleteRequest(id)
+		queryClient.fetchQuery('requests')
+		navigate('/search')
 	}
 	const remindApprover = async (userId) => {
 		await remindApprove(id, userId)
@@ -88,6 +99,8 @@ const  DisplayContent = ({id, mode}) => {
 						type={request.type}
 						updatedAt={request.updatedAt}
 						mode={mode}
+						setCancelPopup={setCancelPopup}
+						onDeleteDraft={onDeleteDraft}
 					/>
 					<Tab fullHeight className="tab-container">
 						<TabPane name="Content" key={1} value={1}>
@@ -130,7 +143,7 @@ const  DisplayContent = ({id, mode}) => {
 						/>
 					</AbsoluteModal>
 					<AbsoluteModal 
-						visible={confirmPopup !== ""} 
+						visible={cancelPopup} 
 						onClickOutside={() => setCancelPopup(false)} 
 						width="80%"
 						maxWidth="360px"
