@@ -40,7 +40,7 @@ const Header = styled.div`
     padding: 0.5rem 1rem;
     border-bottom: 1px solid ${props => props.theme.color.border.primary};
     
-    & p {
+    & div {
         display: flex;
         align-items: center;
         & > * + * {
@@ -86,15 +86,14 @@ const AttachmentPopup = ({set, attachments, checkItemId, closePopup, checklist})
         })))))
         closePopup()
     }
-    console.log(checklist)
     return (
         <Container>
             <Header>
-                <p>Add attachment to <span><BsCheckCircle size="1.2rem"/>{checklist.find(_ => _.id === checkItemId) && checklist.find(_ => _.id === checkItemId).name}</span></p>
+                <div><p>Add attachment to</p> <span><BsCheckCircle size="1.2rem"/>{checklist.find(_ => _.id === checkItemId) && checklist.find(_ => _.id === checkItemId).name}</span></div>
             </Header>
             <Wrapper>
                 <Col>
-                    <FormControl headline="Upload from computer" noSpace>
+                    <FormControl headline="Upload from computer (PDF preferred)" noSpace>
                         <FileUpload onSubmit={handleFile} name="choose-file"/>
                     </FormControl>
                 </Col>

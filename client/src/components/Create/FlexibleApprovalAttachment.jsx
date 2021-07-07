@@ -82,7 +82,7 @@ const FlexibleApprovalAttachment = ({type, attachments, set, onRemoveAttachment,
             <Description>The flexible approval may not follow the operational procedures, approval participants are responsible for the completeness of attached documents.</Description>
             <Wrapper>
                 <Col>
-                    <FormControl headline="Upload from computer" noSpace>
+                    <FormControl headline="Upload from computer (PDF preferred)" noSpace>
                         <FileUpload onSubmit={handleFile} name="choose-file"/>
                     </FormControl>
                 </Col>

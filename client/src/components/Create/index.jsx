@@ -136,7 +136,8 @@ const Create = ({id, mode}) => {
 				<AbsoluteModal 
 					visible={addingAttachment !== null} 
 					onClickOutside={() => setAddingAttachment(null)} 
-					width="50%"
+					width="60%"
+					maxWidth="800px"
 				>
 					<AttachmentPopup 
 						checkItemId={addingAttachment}

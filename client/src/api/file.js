@@ -47,6 +47,13 @@ export const downloadForm = async (name, fileId, fields) => {
 }
 export const downloadForm2 = async (name, file, fields) => {
     const existingPdf = await axios.get(file, {responseType: 'arraybuffer'})
+    if (existingPdf.headers["content-type"] !== "application/pdf") {
+        const link = document.createElement('a');
+        link.href = file
+        // link.download=`${name}.pdf`
+        link.click()
+        return
+    }
     const pdfDoc = await PDFDocument.load(existingPdf.data)
 
     // use this font so it can print Vietnamese characters correctly

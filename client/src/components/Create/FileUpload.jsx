@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from 'react'
+import React, { useState } from 'react'
 import styled from "styled-components";
 import {BsArrowBarUp} from 'react-icons/bs'
 
@@ -34,16 +34,18 @@ const Container = styled.div`
 
 const UploadButton = ({onSubmit}) => {
 
+    // const [dragging, setDragging] = useState(false)
+
     const handleChange = (e) => {
         let files = e.target.files
         onSubmit(Object.values(files).slice(0, files.length))
     }
-    
+
     return (
         <Container>
             <BsArrowBarUp size="2rem"/>
             Click to choose or drop file here
-            <input type="file" multiple onChange={handleChange} title="" accept=".pdf"/>
+            <input type="file" multiple onChange={handleChange} title="" accept=""/>
         </Container>
     )
 }
