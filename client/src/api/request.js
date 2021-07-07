@@ -369,3 +369,8 @@ export const cancelRequest = async (id, reason) => {
 	const config = await getConfig();
 	await axios.post(`/api/v1/requests/${id}/cancellation`, {reason}, config);
 }
+
+export const deleteRequest = async (id) => {
+	const config = await getConfig();
+	await axios.delete(`/api/v1/requests/${id}`, config);
+}
