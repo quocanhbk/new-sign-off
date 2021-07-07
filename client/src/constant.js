@@ -21,3 +21,4 @@ export const projectList = [
     {id: "MAB", text: "Miss Ao Dai Building"},
     {id: "EMPIRE", text: "EMPIRE"},
 ]
+export const admins = ['4b936fbd-df00-47a5-b9b5-e33fd8be5d59', '296ff6ee-5c88-48a1-9f93-b83b8f41cb37']

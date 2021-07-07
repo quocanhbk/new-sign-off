@@ -7,7 +7,7 @@ const Container = styled.div`
 const Playground = () => {
     return (
         <Container>
-            {null}
+            WTF
         </Container>
     )
 }

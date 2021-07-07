@@ -17,6 +17,7 @@ import FormPopup from './FormPopup'
 import useMediaQuery from 'hooks/useMediaQuery';
 import useRequest from './useRequest'
 import { useQueryClient } from 'react-query';
+import CancelPopup from './CancelPopup'
 
 const Container = styled.div`
 	height: 100%;
@@ -26,20 +27,27 @@ const Container = styled.div`
 `
 
 const  DisplayContent = ({id, mode}) => {
+	// used for displaying approve confirm popup
 	const [confirmPopup, setConfirmPopup] = useState("")
 	const [opinionId, setOpinionId] = useState(null)
+	// used for storing approve comment
 	const [comment, setComment] = useState("")
 	const [logs, setLogs] = useState([]);
+	// used for storing viewing attachment
 	const [editingAttachment, setEditingAttachment] = useState(null)
+	// used for displaying cancel request popup
+	const [cancelPopup, setCancelPopup] = useState(false)
+	const [reason, setReason] = useState("")
 	const setPath = useStoreActions(s => s.setPath)
 	const device = useMediaQuery()
 	const {data: request, render} = useRequest(id, mode)
 	const queryClient = useQueryClient()
+
 	useEffect(() => {
 		if (request) setLogs(request.logs)
 	}, [request])
 
-	const handleConfirm = async () => {
+	const handleConfirmApprove = async () => {
 		// need to catch error
 		await approveRequest(id, {code: confirmPopup, comment, opinionId})
 		getLastSignRequest().then(id => {
@@ -50,8 +58,8 @@ const  DisplayContent = ({id, mode}) => {
 		})
 		setComment("")
 	}
-	const handleCancel = () => {
-		setConfirmPopup("")
+	const handleConfirmCancel = async () => {
+		
 	}
 	const remindApprover = async (userId) => {
 		await remindApprove(id, userId)
@@ -115,10 +123,24 @@ const  DisplayContent = ({id, mode}) => {
 					>
 						<ConfirmPopup 
 							decision={confirmPopup}
-							onConfirmClick={handleConfirm}
-							onCancelClick={handleCancel}
+							onConfirmClick={handleConfirmApprove}
+							onCancelClick={() => setConfirmPopup("")}
 							comment={comment}
 							setComment={setComment}
+						/>
+					</AbsoluteModal>
+					<AbsoluteModal 
+						visible={confirmPopup !== ""} 
+						onClickOutside={() => setCancelPopup(false)} 
+						width="80%"
+						maxWidth="360px"
+						// max-width="480px"
+					>
+						<CancelPopup
+							onConfirmClick={handleConfirmCancel}
+							onCancelClick={() => setCancelPopup(false)}
+							reason={reason}
+							setReason={setReason}
 						/>
 					</AbsoluteModal>
 				</>

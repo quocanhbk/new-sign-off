@@ -9,6 +9,10 @@ import { BsChevronLeft, BsClock } from "react-icons/bs";
 import { GiPauseButton } from "react-icons/gi";
 import { navigate } from "@reach/router";
 import useMediaQuery from "hooks/useMediaQuery";
+import { useStoreState } from "easy-peasy";
+import {admins} from 'constant'
+import { useMsal } from "@azure/msal-react";
+import { cancelRequest } from "api/request";
 const ContentInfo = styled.div`
 	display: flex;
 	background: ${props => props.theme.color.background.primary};
@@ -85,6 +89,12 @@ const Header = ({id, title, status, type, updatedAt, mode}) => {
         }
     }
 	let device = useMediaQuery()
+	const users = useStoreState(state => state.users)
+	const { accounts } = useMsal();
+	const curId = users.find(u => u.email === accounts[0].username).id
+	const handleCancelRequest = () => {
+		
+	}
 	return (
 		<ContentInfo>
 			{device === "PHONE" && 
@@ -105,6 +115,9 @@ const Header = ({id, title, status, type, updatedAt, mode}) => {
 				status === "Draft" ? <Right><Button color="info" onClick={() => navigate("/draft/" + id)}>Edit</Button></Right> :
 				status === "Revising" ? <Right><Button color="info" onClick={() => navigate("/revise/" + id)}>Edit</Button></Right> :
 				null)}
+				{(device === "PC" && status === "Pending" && admins.includes(curId)) &&
+					<Right><Button color="danger" onClick={handleCancelRequest}>Cancel</Button></Right>
+				}
 			</Left>
 		</ContentInfo>
 	);

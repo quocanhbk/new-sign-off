@@ -9,7 +9,7 @@ import { getFader } from 'utils/color';
 import {useStoreActions, useStoreState} from 'easy-peasy'
 import { useMsal } from '@azure/msal-react';
 import useClickOutside from 'hooks/useClickOutside';
-import { getAsyncAvatar, getAvatar } from 'api/user';
+import { getAsyncAvatar } from 'api/user';
 const SidebarContainer = styled.div`
 	background-color: ${props => props.theme.color.background.secondary};
 	padding-top: 0.5rem;

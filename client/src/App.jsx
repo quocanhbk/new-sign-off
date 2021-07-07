@@ -9,6 +9,8 @@ import {StoreProvider, useStoreState} from 'easy-peasy'
 import store from './store'
 import { pdfjs } from 'react-pdf';
 import {QueryClient, QueryClientProvider} from 'react-query'
+import { Router } from '@reach/router';
+import Verify from 'components/Verify'
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const StyledApp = styled.div`
@@ -20,6 +22,13 @@ const StyledApp = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+
+	& .router {
+		height: 100%;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+	}
 `;
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -40,7 +49,10 @@ const Container = () => {
 				<Login onLogin={() => instance.loginRedirect()}/>
             </UnauthenticatedTemplate>
             <AuthenticatedTemplate>
-				<MainPage/>
+				<Router className="router">
+					<MainPage path="/"/>
+					<Verify path="/export"/>
+				</Router>
             </AuthenticatedTemplate>
         </StyledApp>
     </ThemeProvider>
