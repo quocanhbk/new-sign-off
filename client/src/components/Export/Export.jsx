@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import { getCheckList } from 'api/procedure';
 import { useQuery } from 'utils/utils';
 
-
 const DocumentTitle = styled.h2`
   text-align: left;
   text-transform: uppercase;
