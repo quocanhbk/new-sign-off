@@ -9,15 +9,16 @@ const Container = styled.div`
   width: 21cm;
   height: 29.7cm;
   padding: 1cm 0.5cm;
+  position: relative;
 `;
 
 const Playground = () => {
   return (
-    <Container>
-      <Router>
-        <Export path="/:id" />
-      </Router>
-    </Container>
+      <Container>
+        <Router>
+          <Export path="/:id" />
+        </Router>
+      </Container>
   );
 };
 

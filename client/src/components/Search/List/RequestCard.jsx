@@ -7,7 +7,7 @@ import {BiDislike, BiLike, BiRevision, BsChevronRight, BsClock, BsDot, BsStarFil
 import {getFader} from 'utils/color'
 import { navigate } from '@reach/router';
 import Button from 'components/Base/Button'
-
+import StatusTag from '../StatusTag'
 
 const Container = styled.div`
     border: 1px solid ${props => props.theme.color.border.primary};
@@ -69,36 +69,7 @@ const formatDate = (dateString) => {
 
 const Card = ({page, active, data, set}) => {
     const {id, title, status, priority, type, deadline, author} = data
-    const genColor = () => {
-		switch (status) {
-			case "Approved":
-				return "success"
-			case "Rejected":
-				return "danger"
-			case "Draft":
-				return "secondary"
-			case "Pending":
-				return "warning"
-			case "Revising":
-				return "info"
-			default:
-				return "primary"
-		}
-	}
-	const renderIcon = () => {
-        switch(status) {
-            case "Approved":
-                return <BiLike/>
-            case "Pending":
-                return <BsClock/>
-            case "Rejected":
-                return <BiDislike/>
-            case "Revising":
-                return <BiRevision/>
-            default:
-                return <GiPauseButton/>
-        }
-    }
+
     const overdue = (new Date(deadline)).getTime() < (new Date()).getTime()
     return (
         <Container active={active}>
@@ -114,18 +85,14 @@ const Card = ({page, active, data, set}) => {
                     }
                 </Line>
                 <Line last>
-                    <Button type="fill" weight="400" gap="0.2rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("status", status)}>
-                        {renderIcon()}
-                        <p>{status}</p>
-                    </Button>
-                    <Button weight="400" gap="0.2rem" variant={"abc"} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("type", type)}>{type}</Button>
+                    <StatusTag status={status} onClick={() => set("status", status)}/>
+                    <Button weight="400" gap="0.2rem" padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("type", type)}>{type}</Button>
                     {priority === "Urgent" && 
                         <Button weight="400" type="fill" gap="0.2rem" color="info" padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("priority", priority)}>
                             <BsStarFill/><p>Urgent</p>
                         </Button>
                     }
-                    {overdue && 
-                        <Button weight="400" readOnly color="danger" padding="0.2rem 0.4rem" fontSize="0.8rem">Overdue</Button>}
+                    {overdue && <Button weight="400" readOnly color="danger" padding="0.2rem 0.4rem" fontSize="0.8rem">Overdue</Button>}
                 </Line>
             </DivInfo>
             <ButtonContainer>
