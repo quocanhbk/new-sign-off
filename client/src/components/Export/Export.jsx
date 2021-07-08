@@ -95,7 +95,6 @@ const Export = ({id}) => {
     setRequest(fetched.status === 'Approved' ? fetched : null);
     setQRCode(await QRCode.toDataURL(`${baseURL}/search/${id}`));
     document.title = fetched.title;
-    window.print();
   }
   useEffect(() => {
     getRequest()
@@ -103,7 +102,7 @@ const Export = ({id}) => {
   return request ? (
     <div>
       <QRCodeDisplay>
-        <img src={qrCode} width={query.width || 80} height={query.height || 80} alt="qrcode" />
+        <img onLoad={() => window.print()} src={qrCode} width={query.width || 80} height={query.height || 80} alt="qrcode" />
       </QRCodeDisplay>
       <DocumentTitle>{request.title}</DocumentTitle>
       <hr />
