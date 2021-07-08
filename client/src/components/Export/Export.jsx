@@ -14,8 +14,8 @@ import FieldTable from './FieldTable';
 import {BsCheck} from 'react-icons/bs'
 
 const Container = styled.div`
-  /* position: relative; */
-`
+  
+`;
 
 const Section = styled.section`
   margin-top: 0.5rem;
