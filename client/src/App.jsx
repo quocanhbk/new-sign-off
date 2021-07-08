@@ -10,7 +10,7 @@ import store from './store'
 import { pdfjs } from 'react-pdf';
 import {QueryClient, QueryClientProvider} from 'react-query'
 import { Router } from '@reach/router';
-import Verify from 'components/Verify'
+import Export from 'components/Export'
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const StyledApp = styled.div`
@@ -50,8 +50,8 @@ const Container = () => {
             </UnauthenticatedTemplate>
             <AuthenticatedTemplate>
 				<Router className="router">
-					<MainPage path="/*"/>
-					<Verify path="/export"/>
+					<MainPage path="/"/>
+					<Export path="/export/*"/>
 				</Router>
             </AuthenticatedTemplate>
         </StyledApp>
