@@ -9,6 +9,7 @@ import Nothing from './Nothing'
 import AttachmentCheckList from 'components/Create/AttachmentChecklist';
 import Button from 'components/Base/Button';
 import {projectList} from 'constant'
+import {downloadForm2} from 'api/file'
 const ContentWrapper = styled.div`
     display:flex;
     flex-direction: column;
@@ -68,11 +69,13 @@ const Content = ({request, logs, setLogs, setEditingAttachment}) => {
                             checklist={request.checklist}
                             readOnly={true}
                             onEditAttachment={attachmentId => setEditingAttachment({type: "approval", id: attachmentId})}
+                            downloadAttachment={(name, file, fields) => downloadForm2(name, file, fields, request.status === "Approved", request.id)}
                         /> :
                         <AttachmentTable 
                             attachments={request.approvalAttachments} 
                             readOnly={true} 
                             onEditAttachment={attachmentId => setEditingAttachment({type: "approval", id: attachmentId})}
+                            downloadAttachment={(name, file, fields) => downloadForm2(name, file, fields, request.status === "Approved", request.id)}
                         />
                     ) :
                     <Nothing type="FILE"/>

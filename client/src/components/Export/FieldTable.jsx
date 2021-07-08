@@ -5,14 +5,13 @@ import styled from 'styled-components'
 const Container = styled.table`
     width: 100%;
     border-collapse: collapse;
-    box-sizing: border-box;
     
     & th, td {
         border: none !important;
     }
 
     & tr:not(:last-child) {
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid #666;
     }
 `
 

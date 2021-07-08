@@ -5,7 +5,6 @@ import styled, { css } from "styled-components";
 import { getFader } from "utils/color";
 import Table from "../Table";
 import {BsTrash, BsThreeDotsVertical, BsDownload, BsEye} from 'react-icons/bs'
-import { downloadForm, downloadForm2 } from "api/file";
 import useMediaQuery from "hooks/useMediaQuery";
 import AttachmentTableMobile from './AttachmentTableMobile'
 
@@ -89,15 +88,11 @@ const AttachmentName = styled.span`
 		}
 	`}
 `
-const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeFieldContent, readOnly, onEditAttachment}) => {
+const AttachmentTable = ({attachments, onRemoveAttachment, noHeader, changeFieldContent, readOnly, onEditAttachment, downloadAttachment}) => {
 	let device = useMediaQuery()
 	const handleDownload = (attachmentId) => {
 		const attachment = attachments.find(_ => _.id === attachmentId)
-		if (attachment.file) {
-			downloadForm2(attachment.name, attachment.file, attachment.fields)
-			console.log("Downloading...")
-		}
-        else downloadForm(attachment.name, attachment.fileId, attachment.fields)
+		downloadAttachment(attachment.name, attachment.file, attachment.fields)
 	}
 	if (device !== "PC") return <AttachmentTableMobile attachments={attachments}/> 
 	return (

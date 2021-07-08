@@ -22,7 +22,7 @@ import AbsoluteModal from 'components/AbsoluteModal'
 import FormPopup from "./FormPopup";
 import useMediaQuery from "hooks/useMediaQuery";
 import { Redirect } from "@reach/router";
-
+import {downloadForm2} from 'api/file'
 const StyleContainer = styled.div`
   display: flex;
   flex-direction: column;

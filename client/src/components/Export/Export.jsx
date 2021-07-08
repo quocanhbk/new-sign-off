@@ -11,7 +11,7 @@ import { useQuery } from 'utils/utils';
 import Title from './Title'
 import {projectList} from 'constant'
 import FieldTable from './FieldTable';
-import {BsCheck} from 'react-icons/bs'
+import {BsCheck, BsCheckCircle} from 'react-icons/bs'
 
 const Container = styled.div`
   
@@ -120,12 +120,17 @@ const Export = ({id}) => {
 					))}
 				</tbody> :
 				<tbody>
+					<tr>
+						<th>Check Item</th>
+						<th>Attachment name</th>
+						<th>Approved data</th>
+					</tr>
 					{request.checklist.map(checkItem => (
 						<Fragment key={checkItem.id}>
 							<tr>
 								<td rowSpan={request.approvalAttachments.filter(a => a.checklistItemId === checkItem.id).length}>
 									<CheckItemName>
-										<BsCheck/>
+										<BsCheckCircle/>
 										<p>{checkItem.name}</p>
 									</CheckItemName>
 								</td>

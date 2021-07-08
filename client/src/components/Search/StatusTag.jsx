@@ -34,7 +34,7 @@ const StatusTag = ({status, onClick, readOnly}) => {
         }
     }
     return (
-        <Button readOnly={readOnly} type="fade" weight="400" gap="0.2rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={onClick}>
+        <Button readOnly={readOnly} type="fade" weight="500" gap="0.2rem" color={genColor()} padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={onClick}>
             {renderIcon()}
             <p>{status}</p>
         </Button>

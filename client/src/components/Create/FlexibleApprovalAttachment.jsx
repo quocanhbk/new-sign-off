@@ -38,20 +38,10 @@ const VerticalBar = styled.div`
     background: ${props => props.theme.color.border.primary};
 `
 
-const FlexibleApprovalAttachment = ({type, attachments, set, onRemoveAttachment, onEditAttachment, changeFieldContent}) => {
+const FlexibleApprovalAttachment = ({type, attachments, set, onRemoveAttachment, onEditAttachment, changeFieldContent, downloadAttachment}) => {
     // eslint-disable-next-line no-unused-vars
     const [selectedDynamicForm, setSelectedDynamicForm] = useState()
     const dynamicForms = useStoreState(_ => _.forms)
-
-    /*
-        id: v4(),
-        name: f.name,
-        checklistItemId: cur.id,
-        reference: false,
-        fileId: f.fileId,
-        file: f.file,
-        fields: f.fields
-    */
     const selectDynamicForm = async () => {
         if (!selectedDynamicForm) return
         let formDetail = await getFormDetail(selectedDynamicForm) //formDetail = {id, name, fields, file, fileId}
@@ -111,6 +101,7 @@ const FlexibleApprovalAttachment = ({type, attachments, set, onRemoveAttachment,
                     onRemoveAttachment={onRemoveAttachment}
                     changeFieldContent={changeFieldContent}
                     onEditAttachment={onEditAttachment}
+                    downloadAttachment={downloadAttachment}
                 />
             }
         </Container>

@@ -2,6 +2,7 @@ import {PDFDocument, rgb} from 'pdf-lib'
 import fontkit from '@pdf-lib/fontkit'
 import axios from 'axios'
 import getConfig from './getConfig'
+import QRCode from 'qrcode';
 
 
 export const getFile = async (fileId) => {
@@ -9,7 +10,18 @@ export const getFile = async (fileId) => {
     const {data: {downloadUrl: file}} = await axios.get("/api/v1/files/" + fileId, config)
     return file
 }
-
+const getQRText = async (requestId) => {
+    const config = await getConfig();
+    const res = await axios.get(`/api/v1/requests/${requestId}/signed-content`, config);
+    return res.data.text;
+}
+const generateQR = async (text) => {
+    try {
+      return await QRCode.toDataURL(text);
+    } catch (err) {
+      return ""
+    }
+};
 export const downloadForm = async (name, fileId, fields) => {
     const file = await getFile(fileId)
     const existingPdf = await axios.get(file, {responseType: 'arraybuffer'})
@@ -45,7 +57,9 @@ export const downloadForm = async (name, fileId, fields) => {
     link.download=`${name}.pdf`
     link.click()
 }
-export const downloadForm2 = async (name, file, fields) => {
+export const downloadForm2 = async (name, file, fields, isApproved = false, requestId) => {
+
+    // get file from drive
     const existingPdf = await axios.get(file, {responseType: 'arraybuffer'})
     if (existingPdf.headers["content-type"] !== "application/pdf") {
         const link = document.createElement('a');
@@ -58,12 +72,30 @@ export const downloadForm2 = async (name, file, fields) => {
 
     // use this font so it can print Vietnamese characters correctly
     const fontBytes = await axios.get("https://fonts.cdnfonts.com/s/12165/Roboto-Regular.woff", {responseType: 'arraybuffer'})
-
     pdfDoc.registerFontkit(fontkit)
     const customFont = await pdfDoc.embedFont(fontBytes.data)
+
     const pages = pdfDoc.getPages()
     const {width, height} = pages[0].getSize()
 
+    const hashMessage = await getQRText(requestId);
+    const qrCodeB64 = await generateQR(hashMessage);
+    const embededQR = await pdfDoc.embedPng(qrCodeB64);
+    
+    //if Request is APPROVED, draw QR code for each page before downloading
+    if (isApproved) {
+        for (const page of pages) {
+            const { width, height } = page.getSize();
+            page.drawImage(embededQR, {
+              height: 48,
+              width: 48,
+              x: width - 48 - 8, // yes I'm not retarded it's just for clarity
+              y: height - 48 - 8,
+            });
+        }
+    }
+
+    //draw field
     fields.forEach(field => {
         let pctPage = 100 / pages.length
         let pageOfField = Math.floor(field.position.Y / pctPage)
