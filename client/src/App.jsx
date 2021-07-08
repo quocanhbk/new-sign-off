@@ -50,7 +50,7 @@ const Container = () => {
             </UnauthenticatedTemplate>
             <AuthenticatedTemplate>
 				<Router className="router">
-					<MainPage path="/"/>
+					<MainPage path="/*"/>
 					<Export path="/export/*"/>
 				</Router>
             </AuthenticatedTemplate>
