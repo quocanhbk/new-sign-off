@@ -13,6 +13,7 @@ const Container = styled.div`
     width: 100%;
     & .router {
         height: 100%;
+        width: 100%;
     }
 `
 
