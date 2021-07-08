@@ -56,7 +56,7 @@ const TitleContainer = styled.div`
 		margin-left: 1rem;
 	}
 `
-const Header = ({id, title, status, type, updatedAt, mode}) => {
+const Header = ({id, title, status, type, updatedAt, mode, setCancelPopup, onDeleteDraft}) => {
 	const genColor = () => {
 		switch (status) {
 			case "Approved":
@@ -92,9 +92,6 @@ const Header = ({id, title, status, type, updatedAt, mode}) => {
 	const users = useStoreState(state => state.users)
 	const { accounts } = useMsal();
 	const curId = users.find(u => u.email === accounts[0].username).id
-	const handleCancelRequest = () => {
-		
-	}
 	return (
 		<ContentInfo>
 			{device === "PHONE" && 
@@ -111,12 +108,16 @@ const Header = ({id, title, status, type, updatedAt, mode}) => {
 						<Button readOnly gap="0.2rem" variant={"abc"} padding="0.2rem 0.4rem" fontSize="0.8rem" weight="400">{type}</Button>
 					</TitleContainer>
 				</div>
-				{device === "PC" && (
-				status === "Draft" ? <Right><Button color="info" onClick={() => navigate("/draft/" + id)}>Edit</Button></Right> :
+				{device === "PC" && mode === "search" && (
+				status === "Draft" ? 
+					<>
+					<Right><Button color="info" onClick={() => navigate("/draft/" + id)}>Edit</Button></Right>
+					<Right><Button color="danger" onClick={onDeleteDraft}>Delete</Button></Right>
+					</> :
 				status === "Revising" ? <Right><Button color="info" onClick={() => navigate("/revise/" + id)}>Edit</Button></Right> :
 				null)}
-				{(device === "PC" && status === "Pending" && admins.includes(curId)) &&
-					<Right><Button color="danger" onClick={handleCancelRequest}>Cancel</Button></Right>
+				{(device === "PC" && status === "Pending" && admins.includes(curId)) && mode === "search" &&
+					<Right><Button color="danger" onClick={() => setCancelPopup(true)}>Cancel</Button></Right>
 				}
 			</Left>
 		</ContentInfo>
