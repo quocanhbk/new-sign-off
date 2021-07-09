@@ -10,6 +10,8 @@ const Container = styled.div`
   height: 29.7cm;
   padding: 1cm 0.5cm;
   position: relative;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
 `;
 
 const Playground = () => {
