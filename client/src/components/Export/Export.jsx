@@ -11,15 +11,15 @@ import { useQuery } from 'utils/utils';
 import Title from './Title'
 import {projectList} from 'constant'
 import FieldTable from './FieldTable';
-import {BsCheck, BsCheckCircle} from 'react-icons/bs'
+import {BsCheckCircle} from 'react-icons/bs'
 
 const Container = styled.div`
-  
+	/* position: relative; */
 `;
 
 const Section = styled.section`
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
 `;
 
 const SectionHeader = styled.h4`
@@ -27,27 +27,27 @@ const SectionHeader = styled.h4`
 `;
 
 const FileInfo = styled.div`
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
 `;
 
 const FileInfoItem = styled.div`
-  padding: 0.4rem;
-  flex-basis: 50%;
+	padding: 0.4rem;
+	flex-basis: 50%;
 `;
 
 const DocumentTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  & th, td {
-    padding: 0.5rem;
-    border: 1px solid black;
-  }
-  & th {
-    font-size: 1rem;
-    font-weight: 500;
-  }
+	width: 100%;
+	border-collapse: collapse;
+	& th, td {
+		padding: 0.5rem;
+		border: 1px solid black;
+	}
+	& th {
+		font-size: 1rem;
+		font-weight: 500;
+	}
 `;
 
 const DescriptionContainer = styled.div`
@@ -66,7 +66,14 @@ const CheckItemName = styled.div`
 		margin-left: 0.5rem;
 	}
 `
-
+const Loading = styled.div`
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`
 const Export = ({id}) => {
   const [request, setRequest] = useState(null);
   const [qrCode, setQRCode] = useState('');
@@ -76,10 +83,10 @@ const Export = ({id}) => {
     setRequest(fetched.status === 'Approved' ? fetched : null);
     setQRCode(await QRCode.toDataURL(`${baseURL}/search/${id}`));
     document.title = fetched.title;
-    console.log(fetched)
   }
   useEffect(() => {
     getRequest()
+
   }, [id]);
   return request ? (
 	<Container>
@@ -169,9 +176,7 @@ const Export = ({id}) => {
 			</LogsContainer>
 		</Section>
 	</Container>
-) : (
-	<div>Error 404: Not found</div>
-);
+) : <div>Loading</div>
 };
 
 Export.propTypes = {

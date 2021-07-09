@@ -21,7 +21,7 @@ const Title = ({qrCode, query, title}) => {
     return (
         <Container>
             <QRCodeDisplay>
-                <img src={qrCode} width={query.width || 56} height={query.height || 56} alt="qrcode" />
+                <img src={qrCode} width={query.width || 56} height={query.height || 56} alt="qrcode" onLoad={() => window.print()}/>
             </QRCodeDisplay>
             <DocumentTitle>{title}</DocumentTitle>
         </Container>

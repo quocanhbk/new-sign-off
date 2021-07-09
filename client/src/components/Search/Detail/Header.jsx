@@ -86,7 +86,7 @@ const Header = ({id, title, status, type, updatedAt, mode, setCancelPopup, onDel
 					<Right><Button color="danger" onClick={() => setCancelPopup(true)}>Cancel</Button></Right>
 				}
 				{device === "PC" && status === "Approved" &&
-					<Right><Button color="success">Export</Button></Right>
+					<Right><Button color="success" onClick={() => navigate(`/export/${id}`)}>Export</Button></Right>
 				}
 			</Left>
 		</ContentInfo>
