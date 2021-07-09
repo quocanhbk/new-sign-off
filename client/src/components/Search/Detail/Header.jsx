@@ -46,6 +46,11 @@ const Left = styled.div`
 const Right = styled.div`
 	display: flex;
 	align-items: center;
+
+	& .export-link{
+		text-decoration: none;
+		color: inherit;
+	}
 `
 const TitleContainer = styled.div`
 	display: flex;
@@ -86,7 +91,9 @@ const Header = ({id, title, status, type, updatedAt, mode, setCancelPopup, onDel
 					<Right><Button color="danger" onClick={() => setCancelPopup(true)}>Cancel</Button></Right>
 				}
 				{device === "PC" && status === "Approved" &&
-					<Right><Button color="success" onClick={() => navigate(`/export/${id}`)}>Export</Button></Right>
+					<Right><Button color="success">
+						<a className="export-link" href={`/export/${id}`} target="_blank" rel="noreferrer">Export</a>	
+					</Button></Right>
 				}
 			</Left>
 		</ContentInfo>

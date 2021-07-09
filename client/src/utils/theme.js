@@ -18,7 +18,7 @@ const theme = {
         secondary: '#212223', // Obsidian 900
         disabled: '#C3C3C3',
         success: '#0A842F', // Green 800
-        warning: '#FEBA00',
+        warning: '#FDB913',
         danger: '#CC1D33', // Red 700
         info: '#256EC2', // Opal 700
       },
