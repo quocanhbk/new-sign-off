@@ -6,6 +6,7 @@ import { msalInstance } from 'index';
 import { removeUndefinedProps } from 'utils/utils';
 import { getFile } from './file';
 import faker from 'faker'
+
 export const getRequests = async (queryString, callback = (v) => {v}) => {
 	const config = await getConfig()
 	let {data} = await axios.get(`/api/v1/requests?${queryString}`, config)

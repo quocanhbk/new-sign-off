@@ -5,11 +5,14 @@ import Button from 'components/Base/Button'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
+    background: ${props => props.theme.color.background.primary};
+    border-radius: 0.5rem;
     & > * + * {
 		margin-top: 2rem;
 	}
     padding: 1rem;
     max-width: 30rem;
+    box-shadow: ${props => props.theme.shadow};
 `
 const ImgContainer = styled.div`
     display: flex;
@@ -46,8 +49,8 @@ const SubmitPopup = ({closeSubmit, submitRequest, title, type}) => {
                 <p className="request-title">{title}</p>
             </Text>
             <ButtonContainer>
-                <Button type="fill" color="primary" padding="0.5rem 2rem" onClick={() => {closeSubmit();submitRequest()}}>Confirm</Button>
                 <Button color="primary" padding="0.5rem 2rem" variant="outline" onClick={closeSubmit}>Cancel</Button>
+                <Button type="fill" color="primary" padding="0.5rem 2rem" onClick={() => {closeSubmit();submitRequest()}}>Confirm</Button>
             </ButtonContainer>
         </Container>
     )

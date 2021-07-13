@@ -54,8 +54,8 @@ const CancelPopup = ({onCancelClick, onConfirmClick, reason, setReason}) => {
                     <TextArea className="approve-comment" value={reason} onChange={e => setReason(e.target.value)} spellCheck={'false'}/>
                 </FormControl>
                 <BtnContainer>
-                    <Button className="confirm-button" onClick={onConfirmClick} color="primary" type="fill">Confirm</Button>
                     <Button variant="outline" className="confirm-button" onClick={onCancelClick} color="primary">Cancel</Button>
+                    <Button className="confirm-button" onClick={onConfirmClick} color="primary" type="fill">Confirm</Button>
                 </BtnContainer>
             </Body>
         </Container>

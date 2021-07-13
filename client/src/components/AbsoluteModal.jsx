@@ -2,29 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
 import PropTypes from 'prop-types'
-import {BsX} from 'react-icons/bs'
-import { getFader } from 'utils/color'
-
-const XContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: ${props => props.theme.color.fill.danger};
-    border-radius: 99px;
-    transition: all 0.25s ease-in-out;
-    cursor: pointer;
-    &:hover {
-        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
-    }
-`
-const X = ({onClick}) => {
-    return (
-        <XContainer onClick={onClick}>
-            <BsX size="1.5rem"/>
-        </XContainer>
-    )
-}
-
+import {getFader} from 'utils/color'
 const StyledModal = styled.div`
     color: ${props => props.theme.color.text.primary};
     position: ${props => props.fixed ? "fixed" : "absolute"};
@@ -51,6 +29,7 @@ const StyledBackground = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
+    background: radial-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));//${props => getFader(props.theme.color.background.primary, 0.8)}
 `;
 const StyledContainer = styled.div`
     display: flex;
@@ -65,18 +44,6 @@ const StyledContainer = styled.div`
     animation: ${opa} 0.25s ease-out 0s 1 forwards normal;
     z-index: 999;
     box-shadow: ${props => props.theme.shadow};
-`;
-const StyledTitle = styled.div`
-    border-bottom: 1px solid ${props => props.theme.color.border.primary};
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1rem;
-    & h4 {
-        padding: 0.5rem 0;
-        font-weight: 500;
-    }
 `;
 const StyledBody = styled.div`
     height: 100%;
@@ -109,11 +76,6 @@ const Modal = (props) => {
     return (
         <StyledModal visible={open} ani={runAni} fixed={fixed}>
             <StyledContainer ani={runAni} height={props.height} width={props.width} overflow={overflow} maxWidth={props.maxWidth} maxHeight={props.maxHeight}>
-                {props.title && 
-                    <StyledTitle>
-                        <h4>{props.title}</h4>
-                        <X onClick={props.onClickOutside}/>
-                    </StyledTitle>}
                 {open &&
                 <StyledBody className="body">
                     {props.children}

@@ -106,9 +106,9 @@ const Create = ({id, mode}) => {
 	const renderModal = () => {
 		return (
 			<>
-			<Modal visible={modal === "Pending" || modal === "Draft"} onClickOutside = {() => setModal("")}>
+			<AbsoluteModal visible={modal === "Pending" || modal === "Draft"} onClickOutside = {() => setModal("")}>
 				<SubmitPopup type={modal} closeSubmit={() => setModal("")} submitRequest={() => submitRequest(modal)} title={title}/>
-			</Modal>
+			</AbsoluteModal>
 			</>
 		)
 	}

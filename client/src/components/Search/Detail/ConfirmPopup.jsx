@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from 'react'
+import React, {useEffect} from 'react'
 import styled from "styled-components";
 import FormControl from 'components/FormControl'
 import Button from 'components/Base/Button'
@@ -63,6 +63,11 @@ const ConfirmPopup = ({onCancelClick, onConfirmClick, decision, comment, setComm
             decision === "APPROVE_WITH_OPINION" ? "Opinion" : "Comment"
         )
     }
+
+    useEffect(() => {
+        setComment(decision === "REJECT" ? "I rejected because" : decision === "APPROVE_WITH_OPINION" ? "I have another opinion, which is" : "I agree")
+    }, [])
+
     return (
         <Container>
             {decision &&
@@ -75,8 +80,8 @@ const ConfirmPopup = ({onCancelClick, onConfirmClick, decision, comment, setComm
                     <TextArea className="approve-comment" value={comment} onChange={e => setComment(e.target.value)} spellCheck={'false'}/>
                 </FormControl>
                 <BtnContainer>
-                    <Button className="confirm-button" onClick={onConfirmClick} color="primary" type="fill">Confirm</Button>
                     <Button variant="outline" className="confirm-button" onClick={onCancelClick} color="primary">Cancel</Button>
+                    <Button className="confirm-button" onClick={onConfirmClick} color="primary" type="fill">Confirm</Button>
                 </BtnContainer>
             </Body>
         </Container>
