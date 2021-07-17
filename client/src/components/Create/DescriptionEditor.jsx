@@ -80,54 +80,60 @@ const StyleWrapper = styled.div`
             background: ${props => getFader(props.theme.color.border.primary, 0.5)} !important;
         }
     }
+    .ck.ck-editor__editable_inline>:first-child {
+        margin-top: 0.5rem; 
+    }
     & ol, ul {
         margin-left: 1rem;
     }
 `
-function DescriptionEditor({description, set}) {
-
+function DescriptionEditor({description, set, readOnly}) {
+    let config = readOnly ? {} : {
+        toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'underline',
+                '|',
+                'alignment',
+                '|',
+                'numberedList',
+                'bulletedList',
+                '|',
+                'fontColor',
+                'fontBackgroundColor',
+                'fontSize',
+                '|',
+                'insertTable',
+                '|',
+                'undo'
+            ]
+        },
+        table: {
+            contentToolbar: [
+                'tableColumn',
+                'tableRow',
+                'mergeTableCells',
+                'tableCellProperties',
+                'tableProperties'
+            ]
+        },
+        disableNativeSpellChecker: true
+    }
     return (
         <StyleWrapper className="description-editor">
             {/* <Text>Use the following editor to compose description for your approval document. Please summary the purpose/reason why are you submitting this document. </Text> */}
             <CKEditor
                 editor={CustomEditor}
-                config={{
-                    toolbar: {
-                        items: [
-                            'heading',
-                            '|',
-                            'bold',
-                            'italic',
-                            'underline',
-                            '|',
-                            'alignment',
-                            '|',
-                            'numberedList',
-                            'bulletedList',
-                            '|',
-                            'fontColor',
-                            'fontBackgroundColor',
-                            'fontSize',
-                            '|',
-                            'insertTable',
-                            '|',
-                            'undo'
-                        ]
-                    },
-                    table: {
-                        contentToolbar: [
-                            'tableColumn',
-                            'tableRow',
-                            'mergeTableCells',
-                            'tableCellProperties',
-                            'tableProperties'
-                        ]
-                    },
-                    disableNativeSpellChecker: true
-                }}
+                config={config}
                 data={description}
                 onChange={(_, editor) => {
                     set("description", editor.getData())
+                }}
+                onReady={(e) => {
+                    if (e) e.isReadOnly = readOnly
                 }}
             />
         </StyleWrapper>

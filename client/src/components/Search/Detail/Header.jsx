@@ -59,12 +59,13 @@ const TitleContainer = styled.div`
 		margin-left: 0.5rem;
 	}
 `
-const Header = ({id, title, status, type, updatedAt, mode, setCancelPopup, onDeleteDraft}) => {
+const Header = ({id, title, status, type, updatedAt, mode, setCancelPopup, onDeleteDraft, createdBy}) => {
 
 	let device = useMediaQuery()
 	const users = useStoreState(state => state.users)
 	const { accounts } = useMsal();
 	const curUser = users.find(u => u.email === accounts[0].username)
+
 	return (
 		<ContentInfo>
 			{device === "PHONE" && 
@@ -80,12 +81,12 @@ const Header = ({id, title, status, type, updatedAt, mode, setCancelPopup, onDel
 					</TitleContainer>
 				</div>
 				{device === "PC" && mode === "search" && (
-				status === "Draft" ? 
+				(status === "Draft" && accounts[0].username === createdBy) ? 
 					<>
 					<Right><Button color="info" onClick={() => navigate("/draft/" + id)}>Edit</Button></Right>
 					<Right><Button color="danger" onClick={onDeleteDraft}>Delete</Button></Right>
 					</> :
-				status === "Revising" ? <Right><Button color="info" onClick={() => navigate("/revise/" + id)}>Edit</Button></Right> :
+				(status === "Revising" && accounts[0].username === createdBy) ? <Right><Button color="info" onClick={() => navigate("/revise/" + id)}>Edit</Button></Right> :
 				null)}
 				{(device === "PC" && status === "Pending" && admins.includes(curUser.id)) && mode === "search" &&
 					<Right><Button color="danger" onClick={() => setCancelPopup(true)}>Cancel</Button></Right>

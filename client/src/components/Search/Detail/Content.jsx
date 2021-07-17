@@ -10,6 +10,7 @@ import AttachmentCheckList from 'components/Create/AttachmentChecklist';
 import Button from 'components/Base/Button';
 import {projectList} from 'constant'
 import {downloadForm2} from 'api/file'
+import DescriptionEditor from 'components/Create/DescriptionEditor';
 const ContentWrapper = styled.div`
     display:flex;
     flex-direction: column;
@@ -37,10 +38,13 @@ const ContentWrapper = styled.div`
 `
 const ProjectContainer = styled.div`
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
     & > * + * {
 		margin-left: 0.5rem;
 	}
+    & > * {
+        margin-top: 0.5rem;
+    }
 `
 const Content = ({request, logs, setLogs, setEditingAttachment}) => {
     
@@ -57,7 +61,8 @@ const Content = ({request, logs, setLogs, setEditingAttachment}) => {
             </SectionContainer>
             <SectionContainer headline="2. Description">
                 {request.description ? 
-                    <div dangerouslySetInnerHTML={{__html: request.description}}></div> :
+                    // <div dangerouslySetInnerHTML={{__html: request.description}}></div> :
+                    <DescriptionEditor description={request.description} readOnly /> :
                     <Nothing type="DESCRIPTION"/>
                 }
             </SectionContainer>

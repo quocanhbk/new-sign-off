@@ -98,6 +98,7 @@ const  DisplayContent = ({id, mode}) => {
 						status={request.status}
 						type={request.type}
 						updatedAt={request.updatedAt}
+						createdBy={request.submitter[0].email}
 						mode={mode}
 						setCancelPopup={setCancelPopup}
 						onDeleteDraft={onDeleteDraft}

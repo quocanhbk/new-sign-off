@@ -7,16 +7,18 @@ const Container = styled.div`
   background-color: white;
   color: black;
   width: 21cm;
-  height: 29.7cm;
-  padding: 1cm 0.5cm;
+  /* height: 29.7cm; */
+  padding: 0.5cm;
   position: relative;
   border-left: 1px solid black;
   border-right: 1px solid black;
+  overflow: auto;
+  display: block;
 `;
 
 const Playground = () => {
   return (
-      <Container>
+      <Container className="test">
         <Router>
           <Export path="/:id" />
         </Router>

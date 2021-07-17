@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, {  } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import styled, { ThemeProvider } from 'styled-components';
 import MainPage from './components/MainPage';
@@ -16,7 +16,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 const StyledApp = styled.div`
 	background: ${(props) => props.theme.color.background.primary};
 	color: ${props => props.theme.color.text.primary};
-	height: 100vh;
+	height: ${props => props.height || "100vh"};
 	overflow: hidden;
 	transition: background 0.25s ease-out;
 	display: flex;
@@ -38,25 +38,28 @@ const queryClient = new QueryClient({
 	}
 })
 const Container = () => {
-  const isDark = useStoreState(s => s.theme)
-  
-  const { instance } = useMsal();
-  
-  return (
-    <ThemeProvider theme={isDark ? theme.dark : theme.light}>
-        <StyledApp className="App">
-            <UnauthenticatedTemplate>
-				<Login onLogin={() => instance.loginRedirect()}/>
-            </UnauthenticatedTemplate>
-            <AuthenticatedTemplate>
-				<Router className="main-router">
-					<MainPage path="/*"/>
-					<Export path="/export/*"/>
-				</Router>
-            </AuthenticatedTemplate>
-        </StyledApp>
-    </ThemeProvider>
-  );
+	const isDark = useStoreState(s => s.theme)
+	const { instance } = useMsal();
+	const [height, setHeight] = useState(null)
+	useEffect(() => {
+		setHeight(`${window.innerHeight}px`)
+	})
+	
+	return (
+		<ThemeProvider theme={isDark ? theme.dark : theme.light}>
+			<StyledApp className="App" height={height}>
+				<UnauthenticatedTemplate>
+					<Login onLogin={() => instance.loginRedirect()}/>
+				</UnauthenticatedTemplate>
+				<AuthenticatedTemplate>
+					<Router className="main-router">
+						<MainPage path="/*"/>
+						<Export path="/export/*"/>
+					</Router>
+				</AuthenticatedTemplate>
+			</StyledApp>
+		</ThemeProvider>
+	);
 };
 const App = () => {
 	return (

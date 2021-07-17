@@ -5,12 +5,13 @@ import styled from "styled-components";
 const Container = styled.div`
   border-bottom: 1px solid black;
   display: flex;
+  align-items: center;
 `
 
 const DocumentTitle = styled.h2`
   text-transform: uppercase;
-  font-size: 400;
-  padding-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 500;
   flex: 1;
 `;
 

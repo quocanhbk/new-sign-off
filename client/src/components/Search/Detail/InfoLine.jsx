@@ -2,35 +2,35 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Container = styled.div`
-    display: flex;
-    justify-content: space-between;
+const Container = styled.tr`
+`
+const Headline = styled.td`
+    vertical-align: top;
+    padding: 0.4rem 0;
+    /* border-bottom: 1px solid ${props => props.theme.color.border.primary}; */
     position: relative;
-    margin-left: 1rem;
+    padding-left: 1rem;
     &:before {
         content: '';
         position: absolute;
-        height: 4px;
-        width: 4px;
-        border-radius: 99px;
-        background: ${props => props.theme.color.text.secondary};
-        left: -1rem;
+        width: 5px;
+        height: 5px;
+        border-radius: 4px;
+        background: ${props => props.theme.color.text.primary};
+        left: 0;
         top: 50%;
         transform: translateY(-50%);
     }
-
 `
-const Left = styled.div`
+const Content = styled.td`
+    text-align: right;
+    /* border-bottom: 1px solid ${props => props.theme.color.border.primary}; */
 `
-const Right = styled.div`
-
-`
-
-const InfoLine = ({headline, content}) => {
+const InfoLine = ({headline, content, span}) => {
     return (
         <Container>
-            <Left>{headline}</Left>
-            <Right>{content}</Right>
+            <Headline colSpan={span ? 2 : 1}>{headline}</Headline>
+            {content && <Content>{content}</Content>}
         </Container>
     )
 }

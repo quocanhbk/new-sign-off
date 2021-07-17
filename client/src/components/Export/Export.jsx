@@ -12,9 +12,18 @@ import Title from './Title'
 import {projectList} from 'constant'
 import FieldTable from './FieldTable';
 import {BsCheckCircle} from 'react-icons/bs'
+import DescriptionEditor from 'components/Create/DescriptionEditor';
 
 const Container = styled.div`
-	/* position: relative; */
+	& .table.ck-widget.ck-widget_with-selection-handle {
+		pointer-events: none;
+	}
+	& .ck.ck-widget__selection-handle {
+		display: none;
+	}
+	& .ck.ck-reset_all.ck-widget__type-around {
+		display: none;
+	}
 `;
 
 const Section = styled.section`
@@ -24,6 +33,7 @@ const Section = styled.section`
 
 const SectionHeader = styled.h4`
     margin: 1rem 0 0.5rem 0;
+	font-weight: 500;
 `;
 
 const FileInfo = styled.div`
@@ -49,12 +59,6 @@ const DocumentTable = styled.table`
 		font-weight: 500;
 	}
 `;
-
-const DescriptionContainer = styled.div`
-    border: 1px black solid;
-    padding: 0.5rem 0.2rem;
-`;
-
 const LogsContainer = styled.div`
     margin-left: 1rem;
 `;
@@ -65,14 +69,6 @@ const CheckItemName = styled.div`
 	& > * + * {
 		margin-left: 0.5rem;
 	}
-`
-const Loading = styled.div`
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 `
 const Export = ({id}) => {
   const [request, setRequest] = useState(null);
@@ -86,7 +82,6 @@ const Export = ({id}) => {
   }
   useEffect(() => {
     getRequest()
-
   }, [id]);
   return request ? (
 	<Container>
@@ -158,9 +153,7 @@ const Export = ({id}) => {
 		</Section>
 		<Section>
 			<SectionHeader>DESCRIPTION</SectionHeader>
-			<DescriptionContainer
-			dangerouslySetInnerHTML={{ __html: request.description }}
-			></DescriptionContainer>
+			<DescriptionEditor description={request.description} readOnly={true}/>
 		</Section>
 		<Section>
 			<SectionHeader>LOGS</SectionHeader>

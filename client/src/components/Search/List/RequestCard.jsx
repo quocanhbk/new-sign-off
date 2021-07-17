@@ -3,7 +3,7 @@
 // Request Card, used to display in Search and Sign Page
 import React, {memo} from 'react';
 import styled, { css } from 'styled-components'
-import {BiDislike, BiLike, BiRevision, BsChevronRight, BsClock, BsDot, BsStarFill, GiPauseButton} from 'react-icons/all'
+import {BsChevronRight, BsClock, BsDot, BsStarFill, GiPauseButton} from 'react-icons/all'
 import {getFader} from 'utils/color'
 import { navigate } from '@reach/router';
 import Button from 'components/Base/Button'
@@ -69,7 +69,6 @@ const formatDate = (dateString) => {
 
 const Card = ({page, active, data, set}) => {
     const {id, title, status, priority, type, deadline, author} = data
-
     const overdue = (new Date(deadline)).getTime() < (new Date()).getTime()
     return (
         <Container active={active}>
@@ -87,8 +86,8 @@ const Card = ({page, active, data, set}) => {
                 <Line last>
                     <StatusTag status={status} onClick={() => set("status", status)}/>
                     <Button weight="400" gap="0.2rem" padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("type", type)}>{type}</Button>
-                    {priority === "Urgent" && 
-                        <Button weight="400" type="fill" gap="0.2rem" color="info" padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("priority", priority)}>
+                    {priority === "Urgent" && status === "Pending" &&
+                        <Button weight="400" type="fade" gap="0.2rem" color="danger" padding="0.2rem 0.4rem" fontSize="0.8rem" onClick={() => set("priority", priority)}>
                             <BsStarFill/><p>Urgent</p>
                         </Button>
                     }
