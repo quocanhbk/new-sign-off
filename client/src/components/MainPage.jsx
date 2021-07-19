@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
-import SideBar from './NavBar'
-import styled from 'styled-components';
-import pageList from '../pageList';
-import {Router} from '@reach/router'
-import { useStoreActions } from 'easy-peasy';
-import useMediaQuery from 'hooks/useMediaQuery';
-import BottomBar from 'components/NavBar/BottomBar'
+import React, { useEffect } from "react"
+import SideBar from "./NavBar"
+import styled from "styled-components"
+import pageList from "../pageList"
+import { Router } from "@reach/router"
+import { useStoreActions } from "easy-peasy"
+import useMediaQuery from "hooks/useMediaQuery"
+import BottomBar from "components/NavBar/BottomBar"
 const PageContainer = styled.div`
     display: flex;
-    height: 100%;
+    height: ${(props) => props.height || "100vh"};
     max-width: 1464px;
     width: 100%;
-    background: ${props => props.theme.color.background.primary};
-    border-left: 1px solid ${props => props.theme.color.border.primary};
-    border-right: 1px solid ${props => props.theme.color.border.primary};
+    background: ${(props) => props.theme.color.background.primary};
+    border-left: 1px solid ${(props) => props.theme.color.border.primary};
+    border-right: 1px solid ${(props) => props.theme.color.border.primary};
 `
 
 const BodyContainer = styled.div`
@@ -33,8 +33,8 @@ const Main = styled.div`
     overflow: hidden;
 `
 const MainPage = () => {
-    const getUsers = useStoreActions(s => s.getUsers)
-    const getForms = useStoreActions(s => s.getForms)
+    const getUsers = useStoreActions((s) => s.getUsers)
+    const getForms = useStoreActions((s) => s.getForms)
     useEffect(() => {
         getUsers()
         getForms()
@@ -42,23 +42,24 @@ const MainPage = () => {
     let device = useMediaQuery()
     return (
         <PageContainer className="main">
-            {device === "PC" && <SideBar/>}
+            {device === "PC" && <SideBar />}
             <BodyContainer>
                 <Wrapper className="Wrrappper">
                     <Main className="app-main-body">
                         <Router className="router">
-                        {
-                            pageList.map(page => {
-                                return React.cloneElement(page.comp, {key: page.text, path: page.path})
-                            })
-                        }
+                            {pageList.map((page) => {
+                                return React.cloneElement(page.comp, {
+                                    key: page.text,
+                                    path: page.path,
+                                })
+                            })}
                         </Router>
                     </Main>
-                    {device === "PHONE" && <BottomBar/>}
+                    {device === "PHONE" && <BottomBar />}
                 </Wrapper>
             </BodyContainer>
         </PageContainer>
     )
 }
 
-export default MainPage;
+export default MainPage
