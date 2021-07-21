@@ -4,7 +4,7 @@ import getConfig from "./getConfig"
 import { getProcedureChecklist } from "./procedure"
 import { msalInstance } from "index"
 import { removeUndefinedProps } from "utils/utils"
-import { getFile } from "./file"
+import { getFile, postFile } from "./file"
 import faker from "faker"
 
 export const getRequests = async (
@@ -62,7 +62,6 @@ export const getRequestDetail = async (
         checklist = await getProcedureChecklist(data.fk_procedure_id)
         callback(50)
     }
-    console.log(data)
     let returnData = {
         id: data.approval_request_id,
         title: data.title,
@@ -257,11 +256,7 @@ export const postRequest = async (
             .concat(referenceAttachments)
             .map(async (attachment) => {
                 if (!attachment.fileId) {
-                    const data = new FormData()
-                    data.append("file", attachment.file, attachment.file.name)
-                    const {
-                        data: { file_id },
-                    } = await axios.post("/api/v1/files", data, config)
+                    const file_id = await postFile(attachment.file)
                     attachment.fileId = file_id
                 }
                 // POST attachment
