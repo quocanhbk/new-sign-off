@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
-import {useEffect, useReducer } from 'react'
-import { getProcedureDetail } from 'api/procedure'
-import { v4 } from 'uuid'
-import { getRequestDetail, patchRequest, postRequest } from 'api/request'
-import { useStoreActions } from 'easy-peasy'
-import useCustomLoader from 'hooks/useCustomLoader'
-import Placeholder from 'components/Placeholder'
-import { getFile } from 'api/file'
+import React, { useState } from "react"
+import { useEffect, useReducer } from "react"
+import { getProcedureDetail } from "api/procedure"
+import { v4 } from "uuid"
+import { getRequestDetail, patchRequest, postRequest } from "api/request"
+import { useStoreActions } from "easy-peasy"
+import useCustomLoader from "hooks/useCustomLoader"
+import Placeholder from "components/Placeholder"
+import { getFile } from "api/file"
 
 const initState = {
     title: "",
@@ -22,18 +22,18 @@ const initState = {
     approvalAttachments: [],
     referenceAttachments: [],
     procedure: null,
-    checklist: []
+    checklist: [],
 }
 const reducer = (state, action) => {
-    switch(action.type) {
-        case 'SET':
+    switch (action.type) {
+        case "SET":
             return {
                 ...state,
-                [action.payload.field]: action.payload.value
+                [action.payload.field]: action.payload.value,
             }
-        case 'RESET':
+        case "RESET":
             return initState
-        case 'INIT':
+        case "INIT":
             return action.payload
         default:
             return state
@@ -45,50 +45,79 @@ const initError = {
     deadline: "",
     relatedProjects: "",
     procedure: "",
-    approvers: ""
+    approvers: "",
 }
 
 const errorReducer = (state, action) => {
-    switch(action.type) {
-        case 'SET':
+    switch (action.type) {
+        case "SET":
             return {
                 ...state,
-                [action.payload.field]: action.payload.value
+                [action.payload.field]: action.payload.value,
             }
     }
 }
 const useDocument = (id, mode) => {
-    const [{
-        title, description, type, priority, 
-        deadline, relatedProjects, 
-        advisors, approvers, observators, 
-        approvalAttachments, referenceAttachments, procedure, checklist
-    }, dispatch] = useReducer(reducer, initState)
+    const [
+        {
+            title,
+            description,
+            type,
+            priority,
+            deadline,
+            relatedProjects,
+            advisors,
+            approvers,
+            observators,
+            approvalAttachments,
+            referenceAttachments,
+            procedure,
+            checklist,
+        },
+        dispatch,
+    ] = useReducer(reducer, initState)
     const [originAttachmentIds, setOriginAttachmentIds] = useState([])
-    const setPath = useStoreActions(action => action.setPath)
-    const {render, reset, setPercent, setNotFound} = useCustomLoader(false, <Placeholder type="NOT_FOUND"/>)
+    const setPath = useStoreActions((action) => action.setPath)
+    const { render, reset, setPercent, setNotFound } = useCustomLoader(
+        false,
+        <Placeholder type="NOT_FOUND" />
+    )
     // fetch procedure detail after user select procedure from combo box
     const [createError, setCreateError] = useState(false)
-    useEffect(() => {    
+    useEffect(() => {
         const fetchProcedure = async () => {
             reset()
-            let data = await getProcedureDetail(procedure, true, (p) => setPercent(p))
+            let data = await getProcedureDetail(procedure, true, (p) =>
+                setPercent(p)
+            )
             if (mode !== "revise") {
-                set("advisors", data.advisors)
-                set("approvers", data.approvers)
-                set("observators", data.observators)
+                set(
+                    "advisors",
+                    data.advisors.map((a) => a.userId)
+                )
+                set(
+                    "approvers",
+                    data.approvers.map((a) => a.userId)
+                )
+                set(
+                    "observators",
+                    data.observators.map((a) => a.userId)
+                )
             }
 
-            set("checklist", data.checklist.map(c => ({id: c.id, name: c.name})))
+            set(
+                "checklist",
+                data.checklist.map((c) => ({ id: c.id, name: c.name }))
+            )
             let arr = data.checklist.reduce((pre, cur) => {
-                let forms = cur.defaultForms.map(f => ({
+                let forms = cur.defaultForms.map((f) => ({
                     id: v4().slice(0, 8),
                     name: f.name,
                     checklistItemId: cur.id,
                     reference: false,
                     fileId: f.fileId,
                     file: f.file,
-                    fields: f.fields
+                    fields: f.fields,
                 }))
                 return pre.concat(forms)
             }, [])
@@ -99,13 +128,11 @@ const useDocument = (id, mode) => {
             set("approvers", [])
             set("observators", [])
         }
-        if (procedure)
-            fetchProcedure()
+        if (procedure) fetchProcedure()
     }, [procedure])
 
     useEffect(() => {
-        if (type === "Flexible" && procedure)
-            set("procedure", null)
+        if (type === "Flexible" && procedure) set("procedure", null)
     }, [type])
 
     useEffect(() => {
@@ -116,17 +143,22 @@ const useDocument = (id, mode) => {
             //still looking for a "cleaner" solution
             setTimeout(() => {
                 if (
-                    (mode === "draft" && data.status !== "Draft") || 
+                    (mode === "draft" && data.status !== "Draft") ||
                     (mode === "revise" && data.status !== "Revising")
-                ) setNotFound(true)
+                )
+                    setNotFound(true)
                 else {
-                    setOriginAttachmentIds(data.approvalAttachments.concat(data.referenceAttachments).map(a => a.id))
+                    setOriginAttachmentIds(
+                        data.approvalAttachments
+                            .concat(data.referenceAttachments)
+                            .map((a) => a.id)
+                    )
                     init(data)
                 }
             }, 250)
         }
         if (id) fetchData()
-        else dispatch({type: "RESET"})
+        else dispatch({ type: "RESET" })
     }, [id])
 
     const [error, dispatchError] = useReducer(errorReducer, initError)
@@ -137,71 +169,101 @@ const useDocument = (id, mode) => {
             description: data.description,
             type: data.type,
             priority: data.priority,
-            deadline: (new Date(data.deadline)).toDateString(),
+            deadline: new Date(data.deadline).toDateString(),
             relatedProjects: data.relatedProjects,
-            advisors: data.advisors.map(a => a.userId),
-            approvers: data.approvers.map(a => a.userId),
-            observators: data.observators.map(a => a.userId),
-            approvalAttachments: data.approvalAttachments.map(attachment => ({
+            advisors: data.advisors.map((a) => a.userId),
+            approvers: data.approvers.map((a) => a.userId),
+            observators: data.observators.map((a) => a.userId),
+            approvalAttachments: data.approvalAttachments.map((attachment) => ({
                 id: attachment.id,
                 name: attachment.name,
                 checklistItemId: attachment.checklistItemId,
                 reference: true,
                 fileId: attachment.fileId,
                 file: null,
-                fields: attachment.fields
+                fields: attachment.fields,
             })),
-            referenceAttachments: data.referenceAttachments.map(attachment => ({
-                id: attachment.id,
-                name: attachment.name,
-                checklistItemId: attachment.checklistItemId,
-                reference: true,
-                fileId: attachment.fileId,
-                file: null,
-                fields: attachment.fields
-            })),
+            referenceAttachments: data.referenceAttachments.map(
+                (attachment) => ({
+                    id: attachment.id,
+                    name: attachment.name,
+                    checklistItemId: attachment.checklistItemId,
+                    reference: true,
+                    fileId: attachment.fileId,
+                    file: null,
+                    fields: attachment.fields,
+                })
+            ),
             procedure: data.procedureId,
-            checklist: data.checklist
+            checklist: data.checklist,
         }
-        await (await Promise.all(data.approvalAttachments.map(_ => _.fileId))).map(async (fileId) => {
+        await (
+            await Promise.all(data.approvalAttachments.map((_) => _.fileId))
+        ).map(async (fileId) => {
             let file = await getFile(fileId)
-            initData.approvalAttachments.find(a => a.fileId === fileId).file = file
+            initData.approvalAttachments.find((a) => a.fileId === fileId).file =
+                file
         })
-        await (await Promise.all(data.referenceAttachments.map(_ => _.fileId))).map(async (fileId) => {
+        await (
+            await Promise.all(data.referenceAttachments.map((_) => _.fileId))
+        ).map(async (fileId) => {
             let file = await getFile(fileId)
-            initData.referenceAttachments.find(a => a.fileId === fileId).file = file
+            initData.referenceAttachments.find(
+                (a) => a.fileId === fileId
+            ).file = file
         })
-        dispatch({type: "INIT", payload: initData})
+        dispatch({ type: "INIT", payload: initData })
     }
 
     const removeAttachment = (type = "approval", attachmentId) => {
         // when in draft mode, when user delete attachment, we should check to delete the file too
         if (type === "approval") {
-            set("approvalAttachments", approvalAttachments.filter(attachment => attachment.id !== attachmentId))
-        }
-        else if (type === "reference") {
-            set("referenceAttachments", referenceAttachments.filter(attachment => attachment.id !== attachmentId))
+            set(
+                "approvalAttachments",
+                approvalAttachments.filter(
+                    (attachment) => attachment.id !== attachmentId
+                )
+            )
+        } else if (type === "reference") {
+            set(
+                "referenceAttachments",
+                referenceAttachments.filter(
+                    (attachment) => attachment.id !== attachmentId
+                )
+            )
         }
     }
-    const setError = (field, value) => dispatchError({type: "SET", payload: {field, value}})
+    const setError = (field, value) =>
+        dispatchError({ type: "SET", payload: { field, value } })
 
     const set = (field, value) => {
-        dispatch({type: "SET", payload: {field: field, value: value}})
+        dispatch({ type: "SET", payload: { field: field, value: value } })
         if (error[field] !== "") setError(field, "")
     }
 
-    const changeFieldContent = (attachmentType, attachmentId, fieldId, content) => {
-        let attachments = [...(attachmentType === "approvalAttachments" ? approvalAttachments : referenceAttachments)]
-        let attachmentIndex = attachments.map(_ => _.id).indexOf(attachmentId)
+    const changeFieldContent = (
+        attachmentType,
+        attachmentId,
+        fieldId,
+        content
+    ) => {
+        let attachments = [
+            ...(attachmentType === "approvalAttachments"
+                ? approvalAttachments
+                : referenceAttachments),
+        ]
+        let attachmentIndex = attachments.map((_) => _.id).indexOf(attachmentId)
         let attachmentObject = attachments[attachmentIndex]
-        let fieldIndex = attachmentObject.fields.map(_ => _.id).indexOf(fieldId)
+        let fieldIndex = attachmentObject.fields
+            .map((_) => _.id)
+            .indexOf(fieldId)
         let fieldObject = attachmentObject.fields[fieldIndex]
         fieldObject.content = content
 
         set(attachmentType, [
             ...attachments.slice(0, attachmentIndex),
             attachmentObject,
-            ...attachments.slice(attachmentIndex + 1, attachments.length)
+            ...attachments.slice(attachmentIndex + 1, attachments.length),
         ])
     }
 
@@ -216,8 +278,7 @@ const useDocument = (id, mode) => {
         if (!deadline) {
             setError("deadline", "Deadline is required")
             submittable = false
-        }
-        else if ((new Date(deadline).getTime() < (new Date()).getTime())) {
+        } else if (new Date(deadline).getTime() < new Date().getTime()) {
             setError("deadline", "Deadline must be after today")
             submittable = false
         }
@@ -237,10 +298,11 @@ const useDocument = (id, mode) => {
             submittable = false
         }
         if (
-            advisors.some(v => approvers.concat(observators).includes(v)) ||
-            approvers.some(v => advisors.concat(observators).includes(v)) ||
-            observators.some(v => approvers.concat(advisors).includes(v))) {
-                submittable = false
+            advisors.some((v) => approvers.concat(observators).includes(v)) ||
+            approvers.some((v) => advisors.concat(observators).includes(v)) ||
+            observators.some((v) => approvers.concat(advisors).includes(v))
+        ) {
+            submittable = false
         }
         return submittable
     }
@@ -250,31 +312,51 @@ const useDocument = (id, mode) => {
         console.log("Reset")
         reset()
         const input = {
-            title, 
-            description, 
-            priority, 
-            type, 
+            title,
+            description,
+            priority,
+            type,
             deadline,
-            relatedProjects, 
-            advisors, 
-            approvers, 
+            relatedProjects,
+            advisors,
+            approvers,
             observators,
             approvalAttachments,
             referenceAttachments,
             procedure,
-            status: requestStatus
+            status: requestStatus,
         }
         if (mode === "create")
             postRequest(input, setPercent)
-                .then(requestId => setTimeout(() => setPath("/search/" + requestId), 400))
-                .catch(() => {setPercent(100);setTimeout(() => setCreateError(true), 400)})
+                .then((requestId) =>
+                    setTimeout(() => setPath("/search/" + requestId), 400)
+                )
+                .catch(() => {
+                    setPercent(100)
+                    setTimeout(() => setCreateError(true), 400)
+                })
         else {
             // delete attachment first
-            let deletedAttachmentIds = originAttachmentIds.filter(a => !approvalAttachments.concat(referenceAttachments).map(_ => _.id).includes(a))
-            let newAttachments = approvalAttachments.concat(referenceAttachments).filter(attachment => !originAttachmentIds.includes(attachment.id))
-            patchRequest(id, input, newAttachments, deletedAttachmentIds, (p) => setPercent(p))
+            let deletedAttachmentIds = originAttachmentIds.filter(
+                (a) =>
+                    !approvalAttachments
+                        .concat(referenceAttachments)
+                        .map((_) => _.id)
+                        .includes(a)
+            )
+            let newAttachments = approvalAttachments
+                .concat(referenceAttachments)
+                .filter(
+                    (attachment) => !originAttachmentIds.includes(attachment.id)
+                )
+            patchRequest(id, input, newAttachments, deletedAttachmentIds, (p) =>
+                setPercent(p)
+            )
                 .then(() => setTimeout(() => setPath("/search/" + id), 400))
-                .catch(() => {setPercent(100);setTimeout(() => setCreateError(true), 400)})
+                .catch(() => {
+                    setPercent(100)
+                    setTimeout(() => setCreateError(true), 400)
+                })
         }
         // setTimeout(() => {if (!createError) setPath("/search/" + requestId)}, 400)
     }
@@ -282,13 +364,17 @@ const useDocument = (id, mode) => {
     const updateAttachment = (attachmentType, attachmentId, name, fields) => {
         if (attachmentType === "approval") {
             let newAttachments = [...approvalAttachments]
-            let updatingAttachment = newAttachments.find(_ => _.id === attachmentId)
+            let updatingAttachment = newAttachments.find(
+                (_) => _.id === attachmentId
+            )
             updatingAttachment.name = name
             updatingAttachment.fields = fields
             set("approvalAttachments", newAttachments)
         } else {
             let newAttachments = [...referenceAttachments]
-            let updatingAttachment = newAttachments.find(_ => _.id === attachmentId)
+            let updatingAttachment = newAttachments.find(
+                (_) => _.id === attachmentId
+            )
             updatingAttachment.name === name
             updatingAttachment.fields = fields
             set("referenceAttachments", newAttachments)
@@ -296,16 +382,32 @@ const useDocument = (id, mode) => {
     }
 
     return {
-        title, description, type,
-        priority, deadline, relatedProjects,
-        advisors, approvers, observators,
-        approvalAttachments, referenceAttachments,
-        procedure, checklist,
+        title,
+        description,
+        type,
+        priority,
+        deadline,
+        relatedProjects,
+        advisors,
+        approvers,
+        observators,
+        approvalAttachments,
+        referenceAttachments,
+        procedure,
+        checklist,
         set,
         //Helper function
-        removeAttachment, submitRequest, isSubmittable, changeFieldContent, 
+        removeAttachment,
+        submitRequest,
+        isSubmittable,
+        changeFieldContent,
         //Error
-        error, setError, render, updateAttachment, createError, setCreateError
+        error,
+        setError,
+        render,
+        updateAttachment,
+        createError,
+        setCreateError,
     }
 }
 
