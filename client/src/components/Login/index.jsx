@@ -13,7 +13,6 @@ const Container = styled.div`
         margin-top: 12rem;
     }
     width: 100%;
-    height: 100%;
 
     background: ${(props) =>
             "linear-gradient(to right," +
