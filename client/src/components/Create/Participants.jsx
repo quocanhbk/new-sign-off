@@ -62,7 +62,9 @@ const Participants = ({
                     multiple
                     searchable
                     selection={users}
-                    value={users.filter((u) => advisors.includes(u.id))}
+                    value={advisors.map((id) =>
+                        users.find((user) => user.id === id)
+                    )}
                     onSelect={(newValue) =>
                         set(
                             "advisors",
@@ -88,7 +90,9 @@ const Participants = ({
                     multiple
                     searchable
                     selection={users}
-                    value={users.filter((u) => approvers.includes(u.id))}
+                    value={approvers.map((id) =>
+                        users.find((user) => user.id === id)
+                    )}
                     onSelect={(newValue) =>
                         set(
                             "approvers",
@@ -111,7 +115,9 @@ const Participants = ({
                     multiple
                     searchable
                     selection={users}
-                    value={users.filter((u) => observators.includes(u.id))}
+                    value={observators.map((id) =>
+                        users.find((user) => user.id === id)
+                    )}
                     onSelect={(newValue) =>
                         set(
                             "observators",

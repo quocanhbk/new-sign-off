@@ -83,13 +83,15 @@ const Participants = ({ advisors, approvers, observators, set }) => {
                     multiple
                     searchable
                     selection={mappedData}
-                    value={mappedData.filter((u) => advisors.includes(u.id))}
-                    onSelect={(newValue) =>
+                    value={advisors.map((id) =>
+                        mappedData.find((user) => user.id === id)
+                    )}
+                    onSelect={(newValue) => {
                         set(
                             "advisors",
                             newValue.map((_) => _.id)
                         )
-                    }
+                    }}
                     displayField={"display"}
                 />
             </FormControl>
@@ -105,7 +107,9 @@ const Participants = ({ advisors, approvers, observators, set }) => {
                     multiple
                     searchable
                     selection={mappedData}
-                    value={mappedData.filter((u) => approvers.includes(u.id))}
+                    value={approvers.map((id) =>
+                        mappedData.find((user) => user.id === id)
+                    )}
                     onSelect={(newValue) =>
                         set(
                             "approvers",
@@ -127,7 +131,9 @@ const Participants = ({ advisors, approvers, observators, set }) => {
                     multiple
                     searchable
                     selection={mappedData}
-                    value={mappedData.filter((u) => observators.includes(u.id))}
+                    value={observators.map((id) =>
+                        mappedData.find((user) => user.id === id)
+                    )}
                     onSelect={(newValue) =>
                         set(
                             "observators",

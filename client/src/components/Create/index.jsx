@@ -178,6 +178,7 @@ const Create = ({ id, mode }) => {
                 >
                     {editingAttachment && (
                         <FormPopup
+                            attachmentType={editingAttachment.type}
                             attachment={(editingAttachment.type === "approval"
                                 ? approvalAttachments
                                 : referenceAttachments

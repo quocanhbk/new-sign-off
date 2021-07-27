@@ -4,6 +4,7 @@ import React from "react"
 import styled from "styled-components"
 import LazyImage from "components/LazyImage"
 import { getAvatar } from "api/user"
+import { getFader } from "utils/color"
 const CardWrapper = styled.div`
     display: flex;
     padding: 0.5rem 0;
@@ -39,6 +40,9 @@ const DivInfo = styled.div`
             color: ${(props) => props.theme.color.text.secondary};
             font-style: italic;
         }
+        & .last-approver {
+            color: red;
+        }
     }
 
     & .title-event {
@@ -46,7 +50,15 @@ const DivInfo = styled.div`
         line-height: 1.2;
     }
 `
-function CardEvents({ createdAt, createdBy, description, type }) {
+const LastApprover = styled.span`
+    background: ${(props) => getFader(props.theme.color.border.primary, 0.5)};
+    color: ${(props) => props.theme.color.fill.info};
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.2rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+`
+function CardEvents({ createdAt, createdBy, description, last }) {
     return (
         <CardWrapper>
             <DivAvatar>
@@ -58,7 +70,8 @@ function CardEvents({ createdAt, createdBy, description, type }) {
             </DivAvatar>
             <DivInfo>
                 <span className="create-event">
-                    <p className="create-by-event">{createdBy.name}</p>
+                    <p className={`create-by-event`}>{createdBy.name}</p>
+                    {last && <LastApprover>Last Approver</LastApprover>}
                     <p className="create-date-event">{createdAt}</p>
                 </span>
                 <p className="title-event">{description}</p>

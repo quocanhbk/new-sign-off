@@ -4,6 +4,16 @@ import { createStore, action, thunk } from "easy-peasy"
 import { getUsersApi } from "api/user"
 import { getForms } from "./api/form"
 
+const toProper = (str) => {
+    if (str)
+        return str
+            .split(" ")
+            .filter((word) => word !== undefined)
+            .map((word) => word[0] + word.slice(1, word.length).toLowerCase())
+            .join(" ")
+    return "Unknown"
+}
+
 const store = createStore({
     theme: localStorage.getItem("ttgTheme")
         ? localStorage.getItem("ttgTheme") === "true"
@@ -23,12 +33,12 @@ const store = createStore({
     setUsers: action((state, payload) => {
         state.users = payload
     }),
-    getUsers: thunk(async (actions, payload) => {
+    getUsers: thunk(async (actions) => {
         const data = await getUsersApi()
         actions.setUsers(
             data.map((d) => ({
                 id: d.user_id,
-                name: d.fullname,
+                name: toProper(d.fullname),
                 email: d.email,
             }))
         )

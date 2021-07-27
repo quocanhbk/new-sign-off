@@ -146,7 +146,7 @@ const FlowTag = ({ data, last, isCurrent, remindApprover }) => {
                             <BsCheck />
                         ) : data.decision === "Rejected" ? (
                             <BsX />
-                        ) : data.decision === "Pending" && isCurrent ? (
+                        ) : isCurrent ? (
                             <BsPlayFill />
                         ) : data.decision === "Pending" ? (
                             <BsThreeDots />

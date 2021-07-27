@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import React, {} from 'react'
+import React from "react"
 
-import IconWrapper from '../IconWrapper';
-import DocContent from './DocContent'
-import {BsCardText} from 'react-icons/bs'
-import styled from 'styled-components';
-import { getFader } from 'utils/color';
+import IconWrapper from "../IconWrapper"
+import DocContent from "./DocContent"
+import { BsCardText } from "react-icons/bs"
+import styled from "styled-components"
+import { getFader } from "utils/color"
 
 const MainContainer = styled.div`
     flex: 5;
@@ -15,7 +15,7 @@ const MainContainer = styled.div`
 const Bar = styled.div`
     display: flex;
     padding: 0.5rem;
-    border-bottom: 1px solid ${props => props.theme.color.border.primary};
+    border-bottom: 1px solid ${(props) => props.theme.color.border.primary};
 
     & div {
         display: flex;
@@ -35,24 +35,40 @@ const DocWrapper = styled.div`
         background: transparent;
     }
     ::-webkit-scrollbar-thumb {
-        background: ${props => getFader(props.theme.color.fill.secondary, 0.5)};
+        background: ${(props) =>
+            getFader(props.theme.color.fill.secondary, 0.5)};
         border-radius: 99px;
     }
     ::-webkit-scrollbar-thumb:hover {
-        background: ${props => props.theme.color.fill.secondary};
+        background: ${(props) => props.theme.color.fill.secondary};
     }
 `
 
-const DocDisplay = ({file, addingTag, setAddingTag, fieldData, handleClickDoc, numPage, setNumPage, moveField, resizeField}) => {
+const DocDisplay = ({
+    file,
+    addingTag,
+    setAddingTag,
+    fieldData,
+    handleClickDoc,
+    numPage,
+    setNumPage,
+    moveField,
+    resizeField,
+    attachmentType,
+}) => {
     return (
         <MainContainer>
-            {file && 
+            {file && attachmentType === "approval" && (
                 <Bar>
-                    <IconWrapper onClick={() => setAddingTag(addingTag === null ? "field" : null)}>
-                        <BsCardText/> Add Field
+                    <IconWrapper
+                        onClick={() =>
+                            setAddingTag(addingTag === null ? "field" : null)
+                        }
+                    >
+                        <BsCardText /> Add Field
                     </IconWrapper>
                 </Bar>
-            }
+            )}
             <DocWrapper>
                 <DocContent
                     file={file}
