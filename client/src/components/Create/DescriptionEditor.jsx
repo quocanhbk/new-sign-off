@@ -147,7 +147,7 @@ function DescriptionEditor({ description, set, readOnly }) {
                 config={config}
                 data={description}
                 onChange={(_, editor) => {
-                    set("description", editor.getData())
+                    if (!readOnly) set("description", editor.getData())
                 }}
                 onReady={(e) => {
                     if (e) e.isReadOnly = readOnly

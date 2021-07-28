@@ -6,6 +6,7 @@ import FormControl from "components/FormControl"
 import { useStoreState } from "easy-peasy"
 import { useQuery } from "react-query"
 import { getPositions } from "api/position"
+import { navigate } from "@reach/router"
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -49,10 +50,13 @@ const Participants = ({ advisors, approvers, observators, set }) => {
     }
 
     const users = useStoreState((s) => s.users)
-    const { data, isLoading } = useQuery("positions", () => getPositions())
+    const { data } = useQuery("positions", () => getPositions(), {
+        onError: () => navigate("/procedure"),
+    })
     const [mappedData, setMappedData] = useState([])
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
-        if (data)
+        if (data) {
             setMappedData(
                 data.map((d) => ({
                     ...d,
@@ -68,8 +72,10 @@ const Participants = ({ advisors, approvers, observators, set }) => {
                     email: users.find((user) => user.id === d.userId).email,
                 }))
             )
+            setLoading(false)
+        }
     }, [data])
-    return !isLoading ? (
+    return !loading ? (
         <Container>
             <FormControl
                 headline={"Advisor List"}

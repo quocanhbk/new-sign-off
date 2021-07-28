@@ -232,7 +232,7 @@ const SideBar = () => {
                 <div className="toggleContainer">
                     <ThemeToggle value={theme} onSelect={() => setTheme()} />
                 </div>
-                <p>Version: v0.99</p>
+                <p>Version: v1.01</p>
             </Footer>
         </SidebarContainer>
     )

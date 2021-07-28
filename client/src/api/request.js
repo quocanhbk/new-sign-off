@@ -91,6 +91,7 @@ export const getRequestDetail = async (
                 userId: a.user.user_id,
                 email: a.user.email,
                 fullname: a.user.fullname,
+                decisionTimestamp: a.decision_timestamp,
             })),
         approvers: data.approvers
             .filter((a) => a.type === "approver")
@@ -101,6 +102,7 @@ export const getRequestDetail = async (
                 userId: a.user.user_id,
                 email: a.user.email,
                 fullname: a.user.fullname,
+                decisionTimestamp: a.decision_timestamp,
             })),
         observators: data.observators.map((o) => ({
             userId: o.user_id,

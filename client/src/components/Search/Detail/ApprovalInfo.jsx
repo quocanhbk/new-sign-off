@@ -78,8 +78,13 @@ const ApprovalInfo = ({ request }) => {
                         <InfoLine
                             headline={"Final approval at"}
                             content={
-                                lastApprover.decision_timestamp
-                                    ? lastApprover.decision_timestamp
+                                lastApprover.decisionTimestamp
+                                    ? format(
+                                          new Date(
+                                              lastApprover.decisionTimestamp
+                                          ),
+                                          "HH:mm dd/MM/yyyy"
+                                      )
                                     : "N/A"
                             }
                         />
