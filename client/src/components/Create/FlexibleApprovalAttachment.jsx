@@ -93,10 +93,16 @@ const FlexibleApprovalAttachment = ({
             <Wrapper>
                 <Col>
                     <FormControl
-                        headline="Upload from computer (PDF preferred)"
+                        headline={`Upload from computer ${
+                            type === "referenceAttachments" ? "" : "(PDF)"
+                        }`}
                         noSpace
                     >
-                        <FileUpload onSubmit={handleFile} name="choose-file" />
+                        <FileUpload
+                            onSubmit={handleFile}
+                            name="choose-file"
+                            reference={type === "referenceAttachments"}
+                        />
                     </FormControl>
                 </Col>
                 <Col noSpan>
