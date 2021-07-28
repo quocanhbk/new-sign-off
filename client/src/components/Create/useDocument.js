@@ -82,8 +82,10 @@ const useDocument = (id, mode) => {
         false,
         <Placeholder type="NOT_FOUND" />
     )
-    // fetch procedure detail after user select procedure from combo box
+
     const [createError, setCreateError] = useState(false)
+
+    // fetch procedure detail after select procedure
     useEffect(() => {
         const fetchProcedure = async () => {
             reset()
@@ -131,6 +133,7 @@ const useDocument = (id, mode) => {
         if (procedure) fetchProcedure()
     }, [procedure])
 
+    // remove procedure when switch type from 'procedure' from 'flexible'
     useEffect(() => {
         if (type === "Flexible" && procedure) set("procedure", null)
     }, [type])
@@ -154,6 +157,7 @@ const useDocument = (id, mode) => {
                             .map((a) => a.id)
                     )
                     init(data)
+                    console.log("DATA", data)
                 }
             }, 250)
         }

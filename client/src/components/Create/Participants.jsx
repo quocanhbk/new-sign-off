@@ -7,6 +7,7 @@ import FormControl from "../FormControl"
 import { useStoreState } from "easy-peasy"
 import LazyImage from "components/LazyImage"
 import { getAvatar } from "api/user"
+import { useMsal } from "@azure/msal-react"
 
 const Container = styled.div`
     display: flex;
@@ -43,6 +44,7 @@ const Participants = ({
     error,
     mode,
 }) => {
+    const { accounts } = useMsal()
     const users = useStoreState((s) => s.users).map((s) => ({
         ...s,
         display: <Tag email={s.email} name={s.name} />,
@@ -61,7 +63,9 @@ const Participants = ({
                 <ControlledCombox
                     multiple
                     searchable
-                    selection={users}
+                    selection={users.filter(
+                        (u) => u.email !== accounts[0].username
+                    )}
                     value={advisors.map((id) =>
                         users.find((user) => user.id === id)
                     )}
@@ -89,7 +93,9 @@ const Participants = ({
                 <ControlledCombox
                     multiple
                     searchable
-                    selection={users}
+                    selection={users.filter(
+                        (u) => u.email !== accounts[0].username
+                    )}
                     value={approvers.map((id) =>
                         users.find((user) => user.id === id)
                     )}
@@ -114,7 +120,9 @@ const Participants = ({
                 <ControlledCombox
                     multiple
                     searchable
-                    selection={users}
+                    selection={users.filter(
+                        (u) => u.email !== accounts[0].username
+                    )}
                     value={observators.map((id) =>
                         users.find((user) => user.id === id)
                     )}

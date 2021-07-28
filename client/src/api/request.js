@@ -164,6 +164,7 @@ export const getRequestDetail = async (
                 })),
             })),
     }
+
     await Promise.all(
         returnData.approvalAttachments.map(async (attachment) => {
             let file = await getFile(attachment.fileId)
