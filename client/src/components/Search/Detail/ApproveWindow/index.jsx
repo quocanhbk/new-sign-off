@@ -1,12 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react"
+import { useRef, useState } from "react"
 import styled from "styled-components"
 import { BsChevronUp, BsChevronDown } from "react-icons/bs"
 import { getFader } from "utils/color"
 import ApprovalOpinionCard from "./ApprovalOpinionCard"
 import Button from "components/Base/Button"
+import { usePopper } from "react-popper"
+import useTooltip from "./useTooltip"
 const Container = styled.div`
     position: relative;
     width: calc(100% - 2rem);
@@ -48,6 +50,7 @@ const Body = styled.div`
     flex-direction: column;
     height: 27rem;
 `
+
 const ApproveBlock = styled.div`
     display: flex;
     & > * + * {
@@ -55,16 +58,77 @@ const ApproveBlock = styled.div`
     }
     padding-bottom: 1rem;
     border-bottom: 1px solid ${(props) => props.theme.color.border.primary};
-
+`
+const ApproveButtonWrapper = styled.div`
+    flex: 1;
     & .approve-button {
         //flex: 1;
         border-radius: 0.2rem;
-        flex-grow: 1;
-    }
-    & .flex-2 {
-        //flex: 2;
+        width: 100%;
     }
 `
+const OpinionButtonWrapper = styled.div`
+    flex: 2;
+    & .opinion-button {
+        //flex: 1;
+        border-radius: 0.2rem;
+        width: 100%;
+    }
+`
+const RejectButtonWrapper = styled.div`
+    flex: 1;
+    & .reject-button {
+        //flex: 1;
+        border-radius: 0.2rem;
+        width: 100%;
+    }
+`
+const ApprovePopper = styled.div`
+    padding: 0.2rem 0.4rem;
+    font-size: 0.9rem;
+    background: ${(props) => getFader(props.theme.color.border.primary, 0.8)};
+    color: ${(props) => props.theme.color.text.secondary};
+    border: 1px solid ${(props) => props.theme.color.border.primary};
+    border-radius: 0.25rem;
+    visibility: hidden;
+    pointer-events: none;
+
+    ${ApproveButtonWrapper}:hover & {
+        visibility: visible;
+        pointer-events: all;
+    }
+`
+const OpinionPopper = styled.div`
+    padding: 0.2rem 0.4rem;
+    font-size: 0.9rem;
+    background: ${(props) => getFader(props.theme.color.border.primary, 0.8)};
+    color: ${(props) => props.theme.color.text.secondary};
+    border: 1px solid ${(props) => props.theme.color.border.primary};
+    border-radius: 0.25rem;
+    visibility: hidden;
+    pointer-events: none;
+
+    ${OpinionButtonWrapper}:hover & {
+        visibility: visible;
+        pointer-events: all;
+    }
+`
+const RejectPopper = styled.div`
+    padding: 0.2rem 0.4rem;
+    font-size: 0.9rem;
+    background: ${(props) => getFader(props.theme.color.border.primary, 0.8)};
+    color: ${(props) => props.theme.color.text.secondary};
+    border: 1px solid ${(props) => props.theme.color.border.primary};
+    border-radius: 0.25rem;
+    visibility: hidden;
+    pointer-events: none;
+
+    ${RejectButtonWrapper}:hover & {
+        visibility: visible;
+        pointer-events: all;
+    }
+`
+
 const OpinionContainer = styled.div`
     overflow: overlay;
     ::-webkit-scrollbar {
@@ -82,12 +146,31 @@ const OpinionContainer = styled.div`
         background: ${(props) => props.theme.color.fill.secondary};
     }
 `
+
 const ApproveWindow = ({ opinions, setConfirmPopup, setOpinionId }) => {
     const [expand, setExpand] = useState(false)
     const approve = (decision) => {
         setConfirmPopup(decision)
     }
-    console.log("OPINION", opinions)
+    const {
+        popperRef: approvePopper,
+        elementRef: approveElement,
+        styles: approveStyles,
+        attributes: approveAttrs,
+    } = useTooltip()
+    const {
+        popperRef: opinionPopper,
+        elementRef: opinionElement,
+        styles: opinionStyles,
+        attributes: opinionAttrs,
+    } = useTooltip()
+    const {
+        popperRef: rejectPopper,
+        elementRef: rejectElement,
+        styles: rejectStyles,
+        attributes: rejectAttrs,
+    } = useTooltip()
+
     return (
         <Container expand={expand}>
             <Block className="block">
@@ -101,30 +184,59 @@ const ApproveWindow = ({ opinions, setConfirmPopup, setOpinionId }) => {
                 </Header>
                 <Body className="body">
                     <ApproveBlock>
-                        <Button
-                            padding="0.5rem"
-                            className="approve-button"
-                            color="success"
-                            onClick={() => approve("APPROVE")}
-                        >
-                            Approve
-                        </Button>
-                        <Button
-                            padding="0.5rem"
-                            className="approve-button flex-2"
-                            color="warning"
-                            onClick={() => approve("APPROVE_WITH_OPINION")}
-                        >
-                            Approve With New Opinion
-                        </Button>
-                        <Button
-                            padding="0.5rem"
-                            className="approve-button"
-                            color="danger"
-                            onClick={() => approve("REJECT")}
-                        >
-                            Reject
-                        </Button>
+                        <ApproveButtonWrapper ref={approveElement}>
+                            <Button
+                                padding="0.5rem"
+                                className="approve-button approve"
+                                color="success"
+                                onClick={() => approve("APPROVE")}
+                            >
+                                Approve
+                            </Button>
+                            <ApprovePopper
+                                ref={approvePopper}
+                                style={approveStyles.popper}
+                                {...approveAttrs.popper}
+                            >
+                                Approve and close this request
+                            </ApprovePopper>
+                        </ApproveButtonWrapper>
+                        <OpinionButtonWrapper ref={opinionElement}>
+                            <Button
+                                padding="0.5rem"
+                                className="opinion-button"
+                                color="warning"
+                                onClick={() => approve("APPROVE_WITH_OPINION")}
+                            >
+                                Approve With New Opinion
+                            </Button>
+                            <OpinionPopper
+                                ref={opinionPopper}
+                                style={opinionStyles.popper}
+                                {...opinionAttrs.popper}
+                            >
+                                {/* Giving a new opinion and revising this approval request */}
+                                Approve with an opinion for submitter to revise
+                                later
+                            </OpinionPopper>
+                        </OpinionButtonWrapper>
+                        <RejectButtonWrapper ref={rejectElement}>
+                            <Button
+                                padding="0.5rem"
+                                className="reject-button"
+                                color="danger"
+                                onClick={() => approve("REJECT")}
+                            >
+                                Reject
+                            </Button>
+                            <RejectPopper
+                                ref={rejectPopper}
+                                style={rejectStyles.popper}
+                                {...rejectAttrs.popper}
+                            >
+                                Reject and close this request
+                            </RejectPopper>
+                        </RejectButtonWrapper>
                     </ApproveBlock>
                     <OpinionContainer>
                         {opinions.map((o) => (

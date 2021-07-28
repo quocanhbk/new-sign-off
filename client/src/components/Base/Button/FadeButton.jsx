@@ -1,5 +1,6 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React from "react"
+import React, { forwardRef } from "react"
 import styled, { css } from "styled-components"
 import { getFader } from "utils/color"
 
@@ -43,38 +44,44 @@ const Container = styled.button`
     }
 `
 
-const FadeButton = ({
-    className,
-    onClick,
-    children,
-    padding,
-    radius,
-    fullWidth,
-    color,
-    gap,
-    fontSize,
-    weight,
-    disabled,
-    readOnly,
-}) => {
-    return (
-        <Container
-            className={className}
-            onClick={onClick}
-            padding={padding}
-            radius={radius}
-            fullWidth={fullWidth}
-            color={color}
-            gap={gap}
-            fontSize={fontSize}
-            weight={weight}
-            disabled={disabled}
-            readOnly={readOnly}
-        >
-            {children}
-        </Container>
-    )
-}
+const FadeButton = forwardRef(
+    (
+        {
+            className,
+            onClick,
+            children,
+            padding,
+            radius,
+            fullWidth,
+            color,
+            gap,
+            fontSize,
+            weight,
+            disabled,
+            readOnly,
+        },
+        ref
+    ) => {
+        return (
+            <Container
+                ref={ref}
+                className={className}
+                onClick={onClick}
+                padding={padding}
+                radius={radius}
+                fullWidth={fullWidth}
+                color={color}
+                gap={gap}
+                fontSize={fontSize}
+                weight={weight}
+                disabled={disabled}
+                readOnly={readOnly}
+            >
+                {children}
+            </Container>
+        )
+    }
+)
 
 FadeButton.defaultProps = {
     padding: "0.5rem 1rem",
