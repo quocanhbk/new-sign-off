@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "signoff-ttg"
+    "ttg-ao": "ttg-ao",
+    "default": "ttg-ao"
   }
 }
