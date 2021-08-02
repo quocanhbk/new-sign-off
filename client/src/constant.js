@@ -35,7 +35,7 @@ export const adminEmails = [
     "thang.hd@ttgvn.com",
     "lien.nth@ttgvn.com",
     "du.np@ttgvn.com",
-    "thuan.nv@ttgvn.com",
+    "thuan.pv@ttgvn.com",
     "anh.lq@ttgvn.com",
     "tan.nh@ttgvn.com",
 ]
