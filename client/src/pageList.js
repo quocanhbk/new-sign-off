@@ -5,10 +5,8 @@ import {
     BsSearch,
     BsFileEarmarkPlus,
     BsPencilSquare,
-    BsFileEarmarkCheck,
     BsFileText,
     BsGear,
-    BsEggFill,
 } from "react-icons/bs"
 import NewHomePage from "./components/NewHome"
 import CreatePage from "./components/Create"
@@ -16,13 +14,13 @@ import SearchPage from "./components/Search"
 import Form from "./components/Form"
 import Procedure from "./components/Procedure"
 const pageList = [
-    // {icon: <BsHouse size="24px"/>, text: "Home", path: "/", link: "/", comp: <HomePage/>},
     {
         icon: <BsHouse size="24px" />,
         text: "Home",
         path: "/",
         link: "/",
         comp: <NewHomePage />,
+        admin: false,
     },
     {
         icon: <BsSearch size="24px" />,
@@ -30,6 +28,7 @@ const pageList = [
         path: "/search/*",
         link: "/search",
         comp: <SearchPage />,
+        admin: false,
     },
     {
         icon: <BsFileEarmarkPlus size="24px" />,
@@ -38,6 +37,7 @@ const pageList = [
         link: "/create",
         comp: <CreatePage mode="create" />,
         noMobile: true,
+        admin: false,
     },
     {
         icon: <BsFileEarmarkPlus size="24px" />,
@@ -47,6 +47,7 @@ const pageList = [
         comp: <CreatePage mode="draft" />,
         notVisible: true,
         noMobile: true,
+        admin: false,
     },
     {
         icon: <BsFileEarmarkPlus size="24px" />,
@@ -56,6 +57,7 @@ const pageList = [
         comp: <CreatePage mode="revise" />,
         notVisible: true,
         noMobile: true,
+        admin: false,
     },
     {
         icon: <BsPencilSquare size="24px" />,
@@ -63,8 +65,8 @@ const pageList = [
         path: "/sign/*",
         link: "/sign",
         comp: <SearchPage mode="sign" />,
+        admin: false,
     },
-    // {icon: <BsFileEarmarkCheck size="24px"/>, text: "Verify Document", path: "/verify", link: "/verify", comp: <VerifyPage/>},
     {
         icon: <BsFileText size="24px" />,
         text: "Manage Form",
@@ -72,6 +74,7 @@ const pageList = [
         link: "/form",
         comp: <Form />,
         noMobile: true,
+        admin: true,
     },
     {
         icon: <BsGear size="24px" />,
@@ -80,8 +83,8 @@ const pageList = [
         link: "/procedure",
         comp: <Procedure />,
         noMobile: true,
+        admin: true,
     },
-    // {icon: <BsEggFill size="24px"/>, text: "React Playground", path: "/playground/*", link: "/playground", comp: <Playground/>, noMobile: true},
 ]
 
 export default pageList

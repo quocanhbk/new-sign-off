@@ -1,12 +1,15 @@
 /* eslint-disable no-unreachable */
-import { Router, Redirect } from '@reach/router';
-import useMediaQuery from 'hooks/useMediaQuery';
-import React from 'react'
-import styled from "styled-components";
-import CreatePage from './CreatePage'
-import ViewPage from './ViewPage';
+import { Router, Redirect } from "@reach/router"
+import useMediaQuery from "hooks/useMediaQuery"
+import React from "react"
+import styled from "styled-components"
+import CreatePage from "./CreatePage"
+import ViewPage from "./ViewPage"
+import { adminEmails } from "constant"
+import { useMsal } from "@azure/msal-react"
+
 const Container = styled.div`
-    display:flex;
+    display: flex;
     flex-direction: column;
     height: 100%;
     width: 100%;
@@ -17,17 +20,19 @@ const Container = styled.div`
 
 const Procedure = () => {
     const device = useMediaQuery()
+    const { accounts } = useMsal()
+    if (!adminEmails.includes(accounts[0].username) || device !== "PC")
+        return <Redirect to="/" noThrow />
+
     return (
-        device === "PC" ?
         <Container>
             <Router className="router">
                 <CreatePage path="/create" />
                 <CreatePage path="/create/:id" />
                 <ViewPage path="/view/*" />
-                <Redirect from="/" to="/procedure/view" noThrow/>
+                <Redirect from="/" to="/procedure/view" noThrow />
             </Router>
-        </Container> :
-        <Redirect to="/"/>
+        </Container>
     )
 }
 

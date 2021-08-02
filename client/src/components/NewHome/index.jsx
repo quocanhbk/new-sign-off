@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
-import React from "react"
+import React, { useEffect } from "react"
 import styled, { css } from "styled-components"
 import { getFader } from "utils/color"
 import Feature from "./Feature"
 import Dashboard from "./Dashboard"
 import useMediaQuery from "hooks/useMediaQuery"
+import { useStoreActions } from "easy-peasy"
 const StyleContainer = styled.div`
     display: flex;
     width: 100%;
@@ -42,7 +43,10 @@ const Vertical = styled.div`
 `
 const Home = () => {
     let device = useMediaQuery()
-
+    const setPath = useStoreActions((action) => action.setPath)
+    useEffect(() => {
+        setPath("/")
+    }, [])
     return (
         <StyleContainer>
             <Col right>

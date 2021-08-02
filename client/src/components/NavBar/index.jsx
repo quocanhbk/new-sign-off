@@ -2,7 +2,6 @@
 import React, { useRef, useState } from "react"
 import styled, { css } from "styled-components"
 import { BsPower, BsThreeDotsVertical } from "react-icons/bs"
-import Avatar from "components/Avatar"
 import ThemeToggle from "./ThemeToggle"
 import pageList from "pageList"
 import { getFader } from "utils/color"
@@ -11,7 +10,7 @@ import { useMsal } from "@azure/msal-react"
 import useClickOutside from "hooks/useClickOutside"
 import LazyImage from "components/LazyImage"
 import { getAvatar } from "api/user"
-
+import { adminEmails } from "constant"
 const SidebarContainer = styled.div`
     background-color: ${(props) => props.theme.color.background.secondary};
     padding-top: 0.5rem;
@@ -165,6 +164,7 @@ const SideBar = () => {
     const setTheme = useStoreActions((_) => _.setTheme)
     const setPath = useStoreActions((_) => _.setPath)
     const path = useStoreState((_) => _.path)
+    const users = useStoreState((_) => _.users)
     const [popup, setPopup] = useState(false)
     const { instance, accounts } = useMsal()
     const name =
@@ -174,6 +174,7 @@ const SideBar = () => {
         () => setPopup(false),
         threeDotRef.current
     )
+
     return (
         <SidebarContainer>
             <Header>
@@ -214,6 +215,11 @@ const SideBar = () => {
             <NavList>
                 {pageList
                     .filter((p) => !p.notVisible)
+                    .filter(
+                        (page) =>
+                            !page.admin ||
+                            adminEmails.includes(accounts[0].username)
+                    )
                     .map((item) => (
                         <NavItem
                             key={item.text}
@@ -232,7 +238,7 @@ const SideBar = () => {
                 <div className="toggleContainer">
                     <ThemeToggle value={theme} onSelect={() => setTheme()} />
                 </div>
-                <p>Version: v1.02</p>
+                <p>Version: v1.00</p>
             </Footer>
         </SidebarContainer>
     )
