@@ -119,7 +119,7 @@ function DescriptionEditor({ description, set, readOnly }) {
                       "bulletedList",
                       "|",
                       "fontColor",
-                      "fontBackgroundColor"
+                      "fontBackgroundColor",
                       "|",
                       "insertTable",
                       "|",
