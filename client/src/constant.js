@@ -29,13 +29,15 @@ export const admins = [
     "0cc1c98a-3296-4eb7-a30d-917d9c8f8be9",
     "fb1537e0-d8f1-412c-88a2-8af50909b4a9",
     "63e91bb5-27c7-4405-b3a3-cbbe68282e70",
+    "a1e42e68-a7ba-4237-abc3-f7f3cab823b3",
 ]
 export const adminEmails = [
+    "anh.lq@ttgvn.com",
     "son.nk@ttgvn.com",
+    "tan.nh@ttgvn.com",
     "thang.hd@ttgvn.com",
     "lien.nth@ttgvn.com",
     "du.np@ttgvn.com",
     "thuan.pv@ttgvn.com",
-    "anh.lq@ttgvn.com",
-    "tan.nh@ttgvn.com",
+    "huong.ntm@ttgvn.com",
 ]
