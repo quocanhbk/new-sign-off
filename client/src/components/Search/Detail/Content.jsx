@@ -143,7 +143,7 @@ const Content = ({ request, logs, setLogs, setEditingAttachment }) => {
                 <EventComments
                     logs={logs}
                     lastApproverId={
-                        request.approvers[request.approvers.length - 1].userId
+                        request.approvers[request.approvers.length - 1] ? request.approvers[request.approvers.length - 1].userId : 'N/A'
                     }
                     setLogs={setLogs}
                     requestId={request.id}

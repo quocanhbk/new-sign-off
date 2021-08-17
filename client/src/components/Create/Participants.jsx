@@ -63,9 +63,7 @@ const Participants = ({
                 <ControlledCombox
                     multiple
                     searchable
-                    selection={users.filter(
-                        (u) => u.email !== accounts[0].username
-                    )}
+                    selection={users}
                     value={advisors.map((id) =>
                         users.find((user) => user.id === id)
                     )}
@@ -93,9 +91,7 @@ const Participants = ({
                 <ControlledCombox
                     multiple
                     searchable
-                    selection={users.filter(
-                        (u) => u.email !== accounts[0].username
-                    )}
+                    selection={users}
                     value={approvers.map((id) =>
                         users.find((user) => user.id === id)
                     )}
@@ -120,9 +116,7 @@ const Participants = ({
                 <ControlledCombox
                     multiple
                     searchable
-                    selection={users.filter(
-                        (u) => u.email !== accounts[0].username
-                    )}
+                    selection={users}
                     value={observators.map((id) =>
                         users.find((user) => user.id === id)
                     )}

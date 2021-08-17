@@ -37,7 +37,7 @@ const LineContainer = styled.table`
 `
 
 const ApprovalInfo = ({ request }) => {
-    const lastApprover = request.approvers[request.approvers.length - 1]
+    const lastApprover = request.approvers[request.approvers.length - 1] ? request.approvers[request.approvers.length - 1]  : {};
     return (
         <Container>
             <SectionContainer headline="Document">
