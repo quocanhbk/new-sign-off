@@ -9,14 +9,14 @@ import faker from "faker"
 
 export const getRequests = async (
     queryString,
-    callback = (v) => {
+    callback = v => {
         v
     }
 ) => {
     const config = await getConfig()
     let { data } = await axios.get(`/api/v1/requests?${queryString}`, config)
     callback(100)
-    return data.map((request) => ({
+    return data.map(request => ({
         id: request.approval_request_id,
         type: request.type,
         title: request.title,
@@ -34,10 +34,7 @@ export const getRequests = async (
 export const getLastSignRequest = async () => {
     const config = await getConfig()
     try {
-        let { data } = await axios.get(
-            "/api/v1/requests?sign=true&start=0&end=1",
-            config
-        )
+        let { data } = await axios.get("/api/v1/requests?sign=true&start=0&end=1", config)
         return data[0] ? data[0].approval_request_id : null
     } catch (error) {
         return null
@@ -47,15 +44,12 @@ export const getLastSignRequest = async () => {
 export const getRequestDetail = async (
     id,
     sign = false,
-    callback = (v) => {
+    callback = v => {
         v
     }
 ) => {
     const config = await getConfig()
-    let { data } = await axios.get(
-        `/api/v1/requests/${id}?${sign ? "sign=true" : ""}`,
-        config
-    )
+    let { data } = await axios.get(`/api/v1/requests/${id}?${sign ? "sign=true" : ""}`, config)
     callback(25)
     let checklist = []
     if (data.type === "Procedure") {
@@ -83,8 +77,8 @@ export const getRequestDetail = async (
             },
         ],
         advisors: data.approvers
-            .filter((a) => a.type === "advisor")
-            .map((a) => ({
+            .filter(a => a.type === "advisor")
+            .map(a => ({
                 id: a.approver_id,
                 order: a.order,
                 decision: a.decision,
@@ -94,8 +88,8 @@ export const getRequestDetail = async (
                 decisionTimestamp: a.decision_timestamp,
             })),
         approvers: data.approvers
-            .filter((a) => a.type === "approver")
-            .map((a) => ({
+            .filter(a => a.type === "approver")
+            .map(a => ({
                 id: a.approver_id,
                 order: a.order,
                 decision: a.decision,
@@ -104,12 +98,12 @@ export const getRequestDetail = async (
                 fullname: a.user.fullname,
                 decisionTimestamp: a.decision_timestamp,
             })),
-        observators: data.observators.map((o) => ({
+        observators: data.observators.map(o => ({
             userId: o.user_id,
             fullname: o.fullname,
             email: o.email,
         })),
-        logs: data.logs.map((log) => ({
+        logs: data.logs.map(log => ({
             id: log.log_id,
             type: log.type,
             description: log.description,
@@ -123,7 +117,7 @@ export const getRequestDetail = async (
         currentApprover: data.current_approver,
         procedureId: data.fk_procedure_id,
         checklist: checklist,
-        opinions: data.opinions.map((o) => ({
+        opinions: data.opinions.map(o => ({
             id: o.request_opinion_id,
             comment: o.opinion,
             isFinal: o.is_final,
@@ -132,13 +126,13 @@ export const getRequestDetail = async (
         })),
         updatedAt: new Date(data.updated_at),
         approvalAttachments: data.attachments
-            .filter((a) => !a.reference)
-            .map((a) => ({
+            .filter(a => !a.reference)
+            .map(a => ({
                 id: a.attachment_id,
                 name: a.name,
                 checklistItemId: a.fk_checklist_item_id,
                 fileId: a.fk_file_id,
-                fields: a.fields.map((field) => ({
+                fields: a.fields.map(field => ({
                     id: field.field_id,
                     name: field.field,
                     content: field.value,
@@ -148,13 +142,13 @@ export const getRequestDetail = async (
                 })),
             })),
         referenceAttachments: data.attachments
-            .filter((a) => a.reference)
-            .map((a) => ({
+            .filter(a => a.reference)
+            .map(a => ({
                 id: a.attachment_id,
                 name: a.name,
                 checklistItemId: a.fk_checklist_item_id,
                 fileId: a.fk_file_id,
-                fields: a.fields.map((field) => ({
+                fields: a.fields.map(field => ({
                     id: field.field_id,
                     name: field.field,
                     content: field.value,
@@ -166,14 +160,14 @@ export const getRequestDetail = async (
     }
 
     await Promise.all(
-        returnData.approvalAttachments.map(async (attachment) => {
+        returnData.approvalAttachments.map(async attachment => {
             let file = await getFile(attachment.fileId)
             attachment.file = file
         })
     )
     callback(75)
     await Promise.all(
-        returnData.referenceAttachments.map(async (attachment) => {
+        returnData.referenceAttachments.map(async attachment => {
             let file = await getFile(attachment.fileId)
             attachment.file = file
         })
@@ -212,7 +206,7 @@ export const burstRequest = async () => {
 
 export const postRequest = async (
     input,
-    callback = (v) => {
+    callback = v => {
         v
     }
 ) => {
@@ -239,7 +233,7 @@ export const postRequest = async (
         description,
         priority,
         type,
-        deadline: new Date(deadline).toLocaleDateString("en-CA"),
+        deadline: deadline ? new Date(deadline).toLocaleDateString("en-CA") : null,
         status,
         relatedProjects,
         advisors,
@@ -255,47 +249,36 @@ export const postRequest = async (
     } = await axios.post("/api/v1/requests", sendData, config)
     // 2. POST attachments
     await Promise.all(
-        approvalAttachments
-            .concat(referenceAttachments)
-            .map(async (attachment) => {
-                if (!attachment.fileId) {
-                    const file_id = await postFile(attachment.file)
-                    attachment.fileId = file_id
-                }
-                // POST attachment
-                let attachmentBody = {
-                    name: attachment.name,
-                    checklistItemId: attachment.checklistItemId,
-                    reference: attachment.reference,
-                    fileId: attachment.fileId,
-                }
-                if (!attachmentBody.checklistItemId)
-                    delete attachmentBody.checklistItemId
-                let {
-                    data: { attachment_id: attachmentId },
-                } = await axios.post(
-                    "/api/v1/requests/" + id + "/attachments",
-                    attachmentBody,
-                    config
-                )
+        approvalAttachments.concat(referenceAttachments).map(async attachment => {
+            if (!attachment.fileId) {
+                const file_id = await postFile(attachment.file)
+                attachment.fileId = file_id
+            }
+            // POST attachment
+            let attachmentBody = {
+                name: attachment.name,
+                checklistItemId: attachment.checklistItemId,
+                reference: attachment.reference,
+                fileId: attachment.fileId,
+            }
+            if (!attachmentBody.checklistItemId) delete attachmentBody.checklistItemId
+            let {
+                data: { attachment_id: attachmentId },
+            } = await axios.post("/api/v1/requests/" + id + "/attachments", attachmentBody, config)
 
-                // POST field
-                let fields = attachment.fields.map((field) => ({
-                    field: field.name,
-                    type: "FIELD",
-                    value: field.content,
-                    x: field.position.X,
-                    y: field.position.Y,
-                    width: field.size.width,
-                    height: field.size.height,
-                    required: field.required,
-                }))
-                await axios.post(
-                    "/api/v1/requests/attachments/" + attachmentId + "/fields",
-                    { fields },
-                    config
-                )
-            })
+            // POST field
+            let fields = attachment.fields.map(field => ({
+                field: field.name,
+                type: "FIELD",
+                value: field.content,
+                x: field.position.X,
+                y: field.position.Y,
+                width: field.size.width,
+                height: field.size.height,
+                required: field.required,
+            }))
+            await axios.post("/api/v1/requests/attachments/" + attachmentId + "/fields", { fields }, config)
+        })
     )
     callback(100)
     return id
@@ -306,7 +289,7 @@ export const patchRequest = async (
     input,
     newAttachments,
     deletedAttachmentIds,
-    callback = (v) => {
+    callback = v => {
         v
     }
 ) => {
@@ -340,14 +323,14 @@ export const patchRequest = async (
 
     // delete old attachment
     await Promise.all(
-        deletedAttachmentIds.map(async (attachment) => {
+        deletedAttachmentIds.map(async attachment => {
             await deleteAttachment(id, attachment)
         })
     )
     callback(66)
     // post all the new attachments
     await Promise.all(
-        newAttachments.map(async (attachment) => {
+        newAttachments.map(async attachment => {
             if (!attachment.fileId) {
                 const data = new FormData()
                 data.append("file", attachment.file, attachment.file.name)
@@ -363,18 +346,13 @@ export const patchRequest = async (
                 reference: attachment.reference,
                 fileId: attachment.fileId,
             }
-            if (!attachmentBody.checklistItemId)
-                delete attachmentBody.checklistItemId
+            if (!attachmentBody.checklistItemId) delete attachmentBody.checklistItemId
             let {
                 data: { attachment_id: attachmentId },
-            } = await axios.post(
-                "/api/v1/requests/" + id + "/attachments",
-                attachmentBody,
-                config
-            )
+            } = await axios.post("/api/v1/requests/" + id + "/attachments", attachmentBody, config)
 
             // POST field
-            let fields = attachment.fields.map((field) => ({
+            let fields = attachment.fields.map(field => ({
                 field: field.name,
                 type: "FIELD",
                 value: field.content,
@@ -384,11 +362,7 @@ export const patchRequest = async (
                 height: field.size.height,
                 required: field.required,
             }))
-            await axios.post(
-                "/api/v1/requests/attachments/" + attachmentId + "/fields",
-                { fields },
-                config
-            )
+            await axios.post("/api/v1/requests/attachments/" + attachmentId + "/fields", { fields }, config)
         })
     )
     callback(100)
@@ -419,7 +393,7 @@ export const postComment = async (id, comment) => {
 export const approveRequest = async (
     id,
     { code, comment, opinionId },
-    callback = (v) => {
+    callback = v => {
         v
     }
 ) => {
@@ -461,10 +435,7 @@ export const remindApprove = async (id, userId) => {
 
 export const deleteAttachment = async (requestId, attachmentId) => {
     const config = await getConfig()
-    await axios.delete(
-        `/api/v1/requests/${requestId}/attachments/${attachmentId}`,
-        config
-    )
+    await axios.delete(`/api/v1/requests/${requestId}/attachments/${attachmentId}`, config)
 }
 
 export const cancelRequest = async (id, reason) => {
@@ -472,7 +443,7 @@ export const cancelRequest = async (id, reason) => {
     await axios.post(`/api/v1/requests/${id}/cancellation`, { reason }, config)
 }
 
-export const deleteRequest = async (id) => {
+export const deleteRequest = async id => {
     const config = await getConfig()
     await axios.delete(`/api/v1/requests/${id}`, config)
 }
