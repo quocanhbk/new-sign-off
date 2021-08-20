@@ -8,13 +8,14 @@ import { Id } from "types"
 
 export interface DocContentProps {
     file: File | string
-    addingTag: string | null
+    addingTag: boolean
     fieldData: IField[]
     handleClickDoc: (position: IField["position"]) => void
     numPage: number
     setNumPage: (pageNum: number) => void
     moveField: (fieldId: Id, position: IField["position"]) => void
     resizeField: (fieldId: Id, size: IField["size"]) => void
+    initForm?: (f: File) => void
 }
 
 const DocContent = ({
@@ -26,6 +27,7 @@ const DocContent = ({
     setNumPage,
     moveField,
     resizeField,
+    initForm,
 }: DocContentProps) => {
     const [curPos, setCurPos] = useState({ X: -100, Y: -100 })
     let docRef = useRef<HTMLDivElement>(null)
@@ -37,7 +39,7 @@ const DocContent = ({
     const [displayTag, setDisplayTag] = useState(false)
 
     const handleMouseMoveDoc = e => {
-        if (addingTag === "field") {
+        if (addingTag) {
             let { x, y, width, height } = docRef.current!.getBoundingClientRect()
             let { width: floatWidth, height: floatHeight } = floatRef.current!.getBoundingClientRect()
             setCurPos({
@@ -120,7 +122,7 @@ const DocContent = ({
                         fontSize={docRef.current!.getBoundingClientRect().width / 60 + "px"}
                     />
                 ))}
-            {addingTag === "field" && (
+            {addingTag && (
                 <FieldTag
                     data={{ position: curPos, content: "", size: { width: 2, height: 0.1 }, name: "" }}
                     ref={floatRef}

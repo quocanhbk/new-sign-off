@@ -4,8 +4,6 @@ import axios from "axios"
 import getConfig from "./getConfig"
 import QRCode from "qrcode"
 import { IField } from "./form"
-import { CallbackFunction } from "types"
-// export type File = string
 interface IDownloadFormInput {
     name: string
     file: string
@@ -14,37 +12,36 @@ interface IDownloadFormInput {
     size: number
     position: "left" | "right"
 }
-export const getFile = async (id: number, callback: CallbackFunction = () => {}): Promise<string> => {
+export const getFile = async (id: number): Promise<string> => {
     const config = await getConfig()
     const {
         data: { downloadUrl: file },
     } = await axios.get("/api/v1/files/" + id, config)
-    callback(100)
     return file
 }
 
-export const postFile = async (file: File, callback: CallbackFunction = () => {}): Promise<number> => {
+export const postFile = async (file: File): Promise<number> => {
     const config = await getConfig()
     const data = new FormData()
     data.append("file", file, file.name)
     const {
         data: { file_id },
     } = await axios.post("/api/v1/files", data, config)
-    callback(100)
     return file_id
 }
 
-export const deleteFile = async (fileId: number, callback: CallbackFunction = () => {}) => {
+export const deleteFile = async (fileId: number) => {
     const config = await getConfig()
     let res = await axios.delete("/api/v1/files/" + fileId, config)
-    callback(100)
     return res.data
 }
 
-export const downloadForm2 = async (
-    { name, file, fields, requestId }: Omit<IDownloadFormInput, "size" | "position">,
-    callback: CallbackFunction = () => {}
-) => {
+export const downloadAttachment = async ({
+    name,
+    file,
+    fields,
+    requestId,
+}: Omit<IDownloadFormInput, "size" | "position">) => {
     const getQRText = async requestId => {
         const config = await getConfig()
         const res = await axios.get(`/api/v1/requests/${requestId}/signed-content`, config)
@@ -64,7 +61,6 @@ export const downloadForm2 = async (
         link.href = file
         // link.download=`${name}.pdf`
         link.click()
-        callback(100)
         return
     }
     const pdfDoc = await PDFDocument.load(existingPdf.data)
@@ -117,14 +113,17 @@ export const downloadForm2 = async (
     link.href = window.URL.createObjectURL(blob)
     link.download = `${name}.pdf`
     link.click()
-    callback(100)
 }
 // you can change QR code size and position
 
-export const downloadForm3 = async (
-    { name, file, fields, requestId, size, position }: IDownloadFormInput,
-    callback: CallbackFunction = () => {}
-) => {
+export const downloadStampAttachment = async ({
+    name,
+    file,
+    fields,
+    requestId,
+    size,
+    position,
+}: IDownloadFormInput) => {
     const getQRText = async (requestId: number): Promise<string> => {
         const config = await getConfig()
         const {
@@ -146,7 +145,6 @@ export const downloadForm3 = async (
         const link = document.createElement("a")
         link.href = file
         link.click()
-        callback(100)
         return
     }
     const pdfDoc = await PDFDocument.load(fileBuffer.data)
@@ -199,5 +197,4 @@ export const downloadForm3 = async (
     link.href = window.URL.createObjectURL(blob)
     link.download = `${name}.pdf`
     link.click()
-    callback(100)
 }

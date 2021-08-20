@@ -1,90 +1,49 @@
-import { useState } from "react"
-import styled from "styled-components"
+import { useRef, KeyboardEvent } from "react"
 import { IoMdSend } from "react-icons/all"
-import CardEvents from "./CardEvents"
-import { getFader } from "utils/color"
+import EventCard from "./EventCard"
 import format from "date-fns/format"
-import { postComment } from "api/request"
+import { Flex, IconButton, Input, VStack } from "@chakra-ui/react"
+import { useRequestContext } from "./RequestProvider"
 
-const StyleWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    & > * + * {
-        margin-top: 0.5rem;
-    }
-`
-
-const Input = styled.input`
-    flex: 1;
-    border: 1px solid ${props => props.theme.color.border.primary};
-    border-radius: 99px;
-    background: ${props => props.theme.color.background.primary};
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    color: ${props => props.theme.color.text.primary};
-    outline: none;
-
-    &:focus {
-        border-color: ${props => props.theme.color.fill.primary};
-    }
-`
-const Form = styled.form`
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 0rem;
-    & > * + * {
-        margin-left: 0.5rem;
-    }
-
-    & button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        background: transparent;
-        border: none;
-        color: ${props => props.theme.color.fill.primary};
-        padding: 0.5rem;
-        border-radius: 99px;
-        &:hover {
-            background: ${props => getFader(props.theme.color.border.primary, 0.5)};
+const EventComments = () => {
+    const {
+        request,
+        mutator: { postComment },
+    } = useRequestContext()
+    const logs = request!.logs
+    const lastApproverId = request!.approvers[request!.approvers.length - 1].userId
+    const inputRef = useRef<HTMLInputElement>(null)
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            e.preventDefault()
+            if (inputRef.current && inputRef.current.value !== "") {
+                postComment(inputRef.current.value)
+                inputRef.current.value = ""
+            }
         }
     }
-`
-const TableEvents = styled.div`
-    display: flex;
-    flex-direction: column;
-    & > * + * {
-        margin-top: 0.5rem;
-    }
-`
-
-function EventComents({ requestId, logs, setLogs, lastApproverId }) {
-    const [comment, setComment] = useState("")
-    const handleSubmit = async e => {
-        e.preventDefault()
-        const newComment = await postComment(requestId, comment)
-        setLogs([newComment, ...logs])
-        setComment("")
-    }
     return (
-        <StyleWrapper>
-            <Form onSubmit={handleSubmit}>
+        <Flex direction="column">
+            <Flex>
                 <Input
+                    rounded="full"
                     placeholder="Write comment here ..."
-                    value={comment}
-                    onChange={e => setComment(e.target.value)}
-                    required={true}
+                    ref={inputRef}
+                    flex={1}
+                    onKeyDown={handleKeyDown}
                 />
-                <button>
-                    <IoMdSend size="1.2rem" />
-                </button>
-            </Form>
-            <TableEvents>
+                <IconButton
+                    ml={2}
+                    variant="ghost"
+                    icon={<IoMdSend size="1.2rem" />}
+                    aria-label="send-comment"
+                    rounded="full"
+                />
+            </Flex>
+            <VStack spacing={4} py={4}>
                 {logs &&
                     logs.map(log => (
-                        <CardEvents
+                        <EventCard
                             key={log.id}
                             description={log.description}
                             createdAt={format(new Date(log.createdAt), "HH:mm dd/MM/yyyy")}
@@ -92,9 +51,9 @@ function EventComents({ requestId, logs, setLogs, lastApproverId }) {
                             last={lastApproverId === log.author.id}
                         />
                     ))}
-            </TableEvents>
-        </StyleWrapper>
+            </VStack>
+        </Flex>
     )
 }
 
-export default EventComents
+export default EventComments

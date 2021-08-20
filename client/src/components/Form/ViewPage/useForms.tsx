@@ -1,14 +1,31 @@
 import { useQuery } from "react-query"
 import { getForms } from "api/form"
-import useCustomLoader from "hooks/useCustomLoader"
-import Placeholder from "components/Placeholder"
+import { useEffect, useState } from "react"
+import { useLoader } from "hooks"
 
 const useForms = () => {
-    const { render, setNotFound, setPercent } = useCustomLoader(true, <Placeholder type="NOT_FOUND" />)
-    let { data, isLoading } = useQuery("forms", () => getForms(p => p && setPercent(p)), {
+    const { render, setNotFound, setIsLoading } = useLoader()
+    let { data, isLoading } = useQuery("forms", getForms, {
         onError: () => setNotFound(true),
     })
-    return { data, render, isLoading }
+    useEffect(() => {
+        setIsLoading(isLoading)
+    }, [isLoading])
+    const [searchText, setSearchText] = useState("")
+    // const location = useLocation().pathname.split("/")
+
+    const calculateFormCount = () => {
+        if (isLoading || !data) return "..."
+        else return data.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())).length
+    }
+
+    return {
+        data: data?.filter(form => form.name.toLowerCase().includes(searchText.toLowerCase())),
+        count: calculateFormCount(),
+        render,
+        searchText,
+        setSearchText,
+    }
 }
 
 export default useForms

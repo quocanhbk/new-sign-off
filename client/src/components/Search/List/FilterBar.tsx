@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react"
-import { BsFunnelFill, BsSearch } from "react-icons/bs"
+import { BsFunnel } from "react-icons/bs"
 import FilterForm from "./FilterForm"
-import { Box, Collapse, Flex, IconButton, Input, InputGroup, InputLeftElement, useOutsideClick } from "@chakra-ui/react"
+import { Box, Collapse, Flex, IconButton, useOutsideClick } from "@chakra-ui/react"
 import { RequestQuery, RequestQueryKey } from "./useRequestQuery"
+import { SearchBar } from "components/Base"
 
 interface FilterBarProps {
     setQueryTitle: (text: string) => void
@@ -27,22 +28,11 @@ const FilterBar = ({ setQueryTitle, query, setQueryParam }: FilterBarProps) => {
     })
     return (
         <Flex align="center" px={2} pt={4} pb={2} pos="relative">
-            <InputGroup>
-                <InputLeftElement pointerEvents="none" children={<BsSearch />} />
-                <Input
-                    _hover={{ bg: "gray.100" }}
-                    _focus={{ bg: "gray.100" }}
-                    variant="filled"
-                    rounded="full"
-                    placeholder="Search..."
-                    value={searchText}
-                    onChange={e => setSearchText(e.target.value)}
-                />
-            </InputGroup>
+            <SearchBar searchText={searchText} setSearchText={setSearchText} />
             <Box pos="relative" ref={popupRef}>
                 <IconButton
                     onClick={() => setSettingPopup(!settingPopup)}
-                    icon={<BsFunnelFill />}
+                    icon={<BsFunnel />}
                     aria-label="filter-popup"
                     rounded="full"
                     variant="ghost"

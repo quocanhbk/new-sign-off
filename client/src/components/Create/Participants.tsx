@@ -1,4 +1,3 @@
-import { useMsal } from "@azure/msal-react"
 import { useQuery } from "react-query"
 import { MultipleSelect, FormControl, UserTag } from "components/Base"
 import { IRequestInput, getUsers, IUser } from "api"
@@ -13,7 +12,6 @@ interface ParticipantsProps extends Pick<IRequestInput, "advisors" | "approvers"
 
 const Participants: FC<ParticipantsProps> = ({ advisors, approvers, observators, setValue, errors, mode }) => {
     const [userList, setUserList] = useState<(IUser & { display: JSX.Element })[]>([])
-    const { accounts } = useMsal()
     const { data: users } = useQuery("users", () => getUsers(), {
         onSuccess: data =>
             setUserList(data.map(user => ({ ...user, display: <UserTag email={user.email} name={user.name} /> }))),
@@ -30,7 +28,7 @@ const Participants: FC<ParticipantsProps> = ({ advisors, approvers, observators,
                 }
             >
                 <MultipleSelect
-                    selection={userList.filter(user => user.email !== accounts[0].username)}
+                    selection={userList}
                     value={advisors.map(
                         advisor => userList.find(user => user.id === advisor) as IUser & { display: JSX.Element }
                     )}
@@ -50,7 +48,7 @@ const Participants: FC<ParticipantsProps> = ({ advisors, approvers, observators,
                 error={approvers.some(v => advisors.concat(observators).includes(v)) ? "Duplicate" : errors.approvers}
             >
                 <MultipleSelect
-                    selection={userList.filter(user => user.email !== accounts[0].username)}
+                    selection={userList}
                     value={approvers.map(approver => userList.find(user => user.id === approver) as IUser)}
                     onSelect={newUsers =>
                         setValue(
@@ -68,7 +66,7 @@ const Participants: FC<ParticipantsProps> = ({ advisors, approvers, observators,
                 error={observators.some(v => advisors.concat(approvers).includes(v)) ? "Duplicate" : errors.observators}
             >
                 <MultipleSelect
-                    selection={userList.filter(user => user.email !== accounts[0].username)}
+                    selection={userList}
                     value={observators.map(observator => userList.find(user => user.id === observator) as IUser)}
                     onSelect={newUsers =>
                         setValue(

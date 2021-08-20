@@ -3,8 +3,8 @@ import { BsCardText } from "react-icons/bs"
 import { Box, Button, Flex } from "@chakra-ui/react"
 
 interface DocDisplayProps extends DocContentProps {
-    setAddingTag: (tag: string | null) => void
-    attachmentType: "approvalAttachments" | "referenceAttachments"
+    setAddingTag: (value: boolean) => void
+    addable?: boolean
 }
 
 const DocDisplay = ({
@@ -17,16 +17,17 @@ const DocDisplay = ({
     setNumPage,
     moveField,
     resizeField,
-    attachmentType,
+    addable,
+    initForm,
 }: DocDisplayProps) => {
     return (
         <Flex direction="column" flex={5}>
-            {file && attachmentType === "approvalAttachments" && (
+            {file && addable && (
                 <Flex p={2} borderBottom="1px" borderColor="gray.200">
                     <Button
                         variant="ghost"
                         leftIcon={<BsCardText />}
-                        onClick={() => setAddingTag(addingTag === null ? "field" : null)}
+                        onClick={() => setAddingTag(!addingTag)}
                         size="xs"
                     >
                         Add Field
@@ -43,6 +44,7 @@ const DocDisplay = ({
                     setNumPage={setNumPage}
                     moveField={moveField}
                     resizeField={resizeField}
+                    initForm={initForm}
                 />
             </Box>
         </Flex>

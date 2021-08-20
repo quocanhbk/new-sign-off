@@ -4,7 +4,7 @@ import { Box, Button, Flex, Heading } from "@chakra-ui/react"
 const Header = ({ mode, openSubmit, openDraft }) => {
     return (
         <Flex justify="space-between" align="center" px={4} py={4} shadow="sm">
-            <Heading size="md" color="fill.light">
+            <Heading size="md" color="fill.light" fontWeight="semibold">
                 {mode === "create"
                     ? "Create New Approval Document"
                     : mode === "draft"

@@ -1,11 +1,11 @@
 import { Fragment } from "react"
-import RequestCard from "./RequestCard"
 import FilterBar from "./FilterBar"
 import { RouteComponentProps, useLocation } from "@reach/router"
 import InfiniteScroll from "react-infinite-scroll-component"
 import useRequests from "../useRequests"
 import { Box, Flex, Tag, Text, Wrap } from "@chakra-ui/react"
 import { UrgentTag, ProjectTag, StatusTag } from "components/Base/Tags"
+import { RequestCard } from "components/Base"
 
 interface ListProps extends RouteComponentProps {
     mode: "search" | "sign"
@@ -30,20 +30,20 @@ const List = ({ mode, scroll, setScroll, useRequestsHook }: ListProps) => {
         if (tag.key === "priority" && tag.text === "Urgent") return <UrgentTag onClick={tag.onClick} />
         if (tag.key === "project") return <ProjectTag project={tag.text} onClick={tag.onClick} />
         return (
-            <Tag key={tag.key} onClick={tag.onClick} cursor="pointer">
+            <Tag key={tag.key} onClick={tag.onClick} cursor="pointer" colorScheme="twitter">
                 {tag.text}
             </Tag>
         )
     }
     return (
-        <Flex direction="column" flex={1} h="full" px={2}>
+        <Flex direction="column" flex={1} maxW="25rem" h="full" px={2}>
             <FilterBar setQueryTitle={v => onChangeTitleSearch(v)} query={query} setQueryParam={setQueryParam} />
 
             <Flex align="center" p={2}>
                 <Text mr={2}>Filter: </Text>
                 <Wrap spacing={2}>{queryTags.map(tag => genTag(tag))}</Wrap>
             </Flex>
-            <Box flex={1} id="scrollableDiv" pos="relative" overflow="auto" p={2}>
+            <Box flex={1} id="scrollableDiv" pos="relative" overflow="auto">
                 {render(
                     <InfiniteScroll
                         dataLength={data ? data.pages.reduce((init, cur) => init.concat(cur), []).length : 0}
@@ -51,6 +51,7 @@ const List = ({ mode, scroll, setScroll, useRequestsHook }: ListProps) => {
                         next={() => fetchNextPage()}
                         hasMore={!!hasNextPage}
                         height="100%"
+                        style={{ padding: "0.5rem" }}
                         loader={null}
                         initialScrollY={scroll || 0}
                         onScroll={v => {

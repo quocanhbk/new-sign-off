@@ -1,5 +1,6 @@
 // * DESCRIPTION: Modal that show preview of attachment (if PDF), also you can change name, and other attachment properties...
 
+import { Box } from "@chakra-ui/react"
 import { IAttachmentInput, IField } from "api"
 import { ChakraModal, FormView } from "components/Base"
 
@@ -19,13 +20,15 @@ const ViewAttachmentModal = ({
     onUpdateAttachment,
 }: ViewAttachmentModalProps) => {
     return (
-        <ChakraModal isOpen={isOpen} onClose={onClose} size="6xl">
+        <ChakraModal isOpen={isOpen} onClose={onClose} size="6xl" noPadding>
             {attachmentType && attachment && onUpdateAttachment ? (
-                <FormView
-                    attachmentType={attachmentType}
-                    attachment={attachment}
-                    onUpdateAttachment={onUpdateAttachment}
-                />
+                <Box h="38rem">
+                    <FormView
+                        addable={attachmentType === "approvalAttachments"}
+                        attachment={attachment}
+                        onSave={newAttachment => onUpdateAttachment(newAttachment.name, newAttachment.fields)}
+                    />
+                </Box>
             ) : null}
         </ChakraModal>
     )

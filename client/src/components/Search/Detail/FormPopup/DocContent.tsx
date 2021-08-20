@@ -1,21 +1,17 @@
 import { useRef, useState } from "react"
-import styled from "styled-components"
-import FieldTag from "./FieldTag"
+import FieldTag from "components/Base/FormView/FieldTag"
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack"
-import LoadingFile from "./LoadingFile"
+import { Loader } from "components/Base"
+import { Box } from "@chakra-ui/react"
+import { IAttachment } from "api"
 
-const Container = styled.div`
-    position: relative;
-    min-height: 100%;
-    width: 100%;
-    & .react-document {
-        min-height: 100%;
-        width: 200px;
-    }
-`
-const DocContent = ({ attachment }) => {
-    let docRef = useRef<HTMLDivElement>()
-    let pageRef = useRef<HTMLDivElement>()
+interface DocContentProps {
+    attachment: IAttachment
+}
+
+const DocContent = ({ attachment }: DocContentProps) => {
+    let docRef = useRef<HTMLDivElement>(null)
+    let pageRef = useRef<HTMLDivElement>(null)
     const [displayTag, setDisplayTag] = useState(false)
     const [numPage, setNumPage] = useState(0)
 
@@ -38,13 +34,14 @@ const DocContent = ({ attachment }) => {
     }
 
     return (
-        <Container ref={docRef} className="doc-display">
+        <Box ref={docRef} pos="relative" w="full" h="32rem">
             {displayTag &&
                 attachment.fields.map(tag => (
                     <FieldTag
                         key={tag.id}
                         data={tag}
                         fontSize={docRef.current!.getBoundingClientRect().width / 60 + "px"}
+                        readOnly
                     />
                 ))}
             <Document
@@ -54,11 +51,11 @@ const DocContent = ({ attachment }) => {
                     setNumPage(numPage._pdfInfo.numPages)
                     setDisplayTag(true)
                 }}
-                loading={<LoadingFile />}
+                loading={<Loader isLoading={true} />}
             >
                 {renderPage()}
             </Document>
-        </Container>
+        </Box>
     )
 }
 

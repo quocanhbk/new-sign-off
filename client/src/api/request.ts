@@ -6,7 +6,7 @@ import { msalInstance } from "index"
 import { removeUndefinedProps } from "utils/utils"
 import { getFile, postFile } from "./file"
 import faker from "faker"
-import { CallbackFunction, Id } from "types"
+import { Id } from "types"
 import { IUser } from "./user"
 import { IForm } from "./form"
 
@@ -61,19 +61,15 @@ export interface IRequest extends Omit<IRequestItem, "author"> {
     currentApprover: string[]
     procedureId: number | null
     checklist: Omit<IProcedure["checklist"], "defaultForms">
-    opinions: IOpinion
+    opinions: IOpinion[]
     updatedAt: string | Date
     approvalAttachments: IAttachment[]
     referenceAttachments: IAttachment[]
 }
 
-export const getRequests = async (
-    queryString: string,
-    callback: CallbackFunction = () => {}
-): Promise<IRequestItem[]> => {
+export const getRequests = async (queryString: string): Promise<IRequestItem[]> => {
     const config = await getConfig()
     let { data } = await axios.get(`/api/v1/requests?${queryString}`, config)
-    callback(100)
     return data.map(request => ({
         id: request.approval_request_id,
         type: request.type,
@@ -89,29 +85,22 @@ export const getRequests = async (
     }))
 }
 
-export const getLastSignRequest = async (callback: CallbackFunction = () => {}): Promise<number | null> => {
+export const getLastSignRequest = async (): Promise<number | null> => {
     const config = await getConfig()
     try {
         let { data } = await axios.get("/api/v1/requests?sign=true&start=0&end=1", config)
-        callback(100)
         return data[0] ? data[0].approval_request_id : null
     } catch (error) {
         return null
     }
 }
 
-export const getRequestDetail = async (
-    id: Id,
-    { sign }: { sign: boolean } = { sign: false },
-    callback: CallbackFunction = () => {}
-) => {
+export const getRequestDetail = async (id: Id, { sign }: { sign: boolean } = { sign: false }) => {
     const config = await getConfig()
     let { data } = await axios.get(`/api/v1/requests/${id}?${sign ? "sign=true" : ""}`, config)
-    callback(25)
     let checklist: Omit<IProcedure["checklist"], "defaultForms"> = []
     if (data.type === "Procedure") {
         checklist = await getProcedureChecklist(data.fk_procedure_id)
-        callback(50)
     }
     let returnData: IRequest = {
         id: data.approval_request_id,
@@ -222,14 +211,12 @@ export const getRequestDetail = async (
             attachment.file = file
         })
     )
-    callback(75)
     await Promise.all(
         returnData.referenceAttachments.map(async attachment => {
             let file = await getFile(attachment.fileId)
             attachment.file = file
         })
     )
-    callback(100)
 
     return returnData
 }
@@ -279,7 +266,7 @@ export interface IRequestInput
     procedure?: number | null
 }
 
-export const postRequest = async (input: IRequestInput, callback: CallbackFunction = () => {}): Promise<number> => {
+export const postRequest = async (input: IRequestInput): Promise<number> => {
     // REMEMBER to post all the file without the fileId first
     const config = await getConfig()
     const {
@@ -350,7 +337,6 @@ export const postRequest = async (input: IRequestInput, callback: CallbackFuncti
             await axios.post("/api/v1/requests/attachments/" + attachmentId + "/fields", { fields }, config)
         })
     )
-    callback(100)
     return id
 }
 
@@ -433,11 +419,7 @@ export const patchRequest = async (id: Id, { input, newAttachments, deletedAttac
     )
 }
 
-export const postComment = async (
-    id: Id,
-    comment: string,
-    callback: CallbackFunction = () => {}
-): Promise<IRequestLog> => {
+export const postComment = async (id: Id, comment: string): Promise<IRequestLog> => {
     const account = msalInstance.getAllAccounts()[0]
     const name = account.name ? account.name.split("-")[account!.name.split("-").length - 1] : account.username
     const email = account.username
@@ -446,7 +428,6 @@ export const postComment = async (
         comment,
     }
     await axios.post(`/api/v1/requests/${id}/comment/`, data, config)
-    callback(100)
     return {
         id: v4().slice(0, 8),
         type: "Comment",
@@ -461,16 +442,12 @@ export const postComment = async (
 }
 
 export interface IApproveCommmand {
-    code: string
+    code: "APPROVE" | "APPROVE_WITH_OPINION" | "APPROVE_WITH_EXISTING_OPINION" | "REJECT"
     comment: string
-    opinionId: number | null
+    opinionId?: number
 }
 
-export const approveRequest = async (
-    id: Id,
-    { code, comment, opinionId }: IApproveCommmand,
-    callback: CallbackFunction = () => {}
-) => {
+export const approveRequest = async (id: Id, { code, comment, opinionId }: IApproveCommmand) => {
     const config = await getConfig()
     let query = ""
     let decision = ""
@@ -499,29 +476,24 @@ export const approveRequest = async (
         },
         config
     )
-    callback(100)
 }
 
-export const remindApprove = async (requestId: Id, userId: string, callback: CallbackFunction = () => {}) => {
+export const remindApprove = async (requestId: Id, userId: string) => {
     let config = await getConfig()
     await axios.post(`/api/v1/requests/${requestId}/remind`, { userId }, config)
-    callback(100)
 }
 
-export const deleteAttachment = async (requestId: Id, attachmentId: Id, callback: CallbackFunction = () => {}) => {
+export const deleteAttachment = async (requestId: Id, attachmentId: Id) => {
     const config = await getConfig()
     await axios.delete(`/api/v1/requests/${requestId}/attachments/${attachmentId}`, config)
-    callback(100)
 }
 
-export const cancelRequest = async (requestId: Id, reason: string, callback: CallbackFunction = () => {}) => {
+export const cancelRequest = async (requestId: Id, reason: string) => {
     const config = await getConfig()
     await axios.post(`/api/v1/requests/${requestId}/cancellation`, { reason }, config)
-    callback(100)
 }
 
-export const deleteRequest = async (requestId: Id, callback: CallbackFunction = () => {}) => {
+export const deleteRequest = async (requestId: Id) => {
     const config = await getConfig()
     await axios.delete(`/api/v1/requests/${requestId}`, config)
-    callback(100)
 }

@@ -1,112 +1,40 @@
-import styled, { css } from "styled-components"
 import { BsChevronRight, BsPlayFill, BsStopFill } from "react-icons/all"
-import { getFader } from "utils/color"
-const CardWrapper = styled.div`
-    border: 1px solid ${props => props.theme.color.border.primary};
-    border-radius: 0.5rem;
-    display: flex;
-    box-shadow: ${props => props.theme.shadow};
+import { Box, Flex, IconButton, Tag, TagLabel, TagLeftIcon, Text } from "@chakra-ui/react"
 
-    ${props =>
-        props.active &&
-        css`
-            background: ${props => getFader(props.theme.color.border.primary, 0.5)};
-            color: ${props => props.theme.color.fill.primary};
-            &:hover {
-                background: ${props => props.theme.color.border.primary};
-            }
-            & ${Title} {
-                font-weight: 600;
-            }
-        `}
-`
-const DivInfo = styled.div`
-    flex: 1;
-    padding: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    & > * + * {
-        margin-top: 0.4rem;
-    }
-`
-const Title = styled.div`
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    font-weight: 500;
-    color: ${props => props.theme.color.fill.primary};
-`
-const Line = styled.div`
-    display: flex;
-    & > * + * {
-        margin-left: 0.5rem;
-    }
-    color: ${props => props.theme.color.text.secondary};
-    & span {
-        font-size: 0.8rem;
-        cursor: pointer;
-    }
-`
-const StyleButton = styled.button`
-    cursor: pointer;
-    color: ${props => props.theme.color.text.secondary};
-    background: transparent;
-    border: none;
-    padding: 0.5rem;
-    border-radius: 99px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid transparent;
-    &:hover {
-        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
-    }
-    &:active {
-        background: ${props => props.theme.color.border.primary};
-    }
-    &:focus {
-        border-color: ${props => props.theme.color.border.primary};
-    }
-`
-const Status = styled.span`
-    background: ${props => (props.running ? props.theme.color.fill.success : props.theme.color.fill.danger)};
-    color: ${props => props.theme.color.background.primary};
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.2rem;
-    display: flex;
-    align-items: center;
-    & > * + * {
-        margin-left: 0.2rem;
-    }
-`
-const ButtonContainer = styled.div`
-    display: flex;
-    align-items: center;
-    padding: 0.5rem;
-`
 const Card = ({ title, isActive, createdBy, active, onClick }) => {
     return (
-        <CardWrapper active={active}>
-            <DivInfo>
-                <Title>{title}</Title>
-                <Line>
-                    <span>Created by: {createdBy && createdBy.name}</span>
-                </Line>
-                <Line>
-                    <Status running={isActive}>
-                        {isActive ? <BsPlayFill /> : <BsStopFill />}
-                        <p>{isActive ? "Running" : "Stopped"}</p>
-                    </Status>
-                </Line>
-            </DivInfo>
-            <ButtonContainer>
-                <StyleButton onClick={onClick}>
-                    <BsChevronRight size="1rem" />
-                </StyleButton>
-            </ButtonContainer>
-        </CardWrapper>
+        <Flex mb={2} rounded="md" background="gray.50" shadow="base">
+            <Flex direction="column" flex={1} py={2} px={2}>
+                <Text isTruncated fontWeight="semibold" color="fill.light">
+                    {title}
+                </Text>
+                <Text mt={1} fontSize="xs">
+                    Created by: {createdBy && createdBy.name}
+                </Text>
+                <Box mt={2}>
+                    {isActive ? (
+                        <Tag colorScheme="green">
+                            <TagLeftIcon as={BsPlayFill} />
+                            <TagLabel>Running</TagLabel>
+                        </Tag>
+                    ) : (
+                        <Tag colorScheme="red">
+                            <TagLeftIcon as={BsStopFill} />
+                            <TagLabel>Stopped</TagLabel>
+                        </Tag>
+                    )}
+                </Box>
+            </Flex>
+            <Flex align="center" p={2}>
+                <IconButton
+                    icon={<BsChevronRight />}
+                    variant="ghost"
+                    rounded="full"
+                    aria-label="view-detail"
+                    onClick={onClick}
+                />
+            </Flex>
+        </Flex>
     )
 }
 

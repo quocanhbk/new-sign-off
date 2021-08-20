@@ -1,6 +1,5 @@
-import FormControl from "components/Base/FormControl"
 import { priorityList, approvalTypeList, projectList } from "constant"
-import Select from "components/Base/Select"
+import { Select, FormControl } from "components/Base"
 import { Box, Flex, Heading } from "@chakra-ui/react"
 import { RequestQuery, RequestQueryKey } from "./useRequestQuery"
 
@@ -28,7 +27,7 @@ interface FilterFormProps {
 
 const FilterForm = ({ query, setQueryParam }: FilterFormProps) => {
     return (
-        <Box rounded="md" shadow="base" bg="white" w="16rem">
+        <Box rounded="md" shadow="base" bg="gray.50" w="16rem">
             <Box p={2}>
                 <Heading size="sm" fontWeight="bold" color="fill.light">
                     View Setting

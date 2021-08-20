@@ -7,9 +7,10 @@ import { Id } from "types"
 interface FieldTableProps {
     fields: IField[]
     changeFieldContent: (fieldId: Id, value: string) => void
+    readOnly?: boolean
 }
 
-const FieldTable = ({ fields, changeFieldContent }: FieldTableProps) => {
+const FieldTable = ({ fields, changeFieldContent, readOnly }: FieldTableProps) => {
     return (
         <Box w="full" borderLeft="1px" borderRight="1px" borderColor="gray.200" px={2}>
             <chakra.table w="100%">
@@ -29,6 +30,7 @@ const FieldTable = ({ fields, changeFieldContent }: FieldTableProps) => {
                                         spellCheck="false"
                                         _focus={{ bg: "gray.200" }}
                                         _hover={{ bg: "gray.100" }}
+                                        readOnly={readOnly}
                                     />
                                 </chakra.td>
                             </chakra.tr>

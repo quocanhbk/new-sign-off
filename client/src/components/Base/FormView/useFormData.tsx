@@ -1,11 +1,16 @@
-import { IForm, IField, IAttachmentInput } from "api"
+import { IForm, IField, IFormInput } from "api"
 import { useFormCore } from "hooks"
-import { ChangeEvent, useState } from "react"
+import { useState } from "react"
 import { Id } from "types"
 import { v4 as uuid } from "uuid"
 
-const useFormData = (attachment: IAttachmentInput, onUpdateAttachment: (name: string, fields: IField[]) => void) => {
-    const [addingTag, setAddingTag] = useState<string | null>(null)
+export interface UseFormDataProps {
+    attachment: IFormInput
+    onSave: (newAttachment: IFormInput) => void
+}
+
+const useFormData = ({ attachment, onSave }: UseFormDataProps) => {
+    const [addingTag, setAddingTag] = useState(false)
     const {
         values: { name: formName, fields },
         setValue,
@@ -14,7 +19,7 @@ const useFormData = (attachment: IAttachmentInput, onUpdateAttachment: (name: st
         fields: attachment.fields,
     })
     const addNewField = pos => {
-        if (addingTag === "field") {
+        if (addingTag) {
             let newField = {
                 id: uuid().slice(0, 8),
                 name: "",
@@ -24,10 +29,9 @@ const useFormData = (attachment: IAttachmentInput, onUpdateAttachment: (name: st
                 required: true,
             }
             setValue("fields", [...fields, newField])
-            setAddingTag(null)
+            setAddingTag(false)
         }
     }
-
     const deleteField = (fieldId: Id) => setValue("fields", [...fields.filter(field => field.id !== fieldId)])
 
     const updateField = (fieldId: Id, fieldProp: keyof IField, data: any) => {
@@ -49,31 +53,38 @@ const useFormData = (attachment: IAttachmentInput, onUpdateAttachment: (name: st
         newSize.height = size.height > newSize.height ? size.height : newSize.height
         updateField(fieldId, "size", newSize)
     }
-    const toggleRequire = (fieldId: Id) => updateField(fieldId, "required", null)
+    // const toggleRequire = (fieldId: Id) => updateField(fieldId, "required", null)
 
-    const changeFormName = (e: ChangeEvent<HTMLInputElement>) => {
-        setValue("name", e.target.value)
+    const changeFormName = (value: string) => {
+        setValue("name", value)
     }
 
     const saveForm = () => {
-        onUpdateAttachment(formName, fields)
+        onSave({
+            name: formName,
+            fields: fields,
+            file: attachment.file,
+        })
+    }
+
+    const formUtils = {
+        addNewField,
+        deleteField,
+        changeContent,
+        changeName,
+        moveField,
+        resizeField,
+        changeFormName,
+        saveForm,
     }
 
     return {
-        fieldData: fields,
+        fields,
         formName,
-        changeFormName,
         file: attachment.file,
         addingTag,
         setAddingTag,
-        addNewField,
-        changeContent,
-        moveField,
-        resizeField,
-        changeName,
-        deleteField,
-        toggleRequire,
-        saveForm,
+        formUtils,
     }
 }
 

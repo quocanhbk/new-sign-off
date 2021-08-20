@@ -80,7 +80,7 @@ const Select: FC<SelectProps> = ({
                 <Box flex={1} userSelect="none">
                     <Text isTruncated>{value && value[displayField]}</Text>
                 </Box>
-                {!readOnly && <Box bg="white">{isOpen ? <BsChevronUp /> : <BsChevronDown />}</Box>}
+                {!readOnly && <Box>{isOpen ? <BsChevronUp /> : <BsChevronDown />}</Box>}
             </Flex>
             <Box
                 pos="absolute"

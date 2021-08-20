@@ -1,17 +1,20 @@
 // * DESCRIPTION: display approvals attachments or reference attachments in a table
 
 import { BsTrash, BsThreeDotsVertical } from "react-icons/bs"
-import { IRequestInput } from "api"
+import { downloadAttachment, IAttachment, IAttachmentInput } from "api"
 import { Box, chakra, Flex, IconButton, Text } from "@chakra-ui/react"
 import FieldTable from "./FieldTable"
 import { Id } from "types"
 
-interface AttachmentTableProps {
-    attachments: IRequestInput["approvalAttachments"]
-    onRemoveAttachment: (attachmentId: Id) => void
-    onEditAttachment: (attachmentId: Id) => void
-    changeFieldContent: (attachmentId: Id, fieldId: Id, value: string) => void
+export interface AttachmentTableProps {
+    // attachments: IRequestInput["approvalAttachments"] | IRequest["approvalAttachments"]
+    attachments: Array<IAttachmentInput | IAttachment>
+    onRemoveAttachment?: (attachmentId: Id) => void
+    onEditAttachment?: (attachmentId: Id) => void
+    changeFieldContent?: (attachmentId: Id, fieldId: Id, value: string) => void
     noHeader?: boolean
+    readOnly?: boolean
+    requestId?: Id // provide requestId when request id approved
 }
 
 const AttachmentTablePC = ({
@@ -20,6 +23,8 @@ const AttachmentTablePC = ({
     changeFieldContent,
     onEditAttachment,
     noHeader,
+    readOnly,
+    requestId,
 }: AttachmentTableProps) => {
     return (
         <Box
@@ -48,36 +53,55 @@ const AttachmentTablePC = ({
                     {attachments.map(attachment => (
                         <chakra.tr key={attachment.id}>
                             <chakra.td textAlign="left" width="35%" p={2} verticalAlign="top">
-                                <Text>{attachment.name}</Text>
+                                <Text
+                                    as={readOnly ? "u" : "p"}
+                                    cursor={readOnly ? "pointer" : "auto"}
+                                    onClick={() =>
+                                        readOnly &&
+                                        downloadAttachment({
+                                            name: attachment.name,
+                                            file: attachment.file as string,
+                                            fields: attachment.fields,
+                                            requestId: requestId as number,
+                                        })
+                                    }
+                                >
+                                    {attachment.name}
+                                </Text>
                             </chakra.td>
                             <chakra.td textAlign="left" p={2}>
                                 <FieldTable
                                     fields={attachment.fields}
                                     changeFieldContent={(fieldId, value) =>
-                                        changeFieldContent(attachment.id, fieldId, value)
+                                        changeFieldContent && changeFieldContent(attachment.id, fieldId, value)
                                     }
+                                    readOnly={readOnly}
                                 />
                             </chakra.td>
                             <chakra.td textAlign="center" width="10%" p={2}>
                                 <Flex justify="center">
-                                    <IconButton
-                                        variant="ghost"
-                                        rounded="full"
-                                        size="sm"
-                                        icon={<BsThreeDotsVertical />}
-                                        aria-label="attachment-detail"
-                                        onClick={() => onEditAttachment(attachment.id)}
-                                    />
-                                    <IconButton
-                                        ml={2}
-                                        variant="ghost"
-                                        rounded="full"
-                                        size="sm"
-                                        colorScheme="red"
-                                        icon={<BsTrash />}
-                                        aria-label="attachment-delete"
-                                        onClick={() => onRemoveAttachment(attachment.id)}
-                                    />
+                                    {onEditAttachment && (
+                                        <IconButton
+                                            variant="ghost"
+                                            rounded="full"
+                                            size="sm"
+                                            icon={<BsThreeDotsVertical />}
+                                            aria-label="attachment-detail"
+                                            onClick={() => onEditAttachment && onEditAttachment(attachment.id)}
+                                        />
+                                    )}
+                                    {onRemoveAttachment && (
+                                        <IconButton
+                                            ml={2}
+                                            variant="ghost"
+                                            rounded="full"
+                                            size="sm"
+                                            colorScheme="red"
+                                            icon={<BsTrash />}
+                                            aria-label="attachment-delete"
+                                            onClick={() => onRemoveAttachment(attachment.id)}
+                                        />
+                                    )}
                                 </Flex>
                             </chakra.td>
                         </chakra.tr>

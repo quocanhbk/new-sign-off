@@ -1,88 +1,53 @@
-/* eslint-disable react/prop-types */
-import { useEffect } from "react"
-import styled from "styled-components"
+import { useRef } from "react"
 import FormControl from "components/Base/FormControl"
-// import useFocus from 'hooks/useFocus'
-const Container = styled.div`
-    background: ${props => props.theme.color.background.primary};
-    overflow: hidden;
-    border-radius: 0.2rem;
-    box-shadow: ${props => props.theme.shadow};
-`
-const Header = styled.header`
-    background: ${props =>
-        props.theme.color.fill[
-            props.decision === "APPROVE" ? "success" : props.decision === "REJECT" ? "danger" : "warning"
-        ]};
-    padding: 0.8rem 1rem;
-    color: ${props => props.theme.color.background.primary};
-    font-weight: 500;
-`
-const Body = styled.div`
-    padding: 1rem;
-`
-const TextArea = styled.textarea`
-    background: transparent;
-    resize: none;
-    border: 1px solid ${props => props.theme.color.border.primary};
-    font-family: inherit;
-    color: inherit;
-    font-size: inherit;
-    outline: none;
-    padding: 0.5rem;
-    border-radius: 0.2rem;
+import { useRequestContext } from "./RequestProvider"
+import { SubmitConfirmAlert } from "components/Base"
+import { Textarea } from "@chakra-ui/react"
 
-    &:focus {
-        border: 1px solid ${props => props.theme.color.fill.primary};
-    }
-`
-const BtnContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    & > * + * {
-        margin-left: 2rem;
-    }
-    & .confirm-button {
-        flex: 1;
-    }
-`
-const ConfirmPopup = ({ onCancelClick, onConfirmClick, decision, comment, setComment }) => {
+const ConfirmPopup = () => {
     // const inputRef = useFocus()
-    const genHeadline = () => {
-        return decision === "REJECT" ? "Are you sure to reject this request ?" : "Are you sure to approve this request?"
+    const genTitle = (decision?: string) => {
+        return !decision
+            ? ""
+            : decision === "REJECT"
+            ? "Are you sure to reject this request ?"
+            : "Are you sure to approve this request?"
     }
-    const genFormTitle = () => {
-        return decision === "APPROVE_WITH_OPINION" ? "Opinion" : "Comment"
+    const genFormTitle = (decision?: string) => {
+        return !decision ? "" : decision === "APPROVE_WITH_OPINION" ? "Opinion" : "Comment"
     }
-
-    useEffect(() => {
-        setComment(
-            decision === "REJECT"
-                ? "I rejected because"
-                : decision === "APPROVE_WITH_OPINION"
-                ? "I have another opinion, which is"
-                : "I agree"
-        )
-    }, [])
-
+    const genDefaultText = (decision?: string) => {
+        return !decision
+            ? ""
+            : decision === "REJECT"
+            ? "I rejected because"
+            : decision === "APPROVE_WITH_OPINION"
+            ? "I have another opinion, which is"
+            : "I agree"
+    }
+    const genColor = (decision?: string) => {
+        return !decision ? "main" : decision === "APPROVE" ? "green" : decision === "REJECT" ? "red" : "yellow"
+    }
+    const {
+        confirmPopup,
+        setConfirmPopup,
+        mutator: { approveRequest },
+    } = useRequestContext()
+    const inputRef = useRef<HTMLTextAreaElement>(null)
     return (
-        <Container>
-            {decision && <Header decision={decision}>{genHeadline()}</Header>}
-            <Body>
-                <FormControl label={genFormTitle()}>
-                    <TextArea
-                        className="approve-comment"
-                        value={comment}
-                        onChange={e => setComment(e.target.value)}
-                        spellCheck={"false"}
-                    />
+        <SubmitConfirmAlert
+            isOpen={!!confirmPopup}
+            onClose={() => setConfirmPopup(null)}
+            title={genTitle(confirmPopup?.code)}
+            description={
+                <FormControl label={genFormTitle(confirmPopup?.code)}>
+                    <Textarea resize="none" ref={inputRef} defaultValue={genDefaultText(confirmPopup?.code)} />
                 </FormControl>
-                <BtnContainer>
-                    <button onClick={onCancelClick}>Cancel</button>
-                    <button onClick={onConfirmClick}>Confirm</button>
-                </BtnContainer>
-            </Body>
-        </Container>
+            }
+            leastDestructiveRef={inputRef}
+            color={genColor(confirmPopup?.code)}
+            onConfirm={() => approveRequest({ ...confirmPopup!, comment: inputRef.current?.value || "" })}
+        />
     )
 }
 

@@ -10,17 +10,19 @@ import {
     Button,
     AlertDialogCloseButton,
 } from "@chakra-ui/react"
-import { useRef } from "react"
+import { RefObject, useRef } from "react"
 
 interface SubmitConfirmAlertProps {
     isOpen: boolean
     onClose: () => void
     onConfirm: () => void
     title: string
-    description: string | JSX.Element
+    description?: string | JSX.Element
     cancelText?: string
     confirmText?: string
     color?: string
+    leastDestructiveRef?: RefObject<any>
+    isLoading?: boolean
 }
 
 const SubmitConfirmAlert = ({
@@ -28,14 +30,16 @@ const SubmitConfirmAlert = ({
     onClose,
     onConfirm,
     title,
-    description,
+    description = "Are you sure? You can't undo this action afterwards.",
     cancelText = "Cancel",
     confirmText = "Confirm",
     color = "main",
+    leastDestructiveRef,
+    isLoading,
 }: SubmitConfirmAlertProps) => {
     const cancelRef = useRef<HTMLButtonElement>(null)
     return (
-        <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={cancelRef}>
+        <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={leastDestructiveRef || cancelRef}>
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize="lg" fontWeight="semibold">
@@ -48,7 +52,7 @@ const SubmitConfirmAlert = ({
                         <Button ref={cancelRef} variant="ghost" colorScheme={color} onClick={onClose}>
                             {cancelText}
                         </Button>
-                        <Button colorScheme={color} onClick={onConfirm} ml={3}>
+                        <Button colorScheme={color} onClick={onConfirm} ml={3} isLoading={isLoading}>
                             {confirmText}
                         </Button>
                     </AlertDialogFooter>

@@ -1,135 +1,123 @@
 import FormControl from "components/Base/FormControl"
 import { useRef, useState } from "react"
 import { BsDownload } from "react-icons/bs"
-import styled from "styled-components"
-import { getFader } from "utils/color"
 import DocContent from "./DocContent"
-import Slider from "components/Slider"
-import { downloadForm3 } from "api/file"
-import { useOutsideClick } from "@chakra-ui/react"
+import { downloadAttachment, downloadStampAttachment } from "api/file"
+import {
+    Box,
+    Button,
+    Collapse,
+    Flex,
+    Heading,
+    HStack,
+    SliderFilledTrack,
+    SliderThumb,
+    SliderTrack,
+    Slider,
+    useOutsideClick,
+    Text,
+    RadioGroup,
+    Stack,
+    Radio,
+} from "@chakra-ui/react"
 
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    border: 2px solid ${props => props.theme.color.border.primary};
-    overflow: hidden;
-    border-radius: 0.5rem;
-    background: ${props => props.theme.color.background.primary};
-`
-const DocWrapper = styled.div`
-    flex: 1;
-    position: relative;
-    overflow: overlay;
-    ::-webkit-scrollbar {
-        width: 0.5rem;
-    }
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: ${props => getFader(props.theme.color.fill.secondary, 0.5)};
-        border-radius: 99px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: ${props => props.theme.color.fill.secondary};
-    }
-`
-const Title = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    font-weight: 500;
-    border-bottom: 1px solid ${props => props.theme.color.border.primary};
-`
-const BtnContainer = styled.div`
-    display: flex;
-    & > * + * {
-        margin-left: 0.5rem;
-    }
-`
-const QrPopup = styled.div`
-    position: absolute;
-    min-height: 5rem;
-    min-width: 20rem;
-    background: ${props => props.theme.color.background.primary};
-    border: 1px solid ${props => props.theme.color.fill.primary};
-    z-index: 5;
-    top: 1rem;
-    right: 1rem;
-    padding: 1rem;
-    border-radius: 0.5rem;
-`
 const FormPopup = ({ attachment, requestId, isApproved }) => {
     const [popup, setPopup] = useState(false)
-    const [size, setSize] = useState(48)
     const [position, setPosition] = useState<"right" | "left">("right")
+    const [size, setSize] = useState(48)
     const ref = useRef<HTMLDivElement>(null)
     useOutsideClick({
         ref,
         handler: () => setPopup(false),
     })
     return (
-        <Container>
-            <Title>
-                <p>{attachment.name}</p>
-                <BtnContainer>
-                    <button
+        <Flex direction="column" h="full" w="full" overflow="hidden" rounded="md" border="1px" borderColor="gray.200">
+            <Flex justifyContent="space-between" bg="gray.50" p={4} align="center" pos="relative">
+                <Heading size="sm">{attachment.name}</Heading>
+                <HStack>
+                    <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() =>
-                            downloadForm3({
+                            downloadAttachment({
                                 name: attachment.name,
                                 file: attachment.file,
                                 fields: attachment.fields,
-                                requestId,
-                                size,
-                                position,
                             })
                         }
+                        leftIcon={<BsDownload />}
                     >
-                        <BsDownload />
-                        <p>Original</p>
-                    </button>
+                        Original
+                    </Button>
                     {isApproved && (
-                        <button onClick={() => setPopup(true)}>
-                            <BsDownload />
-                            <p>Stamped</p>
-                        </button>
+                        <Button size="sm" leftIcon={<BsDownload />} onClick={() => setPopup(true)}>
+                            Stamp
+                        </Button>
                     )}
-                </BtnContainer>
-            </Title>
-            <DocWrapper>
-                {popup && (
-                    <QrPopup ref={ref}>
-                        <FormControl label="QR stamp size">
-                            <Slider step={1} min={24} max={72} value={size} onChange={newValue => setSize(newValue)} />
-                        </FormControl>
-                        <FormControl label="QR stamp position">
-                            <div>
-                                <button onClick={() => setPosition("left")}>Left</button>
-                                <button onClick={() => setPosition("right")}>Left</button>
-                            </div>
-                        </FormControl>
-                        <button
-                            onClick={() =>
-                                downloadForm3({
-                                    name: attachment.name,
-                                    file: attachment.file,
-                                    fields: attachment.fields,
-                                    position,
-                                    size,
-                                    requestId,
-                                })
-                            }
-                        >
-                            Download
-                        </button>
-                    </QrPopup>
-                )}
+                </HStack>
+                <Box
+                    pos="absolute"
+                    overflow="visible"
+                    width="fit-content"
+                    zIndex="dropdown"
+                    top={"100%"}
+                    right="0.5rem"
+                    transform={"translateY(0.5rem);"}
+                >
+                    <Collapse in={popup} unmountOnExit animateOpacity>
+                        <Box ref={ref} minW="20rem" zIndex="dropdown" bg="gray.50" shadow="base" rounded="md" p={4}>
+                            <FormControl label="QR stamp size">
+                                <Slider
+                                    aria-label="slider-ex-1"
+                                    value={size}
+                                    onChange={setSize}
+                                    min={24}
+                                    max={72}
+                                    step={1}
+                                >
+                                    <SliderTrack>
+                                        <SliderFilledTrack />
+                                    </SliderTrack>
+                                    <SliderThumb p={2}>
+                                        <Text fontSize="xs">{size}</Text>
+                                    </SliderThumb>
+                                </Slider>
+                            </FormControl>
+                            <FormControl label="QR stamp position">
+                                <RadioGroup
+                                    onChange={newValue => setPosition(newValue as "left" | "right")}
+                                    value={position}
+                                >
+                                    <Stack direction="row" justify="space-evenly">
+                                        <Radio value="left">Left</Radio>
+                                        <Radio value="right">Right</Radio>
+                                    </Stack>
+                                </RadioGroup>
+                            </FormControl>
+                            <Button
+                                onClick={() =>
+                                    downloadStampAttachment({
+                                        name: attachment.name,
+                                        file: attachment.file,
+                                        fields: attachment.fields,
+                                        position,
+                                        size,
+                                        requestId,
+                                    })
+                                }
+                                w="full"
+                                leftIcon={<BsDownload />}
+                            >
+                                Download
+                            </Button>
+                        </Box>
+                    </Collapse>
+                </Box>
+            </Flex>
+            <Box flex={1} pos="relative" overflow="overlay">
                 <DocContent attachment={attachment} />
-            </DocWrapper>
-        </Container>
+            </Box>
+        </Flex>
     )
 }
 

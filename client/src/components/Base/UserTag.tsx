@@ -8,7 +8,6 @@ interface UserTagProps {
 }
 
 const UserTag: FC<UserTagProps> = ({ email, name }) => {
-    console.log(getAvatar(email))
     return (
         <Flex align="center">
             <LazyImage src={getAvatar(email)} size="2xs" />

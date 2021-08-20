@@ -2,7 +2,7 @@ import { FC } from "react"
 import { Box, Flex, Heading } from "@chakra-ui/react"
 interface SectionContainerProps {
     title: string
-    children: JSX.Element[] | JSX.Element | string
+    children: (JSX.Element | null)[] | JSX.Element | string
 }
 
 const SectionContainer: FC<SectionContainerProps> = ({ title, children }) => {

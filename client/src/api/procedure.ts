@@ -1,10 +1,15 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios"
-import { CallbackFunction, Id } from "types"
+import { Id } from "types"
 import { getFormDetail, IForm } from "./form"
 import getConfig from "./getConfig"
 import { IPosition } from "./position"
 
+export interface ICheckItem {
+    id: Id
+    name: string
+    defaultForms: IForm[]
+}
 export interface IProcedure {
     id: number
     title: string
@@ -15,13 +20,18 @@ export interface IProcedure {
     advisors: Pick<IPosition, "id" | "title" | "userId">[]
     approvers: Pick<IPosition, "id" | "title" | "userId">[]
     observators: Pick<IPosition, "id" | "title" | "userId">[]
-    checklist: Array<{ id: number; name: string; defaultForms: IForm[] }>
+    checklist: ICheckItem[]
 }
+export interface IProcedureInput extends Pick<IProcedure, "title" | "description" | "checklist"> {
+    advisors: Id[]
+    approvers: Id[]
+    observators: Id[]
+}
+
 export type IProcedureList = Pick<IProcedure, "id" | "title" | "description" | "isActive" | "tags" | "createdBy">[]
-export const getProcedures = async (callback: CallbackFunction = () => {}): Promise<IProcedureList> => {
+export const getProcedures = async (): Promise<IProcedureList> => {
     const config = await getConfig()
     let { data } = await axios.get("/api/v1/procedures", config)
-    callback(100)
     return data.map(d => ({
         id: d.procedure_id,
         title: d.title,
@@ -32,20 +42,16 @@ export const getProcedures = async (callback: CallbackFunction = () => {}): Prom
     }))
 }
 
-export const getActiveProcedures = async (
-    callback: CallbackFunction = () => {}
-): Promise<Pick<IProcedure, "id" | "title" | "description" | "tags" | "createdBy" | "isActive">[]> => {
-    let procedures = await getProcedures(callback)
+export const getActiveProcedures = async (): Promise<
+    Pick<IProcedure, "id" | "title" | "description" | "tags" | "createdBy" | "isActive">[]
+> => {
+    let procedures = await getProcedures()
     return procedures.filter(procedure => procedure.isActive)
 }
 
-export const getProcedureChecklist = async (
-    id: Id,
-    callback: CallbackFunction = () => {}
-): Promise<Omit<IProcedure["checklist"], "defaultForms">> => {
+export const getProcedureChecklist = async (id: Id): Promise<Omit<IProcedure["checklist"], "defaultForms">> => {
     const config = await getConfig()
     const { data } = await axios.get("/api/v1/procedures/" + id, config)
-    callback(100)
 
     return data.checklist.map(item => ({
         id: item.checklist_item_id,
@@ -53,10 +59,9 @@ export const getProcedureChecklist = async (
     }))
 }
 
-export const getProcedureDetail = async (id: Id, callback: CallbackFunction = () => {}): Promise<IProcedure> => {
+export const getProcedureDetail = async (id: Id): Promise<IProcedure> => {
     const config = await getConfig()
     const { data } = await axios.get("/api/v1/procedures/" + id, config)
-    callback(30)
 
     let checklist = data.checklist.map(checkItem => ({
         id: checkItem.checklist_item_id,
@@ -94,7 +99,6 @@ export const getProcedureDetail = async (id: Id, callback: CallbackFunction = ()
         checklist: [],
     }
     if (checklist.length === 0) {
-        callback(100)
         return returnData
     }
 
@@ -114,30 +118,25 @@ export const getProcedureDetail = async (id: Id, callback: CallbackFunction = ()
             }
         })
     )
-    callback(100)
     returnData.checklist = checklistData
     return returnData
 }
 
-export const postProcedure = async (
-    input: Omit<IProcedure, "createdBy" | "id">,
-    callback: CallbackFunction = () => {}
-): Promise<number> => {
+export const postProcedure = async (input: IProcedureInput): Promise<number> => {
     const config = await getConfig()
-    let { title, description, advisors, approvers, observators, checklist, isActive, tags } = input
+    let { title, description, advisors, approvers, observators, checklist } = input
     let body = {
         title,
         description,
         advisors,
         approvers,
         observators,
-        isActive,
-        tags,
+        isActive: true,
+        tags: [],
     }
     let {
         data: { id },
     } = await axios.post("/api/v2/procedures", body, config)
-    callback(50)
 
     await axios.put(
         "/api/v1/procedures/" + id + "/checklist",
@@ -149,30 +148,24 @@ export const postProcedure = async (
         },
         config
     )
-    callback(100)
     return id
 }
 
-export const updateProcedure = async (
-    id: Id,
-    input: Omit<IProcedure, "createdBy" | "id">,
-    callback: CallbackFunction = () => {}
-): Promise<number> => {
+export const updateProcedure = async (id: Id, input: IProcedureInput): Promise<number> => {
     const config = await getConfig()
-    let { title, description, isActive, advisors, approvers, observators, checklist, tags } = input
+    let { title, description, advisors, approvers, observators, checklist } = input
     let body = {
         title,
         description,
-        isActive,
+        isActive: true,
         advisors,
         approvers,
         observators,
-        tags,
+        tags: [],
     }
     let {
         data: { id: newId },
     } = await axios.put("/api/v2/procedures/" + id, body, config)
-    callback(50)
 
     await axios.put(
         "/api/v1/procedures/" + newId + "/checklist",
@@ -184,29 +177,15 @@ export const updateProcedure = async (
         },
         config
     )
-    callback(100)
     return newId
 }
 
-export const deleteProcedure = async (id: Id, callback: CallbackFunction = () => {}): Promise<string> => {
+export const deleteProcedure = async (id: Id): Promise<void> => {
     const config = await getConfig()
-    let res = await axios.delete("/api/v1/procedures/" + id, config)
-    callback(100)
-    if (res.status === 403) {
-        return "delete-forbidden"
-    } else if (res.status === 204) {
-        return "delete-success"
-    } else return "delete-wrong"
+    await axios.delete("/api/v1/procedures/" + id, config)
 }
 
-export const toggleActive = async (id: Id, isActive: boolean, callback: CallbackFunction = () => {}): Promise<void> => {
+export const toggleActive = async (id: Id, isActive: boolean): Promise<void> => {
     const config = await getConfig()
     await axios.post("/api/v1/procedures/" + id + "/status", { isActive }, config)
-    callback(100)
 }
-
-// export const getCheckList = async (id) => {
-//     const config = await getConfig()
-//     const checklist = axios.get(`/api/v1/procedures/checklist/${id}`, config)
-//     return checklist
-// }

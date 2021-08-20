@@ -6,9 +6,10 @@ interface AddUnitMalProps {
     onClose: () => void
     children: JSX.Element | JSX.Element[] | null | undefined
     size?: ComponentProps<typeof Modal>["size"]
+    noPadding?: boolean
 }
 
-const AddUnitMal: FC<AddUnitMalProps> = ({ title, isOpen, onClose, children, size }) => {
+const AddUnitMal: FC<AddUnitMalProps> = ({ title, isOpen, onClose, children, size, noPadding }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} size={size} isCentered scrollBehavior="inside">
             <ModalOverlay />
@@ -18,7 +19,7 @@ const AddUnitMal: FC<AddUnitMalProps> = ({ title, isOpen, onClose, children, siz
                         {title}
                     </ModalHeader>
                 )}
-                <ModalBody>{children}</ModalBody>
+                <ModalBody p={noPadding ? "0" : "base"}>{children}</ModalBody>
             </ModalContent>
         </Modal>
     )

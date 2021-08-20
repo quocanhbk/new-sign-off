@@ -1,17 +1,14 @@
 import { Fragment } from "react"
 import { BsCheckCircle, BsPlus } from "react-icons/bs"
-import AttachmentTablePC from "./AttachmentTablePC"
+import AttachmentTablePC, { AttachmentTableProps } from "./AttachmentTablePC"
 import { IRequestInput } from "api/request"
 import { Id } from "types"
 import { Box, Button, chakra, Flex, IconButton, Text } from "@chakra-ui/react"
 
-interface AttachmentChecklistProps {
+interface AttachmentChecklistProps extends Omit<AttachmentTableProps, "noHeader"> {
     checklist: IRequestInput["checklist"]
-    attachments: IRequestInput["approvalAttachments"]
-    onRemoveAttachment: (attachmentID: Id) => void
-    onEditAttachment: (attachmentID: Id) => void
-    changeFieldContent: (attachmentId: Id, fieldId: Id, content: string) => void
-    setAddingAttachment: (id: Id) => void
+    setAddingAttachment?: (id: Id) => void
+    readOnly?: boolean
 }
 
 const AttachmentChecklist = ({
@@ -21,6 +18,8 @@ const AttachmentChecklist = ({
     onEditAttachment,
     changeFieldContent,
     setAddingAttachment,
+    readOnly,
+    requestId,
 }: AttachmentChecklistProps) => {
     return (
         <Box rounded="md" overflow="hidden" border="1px" borderColor="gray.200">
@@ -50,7 +49,7 @@ const AttachmentChecklist = ({
                                         leftIcon={<BsPlus />}
                                         size="xs"
                                         variant="ghost"
-                                        onClick={() => setAddingAttachment(checkItem.id)}
+                                        onClick={() => setAddingAttachment && setAddingAttachment(checkItem.id)}
                                     >
                                         Attachment
                                     </Button>
@@ -65,6 +64,8 @@ const AttachmentChecklist = ({
                                             onEditAttachment={onEditAttachment}
                                             changeFieldContent={changeFieldContent}
                                             noHeader
+                                            readOnly={readOnly}
+                                            requestId={requestId}
                                         />
                                     </chakra.td>
                                 </chakra.tr>

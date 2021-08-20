@@ -1,19 +1,24 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useQuery } from "react-query"
 import { getProcedures } from "api/procedure"
-import useCustomLoader from "hooks/useCustomLoader"
-import Placeholder from "components/Placeholder"
+import { useLoader } from "hooks"
+import { getUsers } from "api"
+import { useLocation } from "@reach/router"
 
 const useProcedures = () => {
-    let { render, setNotFound, setPercent, reset } = useCustomLoader(true, <Placeholder type="NOT_FOUND" />)
-    let { data, isLoading } = useQuery("procedures", () => getProcedures(setPercent), {
+    let { render, setNotFound, setIsLoading } = useLoader()
+    let { data, isLoading } = useQuery("procedures", getProcedures, {
         onError: () => setNotFound(true),
     })
     useEffect(() => {
-        if (isLoading) reset()
+        setIsLoading(isLoading)
     }, [isLoading])
+    const { data: users } = useQuery("users", () => getUsers())
 
-    return { data, render }
+    const [searchText, setSearchText] = useState("")
+    const location = useLocation().pathname.split("/")
+
+    return { data, render, users, searchText, setSearchText, location }
 }
 
 export default useProcedures

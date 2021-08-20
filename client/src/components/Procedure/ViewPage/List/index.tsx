@@ -1,85 +1,36 @@
-import { useState } from "react"
-import styled from "styled-components"
 import Cardv2 from "./Cardv2"
-import ListToolbar from "./ListToolbar"
-import { getFader } from "utils/color"
-import { navigate, useLocation } from "@reach/router"
+import { navigate } from "@reach/router"
 import { BsFileEarmarkPlus } from "react-icons/bs"
 import useProcedures from "./useProcedures"
-import { useQuery } from "react-query"
-import { getUsers } from "api"
-const StyleListWrapper = styled.div`
-    flex: 5;
-    background-color: ${props => props.theme.color.background.primary};
-    color: ${props => props.theme.color.text.primary};
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 0 0.5rem;
-`
-const AddNewContainer = styled.div`
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 0;
-    justify-content: space-between;
-`
-const CardList = styled.div`
-    width: 100%;
-    flex: 1;
-    padding-bottom: 0.5rem;
-    overflow: auto;
-    position: relative;
+import { Box, Button, Flex, Text } from "@chakra-ui/react"
+import { SearchBar } from "components/Base"
 
-    ::-webkit-scrollbar {
-        width: 0.5rem;
-    }
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: ${props => getFader(props.theme.color.fill.secondary, 0.5)};
-        border-radius: 99px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: ${props => props.theme.color.fill.secondary};
-    }
-
-    display: flex;
-    flex-direction: column;
-
-    & > * + * {
-        margin-top: 0.5rem;
-    }
-`
-
-function List() {
-    // const [procedures, setProcedures] = useState([])
-    const [searchText, setSearchText] = useState("")
-    const location = useLocation().pathname.split("/")
-    const { data: users } = useQuery("users", () => getUsers())
-    // const {render, setNotFound, setPercent} = useCustomLoader(true, <Placeholder type="NOT_FOUND"/>)
-    const { data: procedures, render } = useProcedures()
-
-    const handle = formId => {
-        navigate("/procedure/view/" + formId)
-    }
+const List = () => {
+    const { data: procedures, render, searchText, setSearchText, users, location } = useProcedures()
 
     return (
-        <StyleListWrapper>
-            <ListToolbar search={searchText} setSearch={setSearchText} />
-            <AddNewContainer>
-                <p>
+        <Flex direction="column" flex={1} maxW="25rem" h="full" px={2} borderRight="1px" borderColor="gray.200">
+            <Flex align="center" px={2} pt={4} pb={2} pos="relative">
+                <SearchBar searchText={searchText} setSearchText={setSearchText} />
+            </Flex>
+            <Flex justify="space-between" p={2}>
+                <Text>
                     Result:{" "}
                     {procedures &&
                         procedures.filter(procedure => procedure.title.toLowerCase().includes(searchText.toLowerCase()))
                             .length}
-                </p>
-                <button onClick={() => navigate("/procedure/create")}>
-                    <BsFileEarmarkPlus size="1rem" />
-                    <p>Add</p>
-                </button>
-            </AddNewContainer>
-            <CardList>
+                </Text>
+                <Button
+                    leftIcon={<BsFileEarmarkPlus />}
+                    size="xs"
+                    onClick={() => navigate("/procedure/create")}
+                    variant="ghost"
+                    bg="gray.50"
+                >
+                    Add
+                </Button>
+            </Flex>
+            <Box flex={1} overflow="auto" p={2} pos="relative">
                 {render(
                     procedures && users ? (
                         <>
@@ -91,15 +42,15 @@ function List() {
                                         title={procedure.title}
                                         isActive={procedure.isActive}
                                         createdBy={users.find(u => u.id === procedure.createdBy)}
-                                        onClick={() => handle(procedure.id)}
+                                        onClick={() => navigate("/procedure/view/" + procedure.id)}
                                         active={procedure.id.toString() === location[location.length - 1]}
                                     />
                                 ))}
                         </>
                     ) : null
                 )}
-            </CardList>
-        </StyleListWrapper>
+            </Box>
+        </Flex>
     )
 }
 

@@ -1,39 +1,35 @@
-import styled from "styled-components"
-
-const Container = styled.tr``
-const Headline = styled.td`
-    vertical-align: top;
-    padding: 0.4rem 0;
-    position: relative;
-    padding-left: 1rem;
-    &:before {
-        content: "";
-        position: absolute;
-        width: 5px;
-        height: 5px;
-        border-radius: 4px;
-        background: ${props => props.theme.color.text.primary};
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-`
-const Content = styled.td`
-    text-align: right;
-`
-
+import { chakra } from "@chakra-ui/react"
 interface InfoLineProps {
     headline: string
-    content?: string
+    content?: string | number
     span?: boolean
 }
 
 const InfoLine = ({ headline, content, span }: InfoLineProps) => {
     return (
-        <Container>
-            <Headline colSpan={span ? 2 : 1}>{headline}</Headline>
-            {content ? <Content>{content}</Content> : null}
-        </Container>
+        <chakra.tr>
+            <chakra.td
+                verticalAlign="top"
+                pb={1}
+                pos="relative"
+                pl={4}
+                _before={{
+                    content: `""`,
+                    pos: "absolute",
+                    w: "5px",
+                    h: "5px",
+                    rounded: "full",
+                    left: 0,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    bg: "gray.800",
+                }}
+                colSpan={span ? 2 : 1}
+            >
+                {headline}
+            </chakra.td>
+            {content ? <chakra.td textAlign="right">{content}</chakra.td> : null}
+        </chakra.tr>
     )
 }
 

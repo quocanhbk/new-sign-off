@@ -130,6 +130,10 @@ const theme = extendTheme({
             ".infinite-scroll-component__outerdiv": {
                 height: "100%",
             },
+            ".form-document": {
+                minH: "100%",
+                position: "relative",
+            },
             ...editorTheme,
         }),
     },

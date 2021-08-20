@@ -23,7 +23,7 @@ const Search = ({ mode }: SearchPageProps) => {
                 <>
                     <List mode={mode} useRequestsHook={useRequestsHook} />
                     <Box flex={2} pos="relative" h="full" borderLeft="1px" borderColor="gray.200">
-                        <Router className="search-router">
+                        <Router style={{ height: "100%" }}>
                             <Detail path="/:id" mode={mode} />
                             <Placeholder type="REQUEST_NOT_SELECTED" default />
                         </Router>

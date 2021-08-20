@@ -3,10 +3,8 @@ import getConfig from "api/getConfig"
 import axios from "axios"
 import { PDFDocument } from "pdf-lib"
 import QRCode from "qrcode"
-import { CallbackFunction } from "types"
 
-const generateQR = async (text: string, callback: CallbackFunction = () => {}) => {
-    callback(100)
+const generateQR = async (text: string) => {
     try {
         return await QRCode.toDataURL(text)
     } catch (err) {
@@ -14,8 +12,8 @@ const generateQR = async (text: string, callback: CallbackFunction = () => {}) =
     }
 }
 
-export const downloadStampedPDF = async (fileUrl: string, requestId: number, callback: CallbackFunction = () => {}) => {
-    const bytes = await fetch(fileUrl).then((res) => res.arrayBuffer())
+export const downloadStampedPDF = async (fileUrl: string, requestId: number) => {
+    const bytes = await fetch(fileUrl).then(res => res.arrayBuffer())
     const loadedPDF = await PDFDocument.load(bytes)
     const hashMessage = await getQRText(requestId)
 
@@ -35,19 +33,16 @@ export const downloadStampedPDF = async (fileUrl: string, requestId: number, cal
     }
     const pdfBytes = await loadedPDF.save()
     downloadBytes(pdfBytes, "application/pdf")
-    callback(100)
 }
 
-const downloadBytes = (arrayBuffer: Uint8Array, type: string, callback: CallbackFunction = () => {}) => {
+const downloadBytes = (arrayBuffer: Uint8Array, type: string) => {
     const blob = new Blob([arrayBuffer], { type: type })
     const url = URL.createObjectURL(blob)
     window.open(url)
-    callback(100)
 }
 
-const getQRText = async (requestId: number, callback: CallbackFunction = () => {}) => {
+const getQRText = async (requestId: number) => {
     const config = await getConfig()
     const res = await axios.get(`${baseURL}/api/v1/requests/${requestId}/signed-content`, config)
-    callback(100)
     return res.data.text
 }

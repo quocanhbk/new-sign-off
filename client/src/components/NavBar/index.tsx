@@ -23,7 +23,7 @@ const SideBar = () => {
     })
 
     return (
-        <Flex direction="column" flex={5} px={4} py={2} shadow="base">
+        <Flex direction="column" flex={5} maxW="25rem" px={4} py={2} shadow="base">
             <Flex align="center" px={2}>
                 <Image h="4rem" src={theme ? "/iconNoTextDark.svg" : "/iconNoTextLight.svg"} />
                 <Heading size="lg" color="fill.light" fontFamily="Campton">

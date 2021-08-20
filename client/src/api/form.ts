@@ -1,6 +1,6 @@
 import axios from "axios"
 import getConfig from "./getConfig"
-import { CallbackFunction, Id } from "types"
+import { Id } from "types"
 import { getFile } from "./file"
 
 export interface IField {
@@ -22,12 +22,9 @@ export interface IForm {
 
 export interface IFormInput extends Pick<IForm, "name" | "fields" | "file"> {}
 
-export const getForms = async (
-    callback: CallbackFunction = () => {}
-): Promise<Pick<IForm, "id" | "name" | "fileId">[]> => {
+export const getForms = async (): Promise<Pick<IForm, "id" | "name" | "fileId">[]> => {
     const config = await getConfig()
     const { data } = await axios.get("/api/v1/forms", config)
-    callback(100)
     return data.map(d => ({
         id: d.form_id,
         name: d.name,
@@ -35,13 +32,21 @@ export const getForms = async (
     }))
 }
 
-export const getFormDetail = async (id: Id, callback: CallbackFunction = () => {}): Promise<IForm> => {
+export const getFormsByIds = async (ids: Id[]): Promise<IForm[]> => {
+    const forms = await Promise.all(
+        ids.map(async id => {
+            const form = await getFormDetail(id)
+            return form
+        })
+    )
+    return forms
+}
+
+export const getFormDetail = async (id: Id): Promise<IForm> => {
     const config = await getConfig()
     const { data: form } = await axios.get("/api/v1/forms/" + id, config)
-    callback(33)
 
     const file = await getFile(form.file.file_id)
-    callback(66)
     const formDetail = {
         id: form.form_id,
         name: form.name,
@@ -59,36 +64,30 @@ export const getFormDetail = async (id: Id, callback: CallbackFunction = () => {
     return formDetail
 }
 
-export const deleteForm = async (id: Id, callback: CallbackFunction = () => {}): Promise<string> => {
+export const deleteForm = async (id: Id): Promise<string> => {
     // did i forget to delete file as well
     const config = await getConfig()
     let res = await axios.delete("/api/v1/forms/" + id, config)
     if (res.status === 404) {
-        callback(100)
         return "delete-not-found"
     } else if (res.status === 204) {
-        callback(100)
         return "delete-success"
     } else {
-        callback(100)
         return "delete-wrong"
     }
 }
 
-export const postForm = async ({ name, file, fields }: IFormInput, callback: CallbackFunction = () => {}) => {
+export const postForm = async ({ name, file, fields }: IFormInput): Promise<number> => {
     const config = await getConfig()
     const data = new FormData()
     data.append("file", file, (file as File).name)
     const {
         data: { file_id },
     } = await axios.post("/api/v1/files", data, config)
-    callback(33)
-
     //post form name
     let {
         data: { form_id },
     } = await axios.post("/api/v1/forms", { name: name, fileId: file_id }, config)
-    callback(66)
 
     //post default fields
     await axios.post(
@@ -107,17 +106,12 @@ export const postForm = async ({ name, file, fields }: IFormInput, callback: Cal
         },
         config
     )
-    callback(100)
+    return form_id
 }
 
-export const updateForm = async (
-    id: Id,
-    { name, fields }: Pick<IForm, "name" | "fields">,
-    callback: CallbackFunction = () => {}
-) => {
+export const updateForm = async (id: Id, { name, fields }: Pick<IForm, "name" | "fields">) => {
     const config = await getConfig()
     await axios.patch("/api/v1/forms/" + id, { name }, config)
-    callback(50)
     await axios.put(
         "/api/v1/forms/" + id + "/default-fields",
         {
@@ -134,5 +128,4 @@ export const updateForm = async (
         },
         config
     )
-    callback(100)
 }

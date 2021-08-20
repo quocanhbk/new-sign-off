@@ -9,7 +9,7 @@ interface TypeTagProps {
 
 export const TypeTag = ({ onClick, type }: TypeTagProps) => {
     return (
-        <Tag cursor="pointer" onClick={onClick}>
+        <Tag cursor="pointer" onClick={onClick} colorScheme="twitter">
             {type}
         </Tag>
     )

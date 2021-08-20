@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import styled from "styled-components"
 import { getRequests } from "api/request"
-import RequestTag from "./RequestTag"
 import { useQuery } from "react-query"
+import { RequestCard } from "components/Base"
 const Container = styled.div`
     width: 80%;
     min-width: 240px;
@@ -35,13 +35,14 @@ const DashboardBody = () => {
                     <SectionName>You have documents to sign</SectionName>
                     <ul>
                         {requests.map(req => (
-                            <RequestTag
-                                key={req.id}
-                                id={req.id}
-                                name={req.author.name}
-                                email={req.author.email}
-                                title={req.title}
-                            />
+                            // <RequestTag
+                            //     key={req.id}
+                            //     id={req.id}
+                            //     name={req.author.name}
+                            //     email={req.author.email}
+                            //     title={req.title}
+                            // />
+                            <RequestCard page="sign" key={req.id} data={req} />
                         ))}
                     </ul>
                 </Section>
