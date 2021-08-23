@@ -7,8 +7,7 @@ import { FC } from "react"
 
 interface ViewPageProps extends RouteComponentProps {}
 
-const ViewPage: FC<ViewPageProps> = ({ location }) => {
-    console.log("LOCATION", location)
+const ViewPage: FC<ViewPageProps> = () => {
     return (
         <Flex h="full">
             <List />
