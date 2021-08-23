@@ -9,7 +9,6 @@ import { adminEmails } from "constant"
 import { Box, Flex, Heading, Image, Text, VStack, useOutsideClick } from "@chakra-ui/react"
 
 const SideBar = () => {
-    const theme = useStoreState(_ => _.theme)
     const setPath = useStoreActions(_ => _.setPath)
     const path = useStoreState(_ => _.path)
     const [popup, setPopup] = useState(false)
@@ -25,7 +24,7 @@ const SideBar = () => {
     return (
         <Flex direction="column" flex={5} maxW="25rem" px={4} py={2} shadow="base">
             <Flex align="center" px={2}>
-                <Image h="4rem" src={theme ? "/iconNoTextDark.svg" : "/iconNoTextLight.svg"} />
+                <Image h="4rem" src="/iconNoTextLight.svg" />
                 <Heading size="lg" color="fill.light" fontFamily="Campton">
                     Approval Online
                 </Heading>
