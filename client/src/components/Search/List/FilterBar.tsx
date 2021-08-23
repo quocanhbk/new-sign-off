@@ -46,10 +46,10 @@ const FilterBar = ({ setQueryTitle, query, setQueryParam }: FilterBarProps) => {
                     right={0}
                     transform="translateY(0.5rem)"
                     zIndex="dropdown"
-                    border="1px"
-                    borderColor="gray.200"
-                    rounded="md"
                     overflow="hidden"
+                    rounded="md"
+                    shadow="lg"
+                    bg="gray.50"
                 >
                     <Collapse unmountOnExit in={settingPopup} animateOpacity>
                         <FilterForm query={query} setQueryParam={setQueryParam} />

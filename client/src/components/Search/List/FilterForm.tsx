@@ -27,7 +27,7 @@ interface FilterFormProps {
 
 const FilterForm = ({ query, setQueryParam }: FilterFormProps) => {
     return (
-        <Box rounded="md" shadow="base" bg="gray.50" w="16rem">
+        <Box w="16rem">
             <Box p={2}>
                 <Heading size="sm" fontWeight="bold" color="fill.light">
                     View Setting
