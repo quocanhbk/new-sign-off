@@ -1,98 +1,88 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
+import { Box, chakra, Flex, Text } from "@chakra-ui/react"
+import { IParticipant, IRequest } from "api"
 import { Fragment } from "react"
 import { BsFillCircleFill } from "react-icons/bs"
-import styled from "styled-components"
+import { Id } from "types"
 import FlowTag from "./FlowTag"
 
-const Headline = styled.td`
-    padding: 0.5rem;
-    font-weight: 500;
-    color: ${props => props.theme.color.fill.secondary};
-    font-size: 1.12rem;
-    //border: 1px solid black;
-`
-const Row = styled.tr`
-    border-top: 2px solid ${props => props.theme.color.border.primary};
-`
-const CheckWrapper = styled.div`
-    border: 2px solid ${props => props.theme.color.fill.secondary};
-    color: ${props => props.theme.color.fill.secondary};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2px;
-    border-radius: 99px;
-    position: relative;
-    background: ${props => props.theme.color.background.primary};
-    z-index: 2;
-`
-const Vertical = styled.div`
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: ${props => (props.type === "submitter" || props.type === "observator" ? "50%" : "-2px")};
-    width: 2px;
-    height: 150%;
-    transform: translate(-50%, 0%);
-    background: ${props => props.theme.color.fill.secondary};
-`
-const Side = styled.td`
-    //border: 1px solid red;
-    overflow: visible;
-    position: relative;
-`
-const CheckContainer = styled.div`
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`
-
 interface FlowSectionProps {
-    headline: string
-    data?
-    type?
-    currentApprover?
-    remindApprover?
-    requestStatus?
+    headline: "Submitter" | "Advisors" | "Approvers" | "Observators"
+    data: IParticipant[]
+    currentApprover?: Id[]
+    remindApprover?: (userId: string) => void
+    requestStatus?: IRequest["status"]
+    noApprover?: boolean
 }
 
-const FlowSection = ({ headline, data, type, currentApprover, remindApprover, requestStatus }: FlowSectionProps) => {
+const FlowSection = ({
+    headline,
+    data,
+    currentApprover,
+    remindApprover,
+    requestStatus,
+    noApprover,
+}: FlowSectionProps) => {
     return (
         <Fragment>
-            {type === "observator" && (
+            {headline === "Observators" && (
                 <>
                     <tr>
                         <td style={{ height: "1rem" }}></td>
                     </tr>
-                    <Row>
+                    <chakra.tr borderTop="1px" borderColor="gray.200">
                         <td colSpan={2} style={{ height: "1rem" }}></td>
-                    </Row>
+                    </chakra.tr>
                 </>
             )}
             <tr>
-                <Side>
-                    <CheckContainer>
-                        <CheckWrapper>
+                <chakra.td pos="relative" overflow="visible">
+                    <Flex justify="center" align="center" p={2}>
+                        <Flex
+                            align="center"
+                            justify="center"
+                            p={0.5}
+                            rounded="full"
+                            pos="relative"
+                            zIndex={2}
+                            bg="white"
+                            color="gray.600"
+                            border="2px"
+                            borderColor="gray.600"
+                        >
                             <BsFillCircleFill size="12px" />
-                        </CheckWrapper>
-                    </CheckContainer>
-                    <Vertical type={type} />
-                </Side>
-                <Headline>{headline}</Headline>
+                        </Flex>
+                    </Flex>
+                    <Box
+                        pos="absolute"
+                        left="50%"
+                        top={headline === "Submitter" || headline === "Observators" ? "50%" : "-2px"}
+                        w="2px"
+                        h="140%"
+                        transform="translate(-50%, 0%)"
+                        bg="gray.600"
+                    />
+                </chakra.td>
+                <chakra.td p={2}>
+                    <Text fontWeight="semibold">{headline}</Text>
+                </chakra.td>
             </tr>
             {data
                 .sort((first, second) => first.order - second.order)
                 .map((d, idx) => (
                     <FlowTag
-                        key={type === "observator" ? d.email : d.id}
+                        key={headline === "Observators" ? d.email : d.id}
                         data={d}
                         isCurrent={
-                            ((type === "approver" || type === "advisor") && currentApprover.includes(d.userId)) ||
-                            (type === "submitter" && requestStatus && requestStatus === "Revising")
+                            ((headline === "Approvers" || headline === "Advisors") &&
+                                currentApprover?.includes(d.userId)) ||
+                            (headline === "Submitter" && requestStatus && requestStatus === "Revising")
                         }
-                        last={(type === "approver" || type === "observator") && idx === data.length - 1}
+                        last={
+                            (headline === "Approvers" ||
+                                headline === "Observators" ||
+                                (headline === "Submitter" && noApprover)) &&
+                            idx === data.length - 1
+                        }
                         remindApprover={remindApprover}
                     />
                 ))}

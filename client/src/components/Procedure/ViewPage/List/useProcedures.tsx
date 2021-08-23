@@ -12,7 +12,7 @@ const useProcedures = () => {
     })
     useEffect(() => {
         setIsLoading(isLoading)
-    }, [isLoading])
+    }, [isLoading, setIsLoading])
     const { data: users } = useQuery("users", () => getUsers())
 
     const [searchText, setSearchText] = useState("")

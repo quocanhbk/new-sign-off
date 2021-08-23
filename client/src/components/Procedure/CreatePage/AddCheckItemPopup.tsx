@@ -1,7 +1,7 @@
 // * DESCRIPTION: used to add checkitem into checklist
 
 import { Box, Input } from "@chakra-ui/react"
-import { getForms, getFormsByIds, ICheckItem } from "api"
+import { getForms, getFormsByIds, ICheckItem, IForm } from "api"
 import { FormControl, MultipleSelect, SubmitConfirmAlert } from "components/Base"
 import { useFormCore } from "hooks"
 import { useEffect, useRef } from "react"
@@ -28,6 +28,7 @@ const AddCheckItemPopup = ({
 
     useEffect(() => {
         initForm()
+        // eslint-disable-next-line
     }, [isOpen])
 
     const { data: forms } = useQuery("forms", getForms, {
@@ -52,6 +53,7 @@ const AddCheckItemPopup = ({
         mutate(values.forms)
     }
     const inputRef = useRef<HTMLInputElement>(null)
+
     return (
         <SubmitConfirmAlert
             isOpen={isOpen}
@@ -70,7 +72,11 @@ const AddCheckItemPopup = ({
                         <FormControl label="Forms">
                             <MultipleSelect
                                 selection={forms}
-                                value={forms.filter(form => values.forms.includes(form.id))}
+                                // value={forms.filter(form => values.forms.includes(form.id))}
+                                value={values.forms.map(
+                                    formId =>
+                                        forms.find(form => form.id === formId) as Pick<IForm, "id" | "name" | "fileId">
+                                )}
                                 displayField="name"
                                 onSelect={newForms =>
                                     setValue(

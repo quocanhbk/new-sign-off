@@ -34,6 +34,7 @@ const AttachmentUploader = ({ type, handleFiles, handleForm }: AttachmentUploade
                 {forms && !formLoading && (
                     <FormControl label="Select from database" pl={4} borderLeft="1px" borderColor="gray.200">
                         <Select
+                            searchable
                             selection={forms}
                             value={forms.find(form => form.id === selectedForm)}
                             displayField={"name"}

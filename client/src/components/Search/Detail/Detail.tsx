@@ -27,10 +27,10 @@ const TabButton = ({ children }) => {
     )
 }
 
-const Detail = ({}) => {
+const Detail = () => {
     const { request, render, mode } = useRequestContext()
     return (
-        <Flex direction="column" h="full" overflow="hidden" className="detail-body">
+        <Flex direction="column" h="full" overflow="hidden">
             {render(
                 request ? (
                     <>

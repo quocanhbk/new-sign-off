@@ -1,32 +1,15 @@
-/* eslint-disable react/prop-types */
-import styled from "styled-components"
-
-const Container = styled.div`
-    border-bottom: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-`
-
-const DocumentTitle = styled.h2`
-    text-transform: uppercase;
-    font-size: 1.5rem;
-    font-weight: 500;
-    flex: 1;
-`
-
-const QRCodeDisplay = styled.div`
-    right: 0.5cm;
-    top: 0.5cm;
-`
+import { Box, Flex, Heading } from "@chakra-ui/react"
 
 const Title = ({ qrCode, title }) => {
     return (
-        <Container>
-            <DocumentTitle>{title}</DocumentTitle>
-            <QRCodeDisplay>
+        <Flex borderBottom="1px" borderColor="gray.200" align="center" mb={4}>
+            <Heading flex={1} fontWeight="semibold" color="fill.light">
+                {title}
+            </Heading>
+            <Box ml={2}>
                 <img src={qrCode} width={56} height={56} alt="qrcode" onLoad={() => window.print()} />
-            </QRCodeDisplay>
-        </Container>
+            </Box>
+        </Flex>
     )
 }
 

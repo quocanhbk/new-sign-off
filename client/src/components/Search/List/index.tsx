@@ -6,6 +6,7 @@ import useRequests from "../useRequests"
 import { Box, Flex, Tag, Text, Wrap } from "@chakra-ui/react"
 import { UrgentTag, ProjectTag, StatusTag } from "components/Base/Tags"
 import { RequestCard } from "components/Base"
+import { useMediaQuery } from "hooks"
 
 interface ListProps extends RouteComponentProps {
     mode: "search" | "sign"
@@ -16,6 +17,7 @@ interface ListProps extends RouteComponentProps {
 // I use the same component for Search and Sign, mode = "search" | "sign"
 const List = ({ mode, scroll, setScroll, useRequestsHook }: ListProps) => {
     const location = useLocation().pathname.split("/")
+    const device = useMediaQuery()
     const { data, fetchNextPage, hasNextPage, onChangeTitleSearch, query, queryTags, render, setQueryParam } =
         useRequestsHook
     const genTag = (tag: { key: string; text: string; onClick: () => void }) => {
@@ -36,7 +38,7 @@ const List = ({ mode, scroll, setScroll, useRequestsHook }: ListProps) => {
         )
     }
     return (
-        <Flex direction="column" flex={1} maxW="25rem" h="full" px={2}>
+        <Flex direction="column" flex={1} maxW={device === "PHONE" ? "100%" : "25rem"} h="full" px={2}>
             <FilterBar setQueryTitle={v => onChangeTitleSearch(v)} query={query} setQueryParam={setQueryParam} />
 
             <Flex align="center" p={2}>
@@ -55,7 +57,7 @@ const List = ({ mode, scroll, setScroll, useRequestsHook }: ListProps) => {
                         loader={null}
                         initialScrollY={scroll || 0}
                         onScroll={v => {
-                            if (setScroll) setScroll((v.currentTarget as HTMLDivElement)!.scrollTop)
+                            if (setScroll) setScroll((v.target as HTMLDivElement).scrollTop)
                         }}
                     >
                         {data &&
@@ -66,7 +68,7 @@ const List = ({ mode, scroll, setScroll, useRequestsHook }: ListProps) => {
                                             key={request.id}
                                             data={request}
                                             page={mode}
-                                            active={request.id == location[location.length - 1]}
+                                            active={request.id.toString() === location[location.length - 1]}
                                             setQueryParam={setQueryParam}
                                         />
                                     ))}

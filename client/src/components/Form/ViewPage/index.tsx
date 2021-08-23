@@ -1,12 +1,13 @@
 import Detail from "./Detail"
 import List from "./List"
 import { RouteComponentProps, Router } from "@reach/router"
-import Placeholder from "components/Placeholder"
+import { Placeholder } from "components/Base"
 import { Box, Flex } from "@chakra-ui/react"
+import { FC } from "react"
 
-interface ViewPage extends RouteComponentProps {}
+interface ViewPageProps extends RouteComponentProps {}
 
-const ViewPage = ({}: ViewPage) => {
+const ViewPage: FC<ViewPageProps> = () => {
     return (
         <Flex h="full">
             <List />

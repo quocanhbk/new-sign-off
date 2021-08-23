@@ -17,7 +17,7 @@ const useForm = (id: Id) => {
 
     useEffect(() => {
         setIsLoading(isLoading)
-    }, [isLoading])
+    }, [isLoading, setIsLoading])
 
     // * MUTATION: Delete form
     const { mutate: mutateDeleteForm } = useMutation(() => deleteForm(id), {
@@ -35,7 +35,7 @@ const useForm = (id: Id) => {
         if (status === "idle") {
             refetch()
         }
-    }, [id])
+    }, [id, refetch, status])
     let docRef = useRef<HTMLDivElement>(null)
 
     const [numPage, setNumPage] = useState(0)

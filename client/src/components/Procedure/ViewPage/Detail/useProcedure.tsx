@@ -26,12 +26,13 @@ const useProcedure = (id: Id) => {
 
     useEffect(() => {
         setIsLoading(isLoading)
-    }, [isLoading])
+    }, [isLoading, setIsLoading])
 
     // * MUTATE: toggle procedure
     const { mutate: mutateToggleActive } = useMutation<unknown, unknown, boolean>(v => toggleActive(id, v), {
         onSettled: () => {
             queryClient.invalidateQueries("procedure")
+            queryClient.invalidateQueries("procedures")
         },
     })
 

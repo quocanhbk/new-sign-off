@@ -22,7 +22,7 @@ const initState: Omit<IRequestInput, "status"> = {
     description: "",
     type: "Flexible",
     priority: "Normal",
-    deadline: new Date().toDateString(),
+    deadline: null,
     relatedProjects: ["TTG"],
     advisors: [],
     approvers: [],
@@ -34,7 +34,7 @@ const initState: Omit<IRequestInput, "status"> = {
 }
 const useDocument = (id?: number, mode?: string) => {
     const { values, setValue, errors, setError, initForm } = useFormCore<Omit<IRequestInput, "status">>(initState)
-    let {
+    const {
         title,
         type,
         deadline,
@@ -99,31 +99,38 @@ const useDocument = (id?: number, mode?: string) => {
             onError: () => setNotFound(true),
         }
     )
-    const { mutateAsync: mutatePostRequest } = useMutation(postRequest)
-    const { mutate: mutatePatchRequest } = useMutation<void, unknown, IPatchRequestInput>(input =>
-        patchRequest(id!, input)
+    const { mutateAsync: mutatePostRequest, isLoading: isPostingRequest } = useMutation(postRequest)
+    const { mutate: mutatePatchRequest, isLoading: isPatchingRequest } = useMutation<void, unknown, IPatchRequestInput>(
+        input => patchRequest(id!, input)
     )
     const toast = useChakraToast()
     const queryClient = useQueryClient()
+
+    // if
     useEffect(() => {
+        // if procedure change and mode !== "revise" => reset advisors, approvers, observators to []
         if (mode !== "revise") {
-            initForm({ ...values, advisors: [], approvers: [], observators: [] })
+            setValue("advisors", [])
+            setValue("approvers", [])
+            setValue("observators", [])
+            setValue("checklist", [])
+            setValue("approvalAttachments", [])
         }
         if (procedure) {
             setIsLoading(true)
             mutateGetProcedure(procedure)
         }
-    }, [procedure])
+    }, [procedure, initForm, mode, setValue, setIsLoading, mutateGetProcedure])
 
-    // remove procedure detail when switch type from 'procedure' from 'flexible'
+    // * remove procedure detail when switch type from 'procedure' from 'flexible'
     useEffect(() => {
         if (type === "Flexible" && procedure) setValue("procedure", null)
-    }, [type])
+    }, [type, procedure, setValue])
 
     useEffect(() => {
         if (id) mutateGetRequest(id)
         else initForm()
-    }, [id])
+    }, [id, mutateGetRequest, initForm])
 
     const init = async (data: IRequest) => {
         // get approval attachments file
@@ -163,7 +170,7 @@ const useDocument = (id?: number, mode?: string) => {
             type: data.type,
             status: "Pending",
             priority: data.priority,
-            deadline: new Date(data.deadline).toDateString(),
+            deadline: data.deadline ? new Date(data.deadline).toDateString() : null,
             relatedProjects: data.relatedProjects,
             advisors: data.advisors.map(a => a.userId),
             approvers: data.approvers.map(a => a.userId),
@@ -242,21 +249,26 @@ const useDocument = (id?: number, mode?: string) => {
         }
         return submittable
     }
-
+    const isDraftSubmittable = () => {
+        let submittable = true
+        if (title === "") {
+            setError("title", "Document title is required")
+            submittable = false
+        }
+        return submittable
+    }
     const submitRequest = async (requestStatus: "Pending" | "Draft") => {
-        setIsLoading(true)
         const input: IRequestInput = { ...values, status: requestStatus }
 
         if (mode === "create")
             mutatePostRequest(input, {
                 onError: () => {
-                    setIsLoading(false)
                     toast({ status: "error", title: "Unable to create request", description: "Try again later" })
                 },
                 onSuccess: requestId => {
+                    toast({ status: "success", title: "Submitted request successfully!" })
                     queryClient.invalidateQueries("requests")
                     setPath("/search/" + requestId)
-                    toast({ status: "success", title: "Request submitted successfully!" })
                 },
             })
         else {
@@ -276,13 +288,12 @@ const useDocument = (id?: number, mode?: string) => {
                 { input, newAttachments, deletedAttachmentIds },
                 {
                     onError: () => {
-                        setIsLoading(false)
                         toast({ status: "error", title: "Unable to patch request", description: "Try again later" })
                     },
-                    onSuccess: requestId => {
-                        queryClient.invalidateQueries("requests")
-                        setPath("/search/" + requestId)
+                    onSuccess: () => {
                         toast({ status: "success", title: "Request submitted successfully!" })
+                        queryClient.invalidateQueries("requests")
+                        setPath("/search/" + id)
                     },
                 }
             )
@@ -347,6 +358,7 @@ const useDocument = (id?: number, mode?: string) => {
         removeAttachment,
         submitRequest,
         isSubmittable,
+        isDraftSubmittable,
         changeFieldContent,
         //Error
         errors,
@@ -355,6 +367,7 @@ const useDocument = (id?: number, mode?: string) => {
         updateAttachment,
         addAttachmentFiles,
         addAttachmentForm,
+        isSubmitting: isPostingRequest || isPatchingRequest,
     }
 }
 

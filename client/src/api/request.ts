@@ -42,7 +42,7 @@ export interface IRequestItem {
     title: string
     status: "Pending" | "Draft" | "Rejected" | "Approved" | "Revising"
     priority: "Normal" | "Urgent"
-    deadline: string | Date
+    deadline: string | Date | null
     author: {
         id: number
         email: string
@@ -98,6 +98,7 @@ export const getLastSignRequest = async (): Promise<number | null> => {
 export const getRequestDetail = async (id: Id, { sign }: { sign: boolean } = { sign: false }) => {
     const config = await getConfig()
     let { data } = await axios.get(`/api/v1/requests/${id}?${sign ? "sign=true" : ""}`, config)
+    console.log("DETAIL", data)
     let checklist: Omit<IProcedure["checklist"], "defaultForms"> = []
     if (data.type === "Procedure") {
         checklist = await getProcedureChecklist(data.fk_procedure_id)
@@ -106,7 +107,7 @@ export const getRequestDetail = async (id: Id, { sign }: { sign: boolean } = { s
         id: data.approval_request_id,
         title: data.title,
         createdAt: new Date(data.created_at),
-        deadline: new Date(data.deadline),
+        deadline: data.deadline ? new Date(data.deadline) : null,
         description: data.description,
         priority: data.priority,
         relatedProjects: data.related_projects,
@@ -290,7 +291,7 @@ export const postRequest = async (input: IRequestInput): Promise<number> => {
         description,
         priority,
         type,
-        deadline: new Date(deadline).toLocaleDateString("en-CA"),
+        deadline: deadline ? new Date(deadline).toLocaleDateString("en-CA") : null,
         status,
         relatedProjects,
         advisors,
@@ -364,7 +365,7 @@ export const patchRequest = async (id: Id, { input, newAttachments, deletedAttac
         title,
         description,
         type,
-        deadline: new Date(deadline).toLocaleDateString("en-CA"),
+        deadline: deadline ? new Date(deadline).toLocaleDateString("en-CA") : null,
         status,
         relatedProjects,
         advisors,

@@ -11,7 +11,8 @@ const EventComments = () => {
         mutator: { postComment },
     } = useRequestContext()
     const logs = request!.logs
-    const lastApproverId = request!.approvers[request!.approvers.length - 1].userId
+    const lastApproverId =
+        request && request.approvers.length > 0 ? request!.approvers[request!.approvers.length - 1].userId : 0
     const inputRef = useRef<HTMLInputElement>(null)
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {

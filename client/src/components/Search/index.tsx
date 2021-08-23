@@ -1,14 +1,15 @@
+import { Box, Flex } from "@chakra-ui/react"
+import { Router } from "@reach/router"
+import { Placeholder } from "components/Base"
+import useMediaQuery from "hooks/useMediaQuery"
 import { useState } from "react"
+import { ViewMode } from "types"
 import Detail from "./Detail"
 import List from "./List"
-import { Router } from "@reach/router"
-import Placeholder from "components/Placeholder"
-import useMediaQuery from "hooks/useMediaQuery"
-import { Box, Flex } from "@chakra-ui/react"
 import useRequests from "./useRequests"
 
 interface SearchPageProps {
-    mode: "search" | "sign"
+    mode: ViewMode
 }
 
 const Search = ({ mode }: SearchPageProps) => {

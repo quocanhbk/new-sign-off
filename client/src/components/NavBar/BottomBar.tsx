@@ -1,40 +1,9 @@
 import { useRef, useState } from "react"
-import styled, { css } from "styled-components"
 import pageList from "pageList"
 import { useStoreActions, useStoreState } from "store"
-import { getFader } from "utils/color"
 import { BsThreeDots } from "react-icons/bs"
+import { Box, Flex, SlideFade, Text, useOutsideClick } from "@chakra-ui/react"
 import UserProfilePopup from "./UserProfilePopup"
-import { useOutsideClick } from "@chakra-ui/react"
-const NavList = styled.div`
-    display: flex;
-    justify-content: space-between;
-    /* gap: 0.5rem; */
-    z-index: 66;
-    border-top: 1px solid ${props => props.theme.color.border.primary};
-    background: ${props => props.theme.color.background.primary};
-    padding: 0.5rem;
-    position: relative;
-    & > * + * {
-        margin-left: 0.5rem;
-    }
-`
-const NavItem = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.2rem;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    ${props =>
-        props.active &&
-        css`
-            background: ${props => getFader(props.theme.color.fill.primary, 0.2)};
-            color: ${props => props.theme.color.fill.primary};
-        `}
-`
 
 const BottomBar = () => {
     const setPath = useStoreActions(_ => _.setPath)
@@ -47,27 +16,49 @@ const BottomBar = () => {
         handler: () => setPopup(false),
     })
     return (
-        <NavList>
+        <Flex justify="space-between" py={2} px={4} pos="relative" borderTop="1px" borderColor="gray.200">
+            <Box pos="absolute" w="full" top={0} left={0} zIndex="modal" className="box" transform="translateY(-100%)">
+                <SlideFade in={popup}>
+                    <UserProfilePopup />
+                </SlideFade>
+            </Box>
             {pageList
                 .filter(p => !p.notVisible && !p.noMobile)
                 .map(item => (
-                    <NavItem
+                    <Flex
+                        direction="column"
                         key={item.text}
                         onClick={() => {
                             setPath(item.link)
                         }}
-                        active={item.link === path}
+                        fontWeight={item.link === path ? "bold" : "normal"}
+                        color={item.link === path ? "fill.light" : "base"}
+                        align="center"
+                        w="5rem"
+                        h="5rem"
+                        justify="center"
+                        userSelect="none"
+                        cursor="pointer"
                     >
                         {item.icon}
-                        <p>{item.text.split(" ")[0]}</p>
-                    </NavItem>
+                        <Text mt={2}>{item.text.split(" ")[0]}</Text>
+                    </Flex>
                 ))}
-            <NavItem special onClick={() => setPopup(!popup)} ref={ref}>
+            <Flex
+                direction="column"
+                align="center"
+                w="5rem"
+                h="5rem"
+                justify="center"
+                onClick={() => setPopup(!popup)}
+                ref={ref}
+                userSelect="none"
+                cursor="pointer"
+            >
                 <BsThreeDots size="24px" />
-                More
-                {popup && <UserProfilePopup />}
-            </NavItem>
-        </NavList>
+                <Text mt={2}>More</Text>
+            </Flex>
+        </Flex>
     )
 }
 

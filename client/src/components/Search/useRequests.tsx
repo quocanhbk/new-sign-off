@@ -34,10 +34,10 @@ const useRequests = ({ mode }: { mode: "search" | "sign" }) => {
     )
     useEffect(() => {
         setIsLoading(isLoading)
-    }, [isLoading])
+    }, [isLoading, setIsLoading])
     useEffect(() => {
         refetch()
-    }, [queryString, mode])
+    }, [queryString, mode, refetch])
 
     return {
         query,

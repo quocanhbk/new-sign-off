@@ -1,10 +1,10 @@
 import Participants from "./Participants"
 import Header from "./Header"
-import { SectionContainer } from "components/Base"
+import { SectionContainer, SubmitConfirmAlert } from "components/Base"
 import useCreateProcedure from "./useCreateProcedure"
 import { BsPlus } from "react-icons/bs"
 import { RouteComponentProps } from "@reach/router"
-import { Button, Flex } from "@chakra-ui/react"
+import { Button, chakra, Flex } from "@chakra-ui/react"
 import PrimaryInfo from "./PrimaryInfo"
 import AddCheckItemPopup from "./AddCheckItemPopup"
 import ProcedureChecklist from "../ProcedureChecklist"
@@ -26,6 +26,10 @@ const CreatePage = ({ id }: CreatePageProps) => {
         errors,
         render,
         submitProcedure,
+        submitPopup,
+        setSubmitPopup,
+        isSubmitting,
+        openSubmitPopup,
     } = useCreateProcedure(id)
     const { title, description, advisors, approvers, observators, checklist } = values
     const handleSubmit = (checkItem: ICheckItem) => {
@@ -54,43 +58,65 @@ const CreatePage = ({ id }: CreatePageProps) => {
                                 : undefined
                         }
                     />
-                    <Header onSubmit={submitProcedure} id={id} />
-                    <Flex flex={1} p={4} overflow="auto" position="relative">
-                        <Flex flex={1} direction="column">
-                            <SectionContainer title="Primary Information">
-                                <PrimaryInfo title={title} description={description} set={setValue} error={errors} />
-                            </SectionContainer>
-                            <SectionContainer title="Participants">
-                                <Participants
-                                    advisors={advisors}
-                                    approvers={approvers}
-                                    observators={observators}
-                                    setValue={setValue}
-                                />
-                            </SectionContainer>
-                        </Flex>
-                        <Flex flex={1} direction="column" ml={4}>
-                            {/* SECTION CHECKLIST ATTACHMENT */}
-                            <SectionContainer title="Attachment Checklist">
-                                {/* <AttachmentChecklist checklist={checklist} util={checklistUtil} /> */}
-                                {checklist.length > 0 ? (
-                                    <ProcedureChecklist
-                                        checklist={checklist}
-                                        onDeleteCheckItem={removeCheckItem}
-                                        onUpdateClick={checkItemId =>
-                                            setAddCheckItemPopup({ mode: "update", id: checkItemId })
-                                        }
+                    <SubmitConfirmAlert
+                        isOpen={submitPopup}
+                        onClose={() => setSubmitPopup(false)}
+                        title={`Create procedure`}
+                        description={
+                            <span>
+                                Are you sure to create{" "}
+                                <chakra.span color="fill.light" fontWeight="semibold">
+                                    {values.title}
+                                </chakra.span>
+                            </span>
+                        }
+                        onConfirm={submitProcedure}
+                        isLoading={isSubmitting}
+                    />
+                    <Header onSubmit={openSubmitPopup} id={id} />
+                    <Flex flex={1} w="full" justify="center">
+                        <Flex h="full" w="full" maxW="60rem" p={4} overflow="auto" position="relative">
+                            <Flex flex={1} direction="column">
+                                <SectionContainer title="Primary Information">
+                                    <PrimaryInfo
+                                        title={title}
+                                        description={description}
+                                        set={setValue}
+                                        errors={errors}
                                     />
-                                ) : null}
-                                <Button
-                                    leftIcon={<BsPlus size="1.2rem" />}
-                                    w="full"
-                                    onClick={() => setAddCheckItemPopup({ mode: "add" })}
-                                    mt={2}
-                                >
-                                    Add Check Item
-                                </Button>
-                            </SectionContainer>
+                                </SectionContainer>
+                                <SectionContainer title="Participants">
+                                    <Participants
+                                        advisors={advisors}
+                                        approvers={approvers}
+                                        observators={observators}
+                                        setValue={setValue}
+                                    />
+                                </SectionContainer>
+                            </Flex>
+                            <Flex flex={1} direction="column" ml={4}>
+                                {/* SECTION CHECKLIST ATTACHMENT */}
+                                <SectionContainer title="Attachment Checklist">
+                                    {/* <AttachmentChecklist checklist={checklist} util={checklistUtil} /> */}
+                                    {checklist.length > 0 ? (
+                                        <ProcedureChecklist
+                                            checklist={checklist}
+                                            onDeleteCheckItem={removeCheckItem}
+                                            onUpdateClick={checkItemId =>
+                                                setAddCheckItemPopup({ mode: "update", id: checkItemId })
+                                            }
+                                        />
+                                    ) : null}
+                                    <Button
+                                        leftIcon={<BsPlus size="1.2rem" />}
+                                        w="full"
+                                        onClick={() => setAddCheckItemPopup({ mode: "add" })}
+                                        mt={2}
+                                    >
+                                        Add Check Item
+                                    </Button>
+                                </SectionContainer>
+                            </Flex>
                         </Flex>
                     </Flex>
                 </>

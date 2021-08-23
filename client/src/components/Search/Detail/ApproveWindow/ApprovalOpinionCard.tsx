@@ -1,94 +1,8 @@
 import { BsCheckCircle } from "react-icons/bs"
-import styled from "styled-components"
-import { getFader } from "utils/color"
-import Avatar from "components/Avatar"
 import { getAvatar, getUsers, IUser } from "api/user"
 import { useQuery } from "react-query"
 import { useState } from "react"
-const Main = styled.div`
-    display: flex;
-    padding: 1rem 0;
-    & > * + * {
-        margin-left: 0.5rem;
-    }
-    border-bottom: 1px solid ${props => props.theme.color.border.primary};
-`
-const DivAvatar = styled.div`
-    padding: 0;
-`
-const DivInfo = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    & > * + * {
-        margin-top: 0.2rem;
-    }
-    & .create-event {
-        display: flex;
-        align-items: center;
-        & > * + * {
-            margin-left: 1rem;
-        }
-
-        & .create-by-event {
-            font-weight: 600;
-            color: ${props => props.theme.color.fill.secondary};
-        }
-        & .create-date-event {
-            font-size: 0.8rem;
-            color: ${props => props.theme.color.text.secondary};
-            font-style: italic;
-        }
-    }
-
-    & .title-event {
-        font-size: 1rem;
-        line-height: 1.2;
-    }
-`
-const Sub = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding-top: 0.4rem;
-    & > * + * {
-        margin-top: 0.4rem;
-    }
-`
-const Line = styled.div`
-    display: flex;
-    & > * + * {
-        margin-left: 0.5rem;
-    }
-    align-items: center;
-    font-size: 0.9rem;
-    font-style: italic;
-    color: ${props => props.theme.color.text.secondary};
-
-    & .name {
-        font-weight: 500;
-    }
-
-    & .icon {
-        color: ${props => props.theme.color.fill.success};
-    }
-`
-const Button = styled.button`
-    border: none;
-    color: ${props => props.theme.color.fill.warning};
-    background: transparent;
-    align-self: center;
-    padding: 0.5rem;
-    font-weight: 500;
-    width: 8rem;
-    cursor: pointer;
-    //border: 1px solid ${props => props.theme.color.border.primary};
-    &:hover {
-        background: ${props => getFader(props.theme.color.border.primary, 0.5)};
-    }
-    &:active {
-        background: ${props => getFader(props.theme.color.border.primary, 1)};
-    }
-`
+import { Avatar, Box, Button, chakra, Flex, Text, VStack } from "@chakra-ui/react"
 
 function ApprovalOpinionCard({ opinion, onApproveClick }) {
     const [curUser, setCurUser] = useState<IUser>()
@@ -96,34 +10,38 @@ function ApprovalOpinionCard({ opinion, onApproveClick }) {
         onSuccess: users => setCurUser(users.find(_ => _.id === opinion.createdBy)),
     })
     return users ? (
-        <Main>
-            <DivAvatar>
-                <Avatar width="2rem" height="2rem" src={getAvatar(curUser ? curUser.email : "")} />
-            </DivAvatar>
-            <DivInfo>
-                <span className="create-event">
-                    <p className="create-by-event">{curUser ? curUser.name : ""}</p>
-                </span>
-                <p className="title-event">{opinion.comment}</p>
-                <Sub>
+        <Flex px={4} py={2} bg="white" rounded="md" shadow="base" w="full">
+            <Avatar size="sm" src={getAvatar(curUser ? curUser.email : "")} />
+            <Flex direction="column" flex={1} ml={4}>
+                <Text fontWeight="semibold">{curUser ? curUser.name : ""}</Text>
+                <Text>{opinion.comment}</Text>
+                <VStack mt={2}>
                     {opinion.inAgreement.map(userId => (
-                        <Line key={userId}>
-                            <BsCheckCircle className="icon" />
+                        <Flex key={userId} align="center" w="full">
+                            <Box color="green.500">
+                                <BsCheckCircle />
+                            </Box>
                             <Avatar
-                                width="1.2rem"
-                                height="1.2rem"
+                                ml={2}
+                                size="xs"
                                 src={getAvatar(users.find(u => u.id === userId)!.email, { resolution: "48x48" })}
                             />
-                            <p>
-                                <span className="name">{users.find(u => u.id === userId)!.name}</span> approved this
-                                opinion
-                            </p>
-                        </Line>
+                            <Text ml={2} fontSize="xs">
+                                <chakra.span fontWeight="semibold">
+                                    {users.find(u => u.id === userId)!.name}
+                                </chakra.span>{" "}
+                                approved with this opinion
+                            </Text>
+                        </Flex>
                     ))}
-                </Sub>
-            </DivInfo>
-            {!opinion.isFinal && <Button onClick={() => onApproveClick(opinion.id)}>Approve With This Opinion</Button>}
-        </Main>
+                </VStack>
+            </Flex>
+            {!opinion.isFinal && (
+                <Button colorScheme="yellow" variant="ghost" size="sm" onClick={() => onApproveClick(opinion.id)}>
+                    Approve With This Opinion
+                </Button>
+            )}
+        </Flex>
     ) : null
 }
 

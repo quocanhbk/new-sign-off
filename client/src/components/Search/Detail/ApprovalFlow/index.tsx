@@ -16,27 +16,37 @@ const ApprovalFlow = () => {
                     <FlowSection
                         headline="Submitter"
                         data={request.submitter}
-                        type="submitter"
                         requestStatus={request.status}
+                        noApprover={request.advisors.length === 0 && request.approvers.length === 0}
                     />
                     {request.advisors && request.advisors.length > 0 && (
                         <FlowSection
                             headline="Advisors"
                             data={request.advisors}
-                            type="advisor"
                             currentApprover={request.currentApprover}
                             remindApprover={remindApprove}
                         />
                     )}
-                    <FlowSection
-                        headline="Approvers"
-                        data={request.approvers}
-                        type="approver"
-                        currentApprover={request.currentApprover}
-                        remindApprover={remindApprove}
-                    />
+                    {request.approvers && request.approvers.length > 0 && (
+                        <FlowSection
+                            headline="Approvers"
+                            data={request.approvers}
+                            currentApprover={request.currentApprover}
+                            remindApprover={remindApprove}
+                        />
+                    )}
                     {request.observators.length > 0 && (
-                        <FlowSection headline="Observators" data={request.observators} type="observator" />
+                        <FlowSection
+                            headline="Observators"
+                            data={request.observators.map((obs, idx) => ({
+                                id: obs.userId,
+                                order: idx,
+                                decision: "",
+                                userId: obs.userId,
+                                email: obs.email,
+                                fullname: obs.fullname,
+                            }))}
+                        />
                     )}
                 </tbody>
             </table>

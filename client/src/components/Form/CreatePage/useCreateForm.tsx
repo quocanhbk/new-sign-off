@@ -36,9 +36,8 @@ const useCreateForm = (id?: Id) => {
     })
 
     useEffect(() => {
-        console.log("ISLOADING", isFetching)
         setIsLoading(isFetching)
-    }, [isFetching])
+    }, [isFetching, setIsLoading])
 
     // * MUTATION: post form
     const { mutate: mutatePostForm, isLoading: isSubmittingForm } = useMutation<number, unknown, IFormInput>(

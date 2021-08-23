@@ -1,103 +1,40 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import { useMsal } from "@azure/msal-react"
-import { useEffect, useState } from "react"
-import styled from "styled-components"
-import { getAsyncAvatar } from "api/user"
-import Avatar from "components/Avatar"
-import { useStoreActions, useStoreState } from "store"
-import ThemeToggle from "./ThemeToggle"
+import { getAvatar } from "api/user"
 import { BsPower } from "react-icons/bs"
-const Container = styled.div`
-    position: absolute;
-    padding: 1rem;
-    top: 0;
-    right: 0;
-    width: calc(100% - 2rem);
-    transform: translate(-1rem, calc(-100% - 1rem));
-    box-shadow: ${props => props.theme.shadow};
-    border-radius: 0.5rem;
-    border: 1px solid ${props => props.theme.color.border.primary};
-    display: flex;
-    flex-direction: column;
-    /* gap: 1rem; */
-    background: ${props => props.theme.color.background.primary};
-    & > * + * {
-        margin-top: 1rem;
-    }
-`
-const UserDisplayCardInfo = styled.div`
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-left: 1rem;
-    /* gap: 0.1rem; */
-    & > * + * {
-        margin-top: 0.1rem;
-    }
-    & h3 {
-        font-size: 1rem;
-        color: ${props => props.theme.color.text.primary};
-    }
-    & p {
-        font-size: 0.8rem;
-        color: ${props => props.theme.color.text.secondary};
-    }
-`
-const UserDisplayCard = styled.div`
-    display: flex;
-    align-items: center;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid ${props => props.theme.color.border.primary};
-`
-const Item = styled.div`
-    display: flex;
-    /* gap: 1rem; */
-    align-items: center;
-    & > * + * {
-        margin-left: 1rem;
-    }
-`
-const IconContainer = styled.div`
-    margin-left: auto;
-    padding: 0.5rem;
-    border-radius: 99px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`
-const UserProfilePopup = ({}) => {
-    const theme = useStoreState(_ => _.theme)
-    const setTheme = useStoreActions(_ => _.setTheme)
+import { Avatar, Flex, IconButton, Text } from "@chakra-ui/react"
+
+const UserProfilePopup = () => {
     const { instance, accounts } = useMsal()
     const name = accounts[0].name ? accounts[0].name.split("-")[accounts[0].name.split("-").length - 1] : ""
-    const [photo, setPhoto] = useState("")
-    useEffect(() => {
-        const fetchPhoto = async () => {
-            let newPhoto = await getAsyncAvatar(accounts[0].username)
-            setPhoto(newPhoto)
-        }
-        fetchPhoto()
-    }, [])
 
     return (
-        <Container>
-            <UserDisplayCard>
-                <Avatar src={photo} height="32px" width="32px" />
-                <UserDisplayCardInfo>
-                    <h3>{name}</h3>
-                    <p>{accounts[0].username}</p>
-                </UserDisplayCardInfo>
-                <IconContainer onClick={() => instance.logoutRedirect()}>
-                    <BsPower size="1.2rem" />
-                </IconContainer>
-            </UserDisplayCard>
-            <Item>
-                <ThemeToggle value={theme} onSelect={() => setTheme()} />
-                <p>{theme ? "Dark Theme" : "Light Theme"}</p>
-            </Item>
-        </Container>
+        <Flex h="full" p={4}>
+            <Flex
+                p={4}
+                bg="white"
+                border="1px"
+                borderColor="gray.50"
+                shadow="base"
+                w="full"
+                rounded="md"
+                align="center"
+            >
+                <Avatar src={getAvatar(accounts[0].username)} size="md" />
+                <Flex direction="column" ml={4}>
+                    <Text fontWeight="semibold">{name}</Text>
+                    <Text>{accounts[0].username}</Text>
+                </Flex>
+                <IconButton
+                    ml="auto"
+                    colorScheme="red"
+                    icon={<BsPower size="1.2rem" />}
+                    variant="ghost"
+                    rounded="full"
+                    aria-label="log-out"
+                    onClick={() => instance.logout()}
+                />
+            </Flex>
+        </Flex>
     )
 }
 

@@ -20,7 +20,7 @@ import RequestCard from "./RequestCard"
 import DeviceRenderer from "./DeviceRenderer"
 import SearchBar from "./SearchBar"
 import PositionTag from "./PositionTag"
-
+import AttachmentTablePC from "./AttachmentTablePC"
 export {
     FormView,
     AttachmentBoard,
@@ -44,4 +44,5 @@ export {
     DeviceRenderer,
     SearchBar,
     PositionTag,
+    AttachmentTablePC,
 }

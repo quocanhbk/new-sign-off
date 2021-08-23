@@ -20,7 +20,7 @@ const FilterBar = ({ setQueryTitle, query, setQueryParam }: FilterBarProps) => {
     useEffect(() => {
         const timeOutId = setTimeout(() => setQueryTitle(searchText), 250)
         return () => clearTimeout(timeOutId)
-    }, [searchText])
+    }, [searchText, setQueryTitle])
 
     useOutsideClick({
         ref: popupRef,

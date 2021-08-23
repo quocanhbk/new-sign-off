@@ -29,7 +29,7 @@ const useRequest = (id: Id, mode: "search" | "sign") => {
     })
     useEffect(() => {
         setIsLoading(isLoading)
-    }, [isLoading])
+    }, [isLoading, setIsLoading])
 
     // * MUTATE: POST COMMENT
     const { mutate: mutatePostComment } = useMutation<unknown, unknown, string>(comment => postComment(id, comment), {
@@ -76,13 +76,18 @@ const useRequest = (id: Id, mode: "search" | "sign") => {
     })
 
     // * MUTATE: APPROVE & REJECT
-    const { mutate: mutateApproveRequest } = useMutation<unknown, unknown, IApproveCommmand>(
+    const { mutate: mutateApproveRequest, isLoading: isApproving } = useMutation<unknown, unknown, IApproveCommmand>(
         command => approveRequest(id, command),
         {
             onError: () => {
                 toast({ status: "error", title: "Unable to approve request", description: "Try again later" })
             },
-            onSuccess: () => {
+            onSuccess: (_, command) => {
+                toast({
+                    status: "success",
+                    title:
+                        command.code === "REJECT" ? "Rejected document successfully" : "Approved document successfully",
+                })
                 setConfirmPopup(null)
                 queryClient.invalidateQueries("requests")
                 queryLastSignRequest()
@@ -110,6 +115,7 @@ const useRequest = (id: Id, mode: "search" | "sign") => {
         setPopup,
         viewingAttachment,
         setViewingAttachment,
+        isApproving,
     }
 }
 

@@ -19,7 +19,7 @@ const ApprovalInfo = () => {
                             <InfoLine headline={"Priority"} content={request.priority} />
                             <InfoLine
                                 headline={"Deadline"}
-                                content={format(request.deadline as Date, "HH:mm dd/MM/yyyy")}
+                                content={request.deadline ? format(request.deadline as Date, "HH:mm dd/MM/yyyy") : ""}
                             />
                             <InfoLine
                                 headline={"Related project"}
@@ -31,15 +31,19 @@ const ApprovalInfo = () => {
                                 headline={"Number of approval file"}
                                 content={request.approvalAttachments.length}
                             />
-                            <InfoLine headline={"Final approval by"} content={lastApprover.fullname} />
-                            <InfoLine
-                                headline={"Final approval at"}
-                                content={
-                                    lastApprover.decisionTimestamp
-                                        ? format(new Date(lastApprover.decisionTimestamp), "HH:mm dd/MM/yyyy")
-                                        : "N/A"
-                                }
-                            />
+                            {lastApprover && (
+                                <>
+                                    <InfoLine headline={"Final approval by"} content={lastApprover.fullname} />
+                                    <InfoLine
+                                        headline={"Final approval at"}
+                                        content={
+                                            lastApprover.decisionTimestamp
+                                                ? format(new Date(lastApprover.decisionTimestamp), "HH:mm dd/MM/yyyy")
+                                                : "N/A"
+                                        }
+                                    />
+                                </>
+                            )}
                         </tbody>
                     </chakra.table>
                 </SectionContainer>

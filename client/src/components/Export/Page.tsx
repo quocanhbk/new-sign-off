@@ -1,61 +1,13 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import { FC, useEffect, useState } from "react"
-import styled from "styled-components"
 import { getRequestDetail, IRequest } from "api/request"
 import { format } from "date-fns"
 import QRCode from "qrcode"
 import baseURL from "api/baseURL"
 import Title from "./Title"
 import { projectList } from "constant"
-import DescriptionEditor from "./DescriptionEditor"
-import AttachmentCheckList from "./AttachmentChecklist"
-import AttachmentTable from "./AttachmentTable"
 import { RouteComponentProps } from "@reach/router"
-
-const Container = styled.div`
-    & .table.ck-widget.ck-widget_with-selection-handle {
-        pointer-events: none;
-    }
-    & .ck.ck-widget__selection-handle {
-        display: none;
-    }
-    & .ck.ck-reset_all.ck-widget__type-around {
-        display: none;
-    }
-`
-
-const Section = styled.section`
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-`
-
-const SectionHeader = styled.h4`
-    margin: 1rem 0 0.5rem 0;
-    font-weight: 500;
-`
-
-const FileInfo = styled.div`
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-`
-
-const FileInfoItem = styled.div`
-    padding: 0.4rem;
-    flex-basis: 50%;
-`
-
-const LogsContainer = styled.div`
-    margin-left: 1rem;
-`
-const LogItem = styled.li`
-    margin-bottom: 0.25rem;
-`
-const LogType = styled.span`
-    color: ${props => props.color || "#333"};
-    font-weight: 500;
-`
+import { AttachmentChecklist, AttachmentTablePC, SectionContainer, DescriptionEditor } from "components/Base"
+import { Box, chakra, Wrap } from "@chakra-ui/react"
 
 interface PageProps extends RouteComponentProps {
     id?: number
@@ -79,87 +31,109 @@ const Page: FC<PageProps> = ({ id }) => {
             if (log.type === "Comment")
                 return (
                     <>
-                        <LogType color="#666">commented: </LogType> {log.description.toLowerCase()}
+                        <chakra.span fontWeight="semibold" color="#666">
+                            commented:{" "}
+                        </chakra.span>{" "}
+                        {log.description.toLowerCase()}
                     </>
                 )
             if (log.type === "Approval")
                 return (
                     <>
-                        <LogType color="#00ac00">approved </LogType>
+                        <chakra.span fontWeight="semibold" color="#00ac00">
+                            approved{" "}
+                        </chakra.span>
                         {log.description.replace("Approved ", "").toLowerCase()}
                     </>
                 )
             if (log.type === "Edit")
                 return (
                     <>
-                        <LogType color="#009999">edited </LogType>
+                        <chakra.span fontWeight="semibold" color="#009999">
+                            edited{" "}
+                        </chakra.span>
                         {log.description.replace("Edited ", "").toLowerCase()}
                     </>
                 )
             if (log.type === "Creation")
                 return (
                     <>
-                        <LogType color="#333">created </LogType>
+                        <chakra.span fontWeight="semibold" color="#333">
+                            created{" "}
+                        </chakra.span>
                         {log.description.replace("Created ", "").toLowerCase()}
                     </>
                 )
             else return log.description.toLowerCase()
         }
         return (
-            <LogItem key={log.id}>
+            <chakra.li mb={1} key={log.id}>
                 <span>{log.author.name}</span> {genDescription()} at{" "}
                 {format(new Date(log.createdAt), "dd/MM/yyyy hh:mm")}
-            </LogItem>
+            </chakra.li>
         )
     }
 
     console.log("REQUEST", request)
     return request ? (
-        <Container>
+        <Box>
             <Title title={request.title} qrCode={qrCode} />
-            <Section>
-                <SectionHeader>DOCUMENT INFORMATION</SectionHeader>
-                <FileInfo>
-                    <FileInfoItem>Document ID: {id}</FileInfoItem>
-                    <FileInfoItem>Document Type: {request.type}</FileInfoItem>
-                    <FileInfoItem>Request deadline: {format(request.deadline as Date, "dd/MM/yyyy")}</FileInfoItem>
-                    <FileInfoItem>Priority: {request.priority}</FileInfoItem>
-                    <FileInfoItem>Creator: {request.submitter[0].fullname}</FileInfoItem>
-                    <FileInfoItem>
+            <SectionContainer title="Document Information">
+                <Wrap align="center">
+                    <Box p={1} flexBasis="45%" flexGrow={1}>
+                        Document ID: {id}
+                    </Box>
+                    <Box p={1} flexBasis="45%" flexGrow={1}>
+                        Document Type: {request.type}
+                    </Box>
+                    <Box p={1} flexBasis="45%" flexGrow={1}>
+                        Request deadline: {format(request.deadline as Date, "dd/MM/yyyy")}
+                    </Box>
+                    <Box p={1} flexBasis="45%" flexGrow={1}>
+                        Priority: {request.priority}
+                    </Box>
+                    <Box p={1} flexBasis="45%" flexGrow={1}>
+                        Creator: {request.submitter[0].fullname}
+                    </Box>
+                    <Box p={1} flexBasis="45%" flexGrow={1}>
                         Final Approver: {request.approvers[request.approvers.length - 1].fullname}
-                    </FileInfoItem>
-                    <FileInfoItem>Created Date: {format(request.createdAt as Date, "dd/MM/yyyy")}</FileInfoItem>
-                    <FileInfoItem>Approved Date: {format(request.updatedAt as Date, "dd/MM/yyyy")}</FileInfoItem>
-                </FileInfo>
-            </Section>
-
-            <Section>
-                <SectionHeader>RELATED PROJECT</SectionHeader>
+                    </Box>
+                    <Box p={1} flexBasis="45%" flexGrow={1}>
+                        Created Date: {format(request.createdAt as Date, "dd/MM/yyyy")}
+                    </Box>
+                    <Box p={1} flexBasis="45%" flexGrow={1}>
+                        Approved Date: {format(request.updatedAt as Date, "dd/MM/yyyy")}
+                    </Box>
+                </Wrap>
+            </SectionContainer>
+            <SectionContainer title="Related Projects">
                 <div>{request.relatedProjects.map(pid => projectList.find(p => p.id === pid)?.text).join(", ")}</div>
-            </Section>
+            </SectionContainer>
+
             {request.approvalAttachments.length > 0 && (
-                <Section>
-                    <SectionHeader>APPROVAL ATTACHMENTS</SectionHeader>
+                <SectionContainer title="Approval Attachments">
                     {request.type === "Procedure" ? (
-                        <AttachmentCheckList attachments={request.approvalAttachments} checklist={request.checklist} />
+                        <AttachmentChecklist
+                            attachments={request.approvalAttachments}
+                            checklist={request.checklist}
+                            readOnly
+                        />
                     ) : (
-                        <AttachmentTable attachments={request.approvalAttachments} />
+                        <AttachmentTablePC attachments={request.approvalAttachments} readOnly />
                     )}
-                </Section>
+                </SectionContainer>
             )}
             {request.description && (
-                <Section>
-                    <SectionHeader>DESCRIPTION</SectionHeader>
-                    <DescriptionEditor description={request.description} />
-                </Section>
+                <SectionContainer title="Description">
+                    <DescriptionEditor description={request.description} readOnly />
+                </SectionContainer>
             )}
-            <Section>
-                <SectionHeader>LOGS</SectionHeader>
-                <LogsContainer>
+            <SectionContainer title="Logs">
+                <Box ml={4}>
                     <ul>{request.logs.map(log => renderLog(log))}</ul>
-                </LogsContainer>
-            </Section>
-        </Container>
+                </Box>
+            </SectionContainer>
+        </Box>
     ) : (
         <div>Loading</div>
     )

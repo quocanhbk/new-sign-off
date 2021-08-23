@@ -42,43 +42,45 @@ const Detail = ({ id }: DetailProps) => {
                             onEditClick={onEditClick}
                             onToggleActive={mutateToggleActive}
                         />
-                        <Flex direction="column" flex={1} padding={4}>
-                            <SectionContainer title={"Description"}>{procedure.description}</SectionContainer>
-                            <SectionContainer title="Participants">
-                                <FormControl label={"Advisor List"}>
-                                    <MultipleSelect
-                                        selection={mappedPosition}
-                                        value={mappedPosition.filter(u =>
-                                            procedure.advisors.map(a => a.id).includes(u.id)
-                                        )}
-                                        displayField={"display"}
-                                        readOnly
-                                    />
-                                </FormControl>
-                                <FormControl label={"Approver List"}>
-                                    <MultipleSelect
-                                        selection={mappedPosition}
-                                        value={mappedPosition.filter(u =>
-                                            procedure.approvers.map(a => a.id).includes(u.id)
-                                        )}
-                                        displayField={"display"}
-                                        readOnly
-                                    />
-                                </FormControl>
-                                <FormControl label={"Observator List"}>
-                                    <MultipleSelect
-                                        selection={mappedPosition}
-                                        value={mappedPosition.filter(u =>
-                                            procedure.observators.map(a => a.id).includes(u.id)
-                                        )}
-                                        displayField={"display"}
-                                        readOnly
-                                    />
-                                </FormControl>
-                            </SectionContainer>
-                            <SectionContainer title="Checklist">
-                                <ProcedureChecklist checklist={procedure.checklist} />
-                            </SectionContainer>
+                        <Flex flex={1} w="full" justify="center">
+                            <Flex direction="column" w="full" h="full" p={4} maxW="48rem">
+                                <SectionContainer title={"Description"}>{procedure.description}</SectionContainer>
+                                <SectionContainer title="Participants">
+                                    <FormControl label={"Advisor List"}>
+                                        <MultipleSelect
+                                            selection={mappedPosition}
+                                            value={mappedPosition.filter(u =>
+                                                procedure.advisors.map(a => a.id).includes(u.id)
+                                            )}
+                                            displayField={"display"}
+                                            readOnly
+                                        />
+                                    </FormControl>
+                                    <FormControl label={"Approver List"}>
+                                        <MultipleSelect
+                                            selection={mappedPosition}
+                                            value={mappedPosition.filter(u =>
+                                                procedure.approvers.map(a => a.id).includes(u.id)
+                                            )}
+                                            displayField={"display"}
+                                            readOnly
+                                        />
+                                    </FormControl>
+                                    <FormControl label={"Observator List"}>
+                                        <MultipleSelect
+                                            selection={mappedPosition}
+                                            value={mappedPosition.filter(u =>
+                                                procedure.observators.map(a => a.id).includes(u.id)
+                                            )}
+                                            displayField={"display"}
+                                            readOnly
+                                        />
+                                    </FormControl>
+                                </SectionContainer>
+                                <SectionContainer title="Checklist">
+                                    <ProcedureChecklist checklist={procedure.checklist} />
+                                </SectionContainer>
+                            </Flex>
                         </Flex>
                     </>
                 ) : null

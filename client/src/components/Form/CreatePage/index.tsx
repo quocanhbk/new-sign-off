@@ -4,11 +4,11 @@ import { Box, Flex, Grid, Heading, IconButton } from "@chakra-ui/react"
 import { FormView } from "components/Base"
 import useCreateForm from "./useCreateForm"
 import FileUpload from "./FileUpload"
-interface CreatePage extends RouteComponentProps {
+interface CreatePageProps extends RouteComponentProps {
     id?: string
 }
 
-const CreatePage = ({ id }: CreatePage) => {
+const CreatePage = ({ id }: CreatePageProps) => {
     const { attachment, render, saveForm, init, isSubmitting } = useCreateForm(id)
     return (
         <Flex h="full" w="full" direction="column" pos="relative">

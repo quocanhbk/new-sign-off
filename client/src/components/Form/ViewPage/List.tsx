@@ -1,14 +1,16 @@
 import { navigate } from "@reach/router"
 import { BsFileEarmarkPlus } from "react-icons/bs"
 import useForms from "./useForms"
-import FilterBar from "./FilterBar"
 import { Box, Button, Flex, Text } from "@chakra-ui/react"
+import { SearchBar } from "components/Base"
 
 const List = () => {
     const { data, count, render, searchText, setSearchText } = useForms()
     return (
         <Flex direction="column" flex={1} maxW="25rem" h="full" px={2} borderRight="1px" borderColor="gray.200">
-            <FilterBar searchText={searchText} setSearchText={setSearchText} />
+            <Flex align="center" px={2} pt={4} pb={2} pos="relative">
+                <SearchBar searchText={searchText} setSearchText={setSearchText} />
+            </Flex>
             <Flex justify="space-between" p={2}>
                 <Text>Result: {count}</Text>
                 <Button

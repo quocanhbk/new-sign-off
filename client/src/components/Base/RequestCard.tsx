@@ -18,7 +18,7 @@ interface RequestCardProps {
 
 const RequestCard = ({ page, active, data, setQueryParam }: RequestCardProps) => {
     const { id, title, status, priority, type, deadline, author } = data
-    const overdue = new Date(deadline).getTime() < new Date().getTime()
+    const overdue = deadline ? new Date(deadline).getTime() < new Date().getTime() : false
     return (
         <Flex shadow="base" rounded="md" bg="gray.50" mb={2}>
             <Flex direction="column" flex={1} py={2} px={2}>
@@ -32,7 +32,7 @@ const RequestCard = ({ page, active, data, setQueryParam }: RequestCardProps) =>
                     >
                         {author.name}
                     </Text>
-                    {(status === "Pending" || status === "Revising") && (
+                    {(status === "Pending" || status === "Revising") && deadline && (
                         <>
                             <BsDot size="0.8rem" />
                             <Text fontSize="xs">Deadline: {format(new Date(deadline), "dd/MM/yyyy")}</Text>

@@ -14,7 +14,7 @@ const Header = ({ onSubmit, id }: HeaderProps) => {
             <IconButton
                 icon={<BsChevronLeft size="1.2rem" />}
                 aria-label="go-back"
-                onClick={() => navigate("/form")}
+                onClick={() => navigate("/procedure")}
                 rounded="full"
                 variant="ghost"
             />

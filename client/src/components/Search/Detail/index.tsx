@@ -10,7 +10,7 @@ interface IndexProps extends RouteComponentProps {
 
 const Index = ({ id, mode }: IndexProps) => {
     return (
-        <RequestProvider id={id} mode={mode}>
+        <RequestProvider id={id!} mode={mode}>
             <Detail />
         </RequestProvider>
     )

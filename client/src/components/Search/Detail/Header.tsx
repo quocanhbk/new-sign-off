@@ -24,9 +24,15 @@ const Header = () => {
     })
     const isAuthor = () => accounts[0].username === submitter[0].email
     return (
-        <Flex borderBottom="1px" borderColor="gray.200" pl={2}>
+        <Flex borderBottom="1px" borderColor="gray.200" pl={2} align="center">
             <DeviceRenderer device="PHONE">
-                <IconButton icon={<BsChevronLeft />} aria-label="back" variant="ghost" rounded="full" />
+                <IconButton
+                    icon={<BsChevronLeft />}
+                    aria-label="back"
+                    variant="ghost"
+                    rounded="full"
+                    onClick={() => navigate("/" + mode)}
+                />
             </DeviceRenderer>
             <Flex flex={1} p={4}>
                 <Flex direction="column" flex={1}>

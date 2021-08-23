@@ -31,6 +31,7 @@ const ConfirmPopup = () => {
     const {
         confirmPopup,
         setConfirmPopup,
+        isApproving,
         mutator: { approveRequest },
     } = useRequestContext()
     const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -39,9 +40,14 @@ const ConfirmPopup = () => {
             isOpen={!!confirmPopup}
             onClose={() => setConfirmPopup(null)}
             title={genTitle(confirmPopup?.code)}
+            isLoading={isApproving}
             description={
                 <FormControl label={genFormTitle(confirmPopup?.code)}>
-                    <Textarea resize="none" ref={inputRef} defaultValue={genDefaultText(confirmPopup?.code)} />
+                    <Textarea
+                        resize="none"
+                        ref={inputRef}
+                        onFocus={e => (e.target.value = genDefaultText(confirmPopup?.code))}
+                    />
                 </FormControl>
             }
             leastDestructiveRef={inputRef}

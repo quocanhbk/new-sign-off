@@ -3,13 +3,13 @@ import { Id, ViewMode } from "types"
 import useRequest from "./useRequest"
 export const RequestContext = createContext<ReturnType<typeof useRequest> | null>(null)
 
-interface RequestProvider {
+interface RequestProviderProps {
     id: Id
     mode: ViewMode
     children: JSX.Element | JSX.Element[]
 }
 
-const RequestProvider = ({ children, id, mode }) => {
+const RequestProvider = ({ children, id, mode }: RequestProviderProps) => {
     return <RequestContext.Provider value={useRequest(id, mode)}>{children}</RequestContext.Provider>
 }
 

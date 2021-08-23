@@ -1,13 +1,11 @@
 import { memo } from "react"
-import Calendar from "../Base/TeamsCalendar"
-import FormControl from "components/Base/FormControl"
-import Select from "components/Base/Select"
-import MultipleSelect from "components/Base/MultipleSelect"
+import { FormControl, TeamsCalendar, Select, MultipleSelect } from "components/Base"
 import { approvalTypeList, IProject, priorityList, projectList } from "constant"
 import { Flex, Input } from "@chakra-ui/react"
 import { IProcedureList, IRequestInput } from "api"
 
-interface PrimaryInfo
+// I use memo so i need to pass separate properties instead of a whole "values" object
+interface PrimaryInfoProps
     extends Pick<IRequestInput, "title" | "type" | "procedure" | "priority" | "deadline" | "relatedProjects"> {
     setValue: (field: keyof Omit<IRequestInput, "status">, value: any) => void
     errors: Record<keyof Omit<IRequestInput, "status">, string>
@@ -24,8 +22,7 @@ const PrimaryInfo = ({
     setValue,
     errors,
     procedureList,
-}: PrimaryInfo) => {
-    console.log("Primary Info Render")
+}: PrimaryInfoProps) => {
     return (
         <Flex direction="column">
             <FormControl label="Document Title" error={errors.title}>
@@ -65,7 +62,7 @@ const PrimaryInfo = ({
                     />
                 </FormControl>
                 <FormControl label={"Deadline"} error={errors.deadline} mr={4}>
-                    <Calendar value={deadline as string} onChange={v => setValue("deadline", v)} />
+                    <TeamsCalendar value={deadline as string | null} onChange={v => setValue("deadline", v)} />
                 </FormControl>
                 <FormControl label={"Related Project"} error={errors.relatedProjects}>
                     <MultipleSelect

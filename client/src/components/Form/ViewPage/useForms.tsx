@@ -10,7 +10,7 @@ const useForms = () => {
     })
     useEffect(() => {
         setIsLoading(isLoading)
-    }, [isLoading])
+    }, [isLoading, setIsLoading])
     const [searchText, setSearchText] = useState("")
     // const location = useLocation().pathname.split("/")
 

@@ -5,7 +5,7 @@ import ApprovalOpinionCard from "./ApprovalOpinionCard"
 import Tippy from "@tippyjs/react"
 import "tippy.js/dist/tippy.css" // optional
 import "tippy.js/animations/perspective-subtle.css"
-import { Box, Button, Flex, Heading, HStack } from "@chakra-ui/react"
+import { Box, Button, Flex, Heading, HStack, VStack } from "@chakra-ui/react"
 import { useRequestContext } from "../RequestProvider"
 
 const ApproveWindow = () => {
@@ -41,8 +41,8 @@ const ApproveWindow = () => {
                     </Heading>
                     {expand ? <BsChevronDown size="1.2rem" /> : <BsChevronUp size="1.2rem" />}
                 </Flex>
-                <Flex direction="column" h="27rem" p={4} pb={0}>
-                    <HStack spacing={4}>
+                <Flex direction="column" h="27rem" pb={0}>
+                    <HStack spacing={4} p={4}>
                         <Tippy
                             content="Approve and close this request"
                             placement="bottom"
@@ -78,7 +78,7 @@ const ApproveWindow = () => {
                             </Button>
                         </Tippy>
                     </HStack>
-                    <Box overflow="overlay">
+                    <VStack overflow="overlay" px={4} pb={2}>
                         {req.opinions.map(o => (
                             <ApprovalOpinionCard
                                 key={o.id}
@@ -88,7 +88,7 @@ const ApproveWindow = () => {
                                 }}
                             />
                         ))}
-                    </Box>
+                    </VStack>
                 </Flex>
             </Box>
         </Box>

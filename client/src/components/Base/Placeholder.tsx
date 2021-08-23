@@ -1,30 +1,30 @@
 import { FC } from "react"
-import { BsInfoCircle, BsX } from "react-icons/bs"
-import { Flex } from "@chakra-ui/react"
+import { BsInfoCircle, BsXCircle } from "react-icons/bs"
+import { Box, Flex, Text } from "@chakra-ui/react"
 import { RouteComponentProps } from "@reach/router"
 
 const types = [
-    { id: "NOT_FOUND", text: "Data not found", sub: "Try again later", Icon: BsX, color: "danger" },
+    { id: "NOT_FOUND", text: "Data not found", sub: "Try again later", Icon: BsXCircle, color: "red.500" },
     {
         id: "PROCEDURE_NOT_SELECTED",
         text: "Select procedure to view",
         sub: "No procedure is selected",
         Icon: BsInfoCircle,
-        color: "secondary",
+        color: "base",
     },
     {
         id: "FORM_NOT_SELECTED",
         text: "Select form to view",
         sub: "No form is selected",
         Icon: BsInfoCircle,
-        color: "secondary",
+        color: "base",
     },
     {
         id: "REQUEST_NOT_SELECTED",
         text: "Select request to view",
         sub: "No request is selected",
         Icon: BsInfoCircle,
-        color: "secondary",
+        color: "base",
     },
 ]
 
@@ -37,9 +37,11 @@ const Placeholder: FC<PlaceholderProps> = ({ type }) => {
 
     return myType ? (
         <Flex pos="absolute" top={0} left={0} h="full" w="full" align="center" justify="center" direction="column">
-            <myType.Icon size="3rem" />
-            <p className="headline">{myType.text}</p>
-            <p className="sub">{myType.sub}</p>
+            <Box color={myType.color}>
+                <myType.Icon size="3rem" />
+            </Box>
+            <Text mt={2}>{myType.text}</Text>
+            <Text fontWeight="thin">{myType.sub}</Text>
         </Flex>
     ) : null
 }

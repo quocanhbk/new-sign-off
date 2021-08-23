@@ -2,6 +2,7 @@ import { FC } from "react"
 import styled from "styled-components"
 import { RouteComponentProps, Router } from "@reach/router"
 import Page from "./Page"
+import { Flex } from "@chakra-ui/react"
 
 const Container = styled.div`
     background-color: white;
@@ -19,11 +20,13 @@ const Container = styled.div`
 interface ExportProps extends RouteComponentProps {}
 const Playground: FC<ExportProps> = () => {
     return (
-        <Container className="test">
-            <Router>
-                <Page path="/:id" />
-            </Router>
-        </Container>
+        <Flex overflow="auto" justify="center">
+            <Container className="test">
+                <Router>
+                    <Page path="/:id" />
+                </Router>
+            </Container>
+        </Flex>
     )
 }
 

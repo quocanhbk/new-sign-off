@@ -20,9 +20,9 @@ const useProcedure = id => {
     const { render, setNotFound, setIsLoading } = useLoader()
     const toast = useChakraToast()
     const [addCheckItemPopup, setAddCheckItemPopup] = useState<{ mode: "add" | "update"; id?: Id } | null>(null)
-
+    const [submitPopup, setSubmitPopup] = useState(false)
     // * QUERY: get procedure detail
-    const { isLoading } = useQuery(["procedure", id], () => getProcedureDetail(id!), {
+    const { isFetching: isGettingProcedure } = useQuery(["procedure", id], () => getProcedureDetail(id!), {
         enabled: !!id,
         onSuccess: procedureDetail =>
             initForm({
@@ -38,8 +38,8 @@ const useProcedure = id => {
         },
     })
     useEffect(() => {
-        setIsLoading(isLoading)
-    }, [isLoading])
+        setIsLoading(isGettingProcedure)
+    }, [isGettingProcedure, setIsLoading])
 
     const isSubmittable = () => {
         let submittable = true
@@ -58,7 +58,7 @@ const useProcedure = id => {
     }
 
     // * MUTATION: post procedure
-    const { mutate: mutatePostProcedure } = useMutation(() => postProcedure(values), {
+    const { mutate: mutatePostProcedure, isLoading: isPostingProcedure } = useMutation(() => postProcedure(values), {
         onSuccess: id => {
             toast({ status: "success", title: "Created procedure successfully!" })
             navigate(`/procedure/view/${id}`)
@@ -69,23 +69,28 @@ const useProcedure = id => {
     })
 
     // * MUTATION: update procedure
-    const { mutate: mutateUpdateProcedure } = useMutation(() => updateProcedure(id, values), {
-        onSuccess: id => {
-            toast({ status: "success", title: "Updated procedure successfully!" })
-            navigate(`/procedure/view/${id}`)
-        },
-        onError: () => {
-            toast({ status: "error", title: "Failed to update procedure!", description: "Please try again later" })
-        },
-    })
-
-    const submitProcedure = () => {
+    const { mutate: mutateUpdateProcedure, isLoading: isUpdatingProcedure } = useMutation(
+        () => updateProcedure(id, values),
+        {
+            onSuccess: id => {
+                toast({ status: "success", title: "Updated procedure successfully!" })
+                navigate(`/procedure/view/${id}`)
+            },
+            onError: () => {
+                toast({ status: "error", title: "Failed to update procedure!", description: "Please try again later" })
+            },
+        }
+    )
+    const openSubmitPopup = () => {
         if (isSubmittable()) {
-            if (id) mutateUpdateProcedure()
-            else mutatePostProcedure()
+            setSubmitPopup(true)
         } else {
             toast({ status: "error", title: "Please fix all errors!" })
         }
+    }
+    const submitProcedure = () => {
+        if (id) mutateUpdateProcedure()
+        else mutatePostProcedure()
     }
 
     const addCheckItem = (checkItem: ICheckItem) => {
@@ -118,6 +123,10 @@ const useProcedure = id => {
         addCheckItemPopup,
         setAddCheckItemPopup,
         setValue,
+        submitPopup,
+        setSubmitPopup,
+        isSubmitting: isPostingProcedure || isUpdatingProcedure,
+        openSubmitPopup,
     }
 }
 

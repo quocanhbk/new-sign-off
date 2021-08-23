@@ -1,10 +1,7 @@
-/* eslint-disable no-unused-vars */
 import { useEffect } from "react"
 import styled, { css } from "styled-components"
 import { getFader } from "utils/color"
-import Feature from "./Feature"
 import Dashboard from "./Dashboard"
-import useMediaQuery from "hooks/useMediaQuery"
 import { useStoreActions } from "store"
 const StyleContainer = styled.div`
     display: flex;
@@ -36,30 +33,17 @@ const Col = styled.div`
             background-size: contain;
         `}
 `
-const Vertical = styled.div`
-    height: 100%;
-    width: 1px;
-    background: ${props => props.theme.color.border.primary};
-`
+
 const Home = () => {
-    let device = useMediaQuery()
     const setPath = useStoreActions(action => action.setPath)
     useEffect(() => {
         setPath("/")
-    }, [])
+    }, [setPath])
     return (
         <StyleContainer>
             <Col right>
                 <Dashboard />
             </Col>
-            {device === "PC" && (
-                <>
-                    <Vertical />
-                    <Col>
-                        <Feature />
-                    </Col>
-                </>
-            )}
         </StyleContainer>
     )
 }

@@ -10,19 +10,19 @@ import {
     ViewAttachmentModal,
     SubmitConfirmAlert,
 } from "components/Base"
-import useDocument from "./useDocument"
+import useCreateRequest from "./useCreateRequest"
 import { getActiveProcedures } from "api/procedure"
 import useMediaQuery from "hooks/useMediaQuery"
 import { Redirect } from "@reach/router"
 import { useQuery } from "react-query"
 import AddAttachmentModal from "./AddAttachmentModal"
-import { Id } from "types"
+import { CreateMode, Id } from "types"
 import useChakraToast from "hooks/useChakraToast"
 import { Box, Flex } from "@chakra-ui/layout"
 import { chakra } from "@chakra-ui/react"
 interface CreateProps {
     id?: number
-    mode: string
+    mode: CreateMode
 }
 
 const Create = ({ id, mode }: CreateProps) => {
@@ -44,18 +44,21 @@ const Create = ({ id, mode }: CreateProps) => {
         submitRequest,
         errors,
         isSubmittable,
+        isDraftSubmittable,
         changeFieldContent,
         render,
         addAttachmentFiles,
         addAttachmentForm,
-    } = useDocument(id, mode)
+        isSubmitting,
+    } = useCreateRequest(id, mode)
 
     const { data: procedureList } = useQuery("active_procedures", () => getActiveProcedures(), {
         initialData: [],
     })
 
     const popupSubmit = (type: "Pending" | "Draft") => {
-        if (!isSubmittable()) toast({ status: "error", title: "Please fix all fields before submitting!" })
+        if ((type === "Pending" && !isSubmittable()) || (type === "Draft" && !isDraftSubmittable()))
+            toast({ status: "error", title: "Please fix all fields before submitting!" })
         else setModal(type)
     }
 
@@ -67,6 +70,7 @@ const Create = ({ id, mode }: CreateProps) => {
                     onClose={() => setModal(null)}
                     onConfirm={() => submitRequest(modal!)}
                     title={modal === "Pending" ? "Submit" : "Save Draft"}
+                    isLoading={isSubmitting}
                     description={
                         modal === "Pending" ? (
                             <chakra.span>
@@ -124,9 +128,13 @@ const Create = ({ id, mode }: CreateProps) => {
     return device === "PC" ? (
         <Flex h="full" direction="column">
             {renderModal()}
-            <Header openSubmit={() => popupSubmit("Pending")} openDraft={() => popupSubmit("Draft")} mode={mode} />
+            <Header
+                onSubmitClick={() => popupSubmit("Pending")}
+                onDraftClick={() => popupSubmit("Draft")}
+                mode={mode}
+            />
             <Box flex={1} overflow="overlay" pos="relative">
-                <Flex direction="column" maxW="960px" mx="auto">
+                <Flex direction="column" maxW="60rem" mx="auto">
                     {render(
                         <Flex direction="column" pos="relative" p={4}>
                             {/* SECTION PRIMARY INFO */}

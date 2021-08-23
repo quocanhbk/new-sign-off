@@ -1,10 +1,18 @@
 import FormControl from "components/Base/FormControl"
 import { Box, Input } from "@chakra-ui/react"
+import { IProcedureInput } from "api"
 
-const PrimaryInfo = ({ title, description, set, error }) => {
+interface PrimaryInfoProps {
+    title: string
+    description: string
+    set: (field: keyof IProcedureInput, value: any) => void
+    errors: Record<keyof IProcedureInput, string>
+}
+
+const PrimaryInfo = ({ title, description, set, errors }: PrimaryInfoProps) => {
     return (
         <Box>
-            <FormControl label="Procedure Name" error={error.title}>
+            <FormControl label="Procedure Name" error={errors.title}>
                 <Input
                     value={title}
                     onChange={e => set("title", e.target.value)}

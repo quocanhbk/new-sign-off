@@ -1,7 +1,13 @@
-/* eslint-disable react/prop-types */
 import { Box, Button, Flex, Heading } from "@chakra-ui/react"
+import { CreateMode } from "types"
 
-const Header = ({ mode, openSubmit, openDraft }) => {
+interface HeaderProps {
+    mode: CreateMode
+    onSubmitClick: () => void
+    onDraftClick: () => void
+}
+
+const Header = ({ mode, onSubmitClick, onDraftClick }: HeaderProps) => {
     return (
         <Flex justify="space-between" align="center" px={4} py={4} shadow="sm">
             <Heading size="md" color="fill.light" fontWeight="semibold">
@@ -13,11 +19,11 @@ const Header = ({ mode, openSubmit, openDraft }) => {
             </Heading>
             <Box>
                 {mode !== "revise" && (
-                    <Button onClick={openDraft} variant="ghost">
+                    <Button onClick={onDraftClick} variant="ghost">
                         Save Draft
                     </Button>
                 )}
-                <Button onClick={openSubmit} ml={4}>
+                <Button onClick={onSubmitClick} ml={4}>
                     Submit
                 </Button>
             </Box>

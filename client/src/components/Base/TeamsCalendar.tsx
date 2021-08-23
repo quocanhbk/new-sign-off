@@ -36,7 +36,7 @@ interface IDateItem {
 }
 
 interface ICalendar {
-    value: string
+    value: string | null
     onChange: (newDate: string) => void
 }
 
