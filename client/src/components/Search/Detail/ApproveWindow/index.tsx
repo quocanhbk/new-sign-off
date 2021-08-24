@@ -49,7 +49,12 @@ const ApproveWindow = () => {
                             delay={250}
                             animation="perspective-subtle"
                         >
-                            <Button flex={1} onClick={() => setConfirmPopup({ code: "APPROVE" })} colorScheme="green">
+                            <Button
+                                flex={1}
+                                onClick={() => setConfirmPopup({ code: "APPROVE" })}
+                                colorScheme="green"
+                                isTruncated
+                            >
                                 Approve
                             </Button>
                         </Tippy>
@@ -63,6 +68,7 @@ const ApproveWindow = () => {
                                 flex={2}
                                 onClick={() => setConfirmPopup({ code: "APPROVE_WITH_OPINION" })}
                                 colorScheme="yellow"
+                                isTruncated
                             >
                                 Approve With New Opinion
                             </Button>
@@ -73,7 +79,12 @@ const ApproveWindow = () => {
                             delay={250}
                             animation="perspective-subtle"
                         >
-                            <Button flex={1} onClick={() => setConfirmPopup({ code: "REJECT" })} colorScheme="red">
+                            <Button
+                                flex={1}
+                                onClick={() => setConfirmPopup({ code: "REJECT" })}
+                                colorScheme="red"
+                                isTruncated
+                            >
                                 Reject
                             </Button>
                         </Tippy>

@@ -6,6 +6,7 @@ interface StoreModel {
     setTheme: Action<StoreModel>
     path: string
     setPath: Action<StoreModel, string>
+    setPathNoNavigate: Action<StoreModel, string>
 }
 
 const store = createStore<StoreModel>({
@@ -19,6 +20,9 @@ const store = createStore<StoreModel>({
     setPath: action((state, payload) => {
         state.path = "/" + payload.split("/")[1]
         navigate(payload)
+    }),
+    setPathNoNavigate: action((state, payload) => {
+        state.path = "/" + payload.split("/")[1]
     }),
 })
 const typedHooks = createTypedHooks<StoreModel>()

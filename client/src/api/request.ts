@@ -98,7 +98,7 @@ export const getLastSignRequest = async (): Promise<number | null> => {
 export const getRequestDetail = async (id: Id, { sign }: { sign: boolean } = { sign: false }) => {
     const config = await getConfig()
     let { data } = await axios.get(`/api/v1/requests/${id}?${sign ? "sign=true" : ""}`, config)
-    console.log("DETAIL", data)
+    console.log("REQUEST DATA", data)
     let checklist: Omit<IProcedure["checklist"], "defaultForms"> = []
     if (data.type === "Procedure") {
         checklist = await getProcedureChecklist(data.fk_procedure_id)
@@ -132,6 +132,7 @@ export const getRequestDetail = async (id: Id, { sign }: { sign: boolean } = { s
                 userId: a.user.user_id,
                 email: a.user.email,
                 fullname: a.user.fullname,
+                deadline: a.deadline,
                 decisionTimestamp: a.decision_timestamp,
             })),
         approvers: data.approvers
@@ -143,6 +144,7 @@ export const getRequestDetail = async (id: Id, { sign }: { sign: boolean } = { s
                 userId: a.user.user_id,
                 email: a.user.email,
                 fullname: a.user.fullname,
+                deadline: a.deadline,
                 decisionTimestamp: a.decision_timestamp,
             })),
         observators: data.observators.map(o => ({

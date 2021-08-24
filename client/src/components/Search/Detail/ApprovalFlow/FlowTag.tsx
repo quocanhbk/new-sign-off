@@ -2,6 +2,8 @@ import { useState } from "react"
 import { BsBellFill, BsCheck, BsEyeFill, BsFillCircleFill, BsPlayFill, BsThreeDots, BsX } from "react-icons/bs"
 import { getAvatar } from "api/user"
 import { Avatar, Box, chakra, Flex, IconButton, Text } from "@chakra-ui/react"
+import { formatDistanceStrict } from "date-fns"
+// import { formatDistanceStrict } from "date-fns"
 
 const FlowTag = ({ data, last, isCurrent, remindApprover }) => {
     const [reminded, setReminded] = useState(false)
@@ -59,14 +61,7 @@ const FlowTag = ({ data, last, isCurrent, remindApprover }) => {
                 />
             </chakra.td>
             <chakra.td p={1}>
-                <Flex
-                    align="center"
-                    rounded="md"
-                    overflow="hidden"
-                    bg={theme.color[0]}
-                    status={data.decision}
-                    isCurrent={isCurrent}
-                >
+                <Flex align="center" rounded="md" overflow="hidden" bg={theme.color[0]} status={data.decision}>
                     <Flex align="center" justify="center" p={2} alignSelf="stretch" bg={theme.color[1]} color="white">
                         {theme.icon}
                     </Flex>
@@ -77,6 +72,18 @@ const FlowTag = ({ data, last, isCurrent, remindApprover }) => {
                                 {data.fullname}
                             </Text>
                             <Text fontSize="xs">{data.email}</Text>
+                            {data.decision === "Approved" &&
+                                data.deadline &&
+                                new Date(data.decisionTimestamp).getTime() > new Date(data.deadline).getTime() && (
+                                    <Text fontSize="xs" color="red.500">
+                                        {formatDistanceStrict(
+                                            new Date(data.deadline),
+                                            data.decisionTimestamp ? new Date(data.decisionTimestamp) : new Date(),
+                                            { unit: "hour" }
+                                        )}{" "}
+                                        late
+                                    </Text>
+                                )}
                         </Flex>
                         {data.decision === "Pending" && isCurrent && (
                             <Box ml="auto" p={2}>

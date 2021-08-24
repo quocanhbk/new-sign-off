@@ -2,7 +2,8 @@ import { Box, Flex } from "@chakra-ui/react"
 import { Router } from "@reach/router"
 import { Placeholder } from "components/Base"
 import useMediaQuery from "hooks/useMediaQuery"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useStoreActions } from "store"
 import { ViewMode } from "types"
 import Detail from "./Detail"
 import List from "./List"
@@ -14,8 +15,11 @@ interface SearchPageProps {
 
 const Search = ({ mode }: SearchPageProps) => {
     let device = useMediaQuery()
+    const setPath = useStoreActions(action => action.setPathNoNavigate)
     const [scroll, setScroll] = useState(0)
-
+    useEffect(() => {
+        setPath(`/${mode}`)
+    }, [setPath])
     // place hook out here so it won't be re-created on mobile
     const useRequestsHook = useRequests({ mode })
     return (

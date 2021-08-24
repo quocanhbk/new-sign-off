@@ -8,7 +8,7 @@ import { useChakraToast, useLoader } from "hooks"
 const useRequests = ({ mode }: { mode: "search" | "sign" }) => {
     const RANGE = 10
     const { query, queryString, queryTags, onChangeTitleSearch, setQueryParam } = useRequestQuery()
-    const { render, setIsLoading } = useLoader()
+    const { render, setIsLoading, setNotFound } = useLoader()
     const toast = useChakraToast()
     const getRequestsWithRange = async ({ pageParam = 0 }) => {
         let requests = await getRequests(
@@ -27,6 +27,7 @@ const useRequests = ({ mode }: { mode: "search" | "sign" }) => {
                 lastPage.length < RANGE ? undefined : lastPage.length * pages.length,
             onError: () => {
                 toast({ status: "error", title: "Failed to get data!", description: "Please try again later" })
+                setNotFound(true)
             },
             refetchOnWindowFocus: true,
             refetchInterval: 30000,
