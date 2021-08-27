@@ -1,14 +1,14 @@
-import axios from "axios"
 import { v4 } from "uuid"
-import getConfig from "./getConfig"
 import { getProcedureChecklist, IProcedure } from "./procedure"
 import { msalInstance } from "index"
 import { removeUndefinedProps } from "utils/utils"
 import { getFile, postFile } from "./file"
-import faker from "faker"
 import { Id } from "types"
 import { IUser } from "./user"
 import { IForm } from "./form"
+import Fetcher from "./fetcher"
+
+const fetcher = new Fetcher("/api/v1/requests/")
 
 export interface IRequestLog {
     id: Id
@@ -68,8 +68,7 @@ export interface IRequest extends Omit<IRequestItem, "author"> {
 }
 
 export const getRequests = async (queryString: string): Promise<IRequestItem[]> => {
-    const config = await getConfig()
-    let { data } = await axios.get(`/api/v1/requests?${queryString}`, config)
+    const { data } = await fetcher.GET(`?${queryString}`)
     return data.map(request => ({
         id: request.approval_request_id,
         type: request.type,
@@ -86,19 +85,12 @@ export const getRequests = async (queryString: string): Promise<IRequestItem[]> 
 }
 
 export const getLastSignRequest = async (): Promise<number | null> => {
-    const config = await getConfig()
-    try {
-        let { data } = await axios.get("/api/v1/requests?sign=true&start=0&end=1", config)
-        return data[0] ? data[0].approval_request_id : null
-    } catch (error) {
-        return null
-    }
+    const { data } = await fetcher.GET("?sign=true&start=0&end=1")
+    return data[0] ? data[0].approval_request_id : null
 }
 
 export const getRequestDetail = async (id: Id, { sign }: { sign: boolean } = { sign: false }) => {
-    const config = await getConfig()
-    let { data } = await axios.get(`/api/v1/requests/${id}?${sign ? "sign=true" : ""}`, config)
-    console.log("REQUEST DATA", data)
+    const { data } = await fetcher.GET(`${id}?${sign ? "sign=true" : ""}`)
     let checklist: Omit<IProcedure["checklist"], "defaultForms"> = []
     if (data.type === "Procedure") {
         checklist = await getProcedureChecklist(data.fk_procedure_id)
@@ -224,33 +216,6 @@ export const getRequestDetail = async (id: Id, { sign }: { sign: boolean } = { s
     return returnData
 }
 
-export const burstRequest = async () => {
-    let arr = Array(50).fill("")
-    let config = await getConfig()
-    await Promise.all(
-        arr.map(async () => {
-            await axios.post(
-                "/api/v1/requests",
-                {
-                    title: faker.vehicle.vehicle(),
-                    type: "Flexible",
-                    description: "",
-                    priority: "Normal",
-                    deadline: "08/01/2021",
-                    status: "Pending",
-                    relatedProjects: ["TTG"],
-                    advisors: [],
-                    approvers: ["296ff6ee-5c88-48a1-9f93-b83b8f41cb37"],
-                    observators: [],
-                    approvalAttachments: [],
-                    referenceAttachments: [],
-                },
-                config
-            )
-        })
-    )
-}
-
 export interface IAttachmentInput extends Omit<IAttachment, "fileId"> {
     fileId: null | number
     reference: boolean
@@ -271,7 +236,6 @@ export interface IRequestInput
 
 export const postRequest = async (input: IRequestInput): Promise<number> => {
     // REMEMBER to post all the file without the fileId first
-    const config = await getConfig()
     const {
         title,
         description,
@@ -304,9 +268,9 @@ export const postRequest = async (input: IRequestInput): Promise<number> => {
     if (!sendData.procedureId) delete sendData.procedureId
 
     // 1. POST request data to get Request ID
-    let {
+    const {
         data: { approval_request_id: id },
-    } = await axios.post("/api/v1/requests", sendData, config)
+    } = await fetcher.POST("", sendData)
     // 2. POST attachments
     await Promise.all(
         approvalAttachments.concat(referenceAttachments).map(async attachment => {
@@ -322,10 +286,9 @@ export const postRequest = async (input: IRequestInput): Promise<number> => {
                 fileId: attachment.fileId,
             }
             if (!attachmentBody.checklistItemId) delete attachmentBody.checklistItemId
-            let {
+            const {
                 data: { attachment_id: attachmentId },
-            } = await axios.post("/api/v1/requests/" + id + "/attachments", attachmentBody, config)
-
+            } = await fetcher.POST(`${id}/attachments`, attachmentBody)
             // POST field
             let fields = attachment.fields.map(field => ({
                 field: field.name,
@@ -337,7 +300,7 @@ export const postRequest = async (input: IRequestInput): Promise<number> => {
                 height: field.size.height,
                 required: field.required,
             }))
-            await axios.post("/api/v1/requests/attachments/" + attachmentId + "/fields", { fields }, config)
+            await fetcher.POST(`attachments/${attachmentId}/fields`, { fields })
         })
     )
     return id
@@ -362,7 +325,6 @@ export const patchRequest = async (id: Id, { input, newAttachments, deletedAttac
         observators,
         procedure: procedureId,
     } = input
-    const config = await getConfig()
     const data = removeUndefinedProps({
         title,
         description,
@@ -375,7 +337,7 @@ export const patchRequest = async (id: Id, { input, newAttachments, deletedAttac
         observators,
         procedureId,
     })
-    await axios.patch(`/api/v1/requests/${id}`, data, config)
+    await fetcher.PATCH(id, data)
 
     // delete old attachment
     await Promise.all(
@@ -387,12 +349,8 @@ export const patchRequest = async (id: Id, { input, newAttachments, deletedAttac
     await Promise.all(
         newAttachments.map(async attachment => {
             if (!attachment.fileId) {
-                const data = new FormData()
-                data.append("file", attachment.file, (attachment.file as File).name)
-                const {
-                    data: { file_id },
-                } = await axios.post("/api/v1/files", data, config)
-                attachment.fileId = file_id
+                const fileId = await postFile(attachment.file as File)
+                attachment.fileId = fileId
             }
             // POST attachment
             let attachmentBody = {
@@ -402,10 +360,9 @@ export const patchRequest = async (id: Id, { input, newAttachments, deletedAttac
                 fileId: attachment.fileId,
             }
             if (!attachmentBody.checklistItemId) delete attachmentBody.checklistItemId
-            let {
+            const {
                 data: { attachment_id: attachmentId },
-            } = await axios.post("/api/v1/requests/" + id + "/attachments", attachmentBody, config)
-
+            } = await fetcher.POST(`${id}/attachments`, attachmentBody)
             // POST field
             let fields = attachment.fields.map(field => ({
                 field: field.name,
@@ -417,7 +374,7 @@ export const patchRequest = async (id: Id, { input, newAttachments, deletedAttac
                 height: field.size.height,
                 required: field.required,
             }))
-            await axios.post("/api/v1/requests/attachments/" + attachmentId + "/fields", { fields }, config)
+            await fetcher.POST(`attachments/${attachmentId}/fields`, { fields })
         })
     )
 }
@@ -426,11 +383,7 @@ export const postComment = async (id: Id, comment: string): Promise<IRequestLog>
     const account = msalInstance.getAllAccounts()[0]
     const name = account.name ? account.name.split("-")[account!.name.split("-").length - 1] : account.username
     const email = account.username
-    const config = await getConfig()
-    const data = {
-        comment,
-    }
-    await axios.post(`/api/v1/requests/${id}/comment/`, data, config)
+    await fetcher.POST(`${id}/comment`, { comment })
     return {
         id: v4().slice(0, 8),
         type: "Comment",
@@ -451,7 +404,6 @@ export interface IApproveCommmand {
 }
 
 export const approveRequest = async (id: Id, { code, comment, opinionId }: IApproveCommmand) => {
-    const config = await getConfig()
     let query = ""
     let decision = ""
     switch (code) {
@@ -470,33 +422,32 @@ export const approveRequest = async (id: Id, { code, comment, opinionId }: IAppr
             decision = "Rejected"
             break
     }
-    await axios.post(
-        "/api/v1/requests/" + id + "/approval?" + query,
-        {
-            decision,
-            opinion: comment,
-            opinionId,
-        },
-        config
-    )
+    await fetcher.POST(`${id}/approval?${query}`, {
+        decision,
+        opinion: comment,
+        opinionId,
+    })
 }
 
 export const remindApprove = async (requestId: Id, userId: string) => {
-    let config = await getConfig()
-    await axios.post(`/api/v1/requests/${requestId}/remind`, { userId }, config)
+    await fetcher.POST(`${requestId}/remind`, { userId })
 }
 
 export const deleteAttachment = async (requestId: Id, attachmentId: Id) => {
-    const config = await getConfig()
-    await axios.delete(`/api/v1/requests/${requestId}/attachments/${attachmentId}`, config)
+    await fetcher.DELETE(`${requestId}/attachments/${attachmentId}`)
 }
 
 export const cancelRequest = async (requestId: Id, reason: string) => {
-    const config = await getConfig()
-    await axios.post(`/api/v1/requests/${requestId}/cancellation`, { reason }, config)
+    await fetcher.POST(`${requestId}/cancellation`, { reason })
 }
 
 export const deleteRequest = async (requestId: Id) => {
-    const config = await getConfig()
-    await axios.delete(`/api/v1/requests/${requestId}`, config)
+    await fetcher.DELETE(`${requestId}`)
+}
+
+export const getQRText = async (requestId: Id) => {
+    const {
+        data: { text },
+    } = await fetcher.GET(`${requestId}/signed-content`)
+    return text
 }

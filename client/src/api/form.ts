@@ -1,8 +1,8 @@
-import axios from "axios"
-import getConfig from "./getConfig"
 import { Id } from "types"
-import { getFile } from "./file"
+import { getFile, postFile } from "./file"
+import Fetcher from "./fetcher"
 
+const fetcher = new Fetcher("/api/v1/forms/")
 export interface IField {
     id: Id
     name: string
@@ -23,8 +23,7 @@ export interface IForm {
 export interface IFormInput extends Pick<IForm, "name" | "fields" | "file"> {}
 
 export const getForms = async (): Promise<Pick<IForm, "id" | "name" | "fileId">[]> => {
-    const config = await getConfig()
-    const { data } = await axios.get("/api/v1/forms", config)
+    const { data } = await fetcher.GET()
     return data.map(d => ({
         id: d.form_id,
         name: d.name,
@@ -43,9 +42,7 @@ export const getFormsByIds = async (ids: Id[]): Promise<IForm[]> => {
 }
 
 export const getFormDetail = async (id: Id): Promise<IForm> => {
-    const config = await getConfig()
-    const { data: form } = await axios.get("/api/v1/forms/" + id, config)
-
+    const { data: form } = await fetcher.GET(`${id}`)
     const file = await getFile(form.file.file_id)
     const formDetail = {
         id: form.form_id,
@@ -64,68 +61,47 @@ export const getFormDetail = async (id: Id): Promise<IForm> => {
     return formDetail
 }
 
-export const deleteForm = async (id: Id): Promise<string> => {
+export const deleteForm = async (id: Id) => {
     // did i forget to delete file as well
-    const config = await getConfig()
-    let res = await axios.delete("/api/v1/forms/" + id, config)
-    if (res.status === 404) {
-        return "delete-not-found"
-    } else if (res.status === 204) {
-        return "delete-success"
-    } else {
-        return "delete-wrong"
-    }
+    await fetcher.DELETE(id)
 }
 
 export const postForm = async ({ name, file, fields }: IFormInput): Promise<number> => {
-    const config = await getConfig()
-    const data = new FormData()
-    data.append("file", file, (file as File).name)
-    const {
-        data: { file_id },
-    } = await axios.post("/api/v1/files", data, config)
+    const fileId = await postFile(file as File)
     //post form name
-    let {
+    const {
         data: { form_id },
-    } = await axios.post("/api/v1/forms", { name: name, fileId: file_id }, config)
+    } = await fetcher.POST("", { name, fileId })
 
     //post default fields
-    await axios.post(
-        `/api/v1/forms/${form_id}/default-fields`,
-        {
-            defaultFields: fields.map(field => ({
-                field: field.name,
-                type: "Field",
-                value: field.content,
-                x: field.position.X,
-                y: field.position.Y,
-                width: field.size.width,
-                height: field.size.height,
-                required: field.required,
-            })),
-        },
-        config
-    )
+    await fetcher.POST(`${form_id}/default-fields`, {
+        defaultFields: fields.map(field => ({
+            field: field.name,
+            type: "Field",
+            value: field.content,
+            x: field.position.X,
+            y: field.position.Y,
+            width: field.size.width,
+            height: field.size.height,
+            required: field.required,
+        })),
+    })
+
     return form_id
 }
 
 export const updateForm = async (id: Id, { name, fields }: Pick<IForm, "name" | "fields">) => {
-    const config = await getConfig()
-    await axios.patch("/api/v1/forms/" + id, { name }, config)
-    await axios.put(
-        "/api/v1/forms/" + id + "/default-fields",
-        {
-            defaultFields: fields.map(field => ({
-                field: field.name,
-                type: "Field",
-                value: field.content,
-                x: field.position.X,
-                y: field.position.Y,
-                width: field.size.width,
-                height: field.size.height,
-                required: field.required,
-            })),
-        },
-        config
-    )
+    await fetcher.PATCH(id, { name })
+    await fetcher.PUT(`${id}/default-fields`, {
+        defaultFields: fields.map(field => ({
+            field: field.name,
+            type: "Field",
+            value: field.content,
+            x: field.position.X,
+            y: field.position.Y,
+            width: field.size.width,
+            height: field.size.height,
+            required: field.required,
+        })),
+    })
 }

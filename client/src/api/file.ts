@@ -1,9 +1,13 @@
 import { PDFDocument, rgb } from "pdf-lib"
 import fontkit from "@pdf-lib/fontkit"
-import axios from "axios"
-import getConfig from "./getConfig"
 import QRCode from "qrcode"
 import { IField } from "./form"
+import Fetcher from "./fetcher"
+import axios from "axios"
+import { getQRText } from "./request"
+
+const fetcher = new Fetcher("/api/v1/files/")
+
 interface IDownloadFormInput {
     name: string
     file: string
@@ -12,28 +16,25 @@ interface IDownloadFormInput {
     size: number
     position: "left" | "right"
 }
+
 export const getFile = async (id: number): Promise<string> => {
-    const config = await getConfig()
     const {
         data: { downloadUrl: file },
-    } = await axios.get("/api/v1/files/" + id, config)
+    } = await fetcher.GET(id)
     return file
 }
 
 export const postFile = async (file: File): Promise<number> => {
-    const config = await getConfig()
     const data = new FormData()
     data.append("file", file, file.name)
     const {
         data: { file_id },
-    } = await axios.post("/api/v1/files", data, config)
+    } = await fetcher.POST("", data)
     return file_id
 }
 
 export const deleteFile = async (fileId: number) => {
-    const config = await getConfig()
-    let res = await axios.delete("/api/v1/files/" + fileId, config)
-    return res.data
+    await fetcher.DELETE(fileId)
 }
 
 export const downloadAttachment = async ({
@@ -42,11 +43,6 @@ export const downloadAttachment = async ({
     fields,
     requestId,
 }: Omit<IDownloadFormInput, "size" | "position">) => {
-    const getQRText = async requestId => {
-        const config = await getConfig()
-        const res = await axios.get(`/api/v1/requests/${requestId}/signed-content`, config)
-        return res.data.text
-    }
     const generateQR = async text => {
         try {
             return await QRCode.toDataURL(text)
@@ -124,14 +120,6 @@ export const downloadStampAttachment = async ({
     size,
     position,
 }: IDownloadFormInput) => {
-    const getQRText = async (requestId: number): Promise<string> => {
-        const config = await getConfig()
-        const {
-            data: { text },
-        } = await axios.get(`/api/v1/requests/${requestId}/signed-content`, config)
-        return text
-    }
-
     const generateQR = async (text: string) => {
         try {
             return await QRCode.toDataURL(text)

@@ -1,10 +1,11 @@
-/* eslint-disable no-unused-vars */
 import axios from "axios"
 import { Id } from "types"
+import Fetcher from "./fetcher"
 import { getFormDetail, IForm } from "./form"
 import getConfig from "./getConfig"
 import { IPosition } from "./position"
 
+const fetcher = new Fetcher("/api/v1/procedures/")
 export interface ICheckItem {
     id: Id
     name: string
@@ -30,8 +31,7 @@ export interface IProcedureInput extends Pick<IProcedure, "title" | "description
 
 export type IProcedureList = Pick<IProcedure, "id" | "title" | "description" | "isActive" | "tags" | "createdBy">[]
 export const getProcedures = async (): Promise<IProcedureList> => {
-    const config = await getConfig()
-    let { data } = await axios.get("/api/v1/procedures", config)
+    const { data } = await fetcher.GET()
     return data.map(d => ({
         id: d.procedure_id,
         title: d.title,
@@ -50,8 +50,7 @@ export const getActiveProcedures = async (): Promise<
 }
 
 export const getProcedureChecklist = async (id: Id): Promise<Omit<IProcedure["checklist"], "defaultForms">> => {
-    const config = await getConfig()
-    const { data } = await axios.get("/api/v1/procedures/" + id, config)
+    const { data } = await fetcher.GET(id)
 
     return data.checklist.map(item => ({
         id: item.checklist_item_id,
@@ -60,8 +59,7 @@ export const getProcedureChecklist = async (id: Id): Promise<Omit<IProcedure["ch
 }
 
 export const getProcedureDetail = async (id: Id): Promise<IProcedure> => {
-    const config = await getConfig()
-    const { data } = await axios.get("/api/v1/procedures/" + id, config)
+    const { data } = await fetcher.GET(id)
 
     let checklist = data.checklist.map(checkItem => ({
         id: checkItem.checklist_item_id,
@@ -106,10 +104,7 @@ export const getProcedureDetail = async (id: Id): Promise<IProcedure> => {
     const checklistData: IProcedure["checklist"] = await Promise.all(
         checklist.map(async checkItem => {
             let defaultFormsDetail = await Promise.all(
-                checkItem.defaultForms.map(async form => {
-                    let formDetail = await getFormDetail(form)
-                    return formDetail
-                })
+                checkItem.defaultForms.map(async form => await getFormDetail(form))
             )
             return {
                 id: checkItem.id,
@@ -181,11 +176,9 @@ export const updateProcedure = async (id: Id, input: IProcedureInput): Promise<n
 }
 
 export const deleteProcedure = async (id: Id): Promise<void> => {
-    const config = await getConfig()
-    await axios.delete("/api/v1/procedures/" + id, config)
+    await fetcher.DELETE(id)
 }
 
 export const toggleActive = async (id: Id, isActive: boolean): Promise<void> => {
-    const config = await getConfig()
-    await axios.post("/api/v1/procedures/" + id + "/status", { isActive }, config)
+    await fetcher.POST(`${id}/status`, { isActive })
 }

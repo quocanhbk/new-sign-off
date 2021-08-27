@@ -1,6 +1,6 @@
-import axios from "axios"
-import getConfig from "./getConfig"
+import Fetcher from "./fetcher"
 
+const fetcher = new Fetcher("/api/v1/job-positions/")
 export interface IPosition {
     id: number
     title: string
@@ -13,8 +13,7 @@ export interface IPosition {
 }
 
 export const getPositions = async (): Promise<Pick<IPosition, "id" | "title" | "userId">[]> => {
-    const config = await getConfig()
-    let { data } = await axios.get("/api/v1/job-positions/", config)
+    const { data } = await fetcher.GET()
     return data.map(d => ({
         id: d.job_position_id,
         title: d.title,
@@ -23,8 +22,7 @@ export const getPositions = async (): Promise<Pick<IPosition, "id" | "title" | "
 }
 
 export const getPosition = async (id): Promise<IPosition> => {
-    const config = await getConfig()
-    let { data } = await axios.get(`/api/v1/job-positions/${id}`, config)
+    const { data } = await fetcher.GET(id)
     return data.map(d => ({
         id: d.job_position_id,
         title: d.title,

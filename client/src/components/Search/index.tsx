@@ -19,7 +19,7 @@ const Search = ({ mode }: SearchPageProps) => {
     const [scroll, setScroll] = useState(0)
     useEffect(() => {
         setPath(`/${mode}`)
-    }, [setPath])
+    }, [setPath, mode])
     // place hook out here so it won't be re-created on mobile
     const useRequestsHook = useRequests({ mode })
     return (
