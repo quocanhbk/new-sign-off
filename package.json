@@ -1,0 +1,15 @@
+{
+    "name": "approval_online",
+    "version": "1.0.0",
+    "description": "Approval online app, designed for TTG",
+    "main": "index.js",
+    "repository": "git@github.com:quocanhbk/new-sign-off.git",
+    "author": "La Quoc Anh <anh.lq@trungthuy.vn>",
+    "license": "MIT",
+    "private": true,
+    "workspaces": {
+        "packages": [
+            "web"
+        ]
+    }
+}
