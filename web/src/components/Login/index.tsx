@@ -17,22 +17,21 @@ const Login = ({ onLogin }) => {
                 <Image h="5rem" src={theme ? "/iconWithTextDark.svg" : "/iconWithTextLight.svg"} />
             </Flex>
             <Flex flex={8} direction="column" align="center" mt="8rem">
-                <Heading fontFamily="Campton" letterSpacing={2} color="fill.light" mb={8}>
+                <Heading fontFamily="Campton" letterSpacing={2} color="fill.light" mb={8} size="lg">
                     APPROVAL ONLINE
                 </Heading>
                 <Flex
                     onClick={onLogin}
-                    bg="fill.light"
-                    border="1px"
-                    borderColor="blackAlpha.300"
+                    bg="white"
                     p={4}
                     align="center"
                     rounded="md"
-                    color="background.primary.light"
+                    color="fill.light"
                     cursor="pointer"
+                    shadow="md"
                 >
                     <Image h="2rem" src="/microsoft.svg" alt="" />
-                    <Heading size="md" ml={4}>
+                    <Heading size="md" fontWeight="normal" ml={4}>
                         Log in with Microsoft
                     </Heading>
                 </Flex>
