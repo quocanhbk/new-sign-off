@@ -11,7 +11,7 @@ interface ParticipantsProps extends Pick<IRequestInput, "advisors" | "approvers"
 }
 
 const Participants: FC<ParticipantsProps> = ({ advisors, approvers, observators, setValue, errors, mode }) => {
-    const [userList, setUserList] = useState<(IUser & { display: JSX.Element })[]>([])
+    const [userList, setUserList] = useState<(Pick<IUser, "id" | "email" | "name"> & { display: JSX.Element })[]>([])
     const { data: users } = useQuery("users", () => getUsers(), {
         onSuccess: data =>
             setUserList(data.map(user => ({ ...user, display: <UserTag email={user.email} name={user.name} /> }))),
@@ -49,7 +49,9 @@ const Participants: FC<ParticipantsProps> = ({ advisors, approvers, observators,
             >
                 <MultipleSelect
                     selection={userList}
-                    value={approvers.map(approver => userList.find(user => user.id === approver) as IUser)}
+                    value={approvers.map(
+                        approver => userList.find(user => user.id === approver) as Pick<IUser, "id" | "email" | "name">
+                    )}
                     onSelect={newUsers =>
                         setValue(
                             "approvers",
@@ -67,7 +69,10 @@ const Participants: FC<ParticipantsProps> = ({ advisors, approvers, observators,
             >
                 <MultipleSelect
                     selection={userList}
-                    value={observators.map(observator => userList.find(user => user.id === observator) as IUser)}
+                    value={observators.map(
+                        observator =>
+                            userList.find(user => user.id === observator) as Pick<IUser, "id" | "email" | "name">
+                    )}
                     onSelect={newUsers =>
                         setValue(
                             "observators",

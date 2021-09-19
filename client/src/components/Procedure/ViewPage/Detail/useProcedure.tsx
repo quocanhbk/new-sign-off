@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "react-query"
-import { deleteProcedure, getProcedureDetail, toggleActive } from "api/procedure"
+import { deleteProcedure, getProcedureDetail, activateProcedure } from "api/procedure"
 import { useChakraToast, useLoader } from "hooks"
 import { Id } from "types"
 import { getPositions, getUsers, IPosition } from "api"
@@ -28,8 +28,8 @@ const useProcedure = (id: Id) => {
         setIsLoading(isLoading)
     }, [isLoading, setIsLoading])
 
-    // * MUTATE: toggle procedure
-    const { mutate: mutateToggleActive } = useMutation<unknown, unknown, boolean>(v => toggleActive(id, v), {
+    // * MUTATE: activate procedure
+    const { mutate: mutateActivateProcedure } = useMutation(() => activateProcedure(id), {
         onSettled: () => {
             queryClient.invalidateQueries("procedure")
             queryClient.invalidateQueries("procedures")
@@ -62,7 +62,7 @@ const useProcedure = (id: Id) => {
     return {
         data,
         render,
-        mutateToggleActive,
+        mutateActivateProcedure,
         deletePopup,
         setDeletePopup,
         mutateDeleteProcedure,

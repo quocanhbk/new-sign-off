@@ -35,7 +35,7 @@ const Search = ({ mode }: SearchPageProps) => {
                     </Box>
                 </>
             ) : (
-                <Box flex={2} pos="relative" h="full" borderLeft="1px" borderColor="gray.200">
+                <Box flex={2} pos="relative" h="full" w="full">
                     <Router style={{ height: "100%" }}>
                         <Detail path="/:id" mode={mode} />
                         <List

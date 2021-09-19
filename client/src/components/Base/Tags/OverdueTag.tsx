@@ -3,6 +3,10 @@
 import { Tag } from "@chakra-ui/react"
 
 interface OverdueTagProps {
+    /**
+     * onClick handler
+     * @type: () => void
+     */
     onClick?: () => void
 }
 

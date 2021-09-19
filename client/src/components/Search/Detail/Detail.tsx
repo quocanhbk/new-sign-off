@@ -6,23 +6,25 @@ import ConfirmPopup from "./ConfirmPopup"
 import Content from "./Content"
 import Header from "./Header"
 import CancelnDeletePopup from "./CancelnDeletePopup"
-import { Tabs, TabList, TabPanels, TabPanel, Text, Tab, Flex } from "@chakra-ui/react"
+import { Tabs, TabList, TabPanels, TabPanel, Tab, Flex } from "@chakra-ui/react"
 import { useRequestContext } from "./RequestProvider"
+import { MyText } from "components/Base"
 
 const TabButton = ({ children }) => {
     return (
         <Tab
             _selected={{
-                fontWeight: "bold",
                 borderBottom: "2px",
                 borderColor: "fill.light",
                 color: "fill.light",
+                fontWeight: "bold",
             }}
             _focus={{
                 border: "none",
             }}
+            px={0}
         >
-            <Text>{children}</Text>
+            <MyText>{children}</MyText>
         </Tab>
     )
 }

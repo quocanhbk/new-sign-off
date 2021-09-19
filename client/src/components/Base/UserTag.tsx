@@ -3,10 +3,18 @@ import { FC } from "react"
 import LazyImage from "./LazyImage"
 import { getAvatar } from "api/user"
 interface UserTagProps {
+    /**
+     * Email of user, used to retrieve avatar
+     * @type string
+     */
     email: string
+    /**
+     * Name of user
+     * @type string
+     */
     name: string
 }
-
+/** Display user avatar along with name */
 const UserTag: FC<UserTagProps> = ({ email, name }) => {
     return (
         <Flex align="center">

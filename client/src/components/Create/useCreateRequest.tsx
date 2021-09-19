@@ -49,7 +49,8 @@ const useDocument = (id?: number, mode?: string) => {
     const [originAttachmentIds, setOriginAttachmentIds] = useState<Id[]>([])
     const setPath = useStoreActions(action => action.setPath)
     const { render, setIsLoading, setNotFound } = useLoader()
-    const { mutateAsync: mutateGetProcedure } = useMutation(getProcedureDetail, {
+    const { mutate: mutateGetProcedure } = useMutation(getProcedureDetail, {
+        onMutate: () => setIsLoading(true),
         onSettled: () => setIsLoading(false),
         onError: () => {
             toast({ status: "error", title: "Failed to get procedure!", description: "Please try again later" })
@@ -99,16 +100,15 @@ const useDocument = (id?: number, mode?: string) => {
             onError: () => setNotFound(true),
         }
     )
-    const { mutateAsync: mutatePostRequest, isLoading: isPostingRequest } = useMutation(postRequest)
+    const { mutate: mutatePostRequest, isLoading: isPostingRequest } = useMutation(postRequest)
     const { mutate: mutatePatchRequest, isLoading: isPatchingRequest } = useMutation<void, unknown, IPatchRequestInput>(
         input => patchRequest(id!, input)
     )
     const toast = useChakraToast()
     const queryClient = useQueryClient()
 
-    // if
+    // * on procedure change, set request form's fields to empty, and fetch procedure detail if procedureId !== 0
     useEffect(() => {
-        // if procedure change and mode !== "revise" => reset advisors, approvers, observators to []
         if (mode !== "revise") {
             setValue("advisors", [])
             setValue("approvers", [])
@@ -116,25 +116,28 @@ const useDocument = (id?: number, mode?: string) => {
             setValue("checklist", [])
             setValue("approvalAttachments", [])
         }
-        if (procedure) {
-            setIsLoading(true)
+        if (procedure && procedure !== 0) {
             mutateGetProcedure(procedure)
         }
-    }, [procedure, initForm, mode, setValue, setIsLoading, mutateGetProcedure])
+    }, [procedure, mode, setValue, mutateGetProcedure])
 
-    // * remove procedure detail when switch type from 'procedure' from 'flexible'
+    // * on procedure change, if procedure is 0, set type to "Flexible", else set type to "Procedure"
     useEffect(() => {
-        if (type === "Flexible" && procedure) setValue("procedure", null)
-    }, [type, procedure, setValue])
+        if (procedure === 0) setValue("type", "Flexible")
+        else setValue("type", "Procedure")
+    }, [procedure, setValue])
 
+    // * hook comes with id, get request detail, else initilize empty form
     useEffect(() => {
+        console.log(3)
         if (id) mutateGetRequest(id)
         else initForm()
     }, [id, mutateGetRequest, initForm])
 
+    // * Initilize form with data get from id
     const init = async (data: IRequest) => {
         // get approval attachments file
-        let approvalAtt: IRequestInput["approvalAttachments"] = await Promise.all(
+        const approvalAttachments: IRequestInput["approvalAttachments"] = await Promise.all(
             data.approvalAttachments.map(async attachment => {
                 let file = await getFile(attachment.fileId)
                 return {
@@ -150,7 +153,7 @@ const useDocument = (id?: number, mode?: string) => {
         )
 
         // get reference attachments file
-        let referenceAtt: IRequestInput["referenceAttachments"] = await Promise.all(
+        const referenceAttachments: IRequestInput["referenceAttachments"] = await Promise.all(
             data.referenceAttachments.map(async attachment => {
                 let file = await getFile(attachment.fileId)
                 return {
@@ -164,6 +167,7 @@ const useDocument = (id?: number, mode?: string) => {
                 }
             })
         )
+        console.log("PROCEDURE ID", data.procedureId)
         let initData: IRequestInput = {
             title: data.title,
             description: data.description,
@@ -175,9 +179,9 @@ const useDocument = (id?: number, mode?: string) => {
             advisors: data.advisors.map(a => a.userId),
             approvers: data.approvers.map(a => a.userId),
             observators: data.observators.map(a => a.userId),
-            approvalAttachments: approvalAtt,
-            referenceAttachments: referenceAtt,
-            procedure: data.procedureId,
+            approvalAttachments,
+            referenceAttachments,
+            procedure: data.procedureId || 0,
             checklist: data.checklist,
         }
         initForm(initData)

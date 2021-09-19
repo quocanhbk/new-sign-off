@@ -4,9 +4,11 @@ import { BsFileEarmarkPlus } from "react-icons/bs"
 import useProcedures from "./useProcedures"
 import { Box, Button, Flex, Text } from "@chakra-ui/react"
 import { SearchBar } from "components/Base"
+import { useUserRoles } from "hooks"
 
 const List = () => {
     const { data: procedures, render, searchText, setSearchText, users, location } = useProcedures()
+    const userRoles = useUserRoles()
     return (
         <Flex direction="column" flex={1} maxW="25rem" h="full" px={2} borderRight="1px" borderColor="gray.200">
             <Flex align="center" px={2} pt={4} pb={2} pos="relative">
@@ -19,15 +21,17 @@ const List = () => {
                         procedures.filter(procedure => procedure.title.toLowerCase().includes(searchText.toLowerCase()))
                             .length}
                 </Text>
-                <Button
-                    leftIcon={<BsFileEarmarkPlus />}
-                    size="xs"
-                    onClick={() => navigate("/procedure/create")}
-                    variant="ghost"
-                    bg="gray.50"
-                >
-                    Add
-                </Button>
+                {userRoles.canCreateProcedure && (
+                    <Button
+                        leftIcon={<BsFileEarmarkPlus />}
+                        size="xs"
+                        onClick={() => navigate("/procedure/create")}
+                        variant="ghost"
+                        bg="gray.50"
+                    >
+                        Add
+                    </Button>
+                )}
             </Flex>
             <Box flex={1} overflow="auto" p={2} pos="relative">
                 {render(

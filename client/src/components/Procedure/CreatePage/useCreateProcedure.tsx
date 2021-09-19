@@ -8,13 +8,15 @@ import { useEffect, useState } from "react"
 const initState: IProcedureInput = {
     title: "",
     description: "",
+    type: "",
+    departments: [],
     advisors: [],
     approvers: [],
     observators: [],
     checklist: [],
 }
 
-const useProcedure = id => {
+const useProcedure = (id: Id) => {
     const { values, setValue, errors, setError, initForm } = useFormCore<IProcedureInput>(initState)
     const { title, advisors, approvers, observators, checklist } = values
     const { render, setNotFound, setIsLoading } = useLoader()
@@ -28,6 +30,8 @@ const useProcedure = id => {
             initForm({
                 title: procedureDetail.title,
                 description: procedureDetail.description,
+                type: procedureDetail.type,
+                departments: procedureDetail.departments,
                 checklist: procedureDetail.checklist,
                 advisors: procedureDetail.advisors.map(advisor => advisor.id),
                 approvers: procedureDetail.approvers.map(approver => approver.id),

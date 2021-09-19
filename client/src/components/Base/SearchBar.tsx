@@ -4,7 +4,13 @@ import { InputGroup, InputLeftElement, Input } from "@chakra-ui/react"
 import { BsSearch } from "react-icons/bs"
 
 interface SearchBarProps {
+    /**
+     * Search text value
+     */
     searchText: string
+    /**
+     * Search text onChange handler
+     */
     setSearchText: (searchText: string) => void
 }
 

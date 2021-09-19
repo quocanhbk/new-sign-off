@@ -15,7 +15,7 @@ export interface IRequestLog {
     type: string
     description: string
     createdAt: string | Date
-    author: IUser
+    author: Pick<IUser, "id" | "email" | "name">
 }
 export interface IParticipant {
     id: Id

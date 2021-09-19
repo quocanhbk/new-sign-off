@@ -1,28 +1,103 @@
 import { format } from "date-fns"
-import { BsChevronLeft, BsDownload, BsPen, BsTrash, BsX } from "react-icons/bs"
+import { BsChevronLeft, BsDownload, BsPen, BsThreeDots, BsTrash, BsX } from "react-icons/bs"
 import { navigate } from "@reach/router"
 import useMediaQuery from "hooks/useMediaQuery"
-import { admins } from "constant"
 import { useMsal } from "@azure/msal-react"
 import { StatusTag, TypeTag } from "components/Base/Tags"
-import { useQuery } from "react-query"
-import { getUsers, IUser } from "api"
-import { useState } from "react"
-import { DeviceRenderer } from "components/Base"
-import { Flex, Heading, HStack, IconButton, Text } from "@chakra-ui/react"
+import { useRef, useState } from "react"
+import { DeviceRenderer, MyHeading, MyText } from "components/Base"
+import { Flex, HStack, IconButton, Box, Collapse, useOutsideClick, VStack, Button } from "@chakra-ui/react"
 import { useRequestContext } from "./RequestProvider"
+import { useUserRoles } from "hooks"
 
 const Header = () => {
     // const { id, title, status, type, updatedAt, submitter } = request
     const { request: req, id, mode, setPopup } = useRequestContext()
     const { submitter, updatedAt, title, status, type } = req!
     let device = useMediaQuery()
-    const [currentUser, setCurrentUser] = useState<IUser>()
+    const userRoles = useUserRoles()
     const { accounts } = useMsal()
-    useQuery("users", getUsers, {
-        onSuccess: data => setCurrentUser(data.find(u => u.email === accounts[0].username)),
-    })
+    const [morePopup, setMorePopup] = useState(false)
     const isAuthor = () => accounts[0].username === submitter[0].email
+    const moreButtonRef = useRef<HTMLDivElement>(null)
+    useOutsideClick({
+        ref: moreButtonRef,
+        handler: () => setMorePopup(false),
+    })
+
+    const genButton = () => {
+        let buttons: React.ReactNode[] = []
+        if (device !== "PC") return []
+        if (mode === "search") {
+            if (status === "Draft" && isAuthor()) {
+                buttons.push(
+                    <Button
+                        key="edit"
+                        leftIcon={<BsPen />}
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => navigate("/draft/" + id)}
+                    >
+                        Edit
+                    </Button>,
+                    <Button
+                        key="delete"
+                        leftIcon={<BsTrash />}
+                        size="sm"
+                        colorScheme="red"
+                        variant="ghost"
+                        onClick={() => setPopup("delete")}
+                    >
+                        Delete
+                    </Button>
+                )
+            } else if (status === "Revising" && accounts[0].username === submitter[0].email) {
+                buttons.push(
+                    <Button
+                        key="revise"
+                        leftIcon={<BsPen />}
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => navigate("/revise/" + id)}
+                    >
+                        Revise
+                    </Button>
+                )
+            }
+        }
+        if (status === "Pending" && userRoles.canCancelRequest && mode === "search") {
+            buttons.push(
+                <Button
+                    key="cancel"
+                    leftIcon={<BsX />}
+                    size="sm"
+                    variant="ghost"
+                    colorScheme="red"
+                    onClick={() => setPopup("cancel")}
+                >
+                    Cancel
+                </Button>
+            )
+        }
+        if (status === "Approved") {
+            buttons.push(
+                <Button
+                    key="export"
+                    leftIcon={<BsDownload />}
+                    size="sm"
+                    variant="ghost"
+                    as="a"
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`/export/${id}`}
+                >
+                    Export
+                </Button>
+            )
+        }
+        return buttons
+    }
+    const buttons = genButton()
     return (
         <Flex borderBottom="1px" borderColor="gray.200" pl={2} align="center">
             <DeviceRenderer device="PHONE">
@@ -34,78 +109,38 @@ const Header = () => {
                     onClick={() => navigate("/" + mode)}
                 />
             </DeviceRenderer>
-            <Flex flex={1} p={4}>
+            <Flex flex={1} p={4} align="center">
                 <Flex direction="column" flex={1}>
-                    <Text fontSize="sm" mb={2}>
+                    <MyText mb={2} textSize="small">
                         {format(updatedAt as Date, "'Last updated at ' HH:mm dd/MM/yyyy")}
-                    </Text>
-                    <Heading size="md" mb={2} fontWeight="semibold" color="fill.light">
+                    </MyText>
+                    <MyHeading mb={2} fontWeight="semibold" color="fill.light">
                         {title}
-                    </Heading>
+                    </MyHeading>
                     <HStack spacing={2}>
                         <StatusTag readOnly status={status} />
                         <TypeTag type={type} />
                     </HStack>
                 </Flex>
-                <HStack ml={2}>
-                    {device === "PC" &&
-                        mode === "search" &&
-                        (status === "Draft" && isAuthor() ? (
-                            <>
-                                <IconButton
-                                    icon={<BsPen />}
-                                    aria-label="edit-request"
-                                    rounded="full"
-                                    colorScheme="blue"
-                                    onClick={() => navigate("/draft/" + id)}
-                                    title="Edit this request"
-                                />
-                                <IconButton
-                                    icon={<BsTrash />}
-                                    aria-label="delete-request"
-                                    rounded="full"
-                                    colorScheme="red"
-                                    onClick={() => setPopup("delete")}
-                                    title="Delete this request"
-                                />
-                            </>
-                        ) : status === "Revising" && accounts[0].username === submitter[0].email ? (
-                            <IconButton
-                                icon={<BsPen />}
-                                aria-label="revise-request"
-                                rounded="full"
-                                colorScheme="blue"
-                                onClick={() => navigate("/revise/" + id)}
-                                title="Revise this request"
-                            />
-                        ) : null)}
-                    {device === "PC" &&
-                        status === "Pending" &&
-                        admins.includes((currentUser?.id as string) || "") &&
-                        mode === "search" && (
-                            <IconButton
-                                icon={<BsX />}
-                                aria-label="delete-request"
-                                rounded="full"
-                                colorScheme="red"
-                                onClick={() => setPopup("cancel")}
-                                title="Cancel this request"
-                            />
-                        )}
-                    {device === "PC" && status === "Approved" && (
+                {buttons.length > 0 && (
+                    <Box pos="relative" ref={moreButtonRef}>
                         <IconButton
-                            as="a"
-                            href={`/export/${id}`}
-                            target="_blank"
-                            rel="noreferrer"
-                            aria-label="export-request"
-                            icon={<BsDownload />}
+                            icon={<BsThreeDots />}
+                            aria-label="more"
                             rounded="full"
-                            colorScheme="blue"
-                            title="Request this request"
+                            colorScheme="gray"
+                            bg="white"
+                            onClick={() => setMorePopup(!morePopup)}
                         />
-                    )}
-                </HStack>
+                        <Box pos="absolute" right={0} top="100%" transform="translateY(0.5rem)">
+                            <Collapse in={morePopup} animateOpacity unmountOnExit>
+                                <Box p={2} rounded="md" bg="gray.50" shadow="base">
+                                    <VStack align="flex-start">{genButton()}</VStack>
+                                </Box>
+                            </Collapse>
+                        </Box>
+                    </Box>
+                )}
             </Flex>
         </Flex>
     )

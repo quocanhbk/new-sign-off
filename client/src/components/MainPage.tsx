@@ -26,7 +26,7 @@ const MainPage: FC<MainPageProps> = () => {
     return (
         <Flex h="100vh" w="100%" className="main">
             {device === "PC" && <SideBar />}
-            <Box flex={18} h="full">
+            <Box flex={18} h="full" w="full" overflow="hidden">
                 <Flex h="full" direction="column">
                     <Box overflow="hidden" h="full">
                         <Router style={{ height: "100%" }}>

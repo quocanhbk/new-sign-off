@@ -140,6 +140,7 @@ const theme = extendTheme({
         initialColorMode: "light",
         useSystemColorMode: false,
     },
+    breakpoint: ["0px", "840px", "2048px"],
 })
 
 export default theme

@@ -20,7 +20,7 @@ const Detail = ({ id }: DetailProps) => {
         isGettingPosition,
         mappedPosition,
         mutateDeleteProcedure,
-        mutateToggleActive,
+        mutateActivateProcedure,
         setDeletePopup,
     } = useProcedure(id!)
     return (
@@ -40,7 +40,7 @@ const Detail = ({ id }: DetailProps) => {
                             isActive={procedure.isActive}
                             onDeleteClick={() => setDeletePopup(true)}
                             onEditClick={onEditClick}
-                            onToggleActive={mutateToggleActive}
+                            onActivateProcedure={mutateActivateProcedure}
                         />
                         <Flex flex={1} w="full" justify="center">
                             <Flex direction="column" w="full" h="full" p={4} maxW="48rem">

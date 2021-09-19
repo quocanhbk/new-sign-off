@@ -61,10 +61,9 @@ export const useFormCore = <IForm extends Record<string, any>>(
         [dispatch, setError, options.clearErrorOnValueChange]
     )
 
-    const initForm = useCallback(
-        (payload: IForm = initialValues) => dispatch({ type: "INIT", payload }),
-        [initialValues]
-    )
+    const initForm = useCallback((payload: IForm = initialValues) => dispatch({ type: "INIT", payload }), [
+        initialValues,
+    ])
 
     return { values, setValue, initForm, errors, setError }
 }

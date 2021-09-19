@@ -5,7 +5,7 @@ import { useState } from "react"
 import { Avatar, Box, Button, chakra, Flex, Text, VStack } from "@chakra-ui/react"
 
 function ApprovalOpinionCard({ opinion, onApproveClick }) {
-    const [curUser, setCurUser] = useState<IUser>()
+    const [curUser, setCurUser] = useState<Pick<IUser, "id" | "email" | "name">>()
     const { data: users } = useQuery("users", () => getUsers(), {
         onSuccess: users => setCurUser(users.find(_ => _.id === opinion.createdBy)),
     })

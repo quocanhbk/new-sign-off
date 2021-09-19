@@ -5,7 +5,7 @@ import SearchPage from "./components/Search"
 import Form from "./components/Form"
 import Procedure from "./components/Procedure"
 
-interface Page {
+export interface Page {
     icon: JSX.Element
     text: string
     path: string

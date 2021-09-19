@@ -1,9 +1,6 @@
-/* eslint-disable react/prop-types */
 import { Flex, Heading, Image } from "@chakra-ui/react"
-import { useStoreState } from "store"
 
 const Login = ({ onLogin }) => {
-    const theme = useStoreState(_ => _.theme)
     return (
         <Flex
             direction="column"
@@ -14,7 +11,7 @@ const Login = ({ onLogin }) => {
             backgroundSize="contain"
         >
             <Flex flex={2} align="center" px={2}>
-                <Image h="5rem" src={theme ? "/iconWithTextDark.svg" : "/iconWithTextLight.svg"} />
+                <Image h="5rem" src="/iconWithTextLight.svg" />
             </Flex>
             <Flex flex={8} direction="column" align="center" mt="8rem">
                 <Heading fontFamily="Campton" letterSpacing={2} color="fill.light" mb={8}>

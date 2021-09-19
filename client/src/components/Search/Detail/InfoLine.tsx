@@ -1,4 +1,5 @@
 import { chakra } from "@chakra-ui/react"
+import { MyText } from "components/Base"
 interface InfoLineProps {
     headline: string
     content?: string | number
@@ -26,9 +27,13 @@ const InfoLine = ({ headline, content, span }: InfoLineProps) => {
                 }}
                 colSpan={span ? 2 : 1}
             >
-                {headline}
+                <MyText>{headline}</MyText>
             </chakra.td>
-            {content ? <chakra.td textAlign="right">{content}</chakra.td> : null}
+            {content ? (
+                <chakra.td textAlign="right">
+                    <MyText>{content}</MyText>
+                </chakra.td>
+            ) : null}
         </chakra.tr>
     )
 }

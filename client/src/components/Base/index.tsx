@@ -46,3 +46,5 @@ export {
     PositionTag,
     AttachmentTablePC,
 }
+
+export * from "./Typography"

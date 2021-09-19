@@ -1,8 +1,6 @@
-import axios from "axios"
 import { Id } from "types"
 import Fetcher from "./fetcher"
 import { getFormDetail, IForm } from "./form"
-import getConfig from "./getConfig"
 import { IPosition } from "./position"
 
 const fetcher = new Fetcher("/api/v1/procedures/")
@@ -17,13 +15,16 @@ export interface IProcedure {
     description: string
     isActive: boolean
     tags: string[]
+    type: string
+    departments: string[]
     createdBy: string
     advisors: Pick<IPosition, "id" | "title" | "userId">[]
     approvers: Pick<IPosition, "id" | "title" | "userId">[]
     observators: Pick<IPosition, "id" | "title" | "userId">[]
     checklist: ICheckItem[]
 }
-export interface IProcedureInput extends Pick<IProcedure, "title" | "description" | "checklist"> {
+export interface IProcedureInput
+    extends Pick<IProcedure, "title" | "description" | "checklist" | "type" | "departments"> {
     advisors: Id[]
     approvers: Id[]
     observators: Id[]
@@ -32,6 +33,7 @@ export interface IProcedureInput extends Pick<IProcedure, "title" | "description
 export type IProcedureList = Pick<IProcedure, "id" | "title" | "description" | "isActive" | "tags" | "createdBy">[]
 export const getProcedures = async (): Promise<IProcedureList> => {
     const { data } = await fetcher.GET()
+    console.log(data)
     return data.map(d => ({
         id: d.procedure_id,
         title: d.title,
@@ -71,6 +73,8 @@ export const getProcedureDetail = async (id: Id): Promise<IProcedure> => {
         title: data.title,
         description: data.description,
         isActive: data.is_active,
+        departments: data.apply_to_departments,
+        type: data.type,
         createdBy: data.author.user_id,
         advisors: data.approver_position
             .filter(a => a.type === "advisor")
@@ -118,37 +122,33 @@ export const getProcedureDetail = async (id: Id): Promise<IProcedure> => {
 }
 
 export const postProcedure = async (input: IProcedureInput): Promise<number> => {
-    const config = await getConfig()
-    let { title, description, advisors, approvers, observators, checklist } = input
+    let { title, description, advisors, approvers, observators, checklist, type, departments } = input
     let body = {
         title,
         description,
         advisors,
         approvers,
         observators,
-        isActive: true,
+        isActive: false,
+        type,
+        departments,
         tags: [],
     }
-    let {
+    const {
         data: { id },
-    } = await axios.post("/api/v2/procedures", body, config)
+    } = await fetcher.POST("", body)
+    await fetcher.PUT(`${id}/checklist`, {
+        checklist: checklist.map(item => ({
+            name: item.name,
+            formIds: item.defaultForms.map(form => form.id),
+        })),
+    })
 
-    await axios.put(
-        "/api/v1/procedures/" + id + "/checklist",
-        {
-            checklist: checklist.map(item => ({
-                name: item.name,
-                formIds: item.defaultForms.map(form => form.id),
-            })),
-        },
-        config
-    )
     return id
 }
 
 export const updateProcedure = async (id: Id, input: IProcedureInput): Promise<number> => {
-    const config = await getConfig()
-    let { title, description, advisors, approvers, observators, checklist } = input
+    let { title, description, advisors, approvers, observators, checklist, departments, type } = input
     let body = {
         title,
         description,
@@ -157,21 +157,19 @@ export const updateProcedure = async (id: Id, input: IProcedureInput): Promise<n
         approvers,
         observators,
         tags: [],
+        departments,
+        type,
     }
-    let {
-        data: { id: newId },
-    } = await axios.put("/api/v2/procedures/" + id, body, config)
 
-    await axios.put(
-        "/api/v1/procedures/" + newId + "/checklist",
-        {
-            checklist: checklist.map(item => ({
-                name: item.name,
-                formIds: item.defaultForms.map(form => form.id),
-            })),
-        },
-        config
-    )
+    const {
+        data: { id: newId },
+    } = await fetcher.PUT(id, body)
+    await fetcher.PUT(`${newId}/checklist`, {
+        checklist: checklist.map(item => ({
+            name: item.name,
+            formIds: item.defaultForms.map(form => form.id),
+        })),
+    })
     return newId
 }
 
@@ -179,6 +177,6 @@ export const deleteProcedure = async (id: Id): Promise<void> => {
     await fetcher.DELETE(id)
 }
 
-export const toggleActive = async (id: Id, isActive: boolean): Promise<void> => {
-    await fetcher.POST(`${id}/status`, { isActive })
+export const activateProcedure = async (id: Id) => {
+    await fetcher.POST(`${id}/activation`, "")
 }

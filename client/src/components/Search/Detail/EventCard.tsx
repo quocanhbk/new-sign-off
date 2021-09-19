@@ -1,6 +1,7 @@
 import LazyImage from "components/Base/LazyImage"
 import { getAvatar } from "api/user"
-import { Badge, Box, Flex, HStack, Text } from "@chakra-ui/react"
+import { Badge, Box, Flex, HStack } from "@chakra-ui/react"
+import { MyText } from "components/Base"
 
 const EventCard = ({ createdAt, createdBy, description, last }) => {
     return (
@@ -10,11 +11,17 @@ const EventCard = ({ createdAt, createdBy, description, last }) => {
             </Box>
             <Box>
                 <HStack spacing={2} align="center">
-                    <Text fontWeight="semibold">{createdBy.name}</Text>
-                    {last && <Badge colorScheme="blue">Last Approver</Badge>}
-                    <Text fontSize="xs">{createdAt}</Text>
+                    <MyText textSize="small" fontWeight="semibold">
+                        {createdBy.name}
+                    </MyText>
+                    {last && (
+                        <Badge colorScheme="blue" fontSize={["xs", "sm"]}>
+                            Last Approver
+                        </Badge>
+                    )}
+                    <MyText textSize="small">{createdAt}</MyText>
                 </HStack>
-                <Text>{description}</Text>
+                <MyText>{description}</MyText>
             </Box>
         </Flex>
     )

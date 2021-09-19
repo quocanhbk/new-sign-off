@@ -8,6 +8,7 @@ class Fetcher {
     constructor(apiBaseUrl: string) {
         this.apiBaseUrl = apiBaseUrl
     }
+
     async GET(path: IPath = "") {
         const config = await getConfig()
         return await axios.get(`${this.apiBaseUrl}${path}`, config)
@@ -29,5 +30,4 @@ class Fetcher {
         return await axios.delete(`${this.apiBaseUrl}${path}`, config)
     }
 }
-
 export default Fetcher

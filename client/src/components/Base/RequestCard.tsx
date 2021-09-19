@@ -16,7 +16,7 @@ interface RequestCardProps {
     setQueryParam?: (field: RequestQueryKey, value: string | null, text: string) => void
 }
 
-const RequestCard = ({ page, active, data, setQueryParam }: RequestCardProps) => {
+const RequestCard = memo(({ page, active, data, setQueryParam }: RequestCardProps) => {
     const { id, title, status, priority, type, deadline, author } = data
     const overdue = deadline && data.status === "Pending" ? new Date(deadline).getTime() < new Date().getTime() : false
     return (
@@ -76,7 +76,6 @@ const RequestCard = ({ page, active, data, setQueryParam }: RequestCardProps) =>
             </Flex>
         </Flex>
     )
-}
+})
 
-// memo is a higher order component that help reduces render times
-export default memo(RequestCard)
+export default RequestCard

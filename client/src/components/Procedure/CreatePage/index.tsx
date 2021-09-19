@@ -30,8 +30,8 @@ const CreatePage = ({ id }: CreatePageProps) => {
         setSubmitPopup,
         isSubmitting,
         openSubmitPopup,
-    } = useCreateProcedure(id)
-    const { title, description, advisors, approvers, observators, checklist } = values
+    } = useCreateProcedure(id!)
+    const { advisors, approvers, observators, checklist } = values
     const handleSubmit = (checkItem: ICheckItem) => {
         if (addCheckItemPopup && addCheckItemPopup.mode === "update") {
             updateCheckItem(addCheckItemPopup.id!, checkItem)
@@ -78,12 +78,7 @@ const CreatePage = ({ id }: CreatePageProps) => {
                         <Flex h="full" w="full" maxW="60rem" p={4} overflow="auto" position="relative">
                             <Flex flex={1} direction="column">
                                 <SectionContainer title="Primary Information">
-                                    <PrimaryInfo
-                                        title={title}
-                                        description={description}
-                                        set={setValue}
-                                        errors={errors}
-                                    />
+                                    <PrimaryInfo values={values} set={setValue} errors={errors} />
                                 </SectionContainer>
                                 <SectionContainer title="Participants">
                                     <Participants
