@@ -33,7 +33,6 @@ export const getUsers = async (): Promise<Pick<IUser, "id" | "name" | "email">[]
 
 export const getUser = async (userId: Id): Promise<IUser> => {
     const { data: user } = await fetcher.GET(userId)
-    console.log("USER", user)
     return {
         id: user.user_id,
         name: user.fullname,

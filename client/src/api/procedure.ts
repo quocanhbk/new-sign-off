@@ -31,9 +31,9 @@ export interface IProcedureInput
 }
 
 export type IProcedureList = Pick<IProcedure, "id" | "title" | "description" | "isActive" | "tags" | "createdBy">[]
+
 export const getProcedures = async (): Promise<IProcedureList> => {
     const { data } = await fetcher.GET()
-    console.log(data)
     return data.map(d => ({
         id: d.procedure_id,
         title: d.title,
@@ -135,7 +135,7 @@ export const postProcedure = async (input: IProcedureInput): Promise<number> => 
         tags: [],
     }
     const {
-        data: { id },
+        data: { procedure_id: id },
     } = await fetcher.POST("", body)
     await fetcher.PUT(`${id}/checklist`, {
         checklist: checklist.map(item => ({

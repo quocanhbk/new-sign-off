@@ -23,7 +23,7 @@ class Fetcher {
     }
     async PUT(path: IPath = "", data: any) {
         const config = await getConfig()
-        return await axios.patch(`${this.apiBaseUrl}${path}`, data, config)
+        return await axios.put(`${this.apiBaseUrl}${path}`, data, config)
     }
     async DELETE(path: IPath = "") {
         const config = await getConfig()

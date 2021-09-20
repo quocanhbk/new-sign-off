@@ -29,7 +29,7 @@ const initState: Omit<IRequestInput, "status"> = {
     observators: [],
     approvalAttachments: [],
     referenceAttachments: [],
-    procedure: null,
+    procedure: 0,
     checklist: [],
 }
 const useDocument = (id?: number, mode?: string) => {
@@ -129,7 +129,6 @@ const useDocument = (id?: number, mode?: string) => {
 
     // * hook comes with id, get request detail, else initilize empty form
     useEffect(() => {
-        console.log(3)
         if (id) mutateGetRequest(id)
         else initForm()
     }, [id, mutateGetRequest, initForm])
@@ -167,7 +166,6 @@ const useDocument = (id?: number, mode?: string) => {
                 }
             })
         )
-        console.log("PROCEDURE ID", data.procedureId)
         let initData: IRequestInput = {
             title: data.title,
             description: data.description,
@@ -262,7 +260,7 @@ const useDocument = (id?: number, mode?: string) => {
         return submittable
     }
     const submitRequest = async (requestStatus: "Pending" | "Draft") => {
-        const input: IRequestInput = { ...values, status: requestStatus }
+        const input: IRequestInput = { ...values, status: requestStatus, procedure: procedure === 0 ? null : procedure }
 
         if (mode === "create")
             mutatePostRequest(input, {

@@ -48,6 +48,7 @@ const useRequest = (id: Id, mode: "search" | "sign") => {
             queryClient.invalidateQueries("requests")
             navigate("/search")
             toast({ status: "success", title: "Delete request successfully" })
+            setPopup(null)
         },
         onError: () => {
             toast({ status: "error", title: "Unable to delete request", description: "Try again later" })
@@ -61,6 +62,7 @@ const useRequest = (id: Id, mode: "search" | "sign") => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries("requests")
+            setPopup(null)
         },
     })
 
