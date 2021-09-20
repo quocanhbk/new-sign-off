@@ -72,9 +72,11 @@ const FlowTag = ({ data, last, isCurrent, remindApprover }) => {
                                 {data.fullname}
                             </Text>
                             <Text fontSize="xs">{data.email}</Text>
-                            {data.decision === "Approved" &&
+                            {["Approved", "Pending"].includes(data.decision) &&
                                 data.deadline &&
-                                new Date(data.decisionTimestamp).getTime() > new Date(data.deadline).getTime() && (
+                                (data.decisionTimestamp
+                                    ? new Date(data.decisionTimestamp).getTime()
+                                    : new Date().getTime()) > new Date(data.deadline).getTime() && (
                                     <Text fontSize="xs" color="red.500">
                                         {formatDistanceStrict(
                                             new Date(data.deadline),

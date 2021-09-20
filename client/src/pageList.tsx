@@ -30,7 +30,7 @@ const pageList: Page[] = [
         text: "Search Document",
         path: "/search/*",
         link: "/search",
-        comp: <SearchPage />,
+        comp: <SearchPage mode="search" />,
         admin: false,
     },
     {

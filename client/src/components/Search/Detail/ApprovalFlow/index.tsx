@@ -8,7 +8,6 @@ const ApprovalFlow = () => {
         request,
         mutator: { remindApprove },
     } = useRequestContext()
-
     return request ? (
         <Flex direction="column" align="center" flex={1}>
             <table style={{ borderCollapse: "collapse" }}>

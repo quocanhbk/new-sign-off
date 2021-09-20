@@ -52,8 +52,4 @@ const Search = ({ mode }: SearchPageProps) => {
     )
 }
 
-Search.defaultProps = {
-    mode: "search",
-}
-
 export default Search
