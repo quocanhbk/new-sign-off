@@ -138,7 +138,7 @@ const Create = ({ id, mode }: CreateProps) => {
                     {render(
                         <Flex direction="column" pos="relative" p={4}>
                             {/* SECTION PRIMARY INFO */}
-                            <SectionContainer title="Primary Information">
+                            <SectionContainer title="Primary Info">
                                 <PrimaryInfo
                                     title={values.title}
                                     type={values.type}

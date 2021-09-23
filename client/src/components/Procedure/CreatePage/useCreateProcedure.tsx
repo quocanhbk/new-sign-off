@@ -26,7 +26,8 @@ const useProcedure = (id: Id) => {
     // * QUERY: get procedure detail
     const { isFetching: isGettingProcedure } = useQuery(["procedure", id], () => getProcedureDetail(id!), {
         enabled: !!id,
-        onSuccess: procedureDetail =>
+        onSuccess: procedureDetail => {
+            console.log("DETAIL", procedureDetail)
             initForm({
                 title: procedureDetail.title,
                 description: procedureDetail.description,
@@ -36,7 +37,8 @@ const useProcedure = (id: Id) => {
                 advisors: procedureDetail.advisors.map(advisor => advisor.id),
                 approvers: procedureDetail.approvers.map(approver => approver.id),
                 observators: procedureDetail.observators.map(observator => observator.id),
-            }),
+            })
+        },
         onError: () => {
             setNotFound(true)
         },

@@ -11,7 +11,7 @@ const Card = ({ title, isActive, createdBy, active, onClick }) => {
             border="1px"
             borderColor={active ? "fill.light" : "transparent"}
         >
-            <Flex direction="column" flex={1} py={2} px={2}>
+            <Flex direction="column" flex={1} py={2} px={2} overflow="hidden">
                 <Text isTruncated fontWeight="semibold" color="fill.light">
                     {title}
                 </Text>

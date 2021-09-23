@@ -251,13 +251,12 @@ export const postRequest = async (input: IRequestInput): Promise<number> => {
         referenceAttachments,
         procedure: procedureId,
     } = input
-
     let sendData = {
         title,
         description,
         priority,
         type,
-        deadline: deadline ? new Date(deadline).toLocaleDateString("en-CA") : null,
+        deadline: deadline ? new Date(deadline).toISOString() : null,
         status,
         relatedProjects,
         advisors,
@@ -329,7 +328,7 @@ export const patchRequest = async (id: Id, { input, newAttachments, deletedAttac
         title,
         description,
         type,
-        deadline: deadline ? new Date(deadline).toLocaleDateString("en-CA") : null,
+        deadline: deadline ? new Date(deadline).toISOString() : null,
         status,
         relatedProjects,
         advisors,

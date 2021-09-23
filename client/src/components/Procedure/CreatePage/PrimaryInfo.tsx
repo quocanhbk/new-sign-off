@@ -3,7 +3,8 @@ import { Box, Input } from "@chakra-ui/react"
 import { IProcedureInput } from "api"
 import { useQuery } from "react-query"
 import { getDepartments, IDepartment } from "api/department"
-import { MultipleSelect } from "components/Base"
+import { MultipleSelect, Select } from "components/Base"
+import { procedureTypes } from "constant"
 
 interface PrimaryInfoProps {
     values: IProcedureInput
@@ -16,6 +17,7 @@ const PrimaryInfo = ({ values, set, errors }: PrimaryInfoProps) => {
     const { data } = useQuery("departments", getDepartments, {
         initialData: [],
     })
+    const mapper = (data: string[]) => data.map(item => ({ id: item, text: item }))
     return (
         <Box>
             <FormControl label="Title" error={errors.title}>
@@ -25,7 +27,11 @@ const PrimaryInfo = ({ values, set, errors }: PrimaryInfoProps) => {
                 <Input value={description} onChange={e => set("description", e.target.value)} spellCheck="false" />
             </FormControl>
             <FormControl label="Type">
-                <Input value={type} onChange={e => set("type", e.target.value)} spellCheck="false" />
+                <Select
+                    selection={mapper(procedureTypes)}
+                    value={mapper(procedureTypes).find(item => item.id === type)}
+                    onSelect={item => set("type", item.id)}
+                />
             </FormControl>
             {data && (
                 <FormControl label="Departments">

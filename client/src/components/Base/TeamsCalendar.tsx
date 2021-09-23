@@ -111,7 +111,8 @@ const useCalendar = ({ value, onChange }: ICalendar) => {
     const selectDate = day => {
         date.current.setMonth(date.current.getMonth() + (day.month === "previous" ? -1 : day.month === "next" ? 1 : 0))
         date.current.setDate(day.value)
-        onChange(date.current.toDateString())
+        date.current.setHours(17, 30)
+        onChange(date.current.toISOString())
         closePopup()
         setCalendar(updateCalendarTable())
     }

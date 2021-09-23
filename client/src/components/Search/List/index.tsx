@@ -18,8 +18,16 @@ interface ListProps extends RouteComponentProps {
 const List = ({ mode, scroll, setScroll, useRequestsHook }: ListProps) => {
     const location = useLocation().pathname.split("/")
     const device = useMediaQuery()
-    const { data, fetchNextPage, hasNextPage, onChangeTitleSearch, query, queryTags, render, setQueryParam } =
-        useRequestsHook
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        onChangeTitleSearch,
+        query,
+        queryTags,
+        render,
+        setQueryParam,
+    } = useRequestsHook
     const genTag = (tag: { key: string; text: string; onClick: () => void }) => {
         if (tag.key === "status")
             return (

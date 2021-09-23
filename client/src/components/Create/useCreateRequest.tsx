@@ -59,6 +59,7 @@ const useDocument = (id?: number, mode?: string) => {
             if (mode !== "revise") {
                 initForm({
                     ...values,
+                    type: "Procedure",
                     advisors: procedure.advisors.map(advisor => advisor.userId),
                     approvers: procedure.approvers.map(approver => approver.userId),
                     observators: procedure.observators.map(observator => observator.userId),
@@ -123,8 +124,7 @@ const useDocument = (id?: number, mode?: string) => {
 
     // * on procedure change, if procedure is 0, set type to "Flexible", else set type to "Procedure"
     useEffect(() => {
-        if (procedure === 0) setValue("type", "Flexible")
-        else setValue("type", "Procedure")
+        setValue("type", procedure === 0 ? "Flexible" : "Procedure")
     }, [procedure, setValue])
 
     // * hook comes with id, get request detail, else initilize empty form
@@ -265,7 +265,6 @@ const useDocument = (id?: number, mode?: string) => {
     }
     const submitRequest = async (requestStatus: "Pending" | "Draft") => {
         const input: IRequestInput = { ...values, status: requestStatus, procedure: procedure === 0 ? null : procedure }
-
         if (mode === "create")
             mutatePostRequest(input, {
                 onError: () => {

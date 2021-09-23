@@ -3,7 +3,10 @@ import { SectionContainer, FormControl, SubmitConfirmAlert, MultipleSelect } fro
 import { navigate, RouteComponentProps } from "@reach/router"
 import ProcedureChecklist from "../../ProcedureChecklist"
 import useProcedure from "./useProcedure"
-import { Flex } from "@chakra-ui/react"
+import { Flex, Input } from "@chakra-ui/react"
+import { getDepartments, IDepartment } from "api/department"
+import { useQuery } from "react-query"
+
 interface DetailProps extends RouteComponentProps {
     id?: string
 }
@@ -23,6 +26,10 @@ const Detail = ({ id }: DetailProps) => {
         mutateActivateProcedure,
         setDeletePopup,
     } = useProcedure(id!)
+
+    const { data } = useQuery("departments", getDepartments, {
+        initialData: [],
+    })
     return (
         <Flex direction="column" h="full" pos="relative">
             {render(
@@ -42,9 +49,35 @@ const Detail = ({ id }: DetailProps) => {
                             onEditClick={onEditClick}
                             onActivateProcedure={mutateActivateProcedure}
                         />
-                        <Flex flex={1} w="full" justify="center">
-                            <Flex direction="column" w="full" h="full" p={4} maxW="48rem">
-                                <SectionContainer title={"Description"}>{procedure.description}</SectionContainer>
+                        <Flex flex={1} w="full" justify="center" overflow="auto">
+                            <Flex direction="column" w="full" maxW="48rem" className="scroller" overflow="auto" p={4}>
+                                <SectionContainer title={"Primary Info"}>
+                                    <FormControl label="Title">
+                                        <Input value={procedure.title} spellCheck="false" readOnly />
+                                    </FormControl>
+                                    <FormControl label="Description">
+                                        <Input value={procedure.description} spellCheck="false" readOnly />
+                                    </FormControl>
+                                    <FormControl label="Type">
+                                        <Input value={procedure.type} spellCheck="false" readOnly />
+                                    </FormControl>
+                                    {data && (
+                                        <FormControl label="Departments">
+                                            <MultipleSelect
+                                                searchable
+                                                selection={data}
+                                                value={procedure.departments.map(
+                                                    departmentId =>
+                                                        data.find(
+                                                            department => department.id === departmentId
+                                                        ) as IDepartment
+                                                )}
+                                                displayField="name"
+                                                readOnly
+                                            />
+                                        </FormControl>
+                                    )}
+                                </SectionContainer>
                                 <SectionContainer title="Participants">
                                     <FormControl label={"Advisor List"}>
                                         <MultipleSelect
@@ -77,7 +110,7 @@ const Detail = ({ id }: DetailProps) => {
                                         />
                                     </FormControl>
                                 </SectionContainer>
-                                <SectionContainer title="Checklist">
+                                <SectionContainer title="Attachment Checklist">
                                     <ProcedureChecklist checklist={procedure.checklist} />
                                 </SectionContainer>
                             </Flex>

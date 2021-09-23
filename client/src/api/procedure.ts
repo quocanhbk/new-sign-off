@@ -73,7 +73,7 @@ export const getProcedureDetail = async (id: Id): Promise<IProcedure> => {
         title: data.title,
         description: data.description,
         isActive: data.is_active,
-        departments: data.apply_to_departments,
+        departments: data.apply_to_departments.map(department => department.department_id),
         type: data.type,
         createdBy: data.author.user_id,
         advisors: data.approver_position

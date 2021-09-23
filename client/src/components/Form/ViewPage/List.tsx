@@ -8,7 +8,16 @@ const List = () => {
     const { data, count, render, searchText, setSearchText } = useForms()
     const location = useLocation().pathname.split("/")
     return (
-        <Flex direction="column" flex={1} maxW="25rem" h="full" px={2} borderRight="1px" borderColor="gray.200">
+        <Flex
+            direction="column"
+            flex={1}
+            maxW="25rem"
+            h="full"
+            px={2}
+            borderRight="1px"
+            borderColor="gray.200"
+            overflow="hidden"
+        >
             <Flex align="center" px={2} pt={4} pb={2} pos="relative">
                 <SearchBar searchText={searchText} setSearchText={setSearchText} />
             </Flex>
@@ -28,10 +37,11 @@ const List = () => {
                 {render(
                     data
                         ? data.map(form => (
-                              <Box
+                              <Flex
                                   key={form.id}
                                   onClick={() => navigate(`/form/view/${form.id}`)}
                                   bg="gray.50"
+                                  direction="column"
                                   mb={2}
                                   p={2}
                                   rounded="md"
@@ -44,9 +54,10 @@ const List = () => {
                                   }
                                   cursor="pointer"
                                   _hover={{ bg: "gray.100" }}
+                                  overflow="hidden"
                               >
-                                  {form.name}
-                              </Box>
+                                  <Text isTruncated>{form.name}</Text>
+                              </Flex>
                           ))
                         : null
                 )}

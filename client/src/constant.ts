@@ -47,4 +47,6 @@ export const adminEmails = [
     "huong.ntm@ttgvn.com",
 ]
 
+export const procedureTypes = ["Budget", "Legal"]
+
 export const REQUEST_FETCH_RANGE = 10

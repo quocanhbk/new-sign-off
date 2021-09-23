@@ -121,7 +121,9 @@ const Select: FC<SelectProps> = ({
                                     px={4}
                                     py={2}
                                     _hover={{ bg: isOptionSelected(option) ? "gray.200" : "gray.100" }}
-                                    bg={isOptionSelected(option) ? "gray.200" : "transparent"}
+                                    bg={isOptionSelected(option) ? "gray.300" : "transparent"}
+                                    color={isOptionSelected(option) ? "fill.light" : "inherit"}
+                                    fontWeight={isOptionSelected(option) ? "semibold" : "normal"}
                                 >
                                     {option[displayField]}
                                 </Box>
