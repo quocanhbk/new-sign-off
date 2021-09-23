@@ -257,6 +257,10 @@ const useDocument = (id?: number, mode?: string) => {
             setError("title", "Document title is required")
             submittable = false
         }
+        if (deadline && new Date().getTime() > new Date(deadline).getTime()) {
+            setError("deadline", "Deadline is invalid")
+            submittable = false
+        }
         return submittable
     }
     const submitRequest = async (requestStatus: "Pending" | "Draft") => {
