@@ -3,6 +3,7 @@ import { MultipleSelect, FormControl, UserTag } from 'components/Base';
 import { IRequestInput, getUsers, IUser } from 'api';
 import { FC, memo, useState } from 'react';
 import { Flex } from '@chakra-ui/react';
+import { useMsal } from '@azure/msal-react';
 
 interface ParticipantsProps
   extends Pick<IRequestInput, 'advisors' | 'approvers' | 'observators'> {
@@ -22,6 +23,7 @@ const Participants: FC<ParticipantsProps> = ({
   const [userList, setUserList] = useState<
     (Pick<IUser, 'id' | 'email' | 'name'> & { display: JSX.Element })[]
   >([]);
+  const { accounts } = useMsal();
   const { data: users } = useQuery('users', () => getUsers(), {
     onSuccess: (data) =>
       setUserList(
@@ -73,7 +75,9 @@ const Participants: FC<ParticipantsProps> = ({
         }
       >
         <MultipleSelect
-          selection={userList}
+          selection={userList.filter(
+            (user) => user.email !== accounts[0].username
+          )}
           value={advisors.map(
             (advisor) =>
               userList.find((user) => user.id === advisor) as IUser & {
